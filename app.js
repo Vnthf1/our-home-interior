@@ -26,8 +26,11 @@
   /* ---------- 네비게이션 ---------- */
   const NAV = [
     { href: "index.html", label: "홈", key: "home" },
+    { href: "concept.html", label: "컨셉", key: "concept" },
     { href: "schedule.html", label: "공정표", key: "schedule" },
     { href: "plans.html", label: "작업계획서", key: "plans" },
+    { href: "floorplan.html", label: "도면", key: "floorplan" },
+    { href: "quotes.html", label: "견적/후보", key: "quotes" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
   ];
@@ -56,9 +59,36 @@
   function renderHome() {
     const t = $("title"); if (t) t.textContent = PROJECT.title;
     const s = $("subtitle"); if (s) s.textContent = PROJECT.subtitle;
-    const intro = $("intro"); if (intro) intro.textContent = PROJECT.intro || "";
+    const intro = $("intro");
+    if (intro) {
+      if (PROJECT.intro) intro.textContent = PROJECT.intro;
+      else intro.style.display = "none";
+    }
+    const map = $("maplink");
+    if (map && PROJECT.mapUrl) map.innerHTML = `<a class="map-btn" href="${esc(PROJECT.mapUrl)}" target="_blank" rel="noopener">📍 네이버 지도에서 단지 위치 보기 ↗</a>`;
+    const video = $("video");
+    if (video && PROJECT.youtube) video.innerHTML =
+      `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${esc(PROJECT.youtube)}" title="집 둘러보기" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>` +
+      `<p class="video-cap">우리 집과 같은 구조의 영상이에요 (방향만 다름).</p>`;
     renderInfoGrid("info");
     renderRooms();
+  }
+
+  /* ---------- 인테리어 컨셉 ---------- */
+  function renderConcept() {
+    if (typeof CONCEPT === "undefined") return;
+    const mood = $("concept-mood"); if (mood) mood.textContent = CONCEPT.mood || "";
+    const kw = $("concept-keywords");
+    if (kw) kw.innerHTML = (CONCEPT.keywords || []).map((k) => `<span class="kw">${esc(k)}</span>`).join("");
+    const mat = $("concept-materials");
+    if (mat) mat.innerHTML = (CONCEPT.materials || []).map((m) => `<tr><th>${esc(m.area)}</th><td>${esc(m.spec)}</td></tr>`).join("");
+    const sec = $("concept-sections");
+    if (sec) sec.innerHTML = (CONCEPT.sections || []).map((s) =>
+      `<div class="cc-card"><div class="cc-h"><span class="ic">${esc(s.icon || "")}</span><h3>${esc(s.title)}</h3></div><p>${esc(s.body)}</p></div>`).join("");
+    const mb = $("concept-moodboard");
+    if (mb) mb.innerHTML = (CONCEPT.moodboard && CONCEPT.moodboard.length)
+      ? CONCEPT.moodboard.map((m) => `<div class="mood-card"><div class="media"><object data="images/${esc(m.file)}" type="image/jpeg">📎 ${esc(m.file)}</object></div>${m.caption ? `<div class="cap">${esc(m.caption)}</div>` : ""}</div>`).join("")
+      : `<div class="stub">큰 틀의 무드 레퍼런스 사진을 <code>images/</code> 에 넣고 <code>data.js</code>의 <code>CONCEPT.moodboard</code>에 추가하면 여기에 표시됩니다.</div>`;
   }
 
   /* ---------- 공정 계획표 (달력형 간트) ---------- */
@@ -235,16 +265,283 @@
       ${c.link ? `<a href="${esc(c.link)}" target="_blank" rel="noopener">링크 열기 ↗</a>` : ""}</div>`).join("");
   }
 
+  /* ---------- 견적 / 후보 (공정별) ---------- */
+  function quoteFile(f) {
+    const path = typeof f === "string" ? f : f.file;
+    const label = (typeof f === "object" && f.label) ? f.label : path.split("/").pop();
+    const ext = (path.split(".").pop() || "").toLowerCase();
+    const isImg = ["png", "jpg", "jpeg", "webp", "gif", "avif"].includes(ext);
+    const preview = isImg
+      ? `<object data="${esc(path)}" type="image/${ext === "jpg" ? "jpeg" : ext}"><div class="qf-ph">📎</div></object>`
+      : `<div class="qf-doc"><span class="qf-ic">${ext === "pdf" ? "📄" : "📎"}</span><span class="qf-ext">${esc(ext.toUpperCase() || "FILE")}</span></div>`;
+    return `<a class="qf${isImg ? " img" : ""}" href="${esc(path)}" target="_blank" rel="noopener" title="${esc(label)} 열기">
+      <div class="qf-media">${preview}</div><span class="qf-name">${esc(label)} ↗</span></a>`;
+  }
+  function quoteCard(c) {
+    const stat = c.status === "decided" ? `<span class="qc-badge decided">✅ 확정</span>`
+      : c.status === "received" ? `<span class="qc-badge received">📄 견적 받음</span>`
+      : `<span class="qc-badge cand">후보</span>`;
+    const price = c.price
+      ? `<div class="qc-price">${esc(c.price)}</div>`
+      : `<div class="qc-price none">견적 대기</div>`;
+    const items = (c.items && c.items.length)
+      ? `<table class="qc-items">${c.items.map((it) => `<tr><td>${esc(it.label)}</td><td class="amt">${esc(it.amount || "")}</td></tr>`).join("")}</table>` : "";
+    const files = (c.files && c.files.length)
+      ? `<div class="qc-files">${c.files.map(quoteFile).join("")}</div>` : "";
+    return `<div class="qcard${c.status === "decided" ? " is-decided" : ""}">
+      <div class="qc-top">
+        <div class="qc-name">${esc(c.name)}${c.company ? ` · <span class="qc-co">${esc(c.company)}</span>` : ""}</div>
+        ${stat}
+      </div>
+      ${price}
+      ${c.scope ? `<div class="qc-scope">📐 ${esc(c.scope)}</div>` : ""}
+      ${c.summary ? `<div class="qc-sum">${esc(c.summary)}</div>` : ""}
+      ${c.phone ? `<div class="qc-phone">📞 <a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></div>` : ""}
+      ${items}
+      ${c.note ? `<div class="qc-note">${esc(c.note)}</div>` : ""}
+      ${files}
+    </div>`;
+  }
+  function renderQuotes() {
+    const el = $("quotes"); if (!el || typeof QUOTES === "undefined") return;
+    const order = PHASES.map((p) => p.id);
+    const sorted = [...QUOTES].sort((a, b) => order.indexOf(a.phase) - order.indexOf(b.phase));
+    el.innerHTML = sorted.map((q) => {
+      const p = PHASES.find((x) => x.id === q.phase);
+      const cands = q.candidates || [];
+      const decided = cands.find((c) => c.status === "decided");
+      const head = decided
+        ? `<span class="qp-stat decided">✅ 확정 · ${esc(decided.name)}</span>`
+        : cands.length
+          ? `<span class="qp-stat pending">⏳ 견적 진행 중 · 후보 ${cands.length}곳</span>`
+          : `<span class="qp-stat none">🔍 후보 찾는 중</span>`;
+      const cards = cands.length
+        ? cands.map(quoteCard).join("")
+        : `<div class="stub">아직 후보·견적이 없어요. 업체를 알아보면 여기에 정리할게요.</div>`;
+      return `<div class="qphase" id="q-${esc(q.phase)}">
+        <div class="qp-head"><span class="ic">${esc(p ? p.icon : "📦")}</span><h3>${esc(p ? p.name : q.phase)}</h3>${head}</div>
+        <div class="qcards">${cards}</div>
+      </div>`;
+    }).join("") || `<div class="stub">아직 견적 항목이 없어요.</div>`;
+  }
+
+  /* ---------- 도면 마커 (인터랙티브 평면도) ---------- */
+  function renderFloorplan() {
+    const root = $("fp-app");
+    if (!root || typeof FLOORPLAN === "undefined") return;
+    const FP = FLOORPLAN;
+    const layerOf = (id) => (FP.layers || []).find((l) => l.id === id) || { id, label: id, color: "#888", icon: "📍" };
+    const LS_KEY = "fp-draft:" + FP.image;
+    const clone = (a) => JSON.parse(JSON.stringify(a || []));
+    const round1 = (n) => Math.round(n * 10) / 10;
+    const hexA = (hex, a) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); if (!m) return hex; const n = parseInt(m[1], 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+    const hasDraft = () => { try { return !!localStorage.getItem(LS_KEY); } catch (e) { return false; } };
+    const saveDraft = () => { try { localStorage.setItem(LS_KEY, JSON.stringify(editItems)); } catch (e) {} };
+    const clearDraft = () => { try { localStorage.removeItem(LS_KEY); } catch (e) {} };
+
+    let editing = false, selected = -1, drag = null, popupEl = null;
+    let editItems = (() => { try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } })() || clone(FP.items);
+    const hidden = new Set();
+    let curLayer = (FP.layers[0] || {}).id, curTool = "pin";
+
+    root.innerHTML =
+      '<div class="fp-toolbar"><div class="fp-chips" id="fp-chips"></div>' +
+      '<button class="fp-btn" id="fp-edit">✏️ 편집</button></div>' +
+      '<div class="fp-editbar" id="fp-editbar" hidden></div>' +
+      '<div class="fp-stage" id="fp-stage"><img class="fp-img" id="fp-img" alt="평면도" src="images/' + esc(FP.image) + '" />' +
+      '<div class="fp-overlay" id="fp-overlay"></div></div>' +
+      '<div id="fp-exportwrap" hidden></div>';
+
+    const overlay = $("fp-overlay"), editBtn = $("fp-edit");
+    const items = () => (editing ? editItems : (FP.items || []));
+
+    function drawChips() {
+      $("fp-chips").innerHTML = (FP.layers || []).map((l) => {
+        const n = items().filter((it) => it.layer === l.id).length;
+        return `<span class="fp-chip${hidden.has(l.id) ? " off" : ""}" data-layer="${l.id}"><span class="dot" style="background:${l.color}"></span>${esc(l.icon + " " + l.label)}${n ? ` <b>${n}</b>` : ""}</span>`;
+      }).join("");
+    }
+
+    function pct(e) {
+      const r = overlay.getBoundingClientRect();
+      return { x: Math.max(0, Math.min(100, (e.clientX - r.left) / r.width * 100)), y: Math.max(0, Math.min(100, (e.clientY - r.top) / r.height * 100)) };
+    }
+
+    function closePopup() { if (popupEl) { popupEl.remove(); popupEl = null; } }
+    function showPopup(it) {
+      closePopup(); const L = layerOf(it.layer);
+      popupEl = document.createElement("div");
+      popupEl.className = "fp-popup";
+      popupEl.style.left = (it.type === "box" ? it.x + (it.w || 0) / 2 : it.x) + "%";
+      popupEl.style.top = it.y + "%";
+      popupEl.innerHTML = `<div class="pl">${esc(L.icon + " " + L.label)}</div>${esc(it.label || "(설명 없음)")}`;
+      overlay.appendChild(popupEl);
+    }
+
+    function drawMarkers() {
+      overlay.classList.toggle("editing", editing);
+      overlay.innerHTML = ""; if (popupEl) overlay.appendChild(popupEl);
+      items().forEach((it, i) => {
+        if (hidden.has(it.layer)) return;
+        const L = layerOf(it.layer); let el = document.createElement("div");
+        if (it.type === "box") {
+          el.className = "fp-marker fp-box";
+          el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, .12)}`;
+          if (it.label) { const lb = document.createElement("span"); lb.className = "lb"; lb.style.background = L.color; lb.textContent = it.label; el.appendChild(lb); }
+        } else if (it.type === "text") {
+          el.className = "fp-marker fp-text";
+          el.style.cssText = `left:${it.x}%;top:${it.y}%;color:${L.color};border-color:${hexA(L.color, .5)}`;
+          el.textContent = it.label || "메모";
+        } else {
+          el.className = "fp-marker fp-pin";
+          el.style.cssText = `left:${it.x}%;top:${it.y}%;background:${L.color}`;
+          el.textContent = L.icon; el.title = it.label || L.label;
+        }
+        el.dataset.i = i;
+        if (editing && i === selected) {
+          el.classList.add("sel");
+          if (it.type === "box") { const h = document.createElement("div"); h.className = "fp-handle"; el.appendChild(h); h.addEventListener("pointerdown", (e) => startResize(e, i)); }
+        }
+        el.addEventListener("pointerdown", (e) => onMarkerDown(e, i));
+        overlay.appendChild(el);
+      });
+    }
+
+    function onMarkerDown(e, i) {
+      e.stopPropagation();
+      if (!editing) { showPopup(items()[i]); return; }
+      selected = i; renderEditbar(); drawMarkers();
+      const it = editItems[i], s = pct(e);
+      drag = { i, mode: "move", ox: it.x, oy: it.y, sx: s.x, sy: s.y, moved: false };
+      overlay.setPointerCapture(e.pointerId);
+    }
+    function startResize(e, i) {
+      e.stopPropagation(); const it = editItems[i], s = pct(e);
+      drag = { i, mode: "resize", ow: it.w || 0, oh: it.h || 0, sx: s.x, sy: s.y, moved: true };
+      overlay.setPointerCapture(e.pointerId);
+    }
+
+    overlay.addEventListener("pointerdown", (e) => {
+      closePopup(); if (!editing) return;
+      const p = pct(e);
+      if (curTool === "box") {
+        editItems.push({ layer: curLayer, type: "box", x: round1(p.x), y: round1(p.y), w: 0, h: 0, label: "" });
+        selected = editItems.length - 1;
+        drag = { i: selected, mode: "draw", sx: p.x, sy: p.y, moved: true };
+        overlay.setPointerCapture(e.pointerId); drawMarkers();
+      } else {
+        editItems.push({ layer: curLayer, type: curTool === "text" ? "text" : "pin", x: round1(p.x), y: round1(p.y), label: "" });
+        selected = editItems.length - 1;
+        saveDraft(); drawChips(); drawMarkers(); renderEditbar(true);
+      }
+    });
+    overlay.addEventListener("pointermove", (e) => {
+      if (!drag) return; const it = editItems[drag.i]; if (!it) return; const p = pct(e);
+      if (drag.mode === "move") {
+        const dx = p.x - drag.sx, dy = p.y - drag.sy;
+        if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) drag.moved = true;
+        it.x = round1(Math.max(0, Math.min(100, drag.ox + dx))); it.y = round1(Math.max(0, Math.min(100, drag.oy + dy)));
+      } else if (drag.mode === "draw") {
+        it.x = round1(Math.min(drag.sx, p.x)); it.y = round1(Math.min(drag.sy, p.y));
+        it.w = round1(Math.abs(p.x - drag.sx)); it.h = round1(Math.abs(p.y - drag.sy));
+      } else if (drag.mode === "resize") {
+        it.w = round1(Math.max(1, drag.ow + (p.x - drag.sx))); it.h = round1(Math.max(1, drag.oh + (p.y - drag.sy)));
+      }
+      drawMarkers();
+    });
+    function endDrag() {
+      if (!drag) return; const it = editItems[drag.i]; const wasDraw = drag.mode === "draw";
+      if (wasDraw && it && (it.w < 1 || it.h < 1)) { editItems.splice(drag.i, 1); selected = -1; }
+      drag = null; saveDraft(); drawChips(); drawMarkers(); renderEditbar(wasDraw);
+    }
+    overlay.addEventListener("pointerup", endDrag);
+    overlay.addEventListener("pointercancel", endDrag);
+
+    function updateLabel(i) {
+      const el = overlay.querySelector(`[data-i="${i}"]`); if (!el) return; const it = editItems[i];
+      if (it.type === "box") { let lb = el.querySelector(".lb"); if (it.label) { if (!lb) { lb = document.createElement("span"); lb.className = "lb"; lb.style.background = layerOf(it.layer).color; el.appendChild(lb); } lb.textContent = it.label; } else if (lb) lb.remove(); }
+      else if (it.type === "text") { el.firstChild ? (el.childNodes[0].nodeType === 3 ? el.childNodes[0].textContent = (it.label || "메모") : el.textContent = (it.label || "메모")) : el.textContent = (it.label || "메모"); }
+      else { el.title = it.label || layerOf(it.layer).label; }
+    }
+
+    function renderEditbar(focusLabel) {
+      const bar = $("fp-editbar");
+      if (!editing) { bar.hidden = true; bar.innerHTML = ""; return; }
+      bar.hidden = false;
+      const tool = (id, lbl) => `<button class="${curTool === id ? "on" : ""}" data-tool="${id}">${lbl}</button>`;
+      const opts = (sel) => (FP.layers || []).map((l) => `<option value="${l.id}"${l.id === sel ? " selected" : ""}>${esc(l.icon + " " + l.label)}</option>`).join("");
+      let selRow = "";
+      if (selected >= 0 && editItems[selected]) {
+        const it = editItems[selected];
+        selRow = `<div class="fp-row"><b style="font-size:13px">선택됨</b>` +
+          `<select class="fp-input grow0" id="fp-sel-layer">${opts(it.layer)}</select>` +
+          `<input class="fp-input" id="fp-sel-label" placeholder="라벨/메모 입력" value="${esc(it.label || "")}" />` +
+          `<button class="fp-btn ghost sm" id="fp-del">🗑 삭제</button></div>`;
+      }
+      bar.innerHTML =
+        `<div class="fp-row"><span class="fp-hint">도구</span><div class="fp-seg">${tool("pin", "📍 점")}${tool("box", "⬛ 영역")}${tool("text", "🅰 글자")}</div>` +
+        `<span class="fp-hint">레이어</span><select class="fp-input grow0" id="fp-cur-layer">${opts(curLayer)}</select></div>` +
+        selRow +
+        `<div class="fp-row"><button class="fp-btn sm" id="fp-export">📋 코드 복사</button>` +
+        `<button class="fp-btn ghost sm" id="fp-reset">↩ 초안 초기화</button>` +
+        `<span class="fp-hint">평면도를 클릭해 추가 · 마커를 끌어 이동 · 선택 후 삭제</span></div>`;
+      bar.querySelectorAll("[data-tool]").forEach((b) => b.addEventListener("click", () => { curTool = b.dataset.tool; renderEditbar(); }));
+      const cl = $("fp-cur-layer"); if (cl) cl.addEventListener("change", () => { curLayer = cl.value; });
+      const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { editItems[selected].layer = sl.value; saveDraft(); drawChips(); drawMarkers(); });
+      const lbl = $("fp-sel-label"); if (lbl) { lbl.addEventListener("input", () => { editItems[selected].label = lbl.value; saveDraft(); updateLabel(selected); }); if (focusLabel) lbl.focus(); }
+      const del = $("fp-del"); if (del) del.addEventListener("click", () => { editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); });
+      $("fp-export").addEventListener("click", exportCode);
+      $("fp-reset").addEventListener("click", () => { if (confirm("편집 중인 내용을 버리고 저장된 원본으로 되돌릴까요?")) { clearDraft(); editItems = clone(FP.items); selected = -1; drawChips(); drawMarkers(); renderEditbar(); $("fp-exportwrap").hidden = true; } });
+    }
+
+    function exportCode() {
+      const body = editItems.map((it) => {
+        const p = [`layer: "${it.layer}"`, `type: "${it.type}"`, `x: ${round1(it.x)}`, `y: ${round1(it.y)}`];
+        if (it.type === "box") { p.push(`w: ${round1(it.w || 0)}`, `h: ${round1(it.h || 0)}`); }
+        p.push(`label: ${JSON.stringify(it.label || "")}`);
+        return "    { " + p.join(", ") + " },";
+      }).join("\n");
+      const code = "  items: [\n" + body + "\n  ],";
+      const wrap = $("fp-exportwrap"); wrap.hidden = false;
+      wrap.innerHTML = `<p class="fp-hint">아래 코드를 복사해 Claude에게 주거나 <code>data.js</code>의 <code>FLOORPLAN.items</code>에 붙여넣으면 모두에게 영구 반영돼요.</p><textarea class="fp-export" id="fp-export-ta" readonly></textarea>`;
+      const ta = $("fp-export-ta"); ta.value = code; ta.focus(); ta.select();
+      try { navigator.clipboard.writeText(code); } catch (e) {}
+    }
+
+    function setEdit(on) {
+      editing = on; selected = -1; closePopup();
+      if (on && !hasDraft()) editItems = clone(FP.items);
+      editBtn.textContent = on ? "👁 보기 모드" : "✏️ 편집";
+      editBtn.classList.toggle("ghost", on);
+      $("fp-exportwrap").hidden = true;
+      renderEditbar(); drawChips(); drawMarkers();
+    }
+    editBtn.addEventListener("click", () => setEdit(!editing));
+    $("fp-chips").addEventListener("click", (e) => {
+      const c = e.target.closest(".fp-chip"); if (!c) return;
+      const id = c.dataset.layer; hidden.has(id) ? hidden.delete(id) : hidden.add(id);
+      drawChips(); drawMarkers();
+    });
+
+    drawChips();
+    const img = $("fp-img");
+    if (img.complete) drawMarkers(); else img.addEventListener("load", drawMarkers);
+    window.addEventListener("resize", () => { if (popupEl) closePopup(); });
+  }
+
   /* ---------- 부팅 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     mountNav();
     renderHome();
+    renderConcept();
     renderCalendar();
     renderDecisions();
     renderOverview();
     renderPhases();
     renderReferences();
+    renderQuotes();
     renderContacts();
+    renderFloorplan();
     const y = $("year"); if (y) y.textContent = new Date().getFullYear();
   });
 })();
