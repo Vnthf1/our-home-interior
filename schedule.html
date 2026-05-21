@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>공정 계획표 · 우리집 인테리어</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="schedule">
+
+<nav id="nav"></nav>
+
+<section><div class="wrap">
+  <div class="sec-title">SCHEDULE</div>
+  <h2 class="sec-head">공정 계획표</h2>
+  <div class="cal-wrap"><div id="cal"></div></div>
+  <div class="flow" id="flow"></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-title">TO DECIDE</div>
+  <h2 class="sec-head">결정이 필요한 항목 <span id="dec-count" style="font-size:16px;color:var(--muted)"></span></h2>
+  <div class="dec-list" id="dec-list"></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-title">TO CHECK</div>
+  <h2 class="sec-head">확인이 필요한 항목 <span id="chk-count" style="font-size:16px;color:var(--muted)"></span></h2>
+  <div class="dec-list" id="chk-list"></div>
+</div></section>
+
+<footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
