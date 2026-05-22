@@ -381,18 +381,17 @@ const FLOORPLAN = {
     { id: "note",      label: "메모",   color: "#8b5cf6", icon: "📝" },
   ],
   items: [
-    // 가구계획 도면(images/가구_계획.png)에서 옮긴 주요 가구 — 위치는 근사치이니
-    // ✏️ 편집 모드에서 박스를 끌어 옮기거나 모서리로 크기를 맞춰 미세조정하세요.
-    { layer: "furniture", type: "box", x: 34, y: 17, w: 3,  h: 14, label: "냉장고장" },
-    { layer: "furniture", type: "box", x: 37, y: 16, w: 11, h: 3,  label: "싱크대" },
-    { layer: "furniture", type: "box", x: 38, y: 23, w: 7,  h: 7,  label: "아일랜드" },
-    { layer: "furniture", type: "box", x: 49, y: 15, w: 13, h: 3,  label: "수납장" },
-    { layer: "furniture", type: "box", x: 63, y: 20, w: 17, h: 6,  label: "소파" },
-    { layer: "furniture", type: "box", x: 59, y: 42, w: 13, h: 10, label: "침대 (침실2)" },
-    { layer: "furniture", type: "box", x: 76, y: 47, w: 9,  h: 3,  label: "상" },
-    { layer: "furniture", type: "box", x: 13, y: 63, w: 17, h: 13, label: "침대 (안방)" },
-    { layer: "furniture", type: "box", x: 35, y: 63, w: 4,  h: 15, label: "붙박이장" },
-    { layer: "furniture", type: "box", x: 40, y: 63, w: 4,  h: 15, label: "붙박이장" },
+    // 가구계획 도면 기준 — 편집 모드에서 위치 미세조정 후 반영한 값.
+    { layer: "furniture", type: "box", x: 38,   y: 19.5, w: 3,    h: 17.1, label: "냉장고장" },
+    { layer: "furniture", type: "box", x: 41.5, y: 17,   w: 7.4,  h: 2.7,  label: "싱크대" },
+    { layer: "furniture", type: "box", x: 46,   y: 19.9, w: 2.7,  h: 10,   label: "아일랜드" },
+    { layer: "furniture", type: "box", x: 49.2, y: 16.9, w: 12.1, h: 2.9,  label: "수납장" },
+    { layer: "furniture", type: "box", x: 51.6, y: 21.4, w: 13.1, h: 5,    label: "소파" },
+    { layer: "furniture", type: "box", x: 47.8, y: 37.5, w: 12.5, h: 6.6,  label: "침대 (침실2)" },
+    { layer: "furniture", type: "box", x: 55.9, y: 49.1, w: 11.5, h: 3.1,  label: "책상 + 상부장" },
+    { layer: "furniture", type: "box", x: 24.3, y: 68.5, w: 10.9, h: 15,   label: "침대 (안방) 퀸사이즈 2개" },
+    { layer: "furniture", type: "box", x: 36.1, y: 64.5, w: 3.5,  h: 23,   label: "붙박이장" },
+    { layer: "furniture", type: "box", x: 42.9, y: 68.5, w: 3.8,  h: 19,   label: "붙박이장 + 워시타워" },
   ],
 };
 
