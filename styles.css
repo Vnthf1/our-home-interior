@@ -129,7 +129,9 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .img-ph .cap{margin-top:6px;font-weight:600;font-size:12px}
 
 /* related references in a phase */
-.phase-refs{margin-top:14px}
+.phase-refs{margin:14px 0 30px}
+.imgs{margin-bottom:24px}
+.img-missing{border:1.5px dashed var(--line);border-radius:10px;background:#faf7f1;padding:36px 14px;text-align:center;color:var(--muted);font-size:13px}
 .phase-refs .rt{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:8px}
 .ref-thumbs{display:flex;flex-wrap:wrap;gap:10px}
 .ref-thumb{width:150px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#faf7f1}
@@ -241,6 +243,10 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .ovc .ic{font-size:26px;flex:none;line-height:1.2}
 .ovc b{font-size:15px;font-weight:800}
 .ovc p{margin:5px 0 0;font-size:13px;color:var(--muted);line-height:1.55}
+.plan-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.plan-item{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#faf7f1}
+.plan-item img{width:100%;display:block}
+.plan-item figcaption{padding:9px 12px;font-size:13px;font-weight:700;text-align:center}
 
 /* phase highlights (견적용 요약) + 항목 질문·미정 */
 .phase-highlights{margin:4px 0 18px;background:var(--accent-soft);border:1px solid #e3d4bf;border-radius:12px;padding:14px 16px}

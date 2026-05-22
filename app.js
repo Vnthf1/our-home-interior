@@ -701,6 +701,9 @@
     const changes = (OV.changes && OV.changes.length)
       ? `<div class="ov-changes">${OV.changes.map((c) =>
           `<div class="ovc"><span class="ic">${esc(c.icon || "•")}</span><div><b>${esc(c.title)}</b>${c.desc ? `<p>${esc(c.desc)}</p>` : ""}</div></div>`).join("")}</div>` : "";
+    const plans = (OV.plans && OV.plans.length)
+      ? `<h3 class="work-subh">📐 계획도 모음</h3>
+         <div class="plan-gallery">${OV.plans.map((p) => `<figure class="plan-item">${zoomImg(p.file, p.label)}<figcaption>${esc(p.label)}</figcaption></figure>`).join("")}</div>` : "";
     const baList = (typeof BEFORE_AFTER !== "undefined" ? BEFORE_AFTER : []);
     const ba = baList.length
       ? `<h3 class="work-subh">공간별 · 현장 → 바뀔 모습</h3>
@@ -709,7 +712,7 @@
     const overviewPanel = `<section class="work-panel" data-tab="overview">
       <h2 class="work-h">🏠 주요 사양 요약</h2>
       ${OV.intro ? `<p class="work-intro">${esc(OV.intro)}</p>` : ""}
-      ${changes}${ba}
+      ${changes}${plans}${ba}
     </section>`;
 
     const phasePanels = PHASES.map((p, i) =>
@@ -772,6 +775,16 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") { const lb = $("lightbox"); if (lb) lb.classList.remove("open"); }
     });
+    // 누락 이미지(아직 안 올린 파일)는 깨진 아이콘 대신 깔끔한 자리표시로
+    document.addEventListener("error", (e) => {
+      const t = e.target;
+      if (t && t.tagName === "IMG" && t.classList.contains("zoom")) {
+        const ph = document.createElement("div");
+        ph.className = "img-missing";
+        ph.textContent = "📎 " + (t.getAttribute("alt") || "사진 준비 중");
+        t.replaceWith(ph);
+      }
+    }, true);
     const y = $("year"); if (y) y.textContent = new Date().getFullYear();
   });
 })();
