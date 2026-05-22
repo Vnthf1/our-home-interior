@@ -344,6 +344,18 @@
     const hidden = new Set();
     let curLayer = (FP.layers[0] || {}).id, curTool = "pin";
 
+    // 실행취소(undo) — 변경 직전 상태 스냅샷을 쌓아두고 뒤로가기/Delete/↩ 로 되돌림
+    const undoStack = [];
+    let guardArmed = false;
+    function armGuard() { if (!guardArmed) { try { history.pushState({ fpGuard: 1 }, ""); } catch (e) {} guardArmed = true; } }
+    function recordUndo(pre) { undoStack.push(pre); if (undoStack.length > 80) undoStack.shift(); armGuard(); }
+    function undo() {
+      if (!undoStack.length) return false;
+      editItems = undoStack.pop(); selected = -1;
+      saveDraft(); drawChips(); drawMarkers(); renderEditbar();
+      return true;
+    }
+
     root.innerHTML =
       '<div class="fp-toolbar"><div class="fp-chips" id="fp-chips"></div>' +
       '<button class="fp-btn" id="fp-edit">✏️ 편집</button></div>' +
@@ -353,7 +365,9 @@
       '<div id="fp-exportwrap" hidden></div>';
 
     const overlay = $("fp-overlay"), editBtn = $("fp-edit");
-    const items = () => (editing ? editItems : (FP.items || []));
+    // 보기·편집 모두 같은 데이터(editItems)를 표시.
+    // editItems 는 내 브라우저 임시저장(draft)이 있으면 그걸, 없으면 data.js 확정본을 씀.
+    const items = () => editItems;
 
     function drawChips() {
       $("fp-chips").innerHTML = (FP.layers || []).map((l) => {
@@ -412,12 +426,12 @@
       if (!editing) { showPopup(items()[i]); return; }
       selected = i; renderEditbar(); drawMarkers();
       const it = editItems[i], s = pct(e);
-      drag = { i, mode: "move", ox: it.x, oy: it.y, sx: s.x, sy: s.y, moved: false };
+      drag = { i, mode: "move", ox: it.x, oy: it.y, sx: s.x, sy: s.y, moved: false, pre: clone(editItems) };
       overlay.setPointerCapture(e.pointerId);
     }
     function startResize(e, i) {
       e.stopPropagation(); const it = editItems[i], s = pct(e);
-      drag = { i, mode: "resize", ow: it.w || 0, oh: it.h || 0, sx: s.x, sy: s.y, moved: true };
+      drag = { i, mode: "resize", ow: it.w || 0, oh: it.h || 0, sx: s.x, sy: s.y, moved: true, pre: clone(editItems) };
       overlay.setPointerCapture(e.pointerId);
     }
 
@@ -425,11 +439,13 @@
       closePopup(); if (!editing) return;
       const p = pct(e);
       if (curTool === "box") {
+        const pre = clone(editItems);
         editItems.push({ layer: curLayer, type: "box", x: round1(p.x), y: round1(p.y), w: 0, h: 0, label: "" });
         selected = editItems.length - 1;
-        drag = { i: selected, mode: "draw", sx: p.x, sy: p.y, moved: true };
+        drag = { i: selected, mode: "draw", sx: p.x, sy: p.y, moved: true, pre };
         overlay.setPointerCapture(e.pointerId); drawMarkers();
       } else {
+        recordUndo(clone(editItems));
         editItems.push({ layer: curLayer, type: curTool === "text" ? "text" : "pin", x: round1(p.x), y: round1(p.y), label: "" });
         selected = editItems.length - 1;
         saveDraft(); drawChips(); drawMarkers(); renderEditbar(true);
@@ -450,8 +466,13 @@
       drawMarkers();
     });
     function endDrag() {
-      if (!drag) return; const it = editItems[drag.i]; const wasDraw = drag.mode === "draw";
-      if (wasDraw && it && (it.w < 1 || it.h < 1)) { editItems.splice(drag.i, 1); selected = -1; }
+      if (!drag) return;
+      const it = editItems[drag.i], mode = drag.mode, wasDraw = mode === "draw";
+      if (wasDraw && it && (it.w < 1 || it.h < 1)) {
+        editItems.splice(drag.i, 1); selected = -1;          // 너무 작은 박스 → 취소 (기록 안 함)
+      } else if (wasDraw || mode === "resize" || (mode === "move" && drag.moved)) {
+        recordUndo(drag.pre);                                 // 실제 변경분만 되돌리기 스택에
+      }
       drag = null; saveDraft(); drawChips(); drawMarkers(); renderEditbar(wasDraw);
     }
     overlay.addEventListener("pointerup", endDrag);
@@ -482,14 +503,16 @@
         `<div class="fp-row"><span class="fp-hint">도구</span><div class="fp-seg">${tool("pin", "📍 점")}${tool("box", "⬛ 영역")}${tool("text", "🅰 글자")}</div>` +
         `<span class="fp-hint">레이어</span><select class="fp-input grow0" id="fp-cur-layer">${opts(curLayer)}</select></div>` +
         selRow +
-        `<div class="fp-row"><button class="fp-btn sm" id="fp-export">📋 코드 복사</button>` +
-        `<button class="fp-btn ghost sm" id="fp-reset">↩ 초안 초기화</button>` +
-        `<span class="fp-hint">평면도를 클릭해 추가 · 마커를 끌어 이동 · 선택 후 삭제</span></div>`;
+        `<div class="fp-row"><button class="fp-btn ghost sm" id="fp-undo"${undoStack.length ? "" : " disabled"}>↩ 되돌리기</button>` +
+        `<button class="fp-btn sm" id="fp-export">📋 코드 복사</button>` +
+        `<button class="fp-btn ghost sm" id="fp-reset">🗑 초안 초기화</button>` +
+        `<span class="fp-hint">평면도 클릭해 추가 · 끌어 이동 · 선택 후 삭제 · <b>뒤로가기/↩/Delete</b> 로 취소</span></div>`;
       bar.querySelectorAll("[data-tool]").forEach((b) => b.addEventListener("click", () => { curTool = b.dataset.tool; renderEditbar(); }));
       const cl = $("fp-cur-layer"); if (cl) cl.addEventListener("change", () => { curLayer = cl.value; });
-      const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { editItems[selected].layer = sl.value; saveDraft(); drawChips(); drawMarkers(); });
+      const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { recordUndo(clone(editItems)); editItems[selected].layer = sl.value; saveDraft(); drawChips(); drawMarkers(); });
       const lbl = $("fp-sel-label"); if (lbl) { lbl.addEventListener("input", () => { editItems[selected].label = lbl.value; saveDraft(); updateLabel(selected); }); if (focusLabel) lbl.focus(); }
-      const del = $("fp-del"); if (del) del.addEventListener("click", () => { editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); });
+      const del = $("fp-del"); if (del) del.addEventListener("click", () => { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); });
+      const undoBtn = $("fp-undo"); if (undoBtn) undoBtn.addEventListener("click", undo);
       $("fp-export").addEventListener("click", exportCode);
       $("fp-reset").addEventListener("click", () => { if (confirm("편집 중인 내용을 버리고 저장된 원본으로 되돌릴까요?")) { clearDraft(); editItems = clone(FP.items); selected = -1; drawChips(); drawMarkers(); renderEditbar(); $("fp-exportwrap").hidden = true; } });
     }
@@ -510,6 +533,7 @@
 
     function setEdit(on) {
       editing = on; selected = -1; closePopup();
+      undoStack.length = 0;                       // 모드 전환 시 되돌리기 기록 초기화
       if (on && !hasDraft()) editItems = clone(FP.items);
       editBtn.textContent = on ? "👁 보기 모드" : "✏️ 편집";
       editBtn.classList.toggle("ghost", on);
@@ -521,6 +545,26 @@
       const c = e.target.closest(".fp-chip"); if (!c) return;
       const id = c.dataset.layer; hidden.has(id) ? hidden.delete(id) : hidden.add(id);
       drawChips(); drawMarkers();
+    });
+
+    // 뒤로가기(back) → 마지막 작업 취소. 취소할 게 없으면 정상적으로 페이지 이동.
+    window.addEventListener("popstate", () => {
+      if (!editing) { guardArmed = false; return; }
+      guardArmed = false;
+      if (undoStack.length) { undo(); if (undoStack.length) armGuard(); }
+    });
+    // 키보드: Delete/Backspace → 선택 삭제(없으면 취소), Esc → 선택 해제, Ctrl/⌘+Z → 취소
+    window.addEventListener("keydown", (e) => {
+      if (!editing) return;
+      const t = e.target, typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT");
+      if (e.key === "Escape") { selected = -1; renderEditbar(); drawMarkers(); return; }
+      if (typing) return;
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); undo(); return; }
+      if (e.key === "Delete" || e.key === "Backspace") {
+        e.preventDefault();
+        if (selected >= 0 && editItems[selected]) { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); }
+        else undo();
+      }
     });
 
     drawChips();
