@@ -559,8 +559,8 @@
     function endDrag() {
       if (!drag) return;
       const it = editItems[drag.i], mode = drag.mode, wasDraw = mode === "draw";
-      if (wasDraw && it && (it.w < 1 || it.h < 1)) {
-        editItems.splice(drag.i, 1); selected = -1;          // 너무 작은 박스 → 취소 (기록 안 함)
+      if (wasDraw && it && it.w < 1 && it.h < 1) {
+        editItems.splice(drag.i, 1); selected = -1;          // 거의 점(클릭) → 취소. 얇은 라인은 유지.
       } else if (wasDraw || mode === "resize" || (mode === "move" && drag.moved)) {
         recordUndo(drag.pre);                                 // 실제 변경분만 되돌리기 스택에
       }
