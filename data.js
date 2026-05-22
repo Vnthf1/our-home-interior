@@ -601,6 +601,9 @@ const FLOORPLAN = {
     { layer: "thermostat", type: "pin", x: 48.8, y: 41.8, label: "온도조절기 (침실1)" },
     { layer: "thermostat", type: "pin", x: 15.9, y: 31.6, label: "" },
     { layer: "thermostat", type: "text", x: 20.2, y: 31.8, label: "온도조절기" },
+    // 우물천장 간접등 (천장 단 둘레 루프, 위치 근사치 — 드래그로 조정)
+    { layer: "light", type: "box", x: 57, y: 19, w: 26, h: 17, label: "우물천장 간접등 (거실)" },
+    { layer: "light", type: "box", x: 14, y: 64, w: 20, h: 18, label: "우물천장 간접등 (안방)" },
   ],
 };
 
