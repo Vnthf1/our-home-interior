@@ -26,7 +26,6 @@
   /* ---------- 네비게이션 ---------- */
   const NAV = [
     { href: "index.html", label: "홈", key: "home" },
-    { href: "concept.html", label: "컨셉", key: "concept" },
     { href: "schedule.html", label: "공정표", key: "schedule" },
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "work.html", label: "작업 안내", key: "work" },
@@ -186,8 +185,10 @@
     return allRefs().filter((r) => (r.phases || []).includes(phaseId));
   }
   const imgType = (f) => { const e = (String(f).split(".").pop() || "").toLowerCase(); return "image/" + (e === "jpg" ? "jpeg" : (e || "jpeg")); };
+  // 클릭하면 확대(라이트박스)되는 이미지
+  const zoomImg = (file, alt) => `<img class="zoom" src="images/${esc(file)}" alt="${esc(alt || file)}" loading="lazy">`;
   function refThumb(r) {
-    const media = `<object data="images/${esc(r.file)}" type="${imgType(r.file)}"><div class="ph">📎 ${esc(r.file)}</div></object>`;
+    const media = zoomImg(r.file, r.title);
     return `<div class="ref-thumb">${media}<div class="rc"><b>${esc(r.title)}</b>${esc(r.desc || "")}${r.link ? `<br><a class="ref-link" href="${esc(r.link)}" target="_blank" rel="noopener">제품 링크 ↗</a>` : ""}</div></div>`;
   }
   function renderOverview() {
@@ -250,7 +251,7 @@
     const imgs = (p.images && p.images.length) ? `
       <div class="imgs">${p.images.map((im) => `
         <div class="img-ph">
-          <object data="images/${esc(im.file)}" type="image/png">📎 ${esc(im.file)}<br><small>(images/ 폴더에 추가하면 표시됨)</small></object>
+          ${zoomImg(im.file, im.label)}
           <div class="cap">${esc(im.label)}</div>
         </div>`).join("")}</div>` : "";
     const refs = relatedRefs(p.id);
@@ -264,7 +265,8 @@
       ${p.summary ? `<div class="phase-summary">${esc(p.summary)}</div>` : ""}
       ${highlights}
       ${phaseAsks}
-      <div class="cols">${groups}</div>${dec}${chk}${imgs}${refBlock}
+      ${imgs}${refBlock}
+      <div class="cols">${groups}</div>${dec}${chk}
     </div>`;
   }
   function renderPhases() {
@@ -278,7 +280,7 @@
   function baCardHTML(b) {
     const arr = (x) => Array.isArray(x) ? x.filter(Boolean) : (x ? [x] : []);
     const thumbs = (files, cls) => files.length
-      ? `<div class="ba-thumbs">${files.map((f) => `<object class="ba-thumb" data="images/${esc(f)}" type="image/jpeg"><span class="ph">📎 ${esc(f)}</span></object>`).join("")}</div>`
+      ? `<div class="ba-thumbs">${files.map((f) => `<img class="ba-thumb zoom" src="images/${esc(f)}" alt="${esc(b.area || "")}" loading="lazy">`).join("")}</div>`
       : `<div class="ba-empty">${cls === "tobe" ? "🤖 AI 시안 준비 중" : "📷 현장 사진 준비 중"}</div>`;
     return `
       <div class="ba-card">
@@ -301,7 +303,7 @@
     const refs = allRefs();
     el.innerHTML = refs.map((r) => `
       <div class="ref-card">
-        <div class="media"><object data="images/${esc(r.file)}" type="${imgType(r.file)}">📎 ${esc(r.file)}<br><small>images/ 폴더에 넣으면 표시됨</small></object></div>
+        <div class="media">${zoomImg(r.file, r.title)}</div>
         <div class="body">
           <h4>${esc(r.title)}</h4>
           <p>${esc(r.desc || "")}</p>
@@ -476,7 +478,10 @@
         } else {
           el.className = "fp-marker fp-pin";
           el.style.cssText = `left:${it.x}%;top:${it.y}%;background:${L.color}`;
-          el.textContent = L.icon; el.title = it.label || L.label;
+          el.title = it.label || L.label;
+          const gu = /(\d+)\s*구/.exec(it.label || "");   // 라벨의 "4구/2구" → 숫자 표시 + 크기 구분
+          if (gu) { el.textContent = gu[1]; el.classList.add("num", +gu[1] >= 4 ? "big" : "small"); }
+          else { el.textContent = L.icon; }
         }
         el.dataset.i = i;
         if (editing && i === selected) {
@@ -674,7 +679,7 @@
          <div class="banner">⚠️ To-Be(바뀔 모습)는 AI 시안이라 실제 시공과 다를 수 있어요. 전체 분위기·방향만 참고해 주세요.</div>
          <div class="ba-grid">${baList.map(baCardHTML).join("")}</div>` : "";
     const overviewPanel = `<section class="work-panel" data-tab="overview">
-      <h2 class="work-h">🏠 우리집은 이렇게 바뀝니다</h2>
+      <h2 class="work-h">🏠 주요 사양 요약</h2>
       ${OV.intro ? `<p class="work-intro">${esc(OV.intro)}</p>` : ""}
       ${changes}${ba}
     </section>`;
@@ -720,6 +725,24 @@
       const done = () => { const old = btn.textContent; btn.textContent = "복사됨 ✓"; setTimeout(() => { btn.textContent = old; }, 1200); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(done);
       else { const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); } catch (_) {} ta.remove(); done(); }
+    });
+    // 이미지 클릭 → 확대(라이트박스)
+    document.addEventListener("click", (e) => {
+      const img = e.target.closest("img.zoom");
+      if (!img || !img.getAttribute("src")) return;
+      let lb = $("lightbox");
+      if (!lb) {
+        lb = document.createElement("div");
+        lb.id = "lightbox"; lb.className = "lightbox";
+        lb.innerHTML = `<img alt="">`;
+        lb.addEventListener("click", () => lb.classList.remove("open"));
+        document.body.appendChild(lb);
+      }
+      lb.querySelector("img").src = img.currentSrc || img.src;
+      lb.classList.add("open");
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { const lb = $("lightbox"); if (lb) lb.classList.remove("open"); }
     });
     const y = $("year"); if (y) y.textContent = new Date().getFullYear();
   });
