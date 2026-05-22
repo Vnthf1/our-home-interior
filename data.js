@@ -531,6 +531,7 @@ const FLOORPLAN = {
     { id: "light",     label: "조명",   color: "#f59e0b", icon: "💡" },
     { id: "outlet",    label: "콘센트", color: "#ef4444", icon: "🔌" },
     { id: "switch",    label: "스위치", color: "#10b981", icon: "🔘" },
+    { id: "thermostat", label: "온도조절기", color: "#14b8a6", icon: "🌡️" },
     { id: "note",      label: "메모",   color: "#8b5cf6", icon: "📝" },
   ],
   items: [
@@ -594,6 +595,13 @@ const FLOORPLAN = {
     { layer: "switch", type: "pin", x: 15.9, y: 25.6, label: "" },
     { layer: "switch", type: "text", x: 19, y: 25.6, label: "스위치" },
     { layer: "outlet", type: "text", x: 19.1, y: 28.6, label: "콘센트" },
+    // 온도조절기 (기존 도면 다이아몬드 기준, 위치 근사치 — 드래그로 조정)
+    { layer: "thermostat", type: "pin", x: 50, y: 31, label: "온도조절기 (거실)" },
+    { layer: "thermostat", type: "pin", x: 45, y: 41, label: "온도조절기 (복도/욕실)" },
+    { layer: "thermostat", type: "pin", x: 33, y: 60, label: "온도조절기 (안방)" },
+    { layer: "thermostat", type: "pin", x: 50, y: 60, label: "온도조절기 (침실1)" },
+    { layer: "thermostat", type: "pin", x: 15.9, y: 31.6, label: "" },
+    { layer: "thermostat", type: "text", x: 19.1, y: 31.6, label: "온도조절기" },
   ],
 };
 
