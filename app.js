@@ -331,16 +331,14 @@
     if (!root || typeof FLOORPLAN === "undefined") return;
     const FP = FLOORPLAN;
     const layerOf = (id) => (FP.layers || []).find((l) => l.id === id) || { id, label: id, color: "#888", icon: "📍" };
-    const LS_KEY = "fp-draft:" + FP.image;
     const clone = (a) => JSON.parse(JSON.stringify(a || []));
     const round1 = (n) => Math.round(n * 10) / 10;
     const hexA = (hex, a) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); if (!m) return hex; const n = parseInt(m[1], 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
-    const hasDraft = () => { try { return !!localStorage.getItem(LS_KEY); } catch (e) { return false; } };
-    const saveDraft = () => { try { localStorage.setItem(LS_KEY, JSON.stringify(editItems)); } catch (e) {} };
-    const clearDraft = () => { try { localStorage.removeItem(LS_KEY); } catch (e) {} };
 
     let editing = false, selected = -1, drag = null, popupEl = null;
-    let editItems = (() => { try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } })() || clone(FP.items);
+    // 표시·편집 모두 data.js 의 FLOORPLAN.items 를 그대로 사용 (로컬 저장 X, 메모리에서만 편집).
+    // 영구 저장 = [코드 복사] → data.js 의 items 에 반영 → 커밋.
+    let editItems = clone(FP.items);
     const hidden = new Set();
     let curLayer = (FP.layers[0] || {}).id, curTool = "pin";
 
@@ -352,7 +350,7 @@
     function undo() {
       if (!undoStack.length) return false;
       editItems = undoStack.pop(); selected = -1;
-      saveDraft(); drawChips(); drawMarkers(); renderEditbar();
+      drawChips(); drawMarkers(); renderEditbar();
       return true;
     }
 
@@ -448,7 +446,7 @@
         recordUndo(clone(editItems));
         editItems.push({ layer: curLayer, type: curTool === "text" ? "text" : "pin", x: round1(p.x), y: round1(p.y), label: "" });
         selected = editItems.length - 1;
-        saveDraft(); drawChips(); drawMarkers(); renderEditbar(true);
+        drawChips(); drawMarkers(); renderEditbar(true);
       }
     });
     overlay.addEventListener("pointermove", (e) => {
@@ -473,7 +471,7 @@
       } else if (wasDraw || mode === "resize" || (mode === "move" && drag.moved)) {
         recordUndo(drag.pre);                                 // 실제 변경분만 되돌리기 스택에
       }
-      drag = null; saveDraft(); drawChips(); drawMarkers(); renderEditbar(wasDraw);
+      drag = null; drawChips(); drawMarkers(); renderEditbar(wasDraw);
     }
     overlay.addEventListener("pointerup", endDrag);
     overlay.addEventListener("pointercancel", endDrag);
@@ -505,16 +503,16 @@
         selRow +
         `<div class="fp-row"><button class="fp-btn ghost sm" id="fp-undo"${undoStack.length ? "" : " disabled"}>↩ 되돌리기</button>` +
         `<button class="fp-btn sm" id="fp-export">📋 코드 복사</button>` +
-        `<button class="fp-btn ghost sm" id="fp-reset">🗑 초안 초기화</button>` +
+        `<button class="fp-btn ghost sm" id="fp-reset">↺ 원본으로</button>` +
         `<span class="fp-hint">평면도 클릭해 추가 · 끌어 이동 · 선택 후 삭제 · <b>뒤로가기/↩/Delete</b> 로 취소</span></div>`;
       bar.querySelectorAll("[data-tool]").forEach((b) => b.addEventListener("click", () => { curTool = b.dataset.tool; renderEditbar(); }));
       const cl = $("fp-cur-layer"); if (cl) cl.addEventListener("change", () => { curLayer = cl.value; });
-      const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { recordUndo(clone(editItems)); editItems[selected].layer = sl.value; saveDraft(); drawChips(); drawMarkers(); });
-      const lbl = $("fp-sel-label"); if (lbl) { lbl.addEventListener("input", () => { editItems[selected].label = lbl.value; saveDraft(); updateLabel(selected); }); if (focusLabel) lbl.focus(); }
-      const del = $("fp-del"); if (del) del.addEventListener("click", () => { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); });
+      const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { recordUndo(clone(editItems)); editItems[selected].layer = sl.value; drawChips(); drawMarkers(); });
+      const lbl = $("fp-sel-label"); if (lbl) { lbl.addEventListener("input", () => { editItems[selected].label = lbl.value; updateLabel(selected); }); if (focusLabel) lbl.focus(); }
+      const del = $("fp-del"); if (del) del.addEventListener("click", () => { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; drawChips(); drawMarkers(); renderEditbar(); });
       const undoBtn = $("fp-undo"); if (undoBtn) undoBtn.addEventListener("click", undo);
       $("fp-export").addEventListener("click", exportCode);
-      $("fp-reset").addEventListener("click", () => { if (confirm("편집 중인 내용을 버리고 저장된 원본으로 되돌릴까요?")) { clearDraft(); editItems = clone(FP.items); selected = -1; drawChips(); drawMarkers(); renderEditbar(); $("fp-exportwrap").hidden = true; } });
+      $("fp-reset").addEventListener("click", () => { if (confirm("편집한 내용을 버리고 원본(data.js)으로 되돌릴까요?")) { recordUndo(clone(editItems)); editItems = clone(FP.items); selected = -1; drawChips(); drawMarkers(); renderEditbar(); $("fp-exportwrap").hidden = true; } });
     }
 
     function exportCode() {
@@ -533,8 +531,7 @@
 
     function setEdit(on) {
       editing = on; selected = -1; closePopup();
-      undoStack.length = 0;                       // 모드 전환 시 되돌리기 기록 초기화
-      if (on && !hasDraft()) editItems = clone(FP.items);
+      undoStack.length = 0;                       // 모드 전환 시 되돌리기 기록 초기화 (편집 내용 자체는 유지)
       editBtn.textContent = on ? "👁 보기 모드" : "✏️ 편집";
       editBtn.classList.toggle("ghost", on);
       $("fp-exportwrap").hidden = true;
@@ -562,7 +559,7 @@
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); undo(); return; }
       if (e.key === "Delete" || e.key === "Backspace") {
         e.preventDefault();
-        if (selected >= 0 && editItems[selected]) { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); }
+        if (selected >= 0 && editItems[selected]) { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; drawChips(); drawMarkers(); renderEditbar(); }
         else undo();
       }
     });
