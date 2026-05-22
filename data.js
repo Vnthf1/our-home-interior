@@ -932,7 +932,7 @@ const PHASES = [
     checks: [],
     images: [
       { file: "조명_계획.png", label: "조명 계획" },
-      { file: "콘센트_계획.png", label: "콘센트 계획" },
+      { file: "콘센트계획.png", label: "콘센트 계획" },
     ],
   },
 

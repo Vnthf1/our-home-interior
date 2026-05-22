@@ -123,9 +123,9 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .phase-chk .dt{font-size:12px;font-weight:700;color:var(--info);margin-bottom:6px}
 .phase-chk li{font-size:13px;padding:2px 0 2px 18px}
 .phase-chk li::before{background:var(--info)}
-.imgs{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.img-ph{flex:1;min-width:160px;border:1.5px dashed var(--line);border-radius:10px;background:#faf7f1;padding:14px;text-align:center;color:var(--muted);font-size:13px}
-.img-ph img,.img-ph object{max-width:100%;border-radius:8px;display:block}
+.imgs{display:flex;flex-direction:column;gap:16px;margin-top:14px}
+.img-ph{border:1.5px dashed var(--line);border-radius:10px;background:#faf7f1;padding:14px;text-align:center;color:var(--muted);font-size:13px}
+.img-ph img,.img-ph object{width:100%;max-width:100%;border-radius:8px;display:block;margin:0 auto}
 .img-ph .cap{margin-top:6px;font-weight:600;font-size:12px}
 
 /* related references in a phase */
@@ -336,6 +336,9 @@ footer{padding:40px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-pin.num::after{content:"구";font-size:.62em;font-weight:700;margin-left:1px;opacity:.9}
 .fp-pin.big{width:32px;height:32px;font-size:15px}
 .fp-pin.small{width:21px;height:21px;font-size:12px;border-width:1.5px}
+.fp-pin.light{font-size:13px}
+.fp-btn.ghost.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fp-box.line{border-radius:99px;border-width:1.5px}
 .fp-box{border:2px solid;border-radius:4px;cursor:pointer}
 .fp-box .lb{position:absolute;top:0;left:0;font-size:11px;font-weight:700;color:#fff;padding:1px 6px;border-radius:3px 0 6px 0;white-space:nowrap;line-height:1.4}
 .fp-text{transform:translate(-50%,-50%);font-size:13px;font-weight:700;background:rgba(255,255,255,.88);padding:2px 8px;border-radius:6px;border:1.5px solid;cursor:pointer;white-space:nowrap;line-height:1.3}

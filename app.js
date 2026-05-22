@@ -398,6 +398,23 @@
     const clone = (a) => JSON.parse(JSON.stringify(a || []));
     const round1 = (n) => Math.round(n * 10) / 10;
     const hexA = (hex, a) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); if (!m) return hex; const n = parseInt(m[1], 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+    // 조명 종류별 아이콘 (라벨 키워드로 판별)
+    const lightIcon = (label) => {
+      const s = label || "";
+      if (/간접|라인/.test(s)) return "▬";
+      if (/멀티|매입/.test(s)) return "◉";
+      if (/cob/i.test(s)) return "✦";
+      if (/확산/.test(s)) return "◯";
+      return "💡";
+    };
+    // 조명 빠른배치 프리셋 — 버튼 누르면 레이어·도구·라벨이 자동 세팅됨
+    const LIGHT_PRESETS = [
+      { key: "간접", label: "간접조명(라인)", tool: "box", icon: "▬" },
+      { key: "멀티매입", label: "멀티매입등", tool: "pin", icon: "◉" },
+      { key: "COB", label: "COB조명", tool: "pin", icon: "✦" },
+      { key: "확산", label: "확산조명", tool: "pin", icon: "◯" },
+    ];
+    let presetLabel = "";   // 다음에 추가할 마커에 자동으로 붙일 라벨 (프리셋 선택 시)
 
     // 자동저장(브라우저) — 편집 중에만 내 브라우저에 백업해 새로고침에도 안 날아가게 한다.
     // 단, 로드 시 자동으로 덮어쓰지 않는다. (기본은 data.js 확정본, 임시저장은 배너로 불러옴)
@@ -467,9 +484,10 @@
       items().forEach((it, i) => {
         if (hidden.has(it.layer)) return;
         const L = layerOf(it.layer); let el = document.createElement("div");
+        const isLine = it.layer === "light" && /간접|라인/.test(it.label || "");
         if (it.type === "box") {
-          el.className = "fp-marker fp-box";
-          el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, .12)}`;
+          el.className = "fp-marker fp-box" + (isLine ? " line" : "");
+          el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, isLine ? .55 : .12)}`;
           if (it.label) { const lb = document.createElement("span"); lb.className = "lb"; lb.style.background = L.color; lb.textContent = it.label; el.appendChild(lb); }
         } else if (it.type === "text") {
           el.className = "fp-marker fp-text";
@@ -480,7 +498,8 @@
           el.style.cssText = `left:${it.x}%;top:${it.y}%;background:${L.color}`;
           el.title = it.label || L.label;
           const gu = /(\d+)\s*구/.exec(it.label || "");   // 라벨의 "4구/2구" → 숫자 표시 + 크기 구분
-          if (gu) { el.textContent = gu[1]; el.classList.add("num", +gu[1] >= 4 ? "big" : "small"); }
+          if (it.layer === "light") { el.textContent = lightIcon(it.label); el.classList.add("light"); }
+          else if (gu) { el.textContent = gu[1]; el.classList.add("num", +gu[1] >= 4 ? "big" : "small"); }
           else { el.textContent = L.icon; }
         }
         el.dataset.i = i;
@@ -512,13 +531,13 @@
       const p = pct(e);
       if (curTool === "box") {
         const pre = clone(editItems);
-        editItems.push({ layer: curLayer, type: "box", x: round1(p.x), y: round1(p.y), w: 0, h: 0, label: "" });
+        editItems.push({ layer: curLayer, type: "box", x: round1(p.x), y: round1(p.y), w: 0, h: 0, label: presetLabel });
         selected = editItems.length - 1;
         drag = { i: selected, mode: "draw", sx: p.x, sy: p.y, moved: true, pre };
         overlay.setPointerCapture(e.pointerId); drawMarkers();
       } else {
         recordUndo(clone(editItems));
-        editItems.push({ layer: curLayer, type: curTool === "text" ? "text" : "pin", x: round1(p.x), y: round1(p.y), label: "" });
+        editItems.push({ layer: curLayer, type: curTool === "text" ? "text" : "pin", x: round1(p.x), y: round1(p.y), label: presetLabel });
         selected = editItems.length - 1;
         saveDraft(); drawChips(); drawMarkers(); renderEditbar(true);
       }
@@ -574,13 +593,19 @@
       bar.innerHTML =
         `<div class="fp-row"><span class="fp-hint">도구</span><div class="fp-seg">${tool("pin", "📍 점")}${tool("box", "⬛ 영역")}${tool("text", "🅰 글자")}</div>` +
         `<span class="fp-hint">레이어</span><select class="fp-input grow0" id="fp-cur-layer">${opts(curLayer)}</select></div>` +
+        `<div class="fp-row"><span class="fp-hint">💡 조명 빠른배치</span>` +
+        LIGHT_PRESETS.map((p) => `<button class="fp-btn ghost sm preset${presetLabel === p.label ? " on" : ""}" data-preset="${esc(p.label)}" data-ptool="${p.tool}">${p.icon} ${esc(p.key)}</button>`).join("") +
+        (presetLabel ? `<button class="fp-btn ghost sm" id="fp-preset-off">✕ 해제</button>` : "") +
+        `</div>` +
         selRow +
         `<div class="fp-row"><button class="fp-btn ghost sm" id="fp-undo"${undoStack.length ? "" : " disabled"}>↩ 되돌리기</button>` +
         `<button class="fp-btn sm" id="fp-export">📋 코드 복사</button>` +
         `<button class="fp-btn ghost sm" id="fp-reset">↺ 원본으로</button>` +
         `<span class="fp-hint">평면도 클릭해 추가 · 끌어 이동 · 선택 후 삭제 · <b>뒤로가기/↩/Delete</b> 로 취소</span></div>`;
-      bar.querySelectorAll("[data-tool]").forEach((b) => b.addEventListener("click", () => { curTool = b.dataset.tool; renderEditbar(); }));
-      const cl = $("fp-cur-layer"); if (cl) cl.addEventListener("change", () => { curLayer = cl.value; });
+      bar.querySelectorAll("[data-tool]").forEach((b) => b.addEventListener("click", () => { curTool = b.dataset.tool; presetLabel = ""; renderEditbar(); }));
+      bar.querySelectorAll("[data-preset]").forEach((b) => b.addEventListener("click", () => { presetLabel = b.dataset.preset; curLayer = "light"; curTool = b.dataset.ptool; selected = -1; renderEditbar(); }));
+      const poff = $("fp-preset-off"); if (poff) poff.addEventListener("click", () => { presetLabel = ""; renderEditbar(); });
+      const cl = $("fp-cur-layer"); if (cl) cl.addEventListener("change", () => { curLayer = cl.value; presetLabel = ""; });
       const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { recordUndo(clone(editItems)); editItems[selected].layer = sl.value; saveDraft(); drawChips(); drawMarkers(); });
       const lbl = $("fp-sel-label"); if (lbl) { lbl.addEventListener("input", () => { editItems[selected].label = lbl.value; saveDraft(); updateLabel(selected); }); if (focusLabel) lbl.focus(); }
       const del = $("fp-del"); if (del) del.addEventListener("click", () => { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); });
