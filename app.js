@@ -185,9 +185,10 @@
   function relatedRefs(phaseId) {
     return allRefs().filter((r) => (r.phases || []).includes(phaseId));
   }
+  const imgType = (f) => { const e = (String(f).split(".").pop() || "").toLowerCase(); return "image/" + (e === "jpg" ? "jpeg" : (e || "jpeg")); };
   function refThumb(r) {
-    const media = `<object data="images/${esc(r.file)}" type="image/jpeg"><div class="ph">📎 ${esc(r.file)}</div></object>`;
-    return `<div class="ref-thumb">${media}<div class="rc"><b>${esc(r.title)}</b>${esc(r.desc || "")}</div></div>`;
+    const media = `<object data="images/${esc(r.file)}" type="${imgType(r.file)}"><div class="ph">📎 ${esc(r.file)}</div></object>`;
+    return `<div class="ref-thumb">${media}<div class="rc"><b>${esc(r.title)}</b>${esc(r.desc || "")}${r.link ? `<br><a class="ref-link" href="${esc(r.link)}" target="_blank" rel="noopener">제품 링크 ↗</a>` : ""}</div></div>`;
   }
   function renderOverview() {
     const el = $("overview-grid"); if (!el) return;
@@ -238,6 +239,8 @@
           `<li><b>${esc(h.label || "")}</b> — ${esc(h.value || "")}${h.note ? ` <span class="hl-n">(${esc(h.note)})</span>` : ""}</li>`).join("")}</ul>
       </div>`;
     }
+    const phaseAsks = (p.asks && p.asks.length)
+      ? `<div class="phase-asks">${p.asks.map((q) => `<div class="it-ask">💬 업자 확인: ${esc(q)}</div>`).join("")}</div>` : "";
     const dec = (p.decisions && p.decisions.length) ? `
       <div class="phase-dec"><div class="dt">⚠️ 결정 필요</div>
       <ul class="items">${p.decisions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>` : "";
@@ -260,6 +263,7 @@
       ${team}
       ${p.summary ? `<div class="phase-summary">${esc(p.summary)}</div>` : ""}
       ${highlights}
+      ${phaseAsks}
       <div class="cols">${groups}</div>${dec}${chk}${imgs}${refBlock}
     </div>`;
   }
@@ -297,10 +301,11 @@
     const refs = allRefs();
     el.innerHTML = refs.map((r) => `
       <div class="ref-card">
-        <div class="media"><object data="images/${esc(r.file)}" type="image/jpeg">📎 ${esc(r.file)}<br><small>images/ 폴더에 넣으면 표시됨</small></object></div>
+        <div class="media"><object data="images/${esc(r.file)}" type="${imgType(r.file)}">📎 ${esc(r.file)}<br><small>images/ 폴더에 넣으면 표시됨</small></object></div>
         <div class="body">
           <h4>${esc(r.title)}</h4>
           <p>${esc(r.desc || "")}</p>
+          ${r.link ? `<a class="ref-link" href="${esc(r.link)}" target="_blank" rel="noopener">제품 링크 ↗</a>` : ""}
           ${(r.phases && r.phases.length) ? `<div class="ref-tags">${r.phases.map((pid) => `<span class="t">${esc(phaseName(pid))}</span>`).join("")}</div>` : ""}
         </div>
       </div>`).join("") || `<div class="stub">아직 레퍼런스가 없어요. 사진을 images/ 에 넣고 data.js의 REFERENCES에 추가하세요.</div>`;
