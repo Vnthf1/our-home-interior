@@ -410,7 +410,7 @@
     // 조명 빠른배치 프리셋 — 버튼 누르면 레이어·도구·라벨이 자동 세팅됨
     const LIGHT_PRESETS = [
       { key: "간접", label: "간접조명(라인)", tool: "box", icon: "▬" },
-      { key: "멀티매입", label: "멀티매입등", tool: "pin", icon: "◉" },
+      { key: "멀티매입", label: "멀티매입등", tool: "box", icon: "▭" },
       { key: "COB", label: "COB조명", tool: "pin", icon: "✦" },
       { key: "확산", label: "확산조명", tool: "pin", icon: "◯" },
     ];
@@ -485,9 +485,10 @@
         if (hidden.has(it.layer)) return;
         const L = layerOf(it.layer); let el = document.createElement("div");
         const isLine = it.layer === "light" && /간접|라인/.test(it.label || "");
+        const isBar = it.layer === "light" && /멀티|매입/.test(it.label || "");
         if (it.type === "box") {
-          el.className = "fp-marker fp-box" + (isLine ? " line" : "");
-          el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, isLine ? .55 : .12)}`;
+          el.className = "fp-marker fp-box" + (isLine ? " line" : "") + (isBar ? " bar" : "");
+          el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, isLine || isBar ? .5 : .12)}`;
           if (it.label) { const lb = document.createElement("span"); lb.className = "lb"; lb.style.background = L.color; lb.textContent = it.label; el.appendChild(lb); }
         } else if (it.type === "text") {
           el.className = "fp-marker fp-text";
