@@ -335,9 +335,15 @@
     const round1 = (n) => Math.round(n * 10) / 10;
     const hexA = (hex, a) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); if (!m) return hex; const n = parseInt(m[1], 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
 
+    // 자동저장(브라우저) — 편집 중에만 내 브라우저에 백업해 새로고침에도 안 날아가게 한다.
+    // 단, 로드 시 자동으로 덮어쓰지 않는다. (기본은 data.js 확정본, 임시저장은 배너로 불러옴)
+    const LS_KEY = "fp-draft:" + FP.image;
+    const readDraft = () => { try { const r = localStorage.getItem(LS_KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } };
+    const saveDraft = () => { if (editing) { try { localStorage.setItem(LS_KEY, JSON.stringify(editItems)); } catch (e) {} } };
+    const clearDraft = () => { try { localStorage.removeItem(LS_KEY); } catch (e) {} };
+
     let editing = false, selected = -1, drag = null, popupEl = null;
-    // 표시·편집 모두 data.js 의 FLOORPLAN.items 를 그대로 사용 (로컬 저장 X, 메모리에서만 편집).
-    // 영구 저장 = [코드 복사] → data.js 의 items 에 반영 → 커밋.
+    // 기본은 항상 data.js 의 확정본. 영구 저장 = [코드 복사] → data.js 반영 → 커밋.
     let editItems = clone(FP.items);
     const hidden = new Set();
     let curLayer = (FP.layers[0] || {}).id, curTool = "pin";
@@ -349,7 +355,7 @@
     function recordUndo(pre) { undoStack.push(pre); if (undoStack.length > 80) undoStack.shift(); armGuard(); }
     function undo() {
       if (!undoStack.length) return false;
-      editItems = undoStack.pop(); selected = -1;
+      editItems = undoStack.pop(); selected = -1; saveDraft();
       drawChips(); drawMarkers(); renderEditbar();
       return true;
     }
@@ -357,6 +363,7 @@
     root.innerHTML =
       '<div class="fp-toolbar"><div class="fp-chips" id="fp-chips"></div>' +
       '<button class="fp-btn" id="fp-edit">✏️ 편집</button></div>' +
+      '<div class="fp-draftbar" id="fp-draftbar" hidden></div>' +
       '<div class="fp-editbar" id="fp-editbar" hidden></div>' +
       '<div class="fp-stage" id="fp-stage"><img class="fp-img" id="fp-img" alt="평면도" src="images/' + esc(FP.image) + '" />' +
       '<div class="fp-overlay" id="fp-overlay"></div></div>' +
@@ -446,7 +453,7 @@
         recordUndo(clone(editItems));
         editItems.push({ layer: curLayer, type: curTool === "text" ? "text" : "pin", x: round1(p.x), y: round1(p.y), label: "" });
         selected = editItems.length - 1;
-        drawChips(); drawMarkers(); renderEditbar(true);
+        saveDraft(); drawChips(); drawMarkers(); renderEditbar(true);
       }
     });
     overlay.addEventListener("pointermove", (e) => {
@@ -471,7 +478,7 @@
       } else if (wasDraw || mode === "resize" || (mode === "move" && drag.moved)) {
         recordUndo(drag.pre);                                 // 실제 변경분만 되돌리기 스택에
       }
-      drag = null; drawChips(); drawMarkers(); renderEditbar(wasDraw);
+      drag = null; saveDraft(); drawChips(); drawMarkers(); renderEditbar(wasDraw);
     }
     overlay.addEventListener("pointerup", endDrag);
     overlay.addEventListener("pointercancel", endDrag);
@@ -507,12 +514,12 @@
         `<span class="fp-hint">평면도 클릭해 추가 · 끌어 이동 · 선택 후 삭제 · <b>뒤로가기/↩/Delete</b> 로 취소</span></div>`;
       bar.querySelectorAll("[data-tool]").forEach((b) => b.addEventListener("click", () => { curTool = b.dataset.tool; renderEditbar(); }));
       const cl = $("fp-cur-layer"); if (cl) cl.addEventListener("change", () => { curLayer = cl.value; });
-      const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { recordUndo(clone(editItems)); editItems[selected].layer = sl.value; drawChips(); drawMarkers(); });
-      const lbl = $("fp-sel-label"); if (lbl) { lbl.addEventListener("input", () => { editItems[selected].label = lbl.value; updateLabel(selected); }); if (focusLabel) lbl.focus(); }
-      const del = $("fp-del"); if (del) del.addEventListener("click", () => { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; drawChips(); drawMarkers(); renderEditbar(); });
+      const sl = $("fp-sel-layer"); if (sl) sl.addEventListener("change", () => { recordUndo(clone(editItems)); editItems[selected].layer = sl.value; saveDraft(); drawChips(); drawMarkers(); });
+      const lbl = $("fp-sel-label"); if (lbl) { lbl.addEventListener("input", () => { editItems[selected].label = lbl.value; saveDraft(); updateLabel(selected); }); if (focusLabel) lbl.focus(); }
+      const del = $("fp-del"); if (del) del.addEventListener("click", () => { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); });
       const undoBtn = $("fp-undo"); if (undoBtn) undoBtn.addEventListener("click", undo);
       $("fp-export").addEventListener("click", exportCode);
-      $("fp-reset").addEventListener("click", () => { if (confirm("편집한 내용을 버리고 원본(data.js)으로 되돌릴까요?")) { recordUndo(clone(editItems)); editItems = clone(FP.items); selected = -1; drawChips(); drawMarkers(); renderEditbar(); $("fp-exportwrap").hidden = true; } });
+      $("fp-reset").addEventListener("click", () => { if (confirm("편집한 내용을 버리고 원본(data.js)으로 되돌릴까요?")) { recordUndo(clone(editItems)); editItems = clone(FP.items); clearDraft(); selected = -1; drawChips(); drawMarkers(); renderEditbar(); $("fp-exportwrap").hidden = true; } });
     }
 
     function exportCode() {
@@ -559,15 +566,26 @@
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); undo(); return; }
       if (e.key === "Delete" || e.key === "Backspace") {
         e.preventDefault();
-        if (selected >= 0 && editItems[selected]) { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; drawChips(); drawMarkers(); renderEditbar(); }
+        if (selected >= 0 && editItems[selected]) { recordUndo(clone(editItems)); editItems.splice(selected, 1); selected = -1; saveDraft(); drawChips(); drawMarkers(); renderEditbar(); }
         else undo();
       }
     });
+
+    // 임시저장(draft) 안내 — data.js 확정본과 다를 때만 "불러올까요?" 배너 표시 (자동 적용 X)
+    function checkDraft() {
+      const bar = $("fp-draftbar"), d = readDraft();
+      if (!d || JSON.stringify(d) === JSON.stringify(FP.items)) { bar.hidden = true; bar.innerHTML = ""; return; }
+      bar.hidden = false;
+      bar.innerHTML = `💾 이전에 편집하던 내용이 있어요 (이 브라우저에 임시저장됨). <button class="fp-btn sm" id="fp-draft-load">불러오기</button> <button class="fp-btn ghost sm" id="fp-draft-discard">버리기</button>`;
+      $("fp-draft-load").addEventListener("click", () => { editItems = clone(d); bar.hidden = true; if (!editing) setEdit(true); else { drawChips(); drawMarkers(); renderEditbar(); } });
+      $("fp-draft-discard").addEventListener("click", () => { clearDraft(); bar.hidden = true; });
+    }
 
     drawChips();
     const img = $("fp-img");
     if (img.complete) drawMarkers(); else img.addEventListener("load", drawMarkers);
     window.addEventListener("resize", () => { if (popupEl) closePopup(); });
+    checkDraft();
   }
 
   /* ---------- 부팅 ---------- */
