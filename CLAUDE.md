@@ -72,10 +72,11 @@ quotes/     ← 견적서 파일(이미지/PDF).
 
 ## 배포
 
-- GitHub: **Vnthf1/our-home-interior** (private) — `gh`는 `github.com` 계정 사용(사내 github.nhnent.com 아님).
-- **Netlify**가 이 repo에 연결돼 있어 `git push origin main` 하면 **자동 배포**.
-  빌드 명령 없음 / publish 디렉터리 = 루트.
-- 사이트 URL은 공개라 누구나 열람 가능 → **연락처 전화번호 등 노출 주의**.
+- GitHub: **Vnthf1/our-home-interior** (**public**) — `gh`는 `github.com` 계정 사용(사내 github.nhnent.com 아님).
+- **GitHub Pages**로 배포 (main 브랜치 / 루트). `git push origin main` 하면 **자동 재빌드·배포**. 빌드 명령 없음.
+  - 사이트: **https://vnthf1.github.io/our-home-interior/** (서브경로 서빙 → 자산은 **상대경로만** 사용. `/`로 시작하는 절대경로 금지).
+  - (구) Netlify는 무료 사용량 초과로 막혀서 2026-05 GitHub Pages로 이전함. repo도 이때 public 전환.
+- repo가 public이라 **코드·커밋 히스토리·전화번호가 모두 공개**됨 → 새 비공개 정보(동·호 상세 등)는 코드/주석에도 넣지 말 것. 사이트 URL도 누구나 열람 가능.
 
 ## 작업 시 주의
 
