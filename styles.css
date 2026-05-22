@@ -221,6 +221,8 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .work-top .wrap{display:flex;align-items:center;gap:12px;height:60px}
 .work-top .brand{font-weight:800;text-decoration:none;font-size:18px;white-space:nowrap}
 .work-top .work-tag{font-size:13px;color:var(--muted);font-weight:600}
+.work-home{margin-left:auto;font-size:12px;font-weight:700;color:var(--accent);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:5px 12px;white-space:nowrap}
+.work-home:hover{border-color:var(--accent);background:var(--accent-soft)}
 .work-tabsbar{position:sticky;top:0;z-index:50;background:rgba(246,243,238,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .wtabs{display:flex;gap:6px;align-items:center;height:54px;overflow-x:auto;scrollbar-width:none}
 .wtabs::-webkit-scrollbar{display:none}

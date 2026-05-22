@@ -38,6 +38,8 @@
   function mountNav() {
     const el = $("nav");
     if (!el) return;
+    // 전체 사이트(견적·연락처 포함)를 본 적 있는 브라우저 = 소유자. 작업자 공유 페이지에서 '전체 사이트' 링크 노출 판단용.
+    try { localStorage.setItem("oh-owner", "1"); } catch (e) {}
     const active = document.body.dataset.page;
     el.innerHTML =
       `<div class="wrap"><a class="brand" href="index.html">🏠 ${esc(PROJECT.title)}</a>` +
@@ -647,6 +649,9 @@
   function renderWork() {
     const tabsEl = $("work-tabs"), contentEl = $("work-content");
     if (!tabsEl || !contentEl) return;
+    // 소유자 브라우저에서만 '전체 사이트' 링크 노출 (작업자에겐 숨김)
+    const homeLink = $("work-home");
+    if (homeLink) { try { if (localStorage.getItem("oh-owner") === "1") homeLink.hidden = false; } catch (e) {} }
     const OV = (typeof OVERVIEW !== "undefined") ? OVERVIEW : {};
     const tabs = [{ key: "overview", icon: "🏠", name: "개요" }]
       .concat(PHASES.map((p) => ({ key: p.id, icon: p.icon, name: p.name })));
