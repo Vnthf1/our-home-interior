@@ -20,7 +20,20 @@ quotes/     ← 견적서 파일(이미지/PDF).
 
 ### 페이지 목록 (app.js의 NAV와 일치)
 홈(index) · 컨셉(concept) · 공정표(schedule) · 작업계획서(plans) ·
-도면(floorplan) · 견적/후보(quotes) · 레퍼런스(references) · 연락처(contacts)
+작업안내(work) · 도면(floorplan) · 견적/후보(quotes) · 레퍼런스(references) · 연락처(contacts)
+
+- **work.html(작업 안내)** = 작업자 공유용 진입점. 자체 헤더 + 탭바(공유 site nav 미사용). `PHASES`를 그대로 재사용하되 담당 업체명·견적·연락처는 숨김. 첫 탭은 개요(`OVERVIEW` + `BEFORE_AFTER`), 이후 공정별 탭. **탭마다 URL이 해시로 구분**(`work.html#electric`)되어 작업자에게 해당 공정만 공유 가능.
+- plans.html(작업계획서)와 work.html은 `phaseCardHTML()`을 공유 → 작업계획서 포맷을 바꾸면 양쪽에 동시 반영. work.html은 `{hideTeam:true}`로 호출.
+
+### 작업계획서 포맷 (PHASES) — 견적용 새 포맷
+- `highlights`: 견적용 요약(맨 위 📌 박스). `[{ value:"규모/개수", label:"항목", note:"보충·확정필요" }]`.
+- `groups[].items`: 문자열이거나 객체. 객체면 `{ text, undecided?:true, memo?:"직접구매 등", caution?:"주의점"|[...], ask?:"질문"|[...] }`.
+  - `undecided` → **미정** 배지(점선 밑줄). `memo` → 옆에 **📝 메모** 태그(직접구매 등).
+  - `caution` → **⚠️ 공정 시 주의**(주황 박스), `ask` → **💬 업자 확인**(파랑 박스). **둘은 별개 필드.**
+  - ⚠️ caution·ask·memo는 **사용자가 직접 채운다. 임의로 넣지 말 것.**
+- `summary`: 있으면 한 줄 표시, 비우면("") 아예 안 나옴(전기는 비워둠).
+- `decisions`(⚠️ 결정 필요)·`checks`(✓ 확인)는 공정 단위 그대로 유지.
+- **진행 현황**: 전기(electric)에 새 포맷 적용 완료(파일럿). 나머지 공정은 아직 문자열 items → 공정별로 하나씩 highlights/ask/undecided 채워가면 됨.
 
 ## 콘텐츠 수정 방법 (대부분 data.js만)
 
@@ -29,7 +42,7 @@ quotes/     ← 견적서 파일(이미지/PDF).
 | 프로젝트 정보·소개 | `PROJECT` |
 | 컨셉/무드/마감재 | `CONCEPT` |
 | 공정 일정(간트) | `SCHEDULE.tasks` (spans = [시작,종료] 날짜) |
-| 공정별 작업계획 | `PHASES` (각 공정의 groups/decisions/checks/images) |
+| 공정별 작업계획 | `PHASES` (각 공정의 highlights/groups/decisions/checks/images) |
 | 도면 마커 | `FLOORPLAN.items` |
 | 레퍼런스 사진 | `REFERENCES` |
 | 견적/후보 업체 | `QUOTES` (공정별 후보·견적) |

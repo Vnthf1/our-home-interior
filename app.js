@@ -29,6 +29,7 @@
     { href: "concept.html", label: "컨셉", key: "concept" },
     { href: "schedule.html", label: "공정표", key: "schedule" },
     { href: "plans.html", label: "작업계획서", key: "plans" },
+    { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
     { href: "quotes.html", label: "견적/후보", key: "quotes" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
@@ -199,39 +200,93 @@
       </a>`;
     }).join("");
   }
+  // 공정 카드 1개 HTML — plans.html(작업계획서)와 work.html(작업 안내)이 공유.
+  //   opts.hideTeam : 담당 업체명 숨김 (작업자 공유 뷰)
+  //   opts.noId     : 카드에 id 부여 안 함 (탭 라우팅과 충돌 방지)
+  // 세부 항목 1개 — 문자열이면 그대로, 객체면 미정·메모·공정주의·업자확인을 인라인 표시.
+  //   { text, undecided?:true, memo?:"직접구매 등",
+  //     caution?:"주의점" | [...],   // ⚠️ 공정 시 주의 (시공 시 주의할 점)
+  //     ask?:"질문" | [...] }        // 💬 업자 확인 (업자에게 물어볼 것 — 별개)
+  function itemHTML(it) {
+    if (typeof it === "string") return `<li>${esc(it)}</li>`;
+    const cautions = it.caution ? (Array.isArray(it.caution) ? it.caution : [it.caution]) : [];
+    const asks = it.ask ? (Array.isArray(it.ask) ? it.ask : [it.ask]) : [];
+    return `<li class="item-x${it.undecided ? " undecided" : ""}">` +
+      `<span class="it-text">${esc(it.text)}</span>` +
+      (it.undecided ? ` <span class="it-flag undecided">미정</span>` : "") +
+      (it.memo ? ` <span class="it-memo">📝 ${esc(it.memo)}</span>` : "") +
+      cautions.map((q) => `<div class="it-caution">⚠️ 공정 시 주의: ${esc(q)}</div>`).join("") +
+      asks.map((q) => `<div class="it-ask">💬 업자 확인: ${esc(q)}</div>`).join("") +
+      `</li>`;
+  }
+  function phaseCardHTML(p, i, opts = {}) {
+    const groups = (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
+      <div class="group">
+        ${g.title ? `<div class="gtitle">${esc(g.title)}</div>` : ""}
+        <ul class="items">${g.items.map(itemHTML).join("")}</ul>
+      </div>`).join("");
+    let highlights = "";
+    if (p.highlights && p.highlights.length) {
+      const copyText = `[${p.name}] 주요 변경·추가 요약\n` +
+        p.highlights.map((h) => `- ${h.label}: ${h.value}${h.note ? ` (${h.note})` : ""}`).join("\n");
+      highlights = `
+      <div class="phase-highlights">
+        <div class="ph-h">📌 한눈에 — 주요 변경·추가 (견적용 요약)<button class="hl-copy" type="button" data-copy="${esc(copyText)}">📋 복사</button></div>
+        <ul class="hl-list">${p.highlights.map((h) =>
+          `<li><b>${esc(h.label || "")}</b> — ${esc(h.value || "")}${h.note ? ` <span class="hl-n">(${esc(h.note)})</span>` : ""}</li>`).join("")}</ul>
+      </div>`;
+    }
+    const dec = (p.decisions && p.decisions.length) ? `
+      <div class="phase-dec"><div class="dt">⚠️ 결정 필요</div>
+      <ul class="items">${p.decisions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>` : "";
+    const chk = (p.checks && p.checks.length) ? `
+      <div class="phase-chk"><div class="dt">✓ 확인 필요 (놓치기 쉬운 것)</div>
+      <ul class="items">${p.checks.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>` : "";
+    const imgs = (p.images && p.images.length) ? `
+      <div class="imgs">${p.images.map((im) => `
+        <div class="img-ph">
+          <object data="images/${esc(im.file)}" type="image/png">📎 ${esc(im.file)}<br><small>(images/ 폴더에 추가하면 표시됨)</small></object>
+          <div class="cap">${esc(im.label)}</div>
+        </div>`).join("")}</div>` : "";
+    const refs = relatedRefs(p.id);
+    const refBlock = refs.length ? `
+      <div class="phase-refs"><div class="rt">🖼️ 관련 레퍼런스</div>
+      <div class="ref-thumbs">${refs.map(refThumb).join("")}</div></div>` : "";
+    const team = opts.hideTeam ? "" : `<div class="phase-team">👷 ${esc(p.team)}</div>`;
+    return `<div class="phase"${opts.noId ? "" : ` id="${p.id}"`}>
+      <div class="phase-head"><span class="num">${i + 1}</span><span class="icon">${esc(p.icon)}</span><h3>${esc(p.name)}</h3></div>
+      ${team}
+      ${p.summary ? `<div class="phase-summary">${esc(p.summary)}</div>` : ""}
+      ${highlights}
+      <div class="cols">${groups}</div>${dec}${chk}${imgs}${refBlock}
+    </div>`;
+  }
   function renderPhases() {
     const el = $("phases"); if (!el) return;
-    el.innerHTML = PHASES.map((p, i) => {
-      const groups = (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
-        <div class="group">
-          ${g.title ? `<div class="gtitle">${esc(g.title)}</div>` : ""}
-          <ul class="items">${g.items.map((it) => `<li>${esc(it)}</li>`).join("")}</ul>
-        </div>`).join("");
-      const dec = (p.decisions && p.decisions.length) ? `
-        <div class="phase-dec"><div class="dt">⚠️ 결정 필요</div>
-        <ul class="items">${p.decisions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>` : "";
-      const chk = (p.checks && p.checks.length) ? `
-        <div class="phase-chk"><div class="dt">✓ 확인 필요 (놓치기 쉬운 것)</div>
-        <ul class="items">${p.checks.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>` : "";
-      const imgs = (p.images && p.images.length) ? `
-        <div class="imgs">${p.images.map((im) => `
-          <div class="img-ph">
-            <object data="images/${esc(im.file)}" type="image/png">📎 ${esc(im.file)}<br><small>(images/ 폴더에 추가하면 표시됨)</small></object>
-            <div class="cap">${esc(im.label)}</div>
-          </div>`).join("")}</div>` : "";
-      const refs = relatedRefs(p.id);
-      const refBlock = refs.length ? `
-        <div class="phase-refs"><div class="rt">🖼️ 관련 레퍼런스</div>
-        <div class="ref-thumbs">${refs.map(refThumb).join("")}</div></div>` : "";
-      return `<div class="phase" id="${p.id}">
-        <div class="phase-head"><span class="num">${i + 1}</span><span class="icon">${esc(p.icon)}</span><h3>${esc(p.name)}</h3></div>
-        <div class="phase-team">👷 ${esc(p.team)}</div>
-        <div class="phase-summary">${esc(p.summary || "")}</div>
-        <div class="cols">${groups}</div>${dec}${chk}${imgs}${refBlock}
-      </div>`;
-    }).join("");
+    el.innerHTML = PHASES.map((p, i) => phaseCardHTML(p, i)).join("");
     // 해시(#tile 등)로 들어오면 해당 공정으로 스크롤
     if (location.hash) { const target = document.getElementById(location.hash.slice(1)); if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth" }), 60); }
+  }
+
+  /* ---------- 현장 → 변화 (As-Is / To-Be) ---------- */
+  function baCardHTML(b) {
+    const arr = (x) => Array.isArray(x) ? x.filter(Boolean) : (x ? [x] : []);
+    const thumbs = (files, cls) => files.length
+      ? `<div class="ba-thumbs">${files.map((f) => `<object class="ba-thumb" data="images/${esc(f)}" type="image/jpeg"><span class="ph">📎 ${esc(f)}</span></object>`).join("")}</div>`
+      : `<div class="ba-empty">${cls === "tobe" ? "🤖 AI 시안 준비 중" : "📷 현장 사진 준비 중"}</div>`;
+    return `
+      <div class="ba-card">
+        <div class="ba-head"><h4>${esc(b.area || "")}</h4>${b.note ? `<span class="ba-note">${esc(b.note)}</span>` : ""}</div>
+        <div class="ba-pair">
+          <div class="ba-col"><div class="ba-col-label asis">현장 · As-Is</div>${thumbs(arr(b.asis), "asis")}</div>
+          <div class="ba-col"><div class="ba-col-label tobe">🤖 AI 시안 · To-Be</div>${thumbs(arr(b.tobe), "tobe")}</div>
+        </div>
+      </div>`;
+  }
+  function renderBeforeAfter() {
+    const el = $("ba-grid"); if (!el) return;
+    const list = (typeof BEFORE_AFTER !== "undefined" ? BEFORE_AFTER : []);
+    el.innerHTML = list.map(baCardHTML).join("") || `<div class="stub">현장/AI 시안 사진을 <code>images/</code> 에 넣고 <code>data.js</code>의 <code>BEFORE_AFTER</code>에 추가하세요.</div>`;
   }
 
   /* ---------- 레퍼런스 갤러리 ---------- */
@@ -588,6 +643,51 @@
     checkDraft();
   }
 
+  /* ---------- 작업 안내 (작업자 공유용 · 탭형, 각 공정마다 URL) ---------- */
+  function renderWork() {
+    const tabsEl = $("work-tabs"), contentEl = $("work-content");
+    if (!tabsEl || !contentEl) return;
+    const OV = (typeof OVERVIEW !== "undefined") ? OVERVIEW : {};
+    const tabs = [{ key: "overview", icon: "🏠", name: "개요" }]
+      .concat(PHASES.map((p) => ({ key: p.id, icon: p.icon, name: p.name })));
+
+    tabsEl.innerHTML = tabs.map((t) =>
+      `<button class="wtab" data-tab="${esc(t.key)}"><span class="wt-ic">${esc(t.icon)}</span>${esc(t.name)}</button>`).join("");
+
+    // 개요 패널 — 전체 변경 요약 + 공간별 before→after
+    const changes = (OV.changes && OV.changes.length)
+      ? `<div class="ov-changes">${OV.changes.map((c) =>
+          `<div class="ovc"><span class="ic">${esc(c.icon || "•")}</span><div><b>${esc(c.title)}</b>${c.desc ? `<p>${esc(c.desc)}</p>` : ""}</div></div>`).join("")}</div>` : "";
+    const baList = (typeof BEFORE_AFTER !== "undefined" ? BEFORE_AFTER : []);
+    const ba = baList.length
+      ? `<h3 class="work-subh">공간별 · 현장 → 바뀔 모습</h3>
+         <div class="banner">⚠️ To-Be(바뀔 모습)는 AI 시안이라 실제 시공과 다를 수 있어요. 전체 분위기·방향만 참고해 주세요.</div>
+         <div class="ba-grid">${baList.map(baCardHTML).join("")}</div>` : "";
+    const overviewPanel = `<section class="work-panel" data-tab="overview">
+      <h2 class="work-h">🏠 우리집은 이렇게 바뀝니다</h2>
+      ${OV.intro ? `<p class="work-intro">${esc(OV.intro)}</p>` : ""}
+      ${changes}${ba}
+    </section>`;
+
+    const phasePanels = PHASES.map((p, i) =>
+      `<section class="work-panel" data-tab="${esc(p.id)}">${phaseCardHTML(p, i, { hideTeam: true, noId: true })}</section>`).join("");
+
+    contentEl.innerHTML = overviewPanel + phasePanels;
+
+    const keys = tabs.map((t) => t.key);
+    function showTab(key) {
+      const valid = keys.includes(key) ? key : "overview";
+      contentEl.querySelectorAll(".work-panel").forEach((s) => { s.style.display = (s.dataset.tab === valid) ? "" : "none"; });
+      tabsEl.querySelectorAll(".wtab").forEach((b) => b.classList.toggle("active", b.dataset.tab === valid));
+      const at = tabsEl.querySelector(`.wtab[data-tab="${valid}"]`);
+      if (at) at.scrollIntoView({ inline: "center", block: "nearest" });
+    }
+    const fromHash = () => decodeURIComponent((location.hash || "#overview").slice(1));
+    showTab(fromHash());
+    tabsEl.addEventListener("click", (e) => { const b = e.target.closest(".wtab"); if (b) location.hash = b.dataset.tab; });
+    window.addEventListener("hashchange", () => { showTab(fromHash()); window.scrollTo({ top: 0 }); });
+  }
+
   /* ---------- 부팅 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     mountNav();
@@ -597,10 +697,20 @@
     renderDecisions();
     renderOverview();
     renderPhases();
+    renderBeforeAfter();
     renderReferences();
     renderQuotes();
     renderContacts();
     renderFloorplan();
+    renderWork();
+    // 견적용 요약 복사 버튼 (작업계획서·작업안내 공용)
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".hl-copy"); if (!btn) return;
+      const text = btn.dataset.copy || "";
+      const done = () => { const old = btn.textContent; btn.textContent = "복사됨 ✓"; setTimeout(() => { btn.textContent = old; }, 1200); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(done);
+      else { const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); } catch (_) {} ta.remove(); done(); }
+    });
     const y = $("year"); if (y) y.textContent = new Date().getFullYear();
   });
 })();
