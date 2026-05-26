@@ -272,8 +272,22 @@
   function renderPhases() {
     const el = $("phases"); if (!el) return;
     el.innerHTML = PHASES.map((p, i) => phaseCardHTML(p, i)).join("");
-    // 해시(#tile 등)로 들어오면 해당 공정으로 스크롤
-    if (location.hash) { const target = document.getElementById(location.hash.slice(1)); if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth" }), 60); }
+    // 해시(#electric 등)로 들어오면 해당 공정으로 스크롤 — 이미지가 lazy 로드되며 위쪽 높이가 변해도 다시 정렬
+    const scrollToHash = () => {
+      const id = decodeURIComponent((location.hash || "").slice(1));
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      const align = () => target.scrollIntoView({ behavior: "auto", block: "start" });
+      align();
+      el.querySelectorAll("img").forEach((img) => {
+        if (!img.complete) img.addEventListener("load", align, { once: true });
+      });
+      setTimeout(align, 250);
+      setTimeout(align, 800);
+    };
+    setTimeout(scrollToHash, 30);
+    window.addEventListener("hashchange", scrollToHash);
   }
 
   /* ---------- 현장 → 변화 (As-Is / To-Be) ---------- */
