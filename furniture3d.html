@@ -8,14 +8,9 @@
 <link rel="stylesheet" as="style" crossorigin
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <link rel="stylesheet" href="styles.css" />
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
+<!-- Three.js r147 (마지막 examples/js 지원 버전) — 비모듈이라 file:// 로컬에서도 동작 -->
+<script src="https://unpkg.com/three@0.147.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body data-page="furniture3d">
 
@@ -24,7 +19,7 @@
 <section><div class="wrap">
   <div class="sec-title">FURNITURE 3D</div>
   <h2 class="sec-head">가구 3D 도면</h2>
-  <p class="ov-lead">가구 업자 공유용 — 각 가구를 입체 박스로 표시하고 가로·깊이·높이(mm)를 라벨에 적었습니다. 박스를 <b>드래그</b>하면 회전, <b>스크롤</b>하면 확대됩니다. 치수는 <code>data.js</code>의 <code>FURNITURE_3D.items</code>에서 수정.</p>
+  <p class="ov-lead">가구 업자 공유용 — 공간(벽)을 깔고 그 안에 가구를 입체 박스로 배치, 가로(W)·높이(H) 치수를 mm로 표기합니다. 박스 <b>드래그=회전</b>, <b>스크롤=확대</b>, <b>⟲=시점 초기화</b>. 모듈/치수는 <code>data.js</code>의 <code>FURNITURE_3D.scenes</code>에서 수정.</p>
   <div id="fur3d-grid" class="fur3d-grid"></div>
 </div></section>
 
@@ -32,6 +27,6 @@
 
 <script src="data.js"></script>
 <script src="app.js"></script>
-<script type="module" src="furniture3d.js"></script>
+<script src="furniture3d.js"></script>
 </body>
 </html>

@@ -376,3 +376,40 @@ footer{padding:40px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fur3d-note{margin:2px 0 0;font-size:13px;line-height:1.55;color:#5a4a35}
 .fur3d-empty{padding:30px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
 .fur3d-empty code{background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px;font-size:13px}
+.fur3d-piecelist{font-size:13px;color:var(--ink);background:#fbf6ec;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.fur3d-piecelist summary{cursor:pointer;font-weight:600;color:var(--accent);outline:none}
+.fur3d-piecelist ul{margin:6px 0 0;padding-left:18px;line-height:1.7}
+.fur3d-piecelist li b{color:var(--ink);font-weight:600}
+.fur3d-pnote{color:var(--muted);font-size:12px;margin-left:4px}
+.fur3d-card{grid-column:1 / -1}
+.fur3d-grid{grid-template-columns:repeat(auto-fill,minmax(480px,1fr))}
+@media (min-width:1100px){.fur3d-grid{grid-template-columns:repeat(2,1fr)}.fur3d-card{grid-column:auto}}
+@media (max-width:600px){.fur3d-grid{grid-template-columns:1fr}.fur3d-card{grid-column:auto}}
+.fur3d-view{aspect-ratio:16/11}
+.fur3d-view.fur3d-editing{cursor:move}
+.fur3d-view.fur3d-editing canvas{cursor:move}
+.fur3d-edit{position:absolute;top:8px;right:46px;z-index:2;height:30px;padding:0 10px;border-radius:16px;border:1px solid var(--line);background:rgba(255,253,250,.95);color:var(--accent);font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;transition:.15s}
+.fur3d-edit:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fur3d-edit-on{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 0 3px rgba(176,132,88,.18)}
+.fur3d-cal{display:flex;flex-direction:column;gap:8px;background:var(--info-soft);border:1px solid #cfe0f1;border-radius:10px;padding:10px 12px;font-size:13px}
+.fur3d-cal[hidden]{display:none}
+.fur3d-cal-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.fur3d-cal-row b{color:var(--info)}
+.fur3d-cal-hint{font-size:11.5px;color:var(--muted)}
+.fur3d-cal-fields{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 14px}
+.fur3d-cal-fields label{display:flex;align-items:center;gap:6px;font-family:ui-monospace,Menlo,monospace;font-weight:700;color:var(--ink)}
+.fur3d-cal-fields input{width:80px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;font-family:ui-monospace,Menlo,monospace;font-size:12px;background:#fff}
+.fur3d-bt{display:flex;gap:3px}
+.fur3d-bt button{padding:2px 7px;border:1px solid var(--line);background:#fff;border-radius:4px;cursor:pointer;font-size:11px;font-family:ui-monospace,Menlo,monospace;line-height:1.2}
+.fur3d-bt button:hover{background:var(--accent-soft);border-color:var(--accent)}
+.fur3d-cal-code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:#fbf9f5;color:var(--ink);white-space:pre;resize:vertical;line-height:1.45;width:100%;box-sizing:border-box}
+.fur3d-cal-copy{align-self:flex-start;padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700}
+.fur3d-cal-copy:hover{filter:brightness(.92)}
+.fur3d-cal-modes{display:flex;gap:6px}
+.fur3d-cal-modes button{padding:5px 12px;border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink);transition:.15s}
+.fur3d-cal-modes button:hover{border-color:var(--accent);color:var(--accent)}
+.fur3d-cal-modes button.fur3d-mode-on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fur3d-view.fur3d-editing.fur3d-mode-rotate{cursor:grab}
+.fur3d-view.fur3d-editing.fur3d-mode-rotate canvas{cursor:grab}
+.fur3d-view.fur3d-editing.fur3d-mode-scale{cursor:nwse-resize}
+.fur3d-view.fur3d-editing.fur3d-mode-scale canvas{cursor:nwse-resize}
