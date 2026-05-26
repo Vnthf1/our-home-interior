@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>가구 3D · 우리집 인테리어</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="styles.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body data-page="furniture3d">
+
+<nav id="nav"></nav>
+
+<section><div class="wrap">
+  <div class="sec-title">FURNITURE 3D</div>
+  <h2 class="sec-head">가구 3D 도면</h2>
+  <p class="ov-lead">가구 업자 공유용 — 각 가구를 입체 박스로 표시하고 가로·깊이·높이(mm)를 라벨에 적었습니다. 박스를 <b>드래그</b>하면 회전, <b>스크롤</b>하면 확대됩니다. 치수는 <code>data.js</code>의 <code>FURNITURE_3D.items</code>에서 수정.</p>
+  <div id="fur3d-grid" class="fur3d-grid"></div>
+</div></section>
+
+<footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script type="module" src="furniture3d.js"></script>
+</body>
+</html>

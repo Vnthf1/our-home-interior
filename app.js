@@ -30,6 +30,7 @@
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
+    { href: "furniture3d.html", label: "가구 3D", key: "furniture3d" },
     { href: "quotes.html", label: "견적/후보", key: "quotes" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
