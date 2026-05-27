@@ -262,6 +262,11 @@
       <div class="phase-refs"><div class="rt">🖼️ 관련 레퍼런스</div>
       <div class="ref-thumbs">${refs.map(refThumb).join("")}</div></div>` : "";
     const team = opts.hideTeam ? "" : `<div class="phase-team">👷 ${esc(p.team)}</div>`;
+    const keyNotes = (typeof KEY_NOTES !== "undefined" && KEY_NOTES.length) ? `
+      <div class="phase-keynotes">
+        <div class="kn-h">🏠 우리집 주요 변경 — 모든 공정 공통</div>
+        <ul>${KEY_NOTES.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
+      </div>` : "";
     return `<div class="phase"${opts.noId ? "" : ` id="${p.id}"`}>
       <div class="phase-head"><span class="num">${i + 1}</span><span class="icon">${esc(p.icon)}</span><h3>${esc(p.name)}</h3></div>
       ${team}
@@ -270,6 +275,7 @@
       ${phaseAsks}
       ${imgs}${refBlock}
       <div class="cols">${groups}</div>${dec}${chk}
+      ${keyNotes}
     </div>`;
   }
   function renderPhases() {
