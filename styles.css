@@ -344,6 +344,22 @@ footer{padding:40px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-pin.small{width:21px;height:21px;font-size:12px;border-width:1.5px}
 .fp-pin.new{box-shadow:0 0 0 2.5px #fde047,0 1px 5px rgba(0,0,0,.4)}
 .fp-pin.new::before{content:"신";position:absolute;top:-7px;right:-8px;background:#f59e0b;color:#fff;border-radius:50%;width:13px;height:13px;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(0,0,0,.3);z-index:1;line-height:1}
+/* 통합 범례 카드 (한 번에 드래그) */
+.fp-legend{position:absolute;background:rgba(255,253,250,.94);border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:11px;line-height:1.35;color:var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:5px;user-select:none;white-space:nowrap;z-index:3}
+.fp-legend.editing{cursor:move;box-shadow:0 0 0 1.5px var(--accent),0 2px 10px rgba(0,0,0,.12)}
+.fp-legend.sel{outline:2px dashed var(--ink);outline-offset:3px}
+.fp-legend .row{display:flex;align-items:center;gap:8px;font-weight:600}
+.fp-legend .hr{height:1px;background:var(--line);margin:3px 0}
+.fp-legend .sw{width:18px;height:18px;flex:none;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:800;line-height:1;border-radius:50%;position:relative}
+.fp-legend .sw.line{width:20px;height:5px;border-radius:99px;background:rgba(245,158,11,.5);border:1.5px solid #f59e0b}
+.fp-legend .sw.cove{width:18px;height:13px;border-radius:3px;border:2px dashed #f59e0b;background:rgba(245,158,11,.07)}
+.fp-legend .sw.bar{width:20px;height:5px;border-radius:2px;background:rgba(245,158,11,.5);border:1.5px solid #f59e0b}
+.fp-legend .sw.cob,.fp-legend .sw.diff{background:#f59e0b;width:15px;height:15px;font-size:9px}
+.fp-legend .sw.outlet{background:#ef4444;width:18px;height:18px}
+.fp-legend .sw.outlet.new{box-shadow:0 0 0 2px #fde047}
+.fp-legend .sw.outlet.new::after{content:"신";position:absolute;top:-5px;right:-6px;background:#f59e0b;color:#fff;border-radius:50%;width:11px;height:11px;font-size:7px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1}
+.fp-legend .sw.switch{background:#10b981;width:18px;height:18px}
+.fp-legend .sw.thermo{background:#14b8a6;width:18px;height:18px;font-size:11px}
 .fp-pin.light{width:17px;height:17px;font-size:10px;border-width:1.5px}
 .fp-btn.ghost.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 .fp-box.line{border-radius:99px;border-width:1.5px;min-width:4px;min-height:4px}

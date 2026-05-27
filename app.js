@@ -498,12 +498,32 @@
       overlay.classList.toggle("editing", editing);
       overlay.innerHTML = ""; if (popupEl) overlay.appendChild(popupEl);
       items().forEach((it, i) => {
-        if (hidden.has(it.layer)) return;
+        if (it.type !== "legend" && hidden.has(it.layer)) return;
         const L = layerOf(it.layer); let el = document.createElement("div");
         const isCove = it.layer === "light" && /우물/.test(it.label || "");
         const isLine = it.layer === "light" && !isCove && /간접|라인/.test(it.label || "");
         const isBar = it.layer === "light" && /멀티|매입/.test(it.label || "");
-        if (it.type === "box") {
+        if (it.type === "legend") {
+          el.className = "fp-legend";
+          el.style.cssText = `left:${it.x}%;top:${it.y}%`;
+          el.innerHTML =
+            '<div class="row"><span class="sw line"></span>간접조명(라인)</div>' +
+            '<div class="row"><span class="sw cove"></span>우물천장 간접등</div>' +
+            '<div class="row"><span class="sw bar"></span>멀티매입등</div>' +
+            '<div class="row"><span class="sw cob">✦</span>COB조명</div>' +
+            '<div class="row"><span class="sw diff">◯</span>확산조명</div>' +
+            '<div class="hr"></div>' +
+            '<div class="row"><span class="sw outlet">2</span>콘센트 (숫자=구수)</div>' +
+            '<div class="row"><span class="sw outlet new">2</span>신규 (노란 테두리·신 배지)</div>' +
+            '<div class="row"><span class="sw switch">3</span>스위치</div>' +
+            '<div class="row"><span class="sw thermo">🌡</span>온도조절기</div>';
+          el.dataset.i = i;
+          if (editing) el.classList.add("editing");
+          if (editing && i === selected) el.classList.add("sel");
+          el.addEventListener("pointerdown", (e) => onMarkerDown(e, i));
+          overlay.appendChild(el);
+          return;
+        } else if (it.type === "box") {
           el.className = "fp-marker fp-box" + (isCove ? " cove" : "") + (isLine ? " line" : "") + (isBar ? " bar" : "");
           el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, isCove ? .07 : (isLine || isBar ? .5 : .12))}`;
           if (it.label) { const lb = document.createElement("span"); lb.className = "lb"; lb.style.background = L.color; lb.textContent = it.label; el.appendChild(lb); }
@@ -533,7 +553,7 @@
 
     function onMarkerDown(e, i) {
       e.stopPropagation();
-      if (!editing) { showPopup(items()[i]); return; }
+      if (!editing) { if (items()[i].type !== "legend") showPopup(items()[i]); return; }
       selected = i; renderEditbar(); drawMarkers();
       const it = editItems[i], s = pct(e);
       drag = { i, mode: "move", ox: it.x, oy: it.y, sx: s.x, sy: s.y, moved: false, pre: clone(editItems) };
