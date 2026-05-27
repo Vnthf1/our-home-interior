@@ -206,16 +206,18 @@
     }).join("");
   }
   // 공정 카드 1개 HTML — plans.html(작업계획서)와 work.html(작업 안내)이 공유.
-  //   opts.hideTeam : 담당 업체명 숨김 (작업자 공유 뷰)
-  //   opts.noId     : 카드에 id 부여 안 함 (탭 라우팅과 충돌 방지)
+  //   opts.hideTeam    : 담당 업체명 숨김 (작업자 공유 뷰)
+  //   opts.noId        : 카드에 id 부여 안 함 (탭 라우팅과 충돌 방지)
+  //   opts.hideCaution : ⚠️ 공정 시 주의 박스 숨김
+  //   opts.hideAsk     : 💬 업자 확인 박스 숨김
   // 세부 항목 1개 — 문자열이면 그대로, 객체면 미정·메모·공정주의·업자확인을 인라인 표시.
   //   { text, undecided?:true, memo?:"직접구매 등",
   //     caution?:"주의점" | [...],   // ⚠️ 공정 시 주의 (시공 시 주의할 점)
   //     ask?:"질문" | [...] }        // 💬 업자 확인 (업자에게 물어볼 것 — 별개)
-  function itemHTML(it) {
+  function itemHTML(it, opts = {}) {
     if (typeof it === "string") return `<li>${esc(it)}</li>`;
-    const cautions = it.caution ? (Array.isArray(it.caution) ? it.caution : [it.caution]) : [];
-    const asks = it.ask ? (Array.isArray(it.ask) ? it.ask : [it.ask]) : [];
+    const cautions = !opts.hideCaution && it.caution ? (Array.isArray(it.caution) ? it.caution : [it.caution]) : [];
+    const asks = !opts.hideAsk && it.ask ? (Array.isArray(it.ask) ? it.ask : [it.ask]) : [];
     return `<li class="item-x${it.undecided ? " undecided" : ""}">` +
       `<span class="it-text">${esc(it.text)}</span>` +
       (it.undecided ? ` <span class="it-flag undecided">미정</span>` : "") +
@@ -228,7 +230,7 @@
     const groups = (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
       <div class="group">
         ${g.title ? `<div class="gtitle">${esc(g.title)}</div>` : ""}
-        <ul class="items">${g.items.map(itemHTML).join("")}</ul>
+        <ul class="items">${g.items.map((it) => itemHTML(it, opts)).join("")}</ul>
       </div>`).join("");
     let highlights = "";
     if (p.highlights && p.highlights.length) {
@@ -241,7 +243,7 @@
           `<li><b>${esc(h.label || "")}</b> — ${esc(h.value || "")}${h.note ? ` <span class="hl-n">(${esc(h.note)})</span>` : ""}</li>`).join("")}</ul>
       </div>`;
     }
-    const phaseAsks = (p.asks && p.asks.length)
+    const phaseAsks = (!opts.hideAsk && p.asks && p.asks.length)
       ? `<div class="phase-asks">${p.asks.map((q) => `<div class="it-ask">💬 업자 확인: ${esc(q)}</div>`).join("")}</div>` : "";
     const dec = (p.decisions && p.decisions.length) ? `
       <div class="phase-dec"><div class="dt">⚠️ 결정 필요</div>
@@ -507,7 +509,7 @@
           el.className = "fp-legend";
           el.style.cssText = `left:${it.x}%;top:${it.y}%`;
           el.innerHTML =
-            '<div class="row"><span class="sw line"></span>간접조명(라인)</div>' +
+            '<div class="row"><span class="sw line"></span>간접조명</div>' +
             '<div class="row"><span class="sw cove"></span>우물천장 간접등</div>' +
             '<div class="row"><span class="sw bar"></span>멀티매입등</div>' +
             '<div class="row"><span class="sw cob">✦</span>COB조명</div>' +
@@ -752,7 +754,7 @@
     </section>`;
 
     const phasePanels = PHASES.map((p, i) =>
-      `<section class="work-panel" data-tab="${esc(p.id)}">${phaseCardHTML(p, i, { hideTeam: true, noId: true })}</section>`).join("");
+      `<section class="work-panel" data-tab="${esc(p.id)}">${phaseCardHTML(p, i, { hideTeam: true, noId: true, hideCaution: true, hideAsk: true })}</section>`).join("");
 
     contentEl.innerHTML = overviewPanel + phasePanels;
 
