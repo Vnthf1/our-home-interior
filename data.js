@@ -598,7 +598,7 @@ const FLOORPLAN = {
     { layer: "outlet", type: "pin", x: 48.4, y: 27, label: "콘센트 2구 (아일랜드 하단, 신규)" },
     { layer: "outlet", type: "pin", x: 31.2, y: 46.3, label: "콘센트 2구 (안방 입구벽)" },
     { layer: "outlet", type: "pin", x: 36.8, y: 77.4, label: "콘센트 2구 (안방 침대 우측)" },
-    { layer: "outlet", type: "pin", x: 34.3, y: 84, label: "콘센트 2구 (침실1 좌측벽, 신규)" },
+    { layer: "outlet", type: "pin", x: 34.3, y: 84, label: "콘센트 2구 " },
     { layer: "outlet", type: "pin", x: 22.5, y: 87, label: "콘센트 2구 (침실1 침대 우측)" },
     { layer: "outlet", type: "pin", x: 36.9, y: 87.5, label: "콘센트 2구 (신규)" },
     { layer: "outlet", type: "pin", x: 59.4, y: 51.6, label: "콘센트 4구 (침실2 우측벽, 신규)" },
