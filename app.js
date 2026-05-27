@@ -424,7 +424,7 @@
     };
     // 조명 빠른배치 프리셋 — 버튼 누르면 레이어·도구·라벨이 자동 세팅됨
     const LIGHT_PRESETS = [
-      { key: "간접", label: "간접조명(라인)", tool: "box", icon: "▬" },
+      { key: "간접", label: "간접조명", tool: "box", icon: "▬" },
       { key: "우물천장", label: "우물천장 간접등", tool: "box", icon: "▢" },
       { key: "멀티매입", label: "멀티매입등", tool: "box", icon: "▭" },
       { key: "COB", label: "COB조명", tool: "pin", icon: "✦" },
@@ -519,6 +519,7 @@
           if (it.layer === "light") { el.textContent = lightIcon(it.label); el.classList.add("light"); }
           else if (gu) { el.textContent = gu[1]; el.classList.add("num", +gu[1] >= 4 ? "big" : "small"); }
           else { el.textContent = L.icon; }
+          if (/신규/.test(it.label || "")) el.classList.add("new");
         }
         el.dataset.i = i;
         if (editing && i === selected) {
