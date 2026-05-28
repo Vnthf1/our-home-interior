@@ -470,3 +470,34 @@ footer{padding:40px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fur3d-view.fur3d-pediting canvas{cursor:move}
 .fur3d-view.fur3d-pediting.fur3d-pmode-rotate,.fur3d-view.fur3d-pediting.fur3d-pmode-rotate canvas{cursor:grab}
 .fur3d-view.fur3d-pediting.fur3d-pmode-scale,.fur3d-view.fur3d-pediting.fur3d-pmode-scale canvas{cursor:nwse-resize}
+
+
+/* === 월간 캘린더 뷰 (공정표) === */
+.cm-head{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 12px}
+.cm-title{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.cm-nav{background:var(--card);border:1px solid var(--line);border-radius:10px;width:36px;height:36px;cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center}
+.cm-nav:hover:not(:disabled){background:var(--accent-soft);border-color:var(--accent)}
+.cm-nav:disabled{opacity:.35;cursor:default}
+.cm-dow{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line);background:var(--card);border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:none}
+.cm-dow>div{padding:10px 12px;font-size:12px;color:var(--muted);font-weight:700;text-align:right;letter-spacing:1px}
+.cm-weeks{border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px;overflow:hidden;background:var(--card)}
+.cm-week{position:relative;border-top:1px solid var(--line)}
+.cm-week:first-child{border-top:none}
+.cm-day-grid{display:grid;grid-template-columns:repeat(5,1fr);min-height:var(--minh,110px)}
+.cm-day{padding:6px 10px 6px 8px;border-right:1px solid var(--line);position:relative}
+.cm-day:last-child{border-right:none}
+.cm-day .cm-num{display:block;font-size:13px;color:var(--ink);font-weight:600;text-align:right}
+.cm-day.cm-other{background:#faf7f1}
+.cm-day.cm-other .cm-num{color:#c0b6a8}
+.cm-day.cm-hol .cm-num{color:#d9534f}
+.cm-num.cm-first{color:var(--accent);font-weight:800;letter-spacing:0}
+.cm-events{position:absolute;left:0;right:0;top:0;pointer-events:none}
+.cm-ev{position:absolute;height:20px;line-height:20px;padding:0 8px;color:#fff;font-size:11px;font-weight:700;border-radius:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:auto;box-shadow:0 1px 2px rgba(0,0,0,.12);cursor:default}
+.cm-ev[data-pid]{cursor:pointer}
+.cm-ev[data-pid]:hover{filter:brightness(1.1);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+@media(max-width:560px){
+  .cm-day{padding:4px 6px;min-height:90px}
+  .cm-day-grid{min-height:var(--minh,90px)}
+  .cm-ev{font-size:10px;padding:0 5px;height:18px;line-height:18px}
+  .cm-title{font-size:18px}
+}

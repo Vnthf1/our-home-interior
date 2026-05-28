@@ -13,13 +13,13 @@
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "설비": "plumbing",
     "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac",
-    "전기 1": "electric", "전기 2 (타공)": "electric",
+    "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric",
     "목공 (방음)": "carpentry",
-    "타일 (도기)": "tile", "타일 줄눈": "tile",
+    "타일": "tile", "타일 (도기)": "tile", "타일 줄눈": "tile", "도기": "tile", "욕실천장": "tile",
     "필름": "film", "도장": "paint", "도배": "wallpaper", "장판": "floor",
     "가구 (신발장·부엌·붙박이장)": "furniture",
     "전기 (조명)": "lighting-final",
-    "탄성코트": "elastic", "중문": "middle-door", "입주청소": "cleaning",
+    "하자 보수": "cleaning", "탄성코트": "elastic", "중문": "middle-door", "입주청소": "cleaning",
   };
   const goPhase = (pid) => { if (pid) location.href = "plans.html#" + pid; };
 
@@ -94,63 +94,111 @@
       : `<div class="stub">큰 틀의 무드 레퍼런스 사진을 <code>images/</code> 에 넣고 <code>data.js</code>의 <code>CONCEPT.moodboard</code>에 추가하면 여기에 표시됩니다.</div>`;
   }
 
-  /* ---------- 공정 계획표 (달력형 간트) ---------- */
+  /* ---------- 공정 계획표 (연속 캘린더 뷰) ---------- */
   function renderCalendar() {
     const el = $("cal"); if (!el || typeof SCHEDULE === "undefined") return;
-    const parse = (str) => { const [y, m, d] = str.split("-").map(Number); return new Date(y, m - 1, d); };
-    const key = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    const WK = ["일", "월", "화", "수", "목", "금", "토"];
+
+    const PALETTE = ["#5b8def","#e0883e","#6a9c5c","#c97a8a","#7b6dab","#3aa5b8","#d9a13a","#8b5e3b","#46708f","#c14d4d","#71a07a","#9b6bb0","#d68c2e","#5b8a7e","#b56c50","#7691c4","#a47ad6","#3f8a6c","#c46161","#5d7da1"];
+    const phaseColor = {};
+    PHASES.forEach((p, i) => phaseColor[p.id] = PALETTE[i % PALETTE.length]);
+    const colorFor = (taskName) => phaseColor[NAME2PHASE[taskName]] || "#888";
+
     const holidays = new Set(SCHEDULE.holidays || []);
-    const isWe = (d) => d.getDay() === 0 || d.getDay() === 6 || holidays.has(key(d));
+    const parse = (str) => { const [y,m,d] = str.split("-").map(Number); return new Date(y,m-1,d); };
+    const fmtKey = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const isWeekend = (d) => d.getDay() === 0 || d.getDay() === 6;
+    const isHoliday = (d) => holidays.has(fmtKey(d));
+    const isOff = (d) => isWeekend(d) || isHoliday(d);
 
-    const s0 = parse(SCHEDULE.rangeStart), e0 = parse(SCHEDULE.rangeEnd);
-    const dates = [];
-    for (let d = new Date(s0); d <= e0; d.setDate(d.getDate() + 1)) dates.push(new Date(d));
+    let minD = null, maxD = null;
+    SCHEDULE.tasks.forEach(t => (t.spans||[]).forEach(([a,b]) => {
+      const da = parse(a), db = parse(b);
+      if (!minD || da < minD) minD = da;
+      if (!maxD || db > maxD) maxD = db;
+    }));
+    if (!minD) { el.innerHTML = '<div class="stub">일정이 없습니다</div>'; return; }
 
-    const months = [];
-    dates.forEach((d) => { const m = d.getMonth() + 1; const last = months[months.length - 1];
-      if (last && last.m === m) last.span++; else months.push({ m, span: 1 }); });
+    // 시작 주의 월요일, 끝 주의 금요일까지
+    const mondayOf = (d) => { const r = new Date(d); r.setDate(r.getDate() - ((r.getDay()+6)%7)); return r; };
+    const firstMon = mondayOf(minD);
+    const lastMon = mondayOf(maxD);
+    const lastFri = new Date(lastMon); lastFri.setDate(lastFri.getDate()+4);
 
-    const sets = SCHEDULE.tasks.map((t) => {
-      const set = new Set();
-      (t.spans || []).forEach(([a, b]) => { for (let d = parse(a); d <= parse(b); d.setDate(d.getDate() + 1)) set.add(key(d)); });
-      return set;
-    });
+    const weeks = [];
+    let curMon = new Date(firstMon);
+    while (curMon <= lastFri) {
+      const week = [];
+      for (let i = 0; i < 5; i++) { const d = new Date(curMon); d.setDate(d.getDate()+i); week.push(d); }
+      weeks.push(week);
+      curMon.setDate(curMon.getDate() + 7);
+    }
 
-    let html = '<table class="cal"><colgroup><col class="c-label">' + dates.map((d) => (isWe(d) ? '<col class="we-col">' : "<col>")).join("") + "</colgroup><thead>";
-    html += '<tr><th class="tlabel corner"></th>' + months.map((mo) => `<th class="month" colspan="${mo.span}">${mo.m}월</th>`).join("") + "</tr>";
-    html += '<tr><th class="tlabel">작업</th>' + dates.map((d) => `<th class="day${isWe(d) ? " we" : ""}"><div class="dnum">${d.getDate()}</div><div class="dwk">${WK[d.getDay()]}</div></th>`).join("") + "</tr>";
-    html += "</thead><tbody>";
-    SCHEDULE.tasks.forEach((t, ti) => {
-      const set = sets[ti];
-      const isOn = (dd) => set.has(key(dd)) && !isWe(dd); // 주말·휴일 칸은 막대 제외
-      const pid = NAME2PHASE[t.name];
-      html += `<tr><th class="tlabel taskname"${pid ? ` data-pid="${pid}" title="더블클릭 → 작업계획서로 이동"` : ""}>${esc(t.name)}</th>`;
-      dates.forEach((d, di) => {
-        const on = isOn(d);
-        const prevOn = di > 0 && isOn(dates[di - 1]);
-        const nextOn = di < dates.length - 1 && isOn(dates[di + 1]);
-        const cls = ["cell"]; if (isWe(d)) cls.push("we");
-        if (on) { cls.push("on"); if (!prevOn) cls.push("s"); if (!nextOn) cls.push("e"); }
-        html += `<td class="${cls.join(" ")}"${on ? ` style="background:${t.color || "#5b8def"}"` : ""}></td>`;
+    let html = '<div class="cm-dow">' + ["월","화","수","목","금"].map(d => `<div>${d}</div>`).join("") + '</div>';
+    html += '<div class="cm-weeks">';
+
+    weeks.forEach(week => {
+      // 이벤트 세그먼트 수집
+      const segs = [];
+      SCHEDULE.tasks.forEach((t) => {
+        (t.spans||[]).forEach(([a,b]) => {
+          const sa = parse(a), sb = parse(b);
+          let runStart = -1;
+          for (let i = 0; i < 5; i++) {
+            const d = week[i];
+            const inSpan = d >= sa && d <= sb;
+            const ok = inSpan && !isOff(d);
+            if (ok) { if (runStart < 0) runStart = i; }
+            else if (runStart >= 0) {
+              segs.push({ start: runStart, end: i-1, name: t.name, color: colorFor(t.name), pid: NAME2PHASE[t.name] });
+              runStart = -1;
+            }
+          }
+          if (runStart >= 0) segs.push({ start: runStart, end: 4, name: t.name, color: colorFor(t.name), pid: NAME2PHASE[t.name] });
+        });
       });
-      html += "</tr>";
-    });
-    html += "</tbody></table>";
-    el.innerHTML = html;
-    // 달력 작업명 더블클릭 → 해당 공정으로 이동
-    el.querySelector("table.cal")?.addEventListener("dblclick", (e) => {
-      const th = e.target.closest(".taskname[data-pid]");
-      if (th) goPhase(th.dataset.pid);
+
+      // 레인 배정
+      segs.sort((a,b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
+      const lanes = [];
+      segs.forEach(s => {
+        let lane = 0;
+        while (lane < lanes.length && lanes[lane].some(x => !(s.end < x.start || s.start > x.end))) lane++;
+        if (lane === lanes.length) lanes.push([]);
+        lanes[lane].push({start:s.start, end:s.end});
+        s.lane = lane;
+      });
+      const laneCount = Math.max(lanes.length, 1);
+      const minH = 32 + laneCount * 22 + 8;
+
+      let cells = week.map(d => {
+        const hol = isHoliday(d);
+        const isFirst = d.getDate() === 1;
+        const label = isFirst ? `${d.getMonth()+1}.${d.getDate()}` : `${d.getDate()}`;
+        return `<div class="cm-day ${hol?"cm-hol":""}"><span class="cm-num ${isFirst?"cm-first":""}">${label}</span></div>`;
+      }).join("");
+
+      let evtHtml = segs.map(s => {
+        const left = (s.start / 5) * 100;
+        const width = ((s.end - s.start + 1) / 5) * 100;
+        const top = 32 + s.lane * 22;
+        return `<div class="cm-ev" ${s.pid?`data-pid="${s.pid}"`:""} style="left:calc(${left}% + 2px);width:calc(${width}% - 4px);top:${top}px;background:${s.color}" title="${esc(s.name)}">${esc(s.name)}</div>`;
+      }).join("");
+
+      html += `<div class="cm-week"><div class="cm-day-grid" style="--minh:${minH}px">${cells}</div><div class="cm-events">${evtHtml}</div></div>`;
     });
 
+    html += '</div>';
+    el.innerHTML = html;
+
+    el.querySelectorAll(".cm-ev[data-pid]").forEach(ev => ev.addEventListener("dblclick", () => goPhase(ev.dataset.pid)));
+
+    // 하단 작업순서 칩
     const flow = $("flow");
     if (flow) {
       flow.innerHTML = PHASES.map((p, i) =>
-        `<div class="step" data-pid="${p.id}" title="더블클릭 → 작업계획서로 이동"><span class="n">${i + 1}</span>${esc(p.name)}</div>` +
+        `<div class="step" data-pid="${p.id}" title="더블클릭 → 작업계획서로 이동"><span class="n" style="background:${phaseColor[p.id]}">${i+1}</span>${esc(p.name)}</div>` +
         (i < PHASES.length - 1 ? `<span class="arrow">→</span>` : "")
       ).join("");
-      // 작업순서 칩 더블클릭 → 해당 공정으로 이동
       flow.addEventListener("dblclick", (e) => {
         const step = e.target.closest(".step[data-pid]");
         if (step) goPhase(step.dataset.pid);
