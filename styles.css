@@ -478,12 +478,12 @@ footer{padding:40px 0;text-align:center;color:var(--muted);font-size:13px;border
 .cm-nav{background:var(--card);border:1px solid var(--line);border-radius:10px;width:36px;height:36px;cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center}
 .cm-nav:hover:not(:disabled){background:var(--accent-soft);border-color:var(--accent)}
 .cm-nav:disabled{opacity:.35;cursor:default}
-.cm-dow{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line);background:var(--card);border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:none}
+.cm-dow{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--line);background:var(--card);border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:none}
 .cm-dow>div{padding:10px 12px;font-size:12px;color:var(--muted);font-weight:700;text-align:right;letter-spacing:1px}
 .cm-weeks{border:1px solid var(--line);border-top:none;border-radius:0 0 10px 10px;overflow:hidden;background:var(--card)}
 .cm-week{position:relative;border-top:1px solid var(--line)}
 .cm-week:first-child{border-top:none}
-.cm-day-grid{display:grid;grid-template-columns:repeat(5,1fr);min-height:var(--minh,110px)}
+.cm-day-grid{display:grid;grid-template-columns:repeat(6,1fr);min-height:var(--minh,110px)}
 .cm-day{padding:6px 10px 6px 8px;border-right:1px solid var(--line);position:relative}
 .cm-day:last-child{border-right:none}
 .cm-day .cm-num{display:block;font-size:13px;color:var(--ink);font-weight:600;text-align:right}

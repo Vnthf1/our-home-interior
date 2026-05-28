@@ -12,7 +12,7 @@
     "보양": "protect",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "설비": "plumbing",
-    "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac",
+    "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공 (방음)": "carpentry",
     "타일": "tile", "타일 (도기)": "tile", "타일 줄눈": "tile", "도기": "tile", "욕실천장": "tile",
@@ -106,7 +106,7 @@
     const holidays = new Set(SCHEDULE.holidays || []);
     const parse = (str) => { const [y,m,d] = str.split("-").map(Number); return new Date(y,m-1,d); };
     const fmtKey = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-    const isWeekend = (d) => d.getDay() === 0 || d.getDay() === 6;
+    const isWeekend = (d) => d.getDay() === 0;  // Sunday only
     const isHoliday = (d) => holidays.has(fmtKey(d));
     const isOff = (d) => isWeekend(d) || isHoliday(d);
 
@@ -128,12 +128,12 @@
     let curMon = new Date(firstMon);
     while (curMon <= lastFri) {
       const week = [];
-      for (let i = 0; i < 5; i++) { const d = new Date(curMon); d.setDate(d.getDate()+i); week.push(d); }
+      for (let i = 0; i < 6; i++) { const d = new Date(curMon); d.setDate(d.getDate()+i); week.push(d); }
       weeks.push(week);
       curMon.setDate(curMon.getDate() + 7);
     }
 
-    let html = '<div class="cm-dow">' + ["월","화","수","목","금"].map(d => `<div>${d}</div>`).join("") + '</div>';
+    let html = '<div class="cm-dow">' + ["월","화","수","목","금","토"].map(d => `<div>${d}</div>`).join("") + '</div>';
     html += '<div class="cm-weeks">';
 
     weeks.forEach(week => {
@@ -143,7 +143,7 @@
         (t.spans||[]).forEach(([a,b]) => {
           const sa = parse(a), sb = parse(b);
           let runStart = -1;
-          for (let i = 0; i < 5; i++) {
+          for (let i = 0; i < 6; i++) {
             const d = week[i];
             const inSpan = d >= sa && d <= sb;
             const ok = inSpan && !isOff(d);
@@ -153,7 +153,7 @@
               runStart = -1;
             }
           }
-          if (runStart >= 0) segs.push({ start: runStart, end: 4, name: t.name, color: colorFor(t.name), pid: NAME2PHASE[t.name] });
+          if (runStart >= 0) segs.push({ start: runStart, end: 5, name: t.name, color: colorFor(t.name), pid: NAME2PHASE[t.name] });
         });
       });
 
@@ -178,8 +178,8 @@
       }).join("");
 
       let evtHtml = segs.map(s => {
-        const left = (s.start / 5) * 100;
-        const width = ((s.end - s.start + 1) / 5) * 100;
+        const left = (s.start / 6) * 100;
+        const width = ((s.end - s.start + 1) / 6) * 100;
         const top = 32 + s.lane * 22;
         return `<div class="cm-ev" ${s.pid?`data-pid="${s.pid}"`:""} style="left:calc(${left}% + 2px);width:calc(${width}% - 4px);top:${top}px;background:${s.color}" title="${esc(s.name)}">${esc(s.name)}</div>`;
       }).join("");
