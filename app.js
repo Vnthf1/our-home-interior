@@ -13,12 +13,12 @@
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "설비": "plumbing",
     "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac",
-    "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric",
+    "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공 (방음)": "carpentry",
     "타일": "tile", "타일 (도기)": "tile", "타일 줄눈": "tile", "도기": "tile", "욕실천장": "tile",
     "필름": "film", "도장": "paint", "도배": "wallpaper", "장판": "floor",
     "가구 (신발장·부엌·붙박이장)": "furniture",
-    "전기 (조명)": "lighting-final",
+    "전기 (조명)": "electric",
     "하자 보수": "cleaning", "탄성코트": "elastic", "중문": "middle-door", "입주청소": "cleaning",
   };
   const goPhase = (pid) => { if (pid) location.href = "plans.html#" + pid; };
