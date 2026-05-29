@@ -5,17 +5,26 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  // 휴대폰 마스킹 — 사이트가 public 이라 ****-**** 로만 노출. 실제 번호는 data.js 에 있고 소유자만 접근.
+  const maskPhone = (p) => {
+    if (!p) return "";
+    const m = String(p).trim().match(/^(\d{2,3})[- ]?(\d{3,4})[- ]?(\d{4})$/);
+    return m ? `${m[1]}-****-****` : "****-****";
+  };
   const phaseName = (id) => { const p = PHASES.find((x) => x.id === id); return p ? `${p.icon} ${p.name}` : id; };
 
   // 공정표 작업명 → 작업계획서 공정 id (더블클릭 이동용)
   const NAME2PHASE = {
+    "이사": "move",
+    "입주민 동의": "consent",
     "보양": "protect",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "설비": "plumbing",
     "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공 (방음)": "carpentry",
-    "타일": "tile", "타일 (도기)": "tile", "타일 줄눈": "tile", "도기": "tile", "욕실천장": "tile",
+    "타일": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile",
+    "타일 줄눈": "grout", "줄눈": "grout",
     "필름": "film", "도장": "paint", "도배": "wallpaper", "장판": "floor",
     "가구 (신발장·부엌·붙박이장)": "furniture",
     "전기 (조명)": "electric",
@@ -30,7 +39,6 @@
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
-    { href: "furniture3d.html", label: "가구 3D", key: "furniture3d" },
     { href: "quotes.html", label: "견적/후보", key: "quotes" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
@@ -391,7 +399,7 @@
       <div class="contact-card">
         <div class="role">${esc(c.role)}</div>
         <div class="name">${esc(c.name)}${c.company ? ` · ${esc(c.company)}` : ""}</div>
-        ${c.phone ? `<div class="phone"><a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></div>` : `<div class="note">연락처 미정</div>`}
+        ${c.phone ? `<div class="phone">${esc(maskPhone(c.phone))}</div>` : `<div class="note">연락처 미정</div>`}
         ${c.note ? `<div class="note">${esc(c.note)}</div>` : ""}
       </div>`).join("");
     const cand = $("candidates");
@@ -419,8 +427,11 @@
     const price = c.price
       ? `<div class="qc-price">${esc(c.price)}</div>`
       : `<div class="qc-price none">견적 대기</div>`;
-    const items = (c.items && c.items.length)
+    const itemsTable = (c.items && c.items.length)
       ? `<table class="qc-items">${c.items.map((it) => `<tr><td>${esc(it.label)}</td><td class="amt">${esc(it.amount || "")}</td></tr>`).join("")}</table>` : "";
+    const items = itemsTable
+      ? `<details class="qc-details"><summary>📋 견적 자세히 보기 <span class="qc-count">(${c.items.length}항목)</span></summary>${itemsTable}</details>`
+      : "";
     const files = (c.files && c.files.length)
       ? `<div class="qc-files">${c.files.map(quoteFile).join("")}</div>` : "";
     return `<div class="qcard${c.status === "decided" ? " is-decided" : ""}">
@@ -431,7 +442,7 @@
       ${price}
       ${c.scope ? `<div class="qc-scope">📐 ${esc(c.scope)}</div>` : ""}
       ${c.summary ? `<div class="qc-sum">${esc(c.summary)}</div>` : ""}
-      ${c.phone ? `<div class="qc-phone">📞 <a href="tel:${esc(c.phone)}">${esc(c.phone)}</a></div>` : ""}
+      ${c.phone ? `<div class="qc-phone">📞 ${esc(maskPhone(c.phone))}</div>` : ""}
       ${items}
       ${c.note ? `<div class="qc-note">${esc(c.note)}</div>` : ""}
       ${files}
@@ -826,12 +837,35 @@
     window.addEventListener("hashchange", () => { showTab(fromHash()); window.scrollTo({ top: 0 }); });
   }
 
+  /* ---------- 실측 일정 (공정표 페이지 하단) ---------- */
+  function renderSurvey() {
+    const el = $("survey"); if (!el || typeof SURVEY === "undefined") return;
+    const upc = (SURVEY.upcoming || []).map((u) => `
+      <article class="sv-card sv-upcoming">
+        <div class="sv-when">📅 <b>${esc(u.date)}</b> ${u.time ? ` · ${esc(u.time)}` : ""}</div>
+        ${u.who && u.who.length ? `<div class="sv-who">방문: <b>${u.who.map(esc).join(", ")}</b></div>` : ""}
+        ${u.checklist && u.checklist.length ? `<div class="sv-cklist">
+          <div class="sv-cklist-h">✅ 체크리스트</div>
+          <ul>${u.checklist.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
+        </div>` : ""}
+      </article>`).join("");
+    const wanted = (SURVEY.wanted || []).map((w) => `
+      <li><b>${esc(w.who)}</b>${w.note ? ` — ${esc(w.note)}` : ""}</li>`).join("");
+    el.innerHTML =
+      (upc ? `<div class="sv-list">${upc}</div>` : "") +
+      (wanted ? `<div class="sv-wanted">
+        <div class="sv-wanted-h">🗓️ 실측 예정 (조정 필요)</div>
+        <ul>${wanted}</ul>
+      </div>` : "");
+  }
+
   /* ---------- 부팅 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     mountNav();
     renderHome();
     renderConcept();
     renderCalendar();
+    renderSurvey();
     renderDecisions();
     renderOverview();
     renderPhases();
