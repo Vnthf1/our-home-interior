@@ -187,6 +187,14 @@ const DESIGN_CANDIDATES = [
  * ------------------------------------------------------------ */
 const QUOTES = [
   {
+    phase: "moving", name: "이사 / 보관", icon: "📦",
+    candidates: [],
+  },
+  {
+    phase: "consent", name: "입주민 동의", icon: "🤝",
+    candidates: [],
+  },
+  {
     phase: "demolition", // 철거
     candidates: [
       {

@@ -465,7 +465,7 @@
         ? cands.map(quoteCard).join("")
         : `<div class="stub">아직 후보·견적이 없어요. 업체를 알아보면 여기에 정리할게요.</div>`;
       return `<div class="qphase" id="q-${esc(q.phase)}">
-        <div class="qp-head"><span class="ic">${esc(p ? p.icon : "📦")}</span><h3>${esc(p ? p.name : q.phase)}</h3>${head}</div>
+        <div class="qp-head"><span class="ic">${esc(p ? p.icon : (q.icon || "📦"))}</span><h3>${esc(p ? p.name : (q.name || q.phase))}</h3>${head}</div>
         <div class="qcards">${cards}</div>
       </div>`;
     }).join("") || `<div class="stub">아직 견적 항목이 없어요.</div>`;
