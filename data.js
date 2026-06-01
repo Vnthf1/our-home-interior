@@ -702,6 +702,242 @@ const QUOTES = [
 ];
 
 /* ------------------------------------------------------------
+ *  자재 (Materials) — "자재" 페이지
+ *
+ *  대분류(group) → 자재종류(category) → 후보(items[]) 3단 구조.
+ *  같은 자재여도 판매처가 여러 곳일 수 있어 offers[] 로 보관.
+ *  실제 발주·구매는 purchased 에 따로 기록 (오프라인·전화 발주 OK).
+ *
+ *  ── items[] 항목 형태 ──
+ *  {
+ *    name: "대림 비데일체형 CL-370",
+ *    photo: "mat_변기.jpg",      // 선택. images/ 에 넣고 파일명만.
+ *    status: "comparing",          // considering | comparing | decided | ordered | bought
+ *    purpose: "안방",              // 선택. 어디 쓸지(자유 텍스트).
+ *    offers: [                     // 판매처 후보 (가격 비교용, 0개도 OK)
+ *      { vendor: "쿠팡", price: 450000, url: "https://...", note: "무배" },
+ *      { vendor: "동네 X상사", price: 420000, note: "전화 070-xxx" },
+ *    ],
+ *    purchased: {                  // 실제 발주·구매 정보 (안 샀으면 null)
+ *      vendor: "동네 X상사", unitPrice: 420000, qty: 1, total: 420000,
+ *      date: "2026-06-15", receipt: "quotes/receipt_변기.jpg", note: "전화 발주",
+ *    },
+ *    note: "젠다이 디자인 좋음",
+ *  }
+ *
+ *  status 5단계:
+ *    considering(🔍 검토중) · comparing(⚖️ 비교중) · decided(✅ 확정)
+ *    ordered(📦 발주) · bought(🛒 구매완료)
+ *
+ *  ⚠️ 시드는 형식 보여주려고 몇 개만 넣어둠 — 직접 채워가세요.
+ * ------------------------------------------------------------ */
+/*
+ * 새 구조: group → items (각 item = 자재 종류). 후보 모델은 candidates[].
+ *
+ * 한 item 예:
+ * {
+ *   category: "양변기",        // 자재 종류 (행 이름)
+ *   purpose: "안방·공용",       // 어디 쓸지 (선택)
+ *   status: "looking",         // looking | decided | ordered | bought
+ *   candidates: [              // 후보 모델들
+ *     { name: "대림 CL-370", photo: "", offers: [{vendor,price,note,url}], note: "" },
+ *   ],
+ *   decided: "대림 CL-370",    // status=decided 부터 어느 후보 골랐는지 (이름 문자열)
+ *   purchased: {               // status=ordered/bought 면 채움
+ *     vendor: "동네 가전매장", unitPrice: 220000, qty: 2, total: 440000,
+ *     date: "2026-06-20", receipt: null, note: "전화 발주",
+ *   },
+ *   note: "",
+ * }
+ *
+ * 상태 4단계: 🔍 검토중(looking) → ✅ 확정(decided) → 📦 발주(ordered) → 🛒 구매완료(bought)
+ */
+/*
+ * 상태 5단계: ⊝ 미정(pending) → 🔍 검토중(looking) → ✅ 확정(decided) → 📦 발주(ordered) → 🛒 구매완료(bought)
+ *  - 미정: 사야 한다는 것만 적어둔 상태. 후보 아직 없음.
+ *  - 검토중: 후보 모으는 중.
+ *  - 확정: 어느 후보 살지 정함.
+ *  - 발주: 주문/결제 완료, 미수령.
+ *  - 구매완료: 수령 + 영수증 보유.
+ *
+ * 한 item 형태:
+ * { category, purpose, qty, status, candidates: [{name, photo?, offers: [{vendor,price,note,url}]}],
+ *   decided, purchased: { vendor, unitPrice, qty, total, date, receipt, note }, note }
+ */
+const MATERIALS = [
+  {
+    group: "욕실용품",
+    items: [
+      {
+        category: "양변기", qty: 2, status: "looking", purpose: "안방·공용",
+        candidates: [
+          { name: "아메리칸 스탠다드 플랫라운드 비데일체형", photo: "mat_양변기.jpg",
+            offers: [{ vendor: "용타일", price: 1100000 }] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+      { category: "세면대",          qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "수전",            qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "거울",            qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      {
+        category: "환풍기", qty: 2, status: "looking", purpose: "안방·공용 욕실",
+        candidates: [
+          { name: "휴젠트2", offers: [
+            { vendor: "을지로 미래상사", price: 300000 },
+          ]},
+          { name: "휴젠트3", offers: [
+            { vendor: "을지로 미래상사", price: 530000 },
+            { vendor: "용타일 옆", price: 360000 },
+          ]},
+          { name: "제로크", offers: [
+            { vendor: "을지로 미래상사", price: 65000 },
+            { vendor: "용타일 옆", price: 90000 },
+          ]},
+          { name: "힘펠 전동뎀퍼 (부속)", offers: [
+            { vendor: "을지로 미래상사", price: 50000 },
+          ]},
+        ],
+        decided: null, purchased: null, note: "",
+      },
+      { category: "휴지걸이",        qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      {
+        category: "수건걸이", qty: 2, status: "looking", purpose: "",
+        candidates: [
+          { name: "EN-400-DG 수건걸이 그레이", photo: "",
+            offers: [{ vendor: "용타일", price: 15000 }] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+      {
+        category: "옷걸이", qty: 2, status: "looking", purpose: "욕실",
+        candidates: [
+          { name: "실바 헤어라인 옷걸이", photo: "mat_옷걸이_실바헤어라인.jpg", offers: [] },
+        ],
+        decided: null, purchased: null, note: "젤 왼쪽 실바헤어라인",
+      },
+      { category: "욕조",            qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "샤워헤드·매립수전", qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      {
+        category: "샤워건", qty: 2, status: "looking", purpose: "",
+        candidates: [
+          { name: "스파플레이건 SET", photo: "mat_샤워건.jpg",
+            offers: [{ vendor: "홈씨씨", price: 48000, note: "매장 진열" }] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+    ],
+  },
+  {
+    group: "가전",
+    items: [
+      { category: "인덕션",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "후드",          qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "식기세척기",     qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "광파오븐",       qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "빌트인 냉장고",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "세탁기·건조기",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "시스템에어컨",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "전열교환기",     qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "보일러",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "로봇청소기",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+    ],
+  },
+  {
+    group: "조명",
+    items: [
+      { category: "매입등(다운라이트)",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "COB 조명",            qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "펜던트",              qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "간접등(스트립/T5)",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "실링팬",              qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+    ],
+  },
+  {
+    group: "스위치·콘센트·IoT",
+    items: [
+      { category: "스마트 스위치",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "콘센트",          qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "재실센서",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "온도조절기",      qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "허브·게이트웨이",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+    ],
+  },
+  {
+    group: "마감재",
+    items: [
+      {
+        category: "안방욕실 타일", qty: 1, status: "looking", purpose: "안방욕실 바닥·벽",
+        candidates: [
+          { name: "BK 1265 600×1200", photo: "mat_타일_안방BK1265.jpg",
+            offers: [{ vendor: "용타일", price: 45000, note: "3장 / 2.16㎡" }] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+      {
+        category: "공용욕실 타일", qty: 1, status: "looking", purpose: "공용욕실 바닥·벽 — 600×600만 사용",
+        candidates: [
+          { name: "66191DW 600×600", photo: "mat_타일_공용66191DW.jpg",
+            offers: [{ vendor: "용타일", price: 22000, note: "4장 / 1.44㎡" }] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+      {
+        category: "현관 타일", qty: 1, status: "looking", purpose: "현관 바닥",
+        candidates: [
+          { name: "용타일 로마디크그레이(DG) 600×1200", photo: "mat_타일_용타일로마DG.jpg",
+            offers: [{ vendor: "용타일", price: 31000, note: "장당" }] },
+          { name: "용타일 로마 DG 600×600", photo: "mat_타일_용타일로마DG.jpg",
+            offers: [{ vendor: "용타일", price: 16000, note: "장당" }] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+      {
+        category: "베란다 타일", qty: 1, status: "looking", purpose: "베란다 바닥",
+        candidates: [
+          { name: "용타일 로마디크그레이(DG) 600×1200", photo: "mat_타일_용타일로마DG.jpg",
+            offers: [{ vendor: "용타일", price: 31000, note: "장당" }] },
+          { name: "용타일 로마 DG 600×600", photo: "mat_타일_용타일로마DG.jpg",
+            offers: [{ vendor: "용타일", price: 16000, note: "장당" }] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+      { category: "벽지",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "장판",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "필름",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "페인트",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "회벽재",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      {
+        category: "방수용품", qty: 1, status: "looking", purpose: "욕실 바닥",
+        candidates: [
+          { name: "드라이픽스 (난방배관 위 타일 접착)", offers: [] },
+        ],
+        decided: null, purchased: null, note: "",
+      },
+    ],
+  },
+  {
+    group: "하드웨어·기타",
+    items: [
+      { category: "커튼레일",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "자동 빨래건조대",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "액자레일",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "매트리스",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      {
+        category: "도어락", qty: 1, status: "looking", purpose: "현관",
+        candidates: [
+          { name: "아카라 N100 도어락 + 허브", offers: [
+            { vendor: "을지로 대일도기사 옆", price: 430000, note: "N100 허브 포함" },
+            { vendor: "을지로 대일도기사 옆", price: 400000, note: "도어락만 (허브 별도)" },
+          ]},
+        ],
+        decided: null, purchased: null,
+        note: "설치비 4만원 (목요일 3만원)",
+      },
+    ],
+  },
+];
+
+/* ------------------------------------------------------------
  *  레퍼런스 (컨셉 / 디테일 참고 이미지)
  *  - file : images/ 폴더에 넣은 이미지 파일명
  *  - desc : 이 레퍼런스에 대한 설명 (왜 좋은지, 어디에 적용할지)

@@ -40,6 +40,7 @@
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
     { href: "quotes.html", label: "견적/후보", key: "quotes" },
+    { href: "materials.html", label: "자재", key: "materials" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
   ];
@@ -859,6 +860,219 @@
       </div>` : "");
   }
 
+  /* ---------- 자재 (materials.html) ---------- */
+  function renderMaterials() {
+    const list = $("mat-list");
+    if (!list || typeof MATERIALS === "undefined") return;
+    const sumEl = $("mat-summary");
+    const filtersEl = $("mat-filters");
+
+    // 5상태: pending → looking → decided → ordered → bought
+    const STATUS = {
+      pending: { label: "미정",   cls: "st-pending" },
+      looking: { label: "검토중", cls: "st-looking" },
+      decided: { label: "확정",   cls: "st-decided" },
+      ordered: { label: "발주",   cls: "st-ordered" },
+      bought:  { label: "구매완료", cls: "st-bought" },
+    };
+    const fmt = (n) => Number(n || 0).toLocaleString("ko-KR");
+    const decidedCand = (it) => (it.decided && (it.candidates||[]).find(c => c.name === it.decided)) || null;
+    const totalPurchased = (p) => p ? (p.total || (p.unitPrice||0)*(p.qty||1) || 0) : 0;
+    const minOfferAll = (it) => {
+      let min = null, n = 0;
+      (it.candidates||[]).forEach(c => (c.offers||[]).forEach(o => {
+        if (o.price) { n++; if (min == null || o.price < min) min = o.price; }
+      }));
+      return { min, n };
+    };
+
+    // 요약 (구매·발주 합계 + 확정·검토·미정 카운트)
+    let boughtSum = 0, orderedSum = 0, decidedN = 0, lookingN = 0, pendingN = 0;
+    MATERIALS.forEach(g => (g.items||[]).forEach(it => {
+      if (it.status === "bought") boughtSum += totalPurchased(it.purchased);
+      if (it.status === "ordered") orderedSum += totalPurchased(it.purchased);
+      if (it.status === "decided") decidedN++;
+      if (it.status === "looking") lookingN++;
+      if (it.status === "pending") pendingN++;
+    }));
+    if (sumEl) sumEl.innerHTML = `
+      <div class="ms-card ms-bought">🛒 구매완료 <b>₩${fmt(boughtSum)}</b></div>
+      <div class="ms-card ms-ordered">📦 발주 <b>₩${fmt(orderedSum)}</b></div>
+      <div class="ms-card">✅ 확정 <b>${decidedN}</b>개</div>
+      <div class="ms-card">🔍 검토중 <b>${lookingN}</b>개</div>
+      <div class="ms-card">⊝ 미정 <b>${pendingN}</b>개</div>`;
+
+    // 필터 칩
+    let fGroup = "all", fStatus = "all";
+    if (filtersEl) filtersEl.innerHTML = `
+      <div class="mf-row">
+        <span class="mf-key">대분류</span>
+        <div class="mf-chips" data-key="group">
+          <button class="mf-chip on" data-v="all">전체</button>
+          ${MATERIALS.map(g => `<button class="mf-chip" data-v="${esc(g.group)}">${esc(g.group)}</button>`).join("")}
+        </div>
+      </div>
+      <div class="mf-row">
+        <span class="mf-key">상태</span>
+        <div class="mf-chips" data-key="status">
+          <button class="mf-chip on" data-v="all">전체</button>
+          ${Object.entries(STATUS).map(([k,s]) => `<button class="mf-chip" data-v="${k}">${s.label}</button>`).join("")}
+        </div>
+      </div>`;
+
+    function priceCell(it) {
+      const wrap = (num, extra) => `<span class="m-price-num">${num}</span><span class="m-price-extra">${extra || ""}</span>`;
+      // 구매·발주 → purchased 합계
+      if (it.purchased) {
+        const t = totalPurchased(it.purchased);
+        return t ? wrap(`₩${fmt(t)}`, "") : wrap("-", "");
+      }
+      // 확정 → 결정된 후보의 최저 견적
+      if (it.status === "decided") {
+        const dc = decidedCand(it);
+        const prices = dc ? (dc.offers||[]).map(o=>o.price).filter(Boolean) : [];
+        return prices.length ? wrap(`₩${fmt(Math.min(...prices))}`, "") : wrap("-", "");
+      }
+      // 검토중 → 모든 후보의 모든 견적 중 최저 + 외 N
+      const r = minOfferAll(it);
+      if (r.min == null) return wrap("-", "");
+      return wrap(`₩${fmt(r.min)}`, r.n > 1 ? `외 ${r.n-1}` : "");
+    }
+    function noteCell(it) {
+      if (it.status === "bought" || it.status === "ordered") {
+        return it.purchased && it.purchased.vendor ? esc(it.purchased.vendor) : "";
+      }
+      if (it.status === "decided") return esc(it.decided || "");
+      // looking / pending — 단일 후보+단일 견적이면 그 판매처, 그 외엔 purpose
+      const cs = it.candidates || [];
+      if (cs.length === 1 && cs[0].offers && cs[0].offers.length === 1) {
+        return esc(cs[0].offers[0].vendor || "") || esc(it.purpose || "");
+      }
+      return esc(it.purpose || "");
+    }
+    function photoCell(it) {
+      const dc = decidedCand(it);
+      let p = (dc && dc.photo) ? dc.photo : ((it.candidates||[])[0] && it.candidates[0].photo) || "";
+      return p ? `<img src="images/${esc(p)}" alt="${esc(it.category)}" loading="lazy">` : `<div class="m-photo-ph">📦</div>`;
+    }
+    function canExpand(it) {
+      const cs = it.candidates || [];
+      if (it.purchased) return true;
+      if (cs.length > 1) return true;
+      if (cs.length === 1 && (cs[0].offers||[]).length > 1) return true;
+      if (it.note) return true;
+      return false;
+    }
+    function offerRow(o) {
+      const price = o.price ? `₩${fmt(o.price)}` : "-";
+      const noteLink = `${esc(o.note||"")}${o.url ? ` <a href="${esc(o.url)}" target="_blank" rel="noopener">↗</a>` : ""}`;
+      return `<div class="m-orow">
+        <div></div>
+        <div class="m-cell m-orow-name">${esc(o.vendor || "-")}</div>
+        <div></div>
+        <div class="m-cell m-cell-price"><span class="m-price-num">${price}</span><span class="m-price-extra"></span></div>
+        <div></div>
+        <div class="m-cell m-cell-note">${noteLink}</div>
+        <div></div>
+      </div>`;
+    }
+    function expandHTML(it) {
+      const cs = it.candidates || [];
+      let candsHTML = "";
+      if (cs.length === 1) {
+        candsHTML = (cs[0].offers || []).map(offerRow).join("");
+      } else if (cs.length > 1) {
+        candsHTML = cs.map(c => {
+          const isDecided = it.decided === c.name;
+          const head = `<div class="m-chead${isDecided ? ' is-decided' : ''}">${isDecided ? '✓ ' : ''}${esc(c.name)}</div>`;
+          const offers = (c.offers||[]).map(offerRow).join("");
+          return head + offers;
+        }).join("");
+      }
+      const p = it.purchased;
+      const purchasedBlock = p ? `<div class="m-purchased">
+        <div class="m-sec-h">${it.status === "bought" ? "🛒 구매완료" : "📦 발주"}</div>
+        <ul>
+          ${p.vendor ? `<li><b>판매처:</b> ${esc(p.vendor)}</li>` : ""}
+          ${p.unitPrice ? `<li><b>단가:</b> ₩${fmt(p.unitPrice)}</li>` : ""}
+          ${p.qty ? `<li><b>수량:</b> ${p.qty}개</li>` : ""}
+          ${(p.total || (p.unitPrice && p.qty)) ? `<li><b>합계:</b> <b>₩${fmt(p.total || p.unitPrice * (p.qty||1))}</b></li>` : ""}
+          ${p.date ? `<li><b>날짜:</b> ${esc(p.date)}</li>` : ""}
+          ${p.note ? `<li><b>메모:</b> ${esc(p.note)}</li>` : ""}
+        </ul>
+        ${p.receipt ? `<div class="m-receipt"><a href="${esc(p.receipt)}" target="_blank" rel="noopener">📎 영수증 보기</a></div>` : ""}
+      </div>` : "";
+      const noteBlock = it.note ? `<div class="m-memo-block"><p>${esc(it.note)}</p></div>` : "";
+      return `<div class="m-body">${candsHTML}${purchasedBlock}${noteBlock}</div>`;
+    }
+    function itemRow(it) {
+      const s = STATUS[it.status] || STATUS.pending;
+      const ph = photoCell(it);
+      const expandable = canExpand(it);
+      const qty = it.qty || 1;
+      const inner = `
+        <div class="m-photo">${ph}</div>
+        <div class="m-cell-name"><span class="m-name">${esc(it.category)}</span></div>
+        <div class="m-cell m-cell-status"><span class="m-status ${s.cls}">${s.label}</span></div>
+        <div class="m-cell m-cell-price">${priceCell(it)}</div>
+        <div class="m-cell m-cell-qty">${qty}개</div>
+        <div class="m-cell m-cell-note">${noteCell(it)}</div>
+        ${expandable ? `<div class="m-chev">▾</div>` : `<div></div>`}`;
+      if (expandable) {
+        return `<details class="m-item"><summary>${inner}</summary>${expandHTML(it)}</details>`;
+      }
+      return `<div class="m-item m-noex">${inner}</div>`;
+    }
+    function paint() {
+      const html = MATERIALS.filter(g => fGroup === "all" || g.group === fGroup).map(g => {
+        const items = (g.items || []).filter(it => fStatus === "all" || it.status === fStatus);
+        if (!items.length) return "";
+        return `<div class="m-group">
+          <div class="m-group-h">${esc(g.group)} <span class="m-count">[${items.length}]</span></div>
+          <div class="m-items">
+            <div class="m-thead">
+              <div></div><div>자재 종류</div><div>상태</div><div class="num">가격</div><div>수량</div><div>비고</div><div></div>
+            </div>
+            ${items.map(itemRow).join("")}
+          </div></div>`;
+      }).join("");
+      list.innerHTML = html || `<div class="stub">조건에 맞는 자재가 없어요.</div>`;
+    }
+    if (filtersEl) filtersEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".mf-chip"); if (!btn) return;
+      const key = btn.parentElement.dataset.key, val = btn.dataset.v;
+      if (key === "group") fGroup = val;
+      else if (key === "status") fStatus = val;
+      btn.parentElement.querySelectorAll(".mf-chip").forEach(b => b.classList.toggle("on", b === btn));
+      paint();
+    });
+    // 이미지 클릭 → 라이트박스 (자재 카드의 사진) — summary 토글 차단
+    list.addEventListener("click", (e) => {
+      const img = e.target.closest(".m-photo img");
+      if (!img) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openLightbox(img.src, img.alt);
+    }, true);
+    paint();
+  }
+
+  /* ---------- 이미지 라이트박스 (자재 페이지에서 사용) ---------- */
+  function openLightbox(src, alt) {
+    let box = document.querySelector(".mat-lightbox");
+    if (box) box.remove();
+    box = document.createElement("div");
+    box.className = "mat-lightbox";
+    box.innerHTML = `<button class="mat-lightbox-close" type="button" aria-label="닫기">✕</button><img src="${esc(src)}" alt="${esc(alt || "")}">`;
+    const close = () => { box.remove(); document.removeEventListener("keydown", onKey); };
+    const onKey = (ev) => { if (ev.key === "Escape") close(); };
+    box.addEventListener("click", (e) => {
+      if (e.target.tagName !== "IMG") close();
+    });
+    document.addEventListener("keydown", onKey);
+    document.body.appendChild(box);
+  }
+
   /* ---------- 부팅 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     mountNav();
@@ -866,6 +1080,7 @@
     renderConcept();
     renderCalendar();
     renderSurvey();
+    renderMaterials();
     renderDecisions();
     renderOverview();
     renderPhases();
