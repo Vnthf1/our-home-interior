@@ -784,10 +784,10 @@ const MATERIALS = [
         candidates: [
           { name: "휴젠트2", offers: [
             { vendor: "을지로 미래상사", price: 300000 },
+            { vendor: "용타일 옆", price: 360000 },
           ]},
           { name: "휴젠트3", offers: [
             { vendor: "을지로 미래상사", price: 530000 },
-            { vendor: "용타일 옆", price: 360000 },
           ]},
           { name: "제로크", offers: [
             { vendor: "을지로 미래상사", price: 65000 },
