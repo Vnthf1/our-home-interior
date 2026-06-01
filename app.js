@@ -17,18 +17,18 @@
   const NAME2PHASE = {
     "이사": "move",
     "입주민 동의": "consent",
-    "보양": "protect",
+    "보양": "demolition",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
-    "샷시": "window", "설비": "plumbing",
+    "샷시": "window", "설비": "demolition",
     "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공 (방음)": "carpentry",
     "타일": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile",
-    "타일 줄눈": "grout", "줄눈": "grout",
-    "필름": "film", "도장": "paint", "도배": "wallpaper", "장판": "floor",
+    "타일 줄눈": "tile", "줄눈": "tile",
+    "필름": "film", "도배": "wallpaper", "장판": "floor",
     "가구 (신발장·부엌·붙박이장)": "furniture",
     "전기 (조명)": "electric",
-    "하자 보수": "cleaning", "탄성코트": "elastic", "중문": "middle-door", "입주청소": "cleaning",
+    "하자 보수": "cleaning", "중문": "middle-door", "입주청소": "cleaning",
   };
   const goPhase = (pid) => { if (pid) location.href = "plans.html#" + pid; };
 
