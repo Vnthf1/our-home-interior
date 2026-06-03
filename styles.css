@@ -338,7 +338,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-input.grow0{flex:0;min-width:120px}
 .fp-hint{font-size:12.5px;color:var(--muted)}
 .fp-stage{position:relative;display:inline-block;max-width:100%;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;line-height:0}
-.fp-img{display:block;max-width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+.fp-img{display:block;max-width:100%;height:auto}
 .fp-overlay{position:absolute;inset:0}
 .fp-overlay.editing{cursor:crosshair}
 .fp-marker{position:absolute;box-sizing:border-box}
