@@ -60,51 +60,52 @@ function addBox(name, x, y, z, w, d, h, color, dimText) {
   mesh.userData = { name, dim: dimText || `${Math.round(w)}×${Math.round(d)}×${Math.round(h)}` };
   scene.add(mesh); pickables.push(mesh);
   const edge = new THREE.LineSegments(new THREE.EdgesGeometry(g), new THREE.LineBasicMaterial({ color: 0x6b5a44, transparent: true, opacity: 0.45 }));
-  edge.position.copy(mesh.position); scene.add(edge);
+  mesh.add(edge); // 외곽선을 자식으로 → mesh.visible 토글 시 함께 숨김
   return mesh;
 }
 
 const COL = { cab: 0xece0c8, fridge: 0xf2ead8, pillar: 0xd6cdbd, island: 0xe8dcc4, ind: 0x2f2a26, sink: 0xcddde4 };
 
+const wallMeshes = []; // 키큰장 런 + 기둥 (토글로 숨김)
+const WALL = (m) => { wallMeshes.push(m); return m; };
 // 도어 손잡이(전면 세로 막대)
 function addHandle(xk, zc, near) {
   const h = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.18, 0.026), new THREE.MeshStandardMaterial({ color: 0x6b5f4c, roughness: 0.5, metalness: 0.35 }));
   h.position.set(xk * S, zc * S, (runD * S) + (near || 0.014));
-  scene.add(h);
+  scene.add(h); return h;
 }
 segs.forEach((s) => {
   if (s.fridge) {
     const fH = s.fridgeH || runH, upH = runH - fH, n = s.count || 3;
     for (let i = 0; i < n; i++) {
       const dx = s.x + s.w * i / n, dw = s.w / n;
-      addBox(`냉장고 ${i + 1}`, dx, 0, 0, dw, runD, fH, COL.fridge, `600×${runD}×${fH}`);
-      addHandle(dx + dw - 55, fH * 0.5, 0.014);
+      WALL(addBox(`냉장고 ${i + 1}`, dx, 0, 0, dw, runD, fH, COL.fridge, `600×${runD}×${fH}`));
+      WALL(addHandle(dx + dw - 55, fH * 0.5, 0.014));
     }
-    if (upH > 0) { addBox("상부장", s.x, 0, fH, s.w, runD, upH, COL.cab, `${s.w}×${runD}×${upH}`); addHandle(s.x + s.w * 0.5, fH + upH * 0.7, 0.014); }
+    if (upH > 0) { WALL(addBox("상부장", s.x, 0, fH, s.w, runD, upH, COL.cab, `${s.w}×${runD}×${upH}`)); WALL(addHandle(s.x + s.w * 0.5, fH + upH * 0.7, 0.014)); }
   } else if (s.appliance === "oven") {
-    addBox(s.label, s.x, 0, 0, s.w, runD, runH, COL.cab);
-    addBox("오븐", s.x + 30, runD - 540, 1000, s.w - 60, 550, 595, 0x2c2924, `${Math.round(s.w - 60)}×550×595`);
-    addHandle(s.x + s.w - 55, runH * 0.72, 0.014);
-    addHandle(s.x + s.w - 55, runH * 0.18, 0.014);
+    WALL(addBox(s.label, s.x, 0, 0, s.w, runD, runH, COL.cab));
+    WALL(addBox("오븐", s.x + 30, runD - 540, 1000, s.w - 60, 550, 595, 0x2c2924, `${Math.round(s.w - 60)}×550×595`));
+    WALL(addHandle(s.x + s.w - 55, runH * 0.72, 0.014)); WALL(addHandle(s.x + s.w - 55, runH * 0.18, 0.014));
   } else if (s.appliance === "robot") {
-    addBox(s.label, s.x, 0, 0, s.w, runD, runH, COL.cab);
-    addBox("로봇청소기 니치", s.x + 25, runD - 300, 0, s.w - 50, 306, 260, 0xd8cdb8, `${Math.round(s.w - 50)}×300×260`);
-    addHandle(s.x + s.w - 55, runH * 0.6, 0.014);
+    WALL(addBox(s.label, s.x, 0, 0, s.w, runD, runH, COL.cab));
+    WALL(addBox("로봇청소기 니치", s.x + 25, runD - 300, 0, s.w - 50, 306, 260, 0xd8cdb8, `${Math.round(s.w - 50)}×300×260`));
+    WALL(addHandle(s.x + s.w - 55, runH * 0.6, 0.014));
   } else {
-    addBox(s.note ? `${s.label} ${s.note}` : s.label, s.x, 0, 0, s.w, runD, runH, COL.cab);
-    addHandle(s.x + s.w - 55, runH * 0.52, 0.014);
+    WALL(addBox(s.note ? `${s.label} ${s.note}` : s.label, s.x, 0, 0, s.w, runD, runH, COL.cab));
+    WALL(addHandle(s.x + s.w - 55, runH * 0.52, 0.014));
   }
 });
-addBox("기둥", pillarX, 0, 0, pillarW, runD, runH, COL.pillar);
+WALL(addBox("기둥", pillarX, 0, 0, pillarW, runD, runH, COL.pillar));
 addBox("인덕션 팔", armX, armTop, 0, armW, armD, H, COL.island);
 addBox("아일랜드 본체", barX, barTop, 0, barW, barD, H, COL.island);
-// 하부장(앞=남쪽 면): 서랍장 | 싱크 하부장 | 식기세척기 | 측판, + 상판 분절선, + 인덕션 하부장(서쪽 면)
+// 하부장(앞=통로/본체 윗변=키큰장 쪽 면, 정면도와 동일 시점): 서랍장 | 싱크 하부장 | 식기세척기 | 측판, + 상판 분절선, + 인덕션 하부장(서쪽 면)
 const TOE3 = 80, cabH = H - TOE3, sm3 = ISL.seam || Math.round(barW * 0.73), dr3 = ISL.drawer || 1000, dw3 = ISL.dishwasher || 600;
-function southHandle(xk, zc) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.022, 0.026), new THREE.MeshStandardMaterial({ color: 0x6b5f4c, roughness: 0.5, metalness: 0.35 })); m.position.set(xk * S, zc * S, barBot * S + 0.016); scene.add(m); }
-for (let i = 0; i < 3; i++) { const dz = TOE3 + cabH * i / 3; addBox(`서랍 ${i + 1}`, barX, barBot - 26, dz, dr3, 32, cabH / 3, COL.island, `${dr3}×${Math.round(cabH / 3)}`); southHandle(barX + dr3 / 2, dz + cabH / 6); }
-addBox("싱크 하부장", barX + dr3, barBot - 26, TOE3, sm3 - dr3, 32, cabH, COL.island, `${sm3 - dr3}×${cabH}`);
-addBox("식기세척기", barX + sm3, barBot - 26, TOE3, dw3, 32, cabH, 0xdfe6e9, `${dw3}×${cabH}`);
-if (barW > sm3 + dw3) addBox("측판(코너)", barX + sm3 + dw3, barBot - 26, TOE3, barW - sm3 - dw3, 32, cabH, COL.island);
+function frontHandle(xk, zc) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.022, 0.026), new THREE.MeshStandardMaterial({ color: 0x6b5f4c, roughness: 0.5, metalness: 0.35 })); m.position.set(xk * S, zc * S, barTop * S - 0.016); scene.add(m); }
+for (let i = 0; i < 3; i++) { const dz = TOE3 + cabH * i / 3; addBox(`서랍 ${i + 1}`, barX, barTop - 26, dz, dr3, 32, cabH / 3, COL.island, `${dr3}×${Math.round(cabH / 3)}`); frontHandle(barX + dr3 / 2, dz + cabH / 6); }
+addBox("싱크 하부장", barX + dr3, barTop - 26, TOE3, sm3 - dr3, 32, cabH, COL.island, `${sm3 - dr3}×${cabH}`);
+addBox("식기세척기", barX + sm3, barTop - 26, TOE3, dw3, 32, cabH, 0xdfe6e9, `${dw3}×${cabH}`);
+if (barW > sm3 + dw3) addBox("측판(코너)", barX + sm3 + dw3, barTop - 26, TOE3, barW - sm3 - dw3, 32, cabH, COL.island);
 addBox("상판 분절", barX + sm3 - 7, barTop, H, 14, barD, 12, 0x9a7a4a, `분절 ${sm3}`);
 addBox("인덕션 하부장", armX - 26, armTop, TOE3, 32, armD, cabH, COL.island, `${armD}×${cabH}`);
 addBox("인덕션", indX, indY, H, IND.w, IND.d, 50, COL.ind, `${IND.w}×${IND.d}`);
@@ -126,7 +127,7 @@ function onMove(e) {
   ptr.x = ((e.clientX - r.left) / r.width) * 2 - 1;
   ptr.y = -((e.clientY - r.top) / r.height) * 2 + 1;
   ray.setFromCamera(ptr, camera);
-  const hit = ray.intersectObjects(pickables, false)[0];
+  const hit = ray.intersectObjects(pickables.filter((o) => o.visible), false)[0];
   const obj = hit ? hit.object : null;
   if (obj !== hovered) {
     if (hovered) hovered.material.emissive.setHex(0x000000);
@@ -142,6 +143,18 @@ function onMove(e) {
 }
 renderer.domElement.addEventListener("pointermove", onMove);
 renderer.domElement.addEventListener("pointerleave", () => { if (hovered) { hovered.material.emissive.setHex(0x000000); hovered = null; } tip.hidden = true; });
+
+/* ---- 키큰장 숨기기 토글 (통로쪽에서 아일랜드 볼 때 시야 확보) ---- */
+const hideBtn = document.getElementById("kz3d-hidewall");
+if (hideBtn) {
+  let hidden = false;
+  hideBtn.addEventListener("click", () => {
+    hidden = !hidden;
+    wallMeshes.forEach((m) => { m.visible = !hidden; });
+    hideBtn.textContent = hidden ? "키큰장 보이기" : "키큰장 숨기기";
+    hideBtn.classList.toggle("on", hidden);
+  });
+}
 
 /* ---- 리사이즈 / 루프 ---- */
 function resize() {

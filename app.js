@@ -1319,6 +1319,8 @@
     [[0.3, 0.33], [0.7, 0.33], [0.3, 0.7], [0.7, 0.7]].forEach((c) => { const P = ISO(indX + IND.w * c[0], indY + IND.d * c[1], H + 45); sv("circle", { cx: P[0], cy: P[1], r: 70, fill: "none", stroke: "#c9a96a", "stroke-width": 6 }, iso); });
     // 6) 싱크볼 (본체 상판 함몰)
     top3(iso, skX, skY, H, ISL.sink.w, ISL.sink.d, SK, { sw: 4, stroke: "#7f9aa6" });
+    // 상판 분절선(세라믹 슬랩 한계) — 본체 좌측 끝에서 seam
+    if (ISL.seam) { const sx = barX + ISL.seam, a = ISO(sx, barTop, H), b = ISO(sx, barBot, H); ln(iso, a[0], a[1], b[0], b[1], { stroke: "#9a7a4a", sw: 6, dash: "34 20" }); }
     // 라벨
     tIso(iso, runW * 0.36, runD / 2, runH + 240, "키큰장", { fs: 150, fill: C.accent, fw: 700 });
     tIso(iso, pillarX + pillarW / 2, runD / 2, runH + 240, "기둥", { fs: 130, fill: C.accent, fw: 700 });
