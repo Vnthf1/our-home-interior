@@ -546,3 +546,18 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .mat-lightbox img{max-width:94vw;max-height:94vh;box-shadow:0 12px 50px rgba(0,0,0,.6);border-radius:6px;display:block;cursor:default}
 .mat-lightbox-close{position:absolute;top:18px;right:24px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:18px;border:none;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(4px)}
 .mat-lightbox-close:hover{background:rgba(255,255,255,.28)}
+
+/* ===== 가구도면 (furniture) ===== */
+.kz-wrap{display:flex;flex-direction:column;gap:18px}
+.kz-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 4px 14px rgba(90,58,34,.05)}
+.kz-card svg{width:100%;height:auto;display:block;margin-top:4px}
+.kz-h{margin:0 0 6px;font-size:16px;color:var(--accent);font-weight:700}
+.kz-h span{font-size:13px;color:var(--muted);font-weight:500;margin-left:6px}
+.kz-notes ul{margin:6px 0 0;padding-left:18px}
+.kz-notes li{margin:4px 0;font-size:14px}
+.kz-notes code{background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:6px;font-size:13px;font-weight:700}
+.kz-todo{margin:12px 0 0;padding:10px 12px;background:#fff7ed;border:1px solid #f0dcc0;border-radius:10px;font-size:13.5px;color:#7a5c3a}
+.kz-todo b{color:#c0392b}
+.kz-verify{margin:12px 0 0;padding:10px 12px;background:#fdecec;border:1px solid #f3c0c0;border-radius:10px;font-size:13.5px;color:#7a3a3a}
+.kz-verify b{color:#c0392b}
+.kz-verify code{background:#fff;color:#c0392b;border:1px solid #f0c8c8;padding:1px 6px;border-radius:6px;font-weight:700}

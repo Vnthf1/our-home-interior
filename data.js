@@ -23,7 +23,7 @@ const PROJECT = {
   // 네이버 지도 (단지 검색 — 동·호 노출 없음)
   mapUrl: "https://map.naver.com/p/search/효성주얼리시티",
   // 집 둘러보기 영상 (YouTube id) — 같은 구조, 방향만 다름
-  youtube: "3mDRPP6LC5A",
+  youtube: "YCJnX3zkBPg",
   // 홈 화면 소개글 (비우면 표시되지 않음)
   intro: "",
   startDate: "2026-07-01",
@@ -1864,3 +1864,26 @@ const PHASES = [
     images: [],
   },
 ];
+
+/* ===== 가구도면 — 주방 (키큰장 + ㄱ자 아일랜드) · 단위 mm ===== */
+const KITCHEN = {
+  tall: {
+    depth: 800, depthVerify: true,   // 실측필요
+    height: 2500, heightVerify: true, // 실측필요
+    widthVerify: true,                // 키큰장 전체폭(합계) 실측필요
+    segs: [
+      { w: 500, label: "장1" },
+      { w: 1818, label: "냉장고", note: "3도어(각 600)", fridge: true },
+      { w: 600, label: "장2", appliance: "oven" },
+      { w: 582, label: "장3", appliance: "robot" },
+    ],
+    pillar: { w: 800, wVerify: true, label: "기둥" }, // 기둥 넓이 실측필요
+  },
+  island: {
+    // 아일랜드는 기둥/키큰장 앞면에 붙어서 시작(통로 없음).
+    bar: { w: 3000, d: 1000, height: 910 },
+    arm: { w: 800, d: 900, side: "right" }, // 인덕션 팔: 기둥에 붙음, 깊이 900 = 기둥~싱크볼(인덕션 포함)
+    sink: { w: 860, d: 460, gapAisle: 100, gapLeft: 1000 }, // 통로(본체 윗변)에서 100, 본체 좌측 끝에서 1000
+    induction: { w: 600, d: 520, gapWall: 200, gapAisle: 100 }, // 가로600×세로520, 벽(뒤)200·통로(왼쪽)100
+  },
+};

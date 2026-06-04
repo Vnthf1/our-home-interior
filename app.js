@@ -39,6 +39,7 @@
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
+    { href: "furniture.html", label: "가구도면", key: "furniture" },
     { href: "quotes.html", label: "견적/후보", key: "quotes" },
     { href: "materials.html", label: "자재", key: "materials" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
@@ -80,8 +81,8 @@
     if (map && PROJECT.mapUrl) map.innerHTML = `<a class="map-btn" href="${esc(PROJECT.mapUrl)}" target="_blank" rel="noopener">📍 네이버 지도에서 단지 위치 보기 ↗</a>`;
     const video = $("video");
     if (video && PROJECT.youtube) video.innerHTML =
-      `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${esc(PROJECT.youtube)}" title="집 둘러보기" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>` +
-      `<p class="video-cap">우리 집과 같은 구조의 영상이에요 (방향만 다름).</p>`;
+      `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${esc(PROJECT.youtube)}?rel=0&playsinline=1" title="집 둘러보기" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>` +
+      `<p class="video-cap">우리 집과 같은 구조의 영상이에요 (방향만 다름). <a href="https://www.youtube.com/watch?v=${esc(PROJECT.youtube)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a></p>`;
     renderInfoGrid("info");
     renderRooms();
   }
@@ -1074,6 +1075,188 @@
     document.body.appendChild(box);
   }
 
+  /* ---------- 가구도면 (주방: 키큰장 + ㄱ자 아일랜드) ---------- */
+  function renderFurniture() {
+    const root = $("furniture");
+    if (!root || typeof KITCHEN === "undefined") return;
+    const NS = "http://www.w3.org/2000/svg";
+    const C = { muted: "#6b5a44", line: "#8a7a63", fill: "#efe6d8", fill2: "#e3d4ba", dim: "#b08d57", guide: "#c0392b", accent: "#5a3a22", sink: "#dfe7ea", sinkLine: "#7f9aa6" };
+    const sv = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+    const box = (p, x, y, w, h, o = {}) => sv("rect", { x, y, width: w, height: h, fill: o.fill || C.fill, stroke: o.stroke || C.line, "stroke-width": o.sw || 7, rx: o.rx || 0 }, p);
+    const ln = (p, x1, y1, x2, y2, o = {}) => { const e = sv("line", { x1, y1, x2, y2, stroke: o.stroke || C.dim, "stroke-width": o.sw || 4 }, p); if (o.dash) e.setAttribute("stroke-dasharray", o.dash); return e; };
+    const txt = (p, x, y, s, o = {}) => {
+      const t = sv("text", { x, y, "font-size": o.fs || 130, fill: o.fill || C.muted, "text-anchor": o.anchor || "middle", "dominant-baseline": "middle", "font-weight": o.fw || 500 }, p);
+      if (o.rotate) t.setAttribute("transform", `rotate(${o.rotate} ${x} ${y})`);
+      const lines = String(s).split("\n");
+      if (lines.length === 1) { t.textContent = s; }
+      else { const fs = o.fs || 130; lines.forEach((l, i) => { const ts = sv("tspan", { x, dy: i === 0 ? -(fs * 0.55 * (lines.length - 1)) : fs * 1.05 }, t); ts.textContent = l; }); }
+      return t;
+    };
+    const dimH = (p, x1, x2, y, label, o = {}) => { const t = 70, col = C.dim; ln(p, x1, y, x2, y, { stroke: col }); ln(p, x1, y - t, x1, y + t, { stroke: col }); ln(p, x2, y - t, x2, y + t, { stroke: col }); txt(p, (x1 + x2) / 2, y + (o.below ? 150 : -90), label, { fs: o.fs || 120, fill: col, fw: 500 }); };
+    const dimV = (p, y1, y2, x, label, o = {}) => { const t = 70, col = C.dim; ln(p, x, y1, x, y2, { stroke: col }); ln(p, x - t, y1, x + t, y1, { stroke: col }); ln(p, x - t, y2, x + t, y2, { stroke: col }); txt(p, x + (o.left ? -110 : 110), (y1 + y2) / 2, label, { fs: o.fs || 120, fill: col, rotate: -90, fw: 500 }); };
+    const hatch = (p, x, y, w, h, id) => { const cp = sv("clipPath", { id }, p); sv("rect", { x, y, width: w, height: h }, cp); const g = sv("g", { "clip-path": `url(#${id})` }, p); for (let d = -h; d < w; d += 110) ln(g, x + d, y, x + d + h, y + h, { stroke: C.line, sw: 3 }); };
+    // 아이소메트릭(입체) 투영 — X=폭(벽 길이), Y=깊이(방 안쪽), Z=높이
+    const ISO = (X, Y, Z) => [(X - Y) * 0.866, (X + Y) * 0.5 - Z];
+    const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16); const r = Math.min(255, Math.round(((n >> 16) & 255) * f)), g = Math.min(255, Math.round(((n >> 8) & 255) * f)), b = Math.min(255, Math.round((n & 255) * f)); return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1); };
+    const poly = (p, pts, fill, o = {}) => sv("polygon", { points: pts.map((q) => q[0].toFixed(1) + "," + q[1].toFixed(1)).join(" "), fill, stroke: o.stroke || "#8a7a63", "stroke-width": o.sw || 5, "stroke-linejoin": "round" }, p);
+    const tIso = (p, X, Y, Z, s, o = {}) => txt(p, ISO(X, Y, Z)[0], ISO(X, Y, Z)[1], s, o);
+    // 윗면 폴리곤만(상판 위 인덕션·싱크 등)
+    const top3 = (p, x, y, z, w, d, fill, o = {}) => poly(p, [ISO(x, y, z), ISO(x + w, y, z), ISO(x + w, y + d, z), ISO(x, y + d, z)], fill, o);
+    // 입체 박스: 우측면+정면+윗면 (음영 차등)
+    const box3 = (p, x, y, z, w, d, h, base, o = {}) => {
+      const X1 = x + w, Y1 = y + d, Z1 = z + h;
+      const E = ISO(x, y, Z1), F = ISO(X1, y, Z1), G = ISO(X1, Y1, Z1), H = ISO(x, Y1, Z1);
+      const Cc = ISO(X1, Y1, z), D = ISO(x, Y1, z), Bb = ISO(X1, y, z);
+      poly(p, [Bb, Cc, G, F], shade(base, 0.74), o); // 우측면(+X)
+      poly(p, [D, Cc, G, H], shade(base, 0.88), o);  // 정면(+Y, 도어)
+      poly(p, [E, F, G, H], base, o);                // 윗면
+      return { D, Cc, G, H, E, F };
+    };
+
+    /* ----- 치수(mm) 계산 ----- */
+    const T = KITCHEN.tall, ISL = KITCHEN.island;
+    const runD = T.depth, runH = T.height;
+    let cx = 0; const segX = T.segs.map((s) => { const o = Object.assign({ x: cx }, s); cx += s.w; return o; });
+    const runW = cx;
+    const pillarX = runW, pillarW = T.pillar.w, pillarR = runW + pillarW;
+    const barW = ISL.bar.w, barD = ISL.bar.d, armW = ISL.arm.w, armD = ISL.arm.d;
+    const barR = pillarR, barX = barR - barW, armX = barR - armW;
+    // 아일랜드는 기둥/키큰장 앞면에 붙어 시작. 인덕션 팔 깊이(armD=900) = 기둥~싱크볼 거리(인덕션 포함).
+    const armTop = runD, armBot = armTop + armD, barTop = armBot, barBot = barTop + barD;
+
+    /* ===== ① 평면도 ===== */
+    const c1 = document.createElement("div"); c1.className = "kz-card";
+    c1.innerHTML = `<h3 class="kz-h">① 평면도 <span>위에서 본 도면</span></h3>`;
+    const plan = sv("svg", { viewBox: "-1050 -1050 6500 5250", xmlns: NS }, c1);
+    segX.forEach((s) => {
+      box(plan, s.x, 0, s.w, runD, s.fridge ? { fill: "#f2ece1" } : {});
+      txt(plan, s.x + s.w / 2, runD / 2, s.note ? s.label + "\n" + s.note : s.label, { fs: s.w < 600 ? 100 : 125 });
+      if (s.fridge) for (let i = 1; i < 3; i++) ln(plan, s.x + s.w * i / 3, 30, s.x + s.w * i / 3, runD - 30, { stroke: C.line, sw: 4, dash: "40 30" });
+    });
+    box(plan, pillarX, 0, pillarW, runD, { fill: C.fill2 });
+    hatch(plan, pillarX, 0, pillarW, runD, "kz-pc-plan");
+    txt(plan, pillarX + pillarW / 2, runD / 2, T.pillar.label, { fs: 130, fill: C.accent });
+    box(plan, barX, barTop, barW, barD);
+    box(plan, armX, armTop, armW, armD);
+    ln(plan, armX + 7, barTop, armX + armW - 7, barTop, { stroke: C.fill, sw: 9 });
+    // 싱크볼: 통로(본체 윗변=키큰장 쪽 작업존)에서 gapAisle, 본체 좌측 끝에서 gapLeft
+    const skGap = ISL.sink.gapAisle || 0;
+    const skX = barX + (ISL.sink.gapLeft || 0), skY = barTop + skGap;
+    box(plan, skX, skY, ISL.sink.w, ISL.sink.d, { fill: C.sink, stroke: C.sinkLine, sw: 5, rx: 30 });
+    txt(plan, skX + ISL.sink.w / 2, skY + ISL.sink.d / 2, "싱크볼", { fs: 100, fill: C.sinkLine });
+    dimH(plan, skX, skX + ISL.sink.w, skY + ISL.sink.d + 130, String(ISL.sink.w), { fs: 88, below: true }); // 가로
+    dimV(plan, skY, skY + ISL.sink.d, skX - 130, String(ISL.sink.d), { left: true, fs: 88 });       // 세로
+    dimV(plan, barTop, skY, skX + ISL.sink.w + 130, "통로 " + skGap, { fs: 82 });                    // 통로(윗변)~싱크볼
+    dimH(plan, barX, skX, skY - 130, "왼쪽 " + (ISL.sink.gapLeft || 0), { fs: 82 });                 // 본체 좌끝~싱크볼
+    // 인덕션 600×520: 벽(뒤=팔 윗변)에서 gapWall, 통로(왼쪽=팔 좌변)에서 gapAisle
+    const IND = ISL.induction, indX = armX + (IND.gapAisle || 0), indY = armTop + (IND.gapWall || 0);
+    box(plan, indX, indY, IND.w, IND.d, { fill: "#2f2a24", stroke: "#1c1916", sw: 5, rx: 25 });
+    [[0.3, 0.33], [0.7, 0.33], [0.3, 0.7], [0.7, 0.7]].forEach((c) => sv("circle", { cx: indX + IND.w * c[0], cy: indY + IND.d * c[1], r: 92, fill: "none", stroke: "#c9a96a", "stroke-width": 7 }, plan));
+    txt(plan, indX + IND.w / 2, armBot - 100, "인덕션 " + IND.w + "×" + IND.d, { fs: 80, fill: C.accent });
+    dimV(plan, armTop, indY, indX + IND.w + 130, "벽 " + IND.gapWall, { fs: 82 });                  // 벽(뒤)~인덕션
+    dimH(plan, armX, indX, indY - 120, "통로 " + IND.gapAisle, { fs: 82 });                          // 통로(왼쪽)~인덕션
+    ln(plan, armX, 0, armX, barTop, { stroke: C.guide, sw: 4, dash: "60 45" });
+    ln(plan, barR, 0, barR, barBot, { stroke: C.guide, sw: 4, dash: "60 45" });
+    segX.forEach((s) => dimH(plan, s.x, s.x + s.w, -270, String(s.w)));
+    dimH(plan, pillarX, pillarR, -270, pillarW + "(기둥)", { fs: 100, verify: T.pillar.wVerify });
+    dimH(plan, 0, runW, -640, "키큰장 " + runW, { verify: T.widthVerify });
+    dimV(plan, 0, runD, -330, String(runD), { left: true, verify: T.depthVerify });
+    dimV(plan, armTop, armBot, barR + 340, armD + " (기둥~싱크)");
+    dimV(plan, barTop, barBot, barR + 340, String(barD));
+    dimH(plan, barX, barR, barBot + 270, String(barW));
+    dimH(plan, armX, barR, armTop - 150, String(armW), { fs: 100 });
+    txt(plan, 700, -870, "키큰장 (벽면)", { fs: 150, fill: C.accent, fw: 700 });
+    txt(plan, (barX + barR) / 2, barBot + 650, `아일랜드 (ㄱ자 · 상판 H${ISL.bar.height})`, { fs: 140, fill: C.accent, fw: 700 });
+    root.appendChild(c1);
+
+    /* ===== ② 키큰장 입면도 ===== */
+    const c2 = document.createElement("div"); c2.className = "kz-card";
+    c2.innerHTML = `<h3 class="kz-h">② 키큰장 입면도 <span>앞에서 본 도면</span></h3>`;
+    const elev = sv("svg", { viewBox: "-1050 -1050 6500 4300", xmlns: NS }, c2);
+    const FY = runH;
+    ln(elev, -150, FY, pillarR + 150, FY, { stroke: C.accent, sw: 8 });
+    segX.forEach((s) => {
+      if (s.fridge) {
+        box(elev, s.x, 0, s.w, runH, { fill: "#f2ece1" });
+        for (let i = 0; i < 3; i++) { const dx = s.x + s.w * i / 3 + 18, dw = s.w / 3 - 36; box(elev, dx, 90, dw, runH - 180, { fill: "#fbf8f2", stroke: "#9c8a70", sw: 5 }); ln(elev, dx + dw - 40, runH * 0.45, dx + dw - 40, runH * 0.55, { stroke: "#9c8a70", sw: 8 }); }
+        txt(elev, s.x + s.w / 2, -120, "냉장고 3도어 (각 600)", { fs: 115, fill: C.accent });
+      } else if (s.appliance === "oven") {
+        box(elev, s.x, 0, s.w, runH);
+        const ovH = 595, ovFloor = 1000, ovY = runH - ovFloor - ovH; // 오븐 밑면을 바닥에서 ovFloor(mm) 띄움
+        box(elev, s.x + 25, ovY, s.w - 50, ovH, { fill: "#3a322a", stroke: "#222", sw: 5, rx: 20 });
+        ln(elev, s.x + 60, ovY + 90, s.x + s.w - 60, ovY + 90, { stroke: "#8a7", sw: 6 });
+        txt(elev, s.x + s.w / 2, ovY + ovH / 2 + 30, "오븐", { fs: 95, fill: "#f3ead8" });
+        ln(elev, s.x, ovY - 20, s.x + s.w, ovY - 20, { stroke: C.line, sw: 4 });
+        ln(elev, s.x, ovY + ovH + 20, s.x + s.w, ovY + ovH + 20, { stroke: C.line, sw: 4 });
+        txt(elev, s.x + s.w / 2, ovY / 2, "수납", { fs: 95 });
+        dimV(elev, ovY + ovH, FY, s.x + s.w / 2, "바닥 " + ovFloor, { fs: 85 }); // 오븐 밑~바닥 띄움 치수(작게·빨강X)
+      } else if (s.appliance === "robot") {
+        box(elev, s.x, 0, s.w, runH);
+        const rvH = 260;
+        box(elev, s.x + 20, FY - rvH, s.w - 40, rvH, { fill: "#ece3d2", stroke: "#9c8a70", sw: 5 });
+        txt(elev, s.x + s.w / 2, FY - rvH / 2, "로봇\n청소기", { fs: 78 });
+        ln(elev, s.x, FY - rvH - 20, s.x + s.w, FY - rvH - 20, { stroke: C.line, sw: 4 });
+        txt(elev, s.x + s.w / 2, (FY - rvH) / 2, "수납", { fs: 95 });
+      } else {
+        box(elev, s.x, 0, s.w, runH);
+        txt(elev, s.x + s.w / 2, runH / 2, s.label, { fs: 110 });
+      }
+    });
+    box(elev, pillarX, 0, pillarW, runH, { fill: C.fill2 });
+    hatch(elev, pillarX, 0, pillarW, runH, "kz-pc-elev");
+    txt(elev, pillarX + pillarW / 2, runH / 2, T.pillar.label, { fs: 130, fill: C.accent });
+    dimH(elev, 0, runW, -380, "키큰장 " + runW, { verify: T.widthVerify });
+    dimH(elev, pillarX, pillarR, -380, String(pillarW), { fs: 100, verify: T.pillar.wVerify });
+    segX.forEach((s) => dimH(elev, s.x, s.x + s.w, -160, String(s.w), { fs: 100 }));
+    dimV(elev, 0, runH, -250, String(runH), { left: true, verify: T.heightVerify });
+    root.appendChild(c2);
+
+    /* ===== ③ 입체도 (아이소메트릭) ===== */
+    const c3 = document.createElement("div"); c3.className = "kz-card";
+    c3.innerHTML = `<h3 class="kz-h">③ 입체도 <span>아이소메트릭 · 입체적으로 보는 도면</span></h3>`;
+    const iso = sv("svg", { viewBox: "-2750 -2900 6900 6800", xmlns: NS }, c3);
+    const CAB = "#ecdfc6", PIL = "#d6cdbd", ISLc = "#ece0c7", IND_C = "#39322c", SK = "#cfe0e6", H = ISL.bar.height;
+    // 바닥
+    poly(iso, [ISO(-60, -60, 0), ISO(pillarR + 60, -60, 0), ISO(pillarR + 60, barBot + 60, 0), ISO(-60, barBot + 60, 0)], "#f7f2e8", { stroke: "#e6dcc8", sw: 3 });
+    // 1) 벽면 키큰장 (뒤)
+    segX.forEach((s) => {
+      box3(iso, s.x, 0, 0, s.w, runD, runH, s.fridge ? "#f3ead8" : CAB);
+      if (s.fridge) for (let i = 1; i < 3; i++) { const dx = s.x + s.w * i / 3, a = ISO(dx, runD, 0), b = ISO(dx, runD, runH); ln(iso, a[0], a[1], b[0], b[1], { stroke: "#b3a589", sw: 4 }); }
+    });
+    // 2) 기둥
+    box3(iso, pillarX, 0, 0, pillarW, runD, runH, PIL);
+    // 3) 아일랜드 인덕션 팔 → 4) 본체(더 앞)
+    box3(iso, armX, armTop, 0, armW, armD, H, ISLc);
+    box3(iso, barX, barTop, 0, barW, barD, H, ISLc);
+    // 5) 인덕션 (상판 위 얇은 슬래브 + 버너)
+    box3(iso, indX, indY, H, IND.w, IND.d, 45, IND_C, { stroke: "#241f1b" });
+    [[0.3, 0.33], [0.7, 0.33], [0.3, 0.7], [0.7, 0.7]].forEach((c) => { const P = ISO(indX + IND.w * c[0], indY + IND.d * c[1], H + 45); sv("circle", { cx: P[0], cy: P[1], r: 70, fill: "none", stroke: "#c9a96a", "stroke-width": 6 }, iso); });
+    // 6) 싱크볼 (본체 상판 함몰)
+    top3(iso, skX, skY, H, ISL.sink.w, ISL.sink.d, SK, { sw: 4, stroke: "#7f9aa6" });
+    // 라벨
+    tIso(iso, runW * 0.36, runD / 2, runH + 240, "키큰장", { fs: 150, fill: C.accent, fw: 700 });
+    tIso(iso, pillarX + pillarW / 2, runD / 2, runH + 240, "기둥", { fs: 130, fill: C.accent, fw: 700 });
+    tIso(iso, barX + barW * 0.32, barBot, H + 360, "아일랜드 H" + H, { fs: 140, fill: C.accent, fw: 700 });
+    tIso(iso, indX + IND.w / 2, indY - 120, H + 360, "인덕션", { fs: 110, fill: C.accent });
+    tIso(iso, skX + ISL.sink.w / 2, skY + ISL.sink.d + 140, H + 320, "싱크볼", { fs: 110, fill: "#4f6a76" });
+    root.appendChild(c3);
+
+    /* ===== 치수 메모 ===== */
+    const memo = document.createElement("div"); memo.className = "kz-card kz-notes";
+    memo.innerHTML =
+      `<h3 class="kz-h">치수 메모 <span>정본은 data.js의 KITCHEN</span></h3>` +
+      `<ul>` +
+      `<li><b>키큰장</b> ${runW} (깊이 ${runD} · 높이 ${runH}) — 좌→우: ` + segX.map((s) => `${s.label} <code>${s.w}</code>`).join(" · ") + `</li>` +
+      `<li><b>기둥</b> ${pillarW}×${runD}, 키큰장과 전면 일(一)자 정렬 → 빨간 점선이 기둥↔인덕션 정렬 가이드</li>` +
+      `<li><b>아일랜드 ㄱ자</b> (기둥에 붙음, 통로 없음) — 인덕션 팔 ${armW}×${armD}(=기둥~싱크볼, 인덕션 포함) + 본체 ${barW}×${barD} (상판 H${ISL.bar.height})</li>` +
+      `<li><b>인덕션</b> ${ISL.induction.w}×${ISL.induction.d} — 벽(뒤)에서 ${ISL.induction.gapWall} · 통로(왼쪽)에서 ${ISL.induction.gapAisle}</li>` +
+      `<li><b>싱크볼</b> ${ISL.sink.w}×${ISL.sink.d} — 통로(본체 윗변)에서 ${ISL.sink.gapAisle} · 본체 좌측 끝에서 ${ISL.sink.gapLeft}</li>` +
+      `</ul>` +
+      `<p class="kz-verify"><b>⚠ 실측 필요</b>: 장 깊이 <code>${runD}</code> · 키큰장 폭 <code>${runW}</code> · 장 높이 <code>${runH}</code> · 기둥 넓이 <code>${pillarW}</code></p>` +
+      `<p class="kz-todo"><b>확정 필요:</b> ① ㄱ자 꺾임 방향(인덕션 팔 위치) · ② 오븐/로봇청소기 위치 · ③ 싱크볼 좌우(가로) 위치</p>`;
+    root.appendChild(memo);
+  }
+
   /* ---------- 부팅 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     mountNav();
@@ -1090,6 +1273,7 @@
     renderQuotes();
     renderContacts();
     renderFloorplan();
+    renderFurniture();
     renderWork();
     // 견적용 요약 복사 버튼 (작업계획서·작업안내 공용)
     document.addEventListener("click", (e) => {
