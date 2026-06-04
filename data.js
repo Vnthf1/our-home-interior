@@ -595,7 +595,7 @@ const QUOTES = [
       {
         name: "벨류연구소", company: "", phone: "", price: "",
         status: "decided",
-        summary: "아래 설비·방수 카드 참조.",
+        summary: "철거 카드 참조 (철거·보양·설비 일괄, 838.5만원).",
         items: [],
         files: [],
         note: "",
@@ -664,28 +664,7 @@ const QUOTES = [
       },
     ],
   },
-  {
-    phase: "plumbing", name: "설비·방수", icon: "🚿", // 설비·방수 — ✅ 벨류연구소 확정 (철거와 일괄)
-    candidates: [
-      {
-        name: "벨류연구소", company: "", phone: "", price: "",
-        status: "decided",
-        summary: "철거 + 보양 + 설비·방수 일괄 진행 — 견적 838.5만원에 포함.",
-        items: [
-          { label: "주방 급/배수 이전", amount: "" },
-          { label: "드레스룸 코아·배관 신설", amount: "" },
-          { label: "로봇청소기 급배수 신설", amount: "" },
-          { label: "각 화장실 난방배관 연장 (안방 화재대피소 자리 포함)", amount: "" },
-          { label: "욕실 1차 몰탈액체방수", amount: "" },
-        ],
-        files: [],
-        note: "벨류연구소 = 철거 + 보양 + 설비·방수 일괄 발주 (합계 838.5만원). 세부 견적은 철거 카드 참고.",
-      },
-    ],
-  },
-  { phase: "plaster", name: "미장", icon: "🪣", candidates: [] },  // 미장
   { phase: "film", candidates: [] },         // 필름
-  { phase: "paint", name: "도장", icon: "🎨", candidates: [] },    // 도장
   {
     phase: "wallpaper", // 도배
     candidates: [
