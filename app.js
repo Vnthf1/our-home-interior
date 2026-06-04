@@ -85,7 +85,7 @@
         `<img src="https://img.youtube.com/vi/${esc(PROJECT.youtube)}/hqdefault.jpg" alt="집 둘러보기 영상" loading="lazy">` +
         `<span class="video-play" aria-hidden="true">▶</span>` +
       `</a>` +
-      `<p class="video-cap">우리 집과 같은 구조의 영상이에요 (방향만 다름). <a href="https://www.youtube.com/watch?v=${esc(PROJECT.youtube)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a></p>`;
+      `<p class="video-cap">우리 집과 같은 구조의 영상이에요. <a href="https://www.youtube.com/watch?v=${esc(PROJECT.youtube)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a></p>`;
     renderInfoGrid("info");
     renderRooms();
   }
@@ -1122,7 +1122,7 @@
     let cx = 0; const segX = T.segs.map((s) => { const o = Object.assign({ x: cx }, s); cx += s.w; return o; });
     const runW = cx;
     const pillarX = runW, pillarW = T.pillar.w, pillarR = runW + pillarW;
-    const barW = ISL.bar.w, barD = ISL.bar.d, armW = ISL.arm.w, armD = ISL.arm.d;
+    const barW = ISL.bar.w, barD = ISL.bar.d, H = ISL.bar.height, armW = ISL.arm.w, armD = ISL.arm.d;
     const barR = pillarR, barX = barR - barW, armX = barR - armW;
     // 아일랜드는 기둥/키큰장 앞면에 붙어 시작. 인덕션 팔 깊이(armD=900) = 기둥~싱크볼 거리(인덕션 포함).
     const armTop = runD, armBot = armTop + armD, barTop = armBot, barBot = barTop + barD;
@@ -1177,32 +1177,50 @@
     c2.innerHTML = `<h3 class="kz-h">② 키큰장 입면도 <span>앞에서 본 도면</span></h3>`;
     const elev = sv("svg", { viewBox: "-1050 -1050 6500 4300", xmlns: NS }, c2);
     const FY = runH;
-    ln(elev, -150, FY, pillarR + 150, FY, { stroke: C.accent, sw: 8 });
+    // 도어 패널 + 손잡이
+    const door = (x, y, w, h, o = {}) => {
+      box(elev, x + 16, y + 16, w - 32, h - 32, { fill: o.fill || "#f3ecdd", stroke: "#9c8a70", sw: 4, rx: 10 });
+      const hx = o.handle === "left" ? x + 48 : x + w - 48;
+      ln(elev, hx, y + h * 0.4, hx, y + h * 0.6, { stroke: "#8a795f", sw: 11 });
+    };
     segX.forEach((s) => {
+      box(elev, s.x, 0, s.w, runH, { fill: s.fridge ? "#f2ece1" : C.fill }); // 캐비닛 몸체
       if (s.fridge) {
-        box(elev, s.x, 0, s.w, runH, { fill: "#f2ece1" });
-        for (let i = 0; i < 3; i++) { const dx = s.x + s.w * i / 3 + 18, dw = s.w / 3 - 36; box(elev, dx, 90, dw, runH - 180, { fill: "#fbf8f2", stroke: "#9c8a70", sw: 5 }); ln(elev, dx + dw - 40, runH * 0.45, dx + dw - 40, runH * 0.55, { stroke: "#9c8a70", sw: 8 }); }
-        txt(elev, s.x + s.w / 2, -120, "냉장고 3도어 (각 600)", { fs: 115, fill: C.accent });
+        const fH = s.fridgeH || runH, upH = runH - fH, n = s.count || 3;
+        if (upH > 0) { // 상부장 (냉장고 위 남는 영역)
+          const uc = Math.max(2, Math.round(s.w / 600));
+          for (let i = 0; i < uc; i++) door(s.x + s.w * i / uc, 0, s.w / uc, upH, { fill: "#f6efe2", handle: i < uc / 2 ? "right" : "left" });
+          ln(elev, s.x, upH, s.x + s.w, upH, { stroke: C.line, sw: 6 });
+          txt(elev, s.x + s.w / 2, upH / 2, "상부장 " + upH, { fs: 86 });
+        }
+        for (let i = 0; i < n; i++) { // 냉장고 n대
+          const dx = s.x + s.w * i / n, dw = s.w / n;
+          box(elev, dx + 14, upH + 24, dw - 28, fH - 48, { fill: "#fbf8f2", stroke: "#9c8a70", sw: 5, rx: 8 });
+          ln(elev, dx + dw - 42, upH + fH * 0.42, dx + dw - 42, upH + fH * 0.58, { stroke: "#9c8a70", sw: 10 });
+        }
+        txt(elev, s.x + s.w / 2, -120, "냉장고 " + n + "도어 (각 600 · H" + fH + ")", { fs: 106, fill: C.accent });
+        dimV(elev, upH, FY, s.x + s.w - 30, String(fH), { fs: 80 });   // 냉장고 높이
+        dimV(elev, 0, upH, s.x + 30, String(upH), { left: true, fs: 78 }); // 상부장 높이
       } else if (s.appliance === "oven") {
-        box(elev, s.x, 0, s.w, runH);
-        const ovH = 595, ovFloor = 1000, ovY = runH - ovFloor - ovH; // 오븐 밑면을 바닥에서 ovFloor(mm) 띄움
-        box(elev, s.x + 25, ovY, s.w - 50, ovH, { fill: "#3a322a", stroke: "#222", sw: 5, rx: 20 });
-        ln(elev, s.x + 60, ovY + 90, s.x + s.w - 60, ovY + 90, { stroke: "#8a7", sw: 6 });
-        txt(elev, s.x + s.w / 2, ovY + ovH / 2 + 30, "오븐", { fs: 95, fill: "#f3ead8" });
-        ln(elev, s.x, ovY - 20, s.x + s.w, ovY - 20, { stroke: C.line, sw: 4 });
-        ln(elev, s.x, ovY + ovH + 20, s.x + s.w, ovY + ovH + 20, { stroke: C.line, sw: 4 });
-        txt(elev, s.x + s.w / 2, ovY / 2, "수납", { fs: 95 });
-        dimV(elev, ovY + ovH, FY, s.x + s.w / 2, "바닥 " + ovFloor, { fs: 85 }); // 오븐 밑~바닥 띄움 치수(작게·빨강X)
+        const ovH = 595, ovFloor = 1000, ovY = runH - ovFloor - ovH; // 오븐 밑면을 바닥에서 ovFloor 띄움
+        door(s.x, 0, s.w, ovY);                       // 오븐 위 수납
+        door(s.x, ovY + ovH, s.w, FY - ovY - ovH);    // 오븐 아래 수납
+        box(elev, s.x + 25, ovY, s.w - 50, ovH, { fill: "#33302a", stroke: "#222", sw: 5, rx: 20 });
+        box(elev, s.x + 55, ovY + 70, s.w - 110, ovH - 200, { fill: "#5a544a", stroke: "#222", sw: 3, rx: 10 }); // 유리창
+        ln(elev, s.x + 70, ovY + 40, s.x + s.w - 70, ovY + 40, { stroke: "#9a8", sw: 7 }); // 핸들
+        txt(elev, s.x + s.w / 2, ovY + ovH - 80, "오븐", { fs: 86, fill: "#f3ead8" });
+        txt(elev, s.x + s.w / 2, ovY / 2, "수납", { fs: 88 });
+        dimV(elev, ovY + ovH, FY, s.x + s.w / 2, "바닥 " + ovFloor, { fs: 85 });
       } else if (s.appliance === "robot") {
-        box(elev, s.x, 0, s.w, runH);
         const rvH = 260;
-        box(elev, s.x + 20, FY - rvH, s.w - 40, rvH, { fill: "#ece3d2", stroke: "#9c8a70", sw: 5 });
-        txt(elev, s.x + s.w / 2, FY - rvH / 2, "로봇\n청소기", { fs: 78 });
-        ln(elev, s.x, FY - rvH - 20, s.x + s.w, FY - rvH - 20, { stroke: C.line, sw: 4 });
-        txt(elev, s.x + s.w / 2, (FY - rvH) / 2, "수납", { fs: 95 });
+        door(s.x, 0, s.w, FY - rvH);
+        box(elev, s.x + 20, FY - rvH, s.w - 40, rvH, { fill: "#e6dcc7", stroke: "#9c8a70", sw: 5, rx: 6 });
+        txt(elev, s.x + s.w / 2, FY - rvH / 2, "로봇\n청소기", { fs: 74 });
+        txt(elev, s.x + s.w / 2, (FY - rvH) / 2, "수납", { fs: 88 });
       } else {
-        box(elev, s.x, 0, s.w, runH);
-        txt(elev, s.x + s.w / 2, runH / 2, s.label, { fs: 110 });
+        door(s.x, 0, s.w, runH * 0.62, { handle: "right" });        // 상
+        door(s.x, runH * 0.62, s.w, runH * 0.38, { handle: "right" }); // 하
+        txt(elev, s.x + s.w / 2, runH * 0.31, s.label, { fs: 100 });
       }
     });
     box(elev, pillarX, 0, pillarW, runH, { fill: C.fill2 });
@@ -1214,17 +1232,59 @@
     dimV(elev, 0, runH, -250, String(runH), { left: true, verify: T.heightVerify });
     root.appendChild(c2);
 
-    /* ===== ③ 입체도 (아이소메트릭) ===== */
+    /* ===== ③ 아일랜드 입면도 (통로/앞에서 본 정면) ===== */
+    const c2b = document.createElement("div"); c2b.className = "kz-card";
+    c2b.innerHTML = `<h3 class="kz-h">③ 아일랜드 입면도 <span>통로(앞)에서 본 정면 · 상판높이 ${H}</span></h3>`;
+    const cap = (t) => { const d = document.createElement("div"); d.className = "kz-cap"; d.textContent = t; c2b.appendChild(d); };
+    const TOE = 80, CT = 40; // 걸레받이 높이, 상판 두께
+    const islandFace = (p, w) => {
+      ln(p, -120, H, w + 120, H, { stroke: C.accent, sw: 8 });               // 바닥
+      box(p, 0, CT, w, H - CT, { fill: C.fill });                            // 몸체
+      box(p, -28, 0, w + 56, CT, { fill: "#d8cdb8", stroke: C.line, sw: 4 }); // 상판(오버행)
+      ln(p, 0, H - TOE, w, H - TOE, { stroke: C.line, sw: 3, dash: "26 18" }); // 걸레받이
+      dimH(p, 0, w, -230, String(w));                                        // 폭
+      dimV(p, 0, H, -200, String(H), { left: true });                        // 높이
+    };
+    // (가) 본체(싱크대) 정면
+    cap("본체(싱크대) 쪽 정면 — W" + barW + " × H" + H);
+    const e1 = sv("svg", { viewBox: "-700 -750 " + (barW + 1400) + " " + (H + 1550), xmlns: NS }, c2b);
+    islandFace(e1, barW);
+    sv("rect", { x: ISL.sink.gapLeft, y: -6, width: ISL.sink.w, height: CT + 70, fill: "none", stroke: C.sinkLine, "stroke-width": 5, "stroke-dasharray": "40 26", rx: 14 }, e1); // 싱크 히든
+    const fxc = ISL.sink.gapLeft + ISL.sink.w / 2;
+    ln(e1, fxc, -160, fxc, -10, { stroke: "#7f9aa6", sw: 9 });               // 수전 기둥
+    ln(e1, fxc, -160, fxc + 120, -160, { stroke: "#7f9aa6", sw: 9 });        // 수전 목
+    txt(e1, fxc, CT + 120, "싱크볼(상판 매립)", { fs: 86, fill: C.sinkLine });
+    dimH(e1, 0, ISL.sink.gapLeft, H + 250, "왼쪽 " + ISL.sink.gapLeft, { fs: 82, below: true });
+    dimH(e1, ISL.sink.gapLeft, ISL.sink.gapLeft + ISL.sink.w, H + 250, String(ISL.sink.w), { fs: 82, below: true });
+    txt(e1, barW - 360, H - TOE / 2, "걸레받이 " + TOE, { fs: 66 });
+    // (나) 인덕션 팔 정면 (벽쪽 끝 기준)
+    cap("인덕션 팔 쪽 정면 — W" + armD + " × H" + H + " · 인덕션은 상판 매립(600은 깊이)");
+    const e2 = sv("svg", { viewBox: "-700 -750 " + (armD + 1400) + " " + (H + 1550), xmlns: NS }, c2b);
+    islandFace(e2, armD);
+    const iLeft = IND.gapWall, iW = IND.d; // 벽쪽 끝에서 gapWall, 보이는 폭=세로(520)
+    sv("rect", { x: iLeft, y: -4, width: iW, height: CT + 44, fill: "#2f2a26", stroke: "#1c1916", "stroke-width": 4, rx: 8 }, e2);
+    txt(e2, iLeft + iW / 2, CT + 120, "인덕션 " + IND.w + "×" + IND.d, { fs: 80, fill: C.accent });
+    dimH(e2, 0, iLeft, H + 250, "벽쪽 " + iLeft, { fs: 82, below: true });
+    dimH(e2, iLeft, iLeft + iW, H + 250, String(iW), { fs: 82, below: true });
+    root.appendChild(c2b);
+
+    /* ===== ④ 입체도 (아이소메트릭) ===== */
     const c3 = document.createElement("div"); c3.className = "kz-card";
-    c3.innerHTML = `<h3 class="kz-h">③ 입체도 <span>아이소메트릭 · 입체적으로 보는 도면</span></h3>`;
+    c3.innerHTML = `<h3 class="kz-h">④ 입체도 <span>아이소메트릭 · 입체적으로 보는 도면</span></h3>`;
     const iso = sv("svg", { viewBox: "-2750 -2900 6900 6800", xmlns: NS }, c3);
-    const CAB = "#ecdfc6", PIL = "#d6cdbd", ISLc = "#ece0c7", IND_C = "#39322c", SK = "#cfe0e6", H = ISL.bar.height;
+    const CAB = "#ecdfc6", PIL = "#d6cdbd", ISLc = "#ece0c7", IND_C = "#39322c", SK = "#cfe0e6";
     // 바닥
     poly(iso, [ISO(-60, -60, 0), ISO(pillarR + 60, -60, 0), ISO(pillarR + 60, barBot + 60, 0), ISO(-60, barBot + 60, 0)], "#f7f2e8", { stroke: "#e6dcc8", sw: 3 });
     // 1) 벽면 키큰장 (뒤)
     segX.forEach((s) => {
-      box3(iso, s.x, 0, 0, s.w, runD, runH, s.fridge ? "#f3ead8" : CAB);
-      if (s.fridge) for (let i = 1; i < 3; i++) { const dx = s.x + s.w * i / 3, a = ISO(dx, runD, 0), b = ISO(dx, runD, runH); ln(iso, a[0], a[1], b[0], b[1], { stroke: "#b3a589", sw: 4 }); }
+      if (s.fridge) {
+        const fH = s.fridgeH || runH, upH = runH - fH, n = s.count || 3;
+        box3(iso, s.x, 0, 0, s.w, runD, fH, "#f3ead8");      // 냉장고
+        if (upH > 0) box3(iso, s.x, 0, fH, s.w, runD, upH, CAB); // 상부장
+        for (let i = 1; i < n; i++) { const dx = s.x + s.w * i / n, a = ISO(dx, runD, 0), b = ISO(dx, runD, fH); ln(iso, a[0], a[1], b[0], b[1], { stroke: "#b3a589", sw: 4 }); }
+      } else {
+        box3(iso, s.x, 0, 0, s.w, runD, runH, CAB);
+      }
     });
     // 2) 기둥
     box3(iso, pillarX, 0, 0, pillarW, runD, runH, PIL);

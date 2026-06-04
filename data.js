@@ -1873,7 +1873,7 @@ const KITCHEN = {
     widthVerify: true,                // 키큰장 전체폭(합계) 실측필요
     segs: [
       { w: 500, label: "장1" },
-      { w: 1818, label: "냉장고", note: "3도어(각 600)", fridge: true },
+      { w: 1818, label: "냉장고", note: "3도어(각 600)", fridge: true, fridgeH: 1860, count: 3 }, // 냉장고 H1860, 위는 상부장(2500-1860)
       { w: 600, label: "장2", appliance: "oven" },
       { w: 582, label: "장3", appliance: "robot" },
     ],

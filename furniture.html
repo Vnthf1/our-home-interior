@@ -16,13 +16,36 @@
 <section><div class="wrap">
   <div class="sec-title">FURNITURE</div>
   <h2 class="sec-head">가구도면</h2>
-  <p class="ov-lead">손그림 기준으로 정리한 가구 평면도·입면도. 치수(mm)는 <code>data.js</code>의 <code>KITCHEN</code>에서 수정합니다.</p>
+  <p class="ov-lead">손그림 기준으로 정리한 가구 평면도·입면도·3D. 치수(mm)는 <code>data.js</code>의 <code>KITCHEN</code>에서 수정합니다.</p>
+  <div class="kz-wrap">
+    <div class="kz-card" id="kz3d-card">
+      <h3 class="kz-h">🧊 3D 입체 (회전 가능) <span>드래그=회전 · 휠=줌 · 우클릭드래그=이동 · 마우스 올리면 치수</span></h3>
+      <div id="kz3d-wrap"><div id="kz3d-tip" class="kz3d-tip" hidden></div></div>
+      <div id="kz3d-fallback" class="kz3d-fallback" hidden>⚠ 3D 뷰를 불러오지 못했어요(네트워크/CDN). 아래 ①~④ 도면으로 확인하세요.</div>
+    </div>
+  </div>
+
   <div id="furniture" class="kz-wrap"></div>
 </div></section>
 
 <footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
 
 <script src="data.js"></script>
+<script>window.KITCHEN = typeof KITCHEN !== "undefined" ? KITCHEN : null;</script>
 <script src="app.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="furniture3d.js"></script>
+<script>
+  // CDN 실패 시 폴백 안내
+  window.addEventListener("load", () => setTimeout(() => {
+    const w = document.getElementById("kz3d-wrap"), fb = document.getElementById("kz3d-fallback");
+    if (w && !w.querySelector("canvas") && fb) fb.hidden = false;
+  }, 2800));
+</script>
 </body>
 </html>
