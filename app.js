@@ -452,7 +452,8 @@
   function renderQuotes() {
     const el = $("quotes"); if (!el || typeof QUOTES === "undefined") return;
     const order = PHASES.map((p) => p.id);
-    const sorted = [...QUOTES].sort((a, b) => order.indexOf(a.phase) - order.indexOf(b.phase));
+    const rank = (ph) => { const i = order.indexOf(ph); return i === -1 ? Infinity : i; };
+    const sorted = [...QUOTES].sort((a, b) => rank(a.phase) - rank(b.phase));
     el.innerHTML = sorted.map((q) => {
       const p = PHASES.find((x) => x.id === q.phase);
       const cands = q.candidates || [];
