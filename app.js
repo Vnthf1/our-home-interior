@@ -81,7 +81,10 @@
     if (map && PROJECT.mapUrl) map.innerHTML = `<a class="map-btn" href="${esc(PROJECT.mapUrl)}" target="_blank" rel="noopener">📍 네이버 지도에서 단지 위치 보기 ↗</a>`;
     const video = $("video");
     if (video && PROJECT.youtube) video.innerHTML =
-      `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${esc(PROJECT.youtube)}?rel=0&playsinline=1" title="집 둘러보기" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>` +
+      `<a class="video-wrap video-thumb" href="https://www.youtube.com/watch?v=${esc(PROJECT.youtube)}" target="_blank" rel="noopener" title="유튜브에서 영상 보기">` +
+        `<img src="https://img.youtube.com/vi/${esc(PROJECT.youtube)}/hqdefault.jpg" alt="집 둘러보기 영상" loading="lazy">` +
+        `<span class="video-play" aria-hidden="true">▶</span>` +
+      `</a>` +
       `<p class="video-cap">우리 집과 같은 구조의 영상이에요 (방향만 다름). <a href="https://www.youtube.com/watch?v=${esc(PROJECT.youtube)}" target="_blank" rel="noopener">유튜브에서 보기 ↗</a></p>`;
     renderInfoGrid("info");
     renderRooms();

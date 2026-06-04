@@ -284,6 +284,11 @@ li.item-x.undecided .it-text{text-decoration:underline dotted var(--warn);text-u
 /* video */
 .video-wrap{position:relative;width:100%;max-width:900px;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000}
 .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%}
+.video-thumb{display:block;cursor:pointer;text-decoration:none}
+.video-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .25s ease}
+.video-thumb:hover img{transform:scale(1.03)}
+.video-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:26px;padding-left:5px;transition:background .2s ease}
+.video-thumb:hover .video-play{background:#ff0000}
 .video-cap{color:var(--muted);font-size:13px;margin-top:10px}
 
 /* map button */
