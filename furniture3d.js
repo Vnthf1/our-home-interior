@@ -98,6 +98,15 @@ segs.forEach((s) => {
 addBox("기둥", pillarX, 0, 0, pillarW, runD, runH, COL.pillar);
 addBox("인덕션 팔", armX, armTop, 0, armW, armD, H, COL.island);
 addBox("아일랜드 본체", barX, barTop, 0, barW, barD, H, COL.island);
+// 하부장(앞=남쪽 면): 서랍장 | 싱크 하부장 | 식기세척기 | 측판, + 상판 분절선, + 인덕션 하부장(서쪽 면)
+const TOE3 = 80, cabH = H - TOE3, sm3 = ISL.seam || Math.round(barW * 0.73), dr3 = ISL.drawer || 1000, dw3 = ISL.dishwasher || 600;
+function southHandle(xk, zc) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.022, 0.026), new THREE.MeshStandardMaterial({ color: 0x6b5f4c, roughness: 0.5, metalness: 0.35 })); m.position.set(xk * S, zc * S, barBot * S + 0.016); scene.add(m); }
+for (let i = 0; i < 3; i++) { const dz = TOE3 + cabH * i / 3; addBox(`서랍 ${i + 1}`, barX, barBot - 26, dz, dr3, 32, cabH / 3, COL.island, `${dr3}×${Math.round(cabH / 3)}`); southHandle(barX + dr3 / 2, dz + cabH / 6); }
+addBox("싱크 하부장", barX + dr3, barBot - 26, TOE3, sm3 - dr3, 32, cabH, COL.island, `${sm3 - dr3}×${cabH}`);
+addBox("식기세척기", barX + sm3, barBot - 26, TOE3, dw3, 32, cabH, 0xdfe6e9, `${dw3}×${cabH}`);
+if (barW > sm3 + dw3) addBox("측판(코너)", barX + sm3 + dw3, barBot - 26, TOE3, barW - sm3 - dw3, 32, cabH, COL.island);
+addBox("상판 분절", barX + sm3 - 7, barTop, H, 14, barD, 12, 0x9a7a4a, `분절 ${sm3}`);
+addBox("인덕션 하부장", armX - 26, armTop, TOE3, 32, armD, cabH, COL.island, `${armD}×${cabH}`);
 addBox("인덕션", indX, indY, H, IND.w, IND.d, 50, COL.ind, `${IND.w}×${IND.d}`);
 addBox("싱크볼", skX, skY, H - 180, ISL.sink.w, ISL.sink.d, 180, COL.sink, `${ISL.sink.w}×${ISL.sink.d}`);
 

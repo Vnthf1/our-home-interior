@@ -1142,6 +1142,8 @@
     box(plan, barX, barTop, barW, barD);
     box(plan, armX, armTop, armW, armD);
     ln(plan, armX + 7, barTop, armX + armW - 7, barTop, { stroke: C.fill, sw: 9 });
+    // 상판 분절선(세라믹 슬랩 한계) — 본체 좌측 끝에서 seam
+    if (ISL.seam) { const sx = barX + ISL.seam; ln(plan, sx, barTop, sx, barBot, { stroke: "#b09a78", sw: 5, dash: "34 20" }); txt(plan, sx, barTop - 90, "상판분절 " + ISL.seam, { fs: 80, fill: "#9a7a4a" }); }
     // 싱크볼: 통로(본체 윗변=키큰장 쪽 작업존)에서 gapAisle, 본체 좌측 끝에서 gapLeft
     const skGap = ISL.sink.gapAisle || 0;
     const skX = barX + (ISL.sink.gapLeft || 0), skY = barTop + skGap;
@@ -1236,7 +1238,8 @@
     const c2b = document.createElement("div"); c2b.className = "kz-card";
     c2b.innerHTML = `<h3 class="kz-h">③ 아일랜드 입면도 <span>통로(앞)에서 본 정면 · 상판높이 ${H}</span></h3>`;
     const cap = (t) => { const d = document.createElement("div"); d.className = "kz-cap"; d.textContent = t; c2b.appendChild(d); };
-    const TOE = 80, CT = 40; // 걸레받이 높이, 상판 두께
+    const TOE = 80, CT = 40;            // 걸레받이 높이, 상판 두께
+    const cyTop = CT + 14, cyH = (H - TOE) - (CT + 14); // 하부 도어 영역
     const islandFace = (p, w) => {
       ln(p, -120, H, w + 120, H, { stroke: C.accent, sw: 8 });               // 바닥
       box(p, 0, CT, w, H - CT, { fill: C.fill });                            // 몸체
@@ -1245,27 +1248,47 @@
       dimH(p, 0, w, -230, String(w));                                        // 폭
       dimV(p, 0, H, -200, String(H), { left: true });                        // 높이
     };
-    // (가) 본체(싱크대) 정면
+    const knob = (p, x, y, horiz) => horiz ? ln(p, x - 70, y, x + 70, y, { stroke: "#8a795f", sw: 11 }) : ln(p, x, y - 70, x, y + 70, { stroke: "#8a795f", sw: 11 });
+    const pnl = (p, x, y, w, h, o = {}) => box(p, x + 12, y + 9, w - 24, h - 18, { fill: o.fill || "#f3ecdd", stroke: "#9c8a70", sw: 4, rx: 8 });
+    const drawers = (p, x, w, n) => { const hh = cyH / n; for (let i = 0; i < n; i++) { pnl(p, x, cyTop + i * hh, w, hh); knob(p, x + w / 2, cyTop + i * hh + hh / 2, true); } };
+    const doors = (p, x, w, n) => { const dw2 = w / n; for (let i = 0; i < n; i++) { pnl(p, x + i * dw2, cyTop, dw2, cyH); knob(p, x + i * dw2 + (i < n / 2 ? dw2 - 55 : 55), cyTop + cyH / 2, false); } };
+    const dr = ISL.drawer || 1000, sm = ISL.seam || Math.round(barW * 0.73), dw = ISL.dishwasher || 600;
+
+    // (가) 본체(싱크대) 정면 — 서랍장 | 싱크 하부장 | 식기세척기 | 측판
     cap("본체(싱크대) 쪽 정면 — W" + barW + " × H" + H);
-    const e1 = sv("svg", { viewBox: "-700 -750 " + (barW + 1400) + " " + (H + 1550), xmlns: NS }, c2b);
+    const e1 = sv("svg", { viewBox: "-700 -800 " + (barW + 1400) + " " + (H + 1650), xmlns: NS }, c2b);
     islandFace(e1, barW);
-    sv("rect", { x: ISL.sink.gapLeft, y: -6, width: ISL.sink.w, height: CT + 70, fill: "none", stroke: C.sinkLine, "stroke-width": 5, "stroke-dasharray": "40 26", rx: 14 }, e1); // 싱크 히든
+    drawers(e1, 0, dr, 3);                            // 서랍장
+    doors(e1, dr, sm - dr, 2);                        // 싱크 하부장(2도어)
+    pnl(e1, sm, cyTop, dw, cyH, { fill: "#e7ecee" }); // 식기세척기
+    ln(e1, sm + 34, cyTop + 78, sm + dw - 34, cyTop + 78, { stroke: "#9aa7ad", sw: 9 });
+    txt(e1, sm + dw / 2, cyTop + cyH / 2 + 20, "식기\n세척기", { fs: 72, fill: "#5a6f78" });
+    if (barW > sm + dw) pnl(e1, sm + dw, cyTop, barW - sm - dw, cyH, { fill: C.fill2 }); // 측판(코너)
+    // 상판 분절선(세라믹 슬랩 한계) — 너머는 인덕션 슬랩
+    ln(e1, sm, -CT - 14, sm, cyTop, { stroke: "#b09a78", sw: 5, dash: "30 16" });
+    txt(e1, sm, -CT - 80, "상판 분절 " + sm, { fs: 72, fill: "#9a7a4a" });
+    // 싱크(상판 매립, 히든) + 수전
+    sv("rect", { x: ISL.sink.gapLeft, y: -6, width: ISL.sink.w, height: CT + 60, fill: "none", stroke: C.sinkLine, "stroke-width": 5, "stroke-dasharray": "40 26", rx: 14 }, e1);
     const fxc = ISL.sink.gapLeft + ISL.sink.w / 2;
-    ln(e1, fxc, -160, fxc, -10, { stroke: "#7f9aa6", sw: 9 });               // 수전 기둥
-    ln(e1, fxc, -160, fxc + 120, -160, { stroke: "#7f9aa6", sw: 9 });        // 수전 목
-    txt(e1, fxc, CT + 120, "싱크볼(상판 매립)", { fs: 86, fill: C.sinkLine });
-    dimH(e1, 0, ISL.sink.gapLeft, H + 250, "왼쪽 " + ISL.sink.gapLeft, { fs: 82, below: true });
-    dimH(e1, ISL.sink.gapLeft, ISL.sink.gapLeft + ISL.sink.w, H + 250, String(ISL.sink.w), { fs: 82, below: true });
-    txt(e1, barW - 360, H - TOE / 2, "걸레받이 " + TOE, { fs: 66 });
-    // (나) 인덕션 팔 정면 (벽쪽 끝 기준)
-    cap("인덕션 팔 쪽 정면 — W" + armD + " × H" + H + " · 인덕션은 상판 매립(600은 깊이)");
-    const e2 = sv("svg", { viewBox: "-700 -750 " + (armD + 1400) + " " + (H + 1550), xmlns: NS }, c2b);
+    ln(e1, fxc, -175, fxc, -10, { stroke: "#7f9aa6", sw: 9 });
+    ln(e1, fxc, -175, fxc + 120, -175, { stroke: "#7f9aa6", sw: 9 });
+    dimH(e1, 0, ISL.sink.gapLeft, H + 250, "싱크 왼쪽 " + ISL.sink.gapLeft, { fs: 80, below: true });
+    dimH(e1, ISL.sink.gapLeft, ISL.sink.gapLeft + ISL.sink.w, H + 250, String(ISL.sink.w), { fs: 80, below: true });
+    txt(e1, dr / 2, H + 500, "서랍장", { fs: 76, fill: C.accent });
+    txt(e1, (dr + sm) / 2, H + 500, "싱크 하부장", { fs: 76, fill: C.accent });
+    txt(e1, sm + dw / 2, H + 500, "식기세척기", { fs: 76, fill: C.accent });
+
+    // (나) 인덕션 팔 정면 — 하부 장(2도어) + 상판 매립 인덕션
+    cap("인덕션 팔 쪽 정면 — W" + armD + " × H" + H + " · 인덕션 상판 매립(600은 깊이) · ㄱ코너는 본체와 이어짐");
+    const e2 = sv("svg", { viewBox: "-700 -800 " + (armD + 1400) + " " + (H + 1650), xmlns: NS }, c2b);
     islandFace(e2, armD);
-    const iLeft = IND.gapWall, iW = IND.d; // 벽쪽 끝에서 gapWall, 보이는 폭=세로(520)
+    doors(e2, 0, armD, 2);                            // 인덕션 하부장
+    const iLeft = IND.gapWall, iW = IND.d;
     sv("rect", { x: iLeft, y: -4, width: iW, height: CT + 44, fill: "#2f2a26", stroke: "#1c1916", "stroke-width": 4, rx: 8 }, e2);
-    txt(e2, iLeft + iW / 2, CT + 120, "인덕션 " + IND.w + "×" + IND.d, { fs: 80, fill: C.accent });
-    dimH(e2, 0, iLeft, H + 250, "벽쪽 " + iLeft, { fs: 82, below: true });
-    dimH(e2, iLeft, iLeft + iW, H + 250, String(iW), { fs: 82, below: true });
+    txt(e2, iLeft + iW / 2, -CT - 24, "인덕션 " + IND.w + "×" + IND.d, { fs: 76, fill: C.accent });
+    dimH(e2, 0, iLeft, H + 250, "벽쪽 " + iLeft, { fs: 80, below: true });
+    dimH(e2, iLeft, iLeft + iW, H + 250, String(iW), { fs: 80, below: true });
+    txt(e2, armD / 2, H + 500, "인덕션 하부장", { fs: 76, fill: C.accent });
     root.appendChild(c2b);
 
     /* ===== ④ 입체도 (아이소메트릭) ===== */
