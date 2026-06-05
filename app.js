@@ -1279,7 +1279,7 @@
     txt(e1, dr / 2, H + 500, "서랍장 " + dr, { fs: 72, fill: C.accent });
     txt(e1, cabSinkX + scW / 2, H + 500, "싱크 하부장 " + scW, { fs: 72, fill: C.accent });
     txt(e1, cabDishX + dw / 2, H + 660, "식세기 " + dw, { fs: 72, fill: C.accent });
-    if (corner > 0) txt(e1, cabCornerX + corner / 2, H + 500, "코너 " + corner, { fs: 70, fill: C.accent });
+    if (corner > 0) txt(e1, cabCornerX + corner / 2, H + 500, "코너 " + corner + "\n(인덕션 연결)", { fs: 66, fill: C.accent });
 
     // (나) 인덕션 팔 정면 — 하부 장(2도어) + 상판 매립 인덕션
     cap("인덕션 팔 쪽 정면 — W" + armD + " × H" + H + " · 인덕션 상판 매립(600은 깊이) · ㄱ코너는 본체와 이어짐");
