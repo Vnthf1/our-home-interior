@@ -99,17 +99,20 @@ segs.forEach((s) => {
 WALL(addBox("기둥", pillarX, 0, 0, pillarW, runD, runH, COL.pillar));
 addBox("인덕션 팔", armX, armTop, 0, armW, armD, H, COL.island);
 addBox("아일랜드 본체", barX, barTop, 0, barW, barD, H, COL.island);
-// 하부장(앞=통로/본체 윗변=키큰장 쪽 면, 정면도와 동일 시점): 서랍장 | 싱크 하부장 | 식기세척기 | 측판, + 상판 분절선, + 인덕션 하부장(서쪽 면)
+// 하부장(앞=통로/본체 윗변 면). 통로뷰는 x축이 거울 → 입면도(③)와 같게 보이도록 본체 중심 기준 미러링.
+// 입면도 좌→우: 서랍장 | 싱크 하부장 | 식기세척기. 미러 후 plan-x: 서랍=코너(arm)쪽, 식세기=barX쪽.
 const TOE3 = 80, cabH = H - TOE3, sm3 = ISL.seam || Math.round(barW * 0.73), dr3 = ISL.drawer || 1000, dw3 = ISL.dishwasher || 600;
+const mir = (xFromLeft, w) => barR - xFromLeft - w; // 입면 왼쪽기준 → plan-x (거울)
 function frontHandle(xk, zc) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.022, 0.026), new THREE.MeshStandardMaterial({ color: 0x6b5f4c, roughness: 0.5, metalness: 0.35 })); m.position.set(xk * S, zc * S, barTop * S - 0.016); scene.add(m); }
-for (let i = 0; i < 3; i++) { const dz = TOE3 + cabH * i / 3; addBox(`서랍 ${i + 1}`, barX, barTop - 26, dz, dr3, 32, cabH / 3, COL.island, `${dr3}×${Math.round(cabH / 3)}`); frontHandle(barX + dr3 / 2, dz + cabH / 6); }
-addBox("싱크 하부장", barX + dr3, barTop - 26, TOE3, sm3 - dr3, 32, cabH, COL.island, `${sm3 - dr3}×${cabH}`);
-addBox("식기세척기", barX + sm3, barTop - 26, TOE3, dw3, 32, cabH, 0xdfe6e9, `${dw3}×${cabH}`);
-if (barW > sm3 + dw3) addBox("측판(코너)", barX + sm3 + dw3, barTop - 26, TOE3, barW - sm3 - dw3, 32, cabH, COL.island);
-addBox("상판 분절", barX + sm3 - 7, barTop, H, 14, barD, 12, 0x9a7a4a, `분절 ${sm3}`);
+const drX = mir(0, dr3), scX = mir(dr3, sm3 - dr3), dwX = mir(sm3, dw3); // 서랍 / 싱크하부장 / 식세기
+for (let i = 0; i < 3; i++) { const dz = TOE3 + cabH * i / 3; addBox(`서랍 ${i + 1}`, drX, barTop - 26, dz, dr3, 32, cabH / 3, COL.island, `${dr3}×${Math.round(cabH / 3)}`); frontHandle(drX + dr3 / 2, dz + cabH / 6); }
+addBox("싱크 하부장", scX, barTop - 26, TOE3, sm3 - dr3, 32, cabH, COL.island, `${sm3 - dr3}×${cabH}`);
+addBox("식기세척기", dwX, barTop - 26, TOE3, dw3, 32, cabH, 0xdfe6e9, `${dw3}×${cabH}`);
+addBox("상판 분절", mir(sm3, 14) - 7, barTop, H, 14, barD, 12, 0x9a7a4a, `분절 ${sm3}`);
 addBox("인덕션 하부장", armX - 26, armTop, TOE3, 32, armD, cabH, COL.island, `${armD}×${cabH}`);
 addBox("인덕션", indX, indY, H, IND.w, IND.d, 50, COL.ind, `${IND.w}×${IND.d}`);
-addBox("싱크볼", skX, skY, H - 180, ISL.sink.w, ISL.sink.d, 180, COL.sink, `${ISL.sink.w}×${ISL.sink.d}`);
+const skXm = barR - (ISL.sink.gapLeft || 0) - ISL.sink.w; // 싱크볼도 미러
+addBox("싱크볼", skXm, skY, H - 180, ISL.sink.w, ISL.sink.d, 180, COL.sink, `${ISL.sink.w}×${ISL.sink.d}`);
 
 /* ---- 인덕션 버너(원형) ---- */
 [[0.3, 0.33], [0.7, 0.33], [0.3, 0.7], [0.7, 0.7]].forEach((c) => {
