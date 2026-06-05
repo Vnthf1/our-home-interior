@@ -198,7 +198,20 @@ const DESIGN_CANDIDATES = [
 const QUOTES = [
   {
     phase: "moving", name: "이사 / 보관", icon: "📦",
-    candidates: [],
+    candidates: [
+      {
+        name: "로젠이사", company: "", phone: "", price: "2,100,000원 (왕복) + 보관료 1일 10,000원",
+        status: "received",
+        scope: "2.5톤 포장이사 (왕복) — 남2·여1 / 공사 기간 짐 보관 별도 (1일 1만원)",
+        summary: "2.5톤 포장이사 왕복 210만원 + 보관료 1일 1만원.",
+        items: [
+          { label: "2.5톤 포장이사 (왕복, 남2·여1)", amount: "2,100,000원" },
+          { label: "보관료 (1일)", amount: "10,000원" },
+        ],
+        files: [],
+        note: "",
+      },
+    ],
   },
   {
     phase: "consent", name: "입주민 동의", icon: "🤝",
