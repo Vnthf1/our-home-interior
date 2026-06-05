@@ -1126,11 +1126,16 @@
     const barR = pillarR, barX = barR - barW, armX = barR - armW;
     // 아일랜드는 기둥/키큰장 앞면에 붙어 시작. 인덕션 팔 깊이(armD=900) = 기둥~싱크볼 거리(인덕션 포함).
     const armTop = runD, armBot = armTop + armD, barTop = armBot, barBot = barTop + barD;
-    // 하부장 레이아웃(입면 왼→오, 본체 좌끝 기준 거리): 서랍 | 싱크하부장 | 식세기 | 코너. 싱크볼은 싱크하부장 중앙.
-    const cab = ISL.cab || { drawer: 1000, sinkCab: 1140, dishwasher: 600 };
-    const cabDrawer = cab.drawer, cabSink = cab.sinkCab, cabDish = cab.dishwasher;
-    const cabSinkX = cabDrawer, cabDishX = cabDrawer + cabSink, cabCornerX = cabDrawer + cabSink + cabDish;
-    const sinkLeft = cabSinkX + (cabSink - ISL.sink.w) / 2; // 싱크볼 좌끝(본체 좌끝 기준) = 싱크하부장 중앙
+    // 하부장 — 통로(입면)에서 본 좌→우 순서를 정본으로: 코너(인덕션 연결, 정면 서랍X) | 서랍장 | 싱크하부장(싱크 중앙) | 식기세척기.
+    // 코너는 인덕션 팔(armW)이 본체 앞에 붙는 구간이라 정면 가용폭 = barW - armW.
+    const cab = ISL.cab || { drawer: 600, sinkCab: 1000, dishwasher: 600 };
+    const cabDrawer = cab.drawer, cabSink = cab.sinkCab, cabDish = cab.dishwasher, cornerW = armW;
+    // 통로뷰 누적 x(왼→오)
+    const A = { corner: 0, drawer: cornerW, sink: cornerW + cabDrawer, dish: cornerW + cabDrawer + cabSink };
+    const sinkAisleLeft = A.sink + (cabSink - ISL.sink.w) / 2;   // 통로뷰 기준 싱크 좌끝
+    // 통로뷰 x(왼끝) → 평면/3D 절대 x (거울): barR - aisleLeft - w
+    const planX = (aL, w) => barR - aL - w;
+    const sinkPlanX = planX(sinkAisleLeft, ISL.sink.w);          // 평면/3D 싱크 좌끝(절대)
 
     /* ===== ① 평면도 ===== */
     const c1 = document.createElement("div"); c1.className = "kz-card";
@@ -1147,11 +1152,11 @@
     box(plan, barX, barTop, barW, barD);
     box(plan, armX, armTop, armW, armD);
     ln(plan, armX + 7, barTop, armX + armW - 7, barTop, { stroke: C.fill, sw: 9 });
-    // 하부장 구획선(서랍|싱크|식세기|코너)
-    [cabSinkX, cabDishX, cabCornerX].forEach((cxx) => ln(plan, barX + cxx, barTop, barX + cxx, barBot, { stroke: C.line, sw: 3, dash: "26 18" }));
+    // 하부장 구획선 (평면 좌→우 = 통로뷰의 거울: 식세기|싱크|서랍|코너)
+    [A.drawer, A.sink, A.dish].forEach((aL) => { const bx = barR - aL; ln(plan, bx, barTop, bx, barBot, { stroke: C.line, sw: 3, dash: "26 18" }); });
     // 싱크볼: 통로(본체 윗변=작업존)에서 gapAisle, 싱크하부장 중앙
     const skGap = ISL.sink.gapAisle || 0;
-    const skX = barX + sinkLeft, skY = barTop + skGap;
+    const skX = sinkPlanX, skY = barTop + skGap;
     box(plan, skX, skY, ISL.sink.w, ISL.sink.d, { fill: C.sink, stroke: C.sinkLine, sw: 5, rx: 30 });
     txt(plan, skX + ISL.sink.w / 2, skY + ISL.sink.d / 2, "싱크볼", { fs: 100, fill: C.sinkLine });
     dimH(plan, skX, skX + ISL.sink.w, skY + ISL.sink.d + 130, String(ISL.sink.w), { fs: 88, below: true }); // 가로
@@ -1256,30 +1261,30 @@
     const pnl = (p, x, y, w, h, o = {}) => box(p, x + 12, y + 9, w - 24, h - 18, { fill: o.fill || "#f3ecdd", stroke: "#9c8a70", sw: 4, rx: 8 });
     const drawers = (p, x, w, n) => { const hh = cyH / n; for (let i = 0; i < n; i++) { pnl(p, x, cyTop + i * hh, w, hh); knob(p, x + w / 2, cyTop + i * hh + hh / 2, true); } };
     const doors = (p, x, w, n) => { const dw2 = w / n; for (let i = 0; i < n; i++) { pnl(p, x + i * dw2, cyTop, dw2, cyH); knob(p, x + i * dw2 + (i < n / 2 ? dw2 - 55 : 55), cyTop + cyH / 2, false); } };
-    const dr = cabDrawer, scW = cabSink, dw = cabDish, corner = barW - cabCornerX; // 서랍 | 싱크하부장 | 식세기 | 코너
+    const dr = cabDrawer, scW = cabSink, dw = cabDish; // 코너 | 서랍 | 싱크하부장 | 식세기 (통로뷰 왼→오)
     const sinkM = (cabSink - ISL.sink.w) / 2; // 싱크 양쪽 여백(중앙정렬)
 
-    // (가) 본체(싱크대) 정면 — 서랍장 | 싱크 하부장(싱크 중앙) | 식기세척기 | 코너
-    cap("본체(싱크대) 쪽 정면 — W" + barW + " × H" + H);
+    // (가) 본체(싱크대) 정면 — 통로에서 본 좌→우: 코너(인덕션 연결) | 서랍장 | 싱크 하부장(싱크 중앙) | 식기세척기
+    cap("본체(싱크대) 쪽 정면 — W" + barW + " × H" + H + " · 통로에서 본 모습");
     const e1 = sv("svg", { viewBox: "-700 -800 " + (barW + 1400) + " " + (H + 1650), xmlns: NS }, c2b);
     islandFace(e1, barW);
-    drawers(e1, 0, dr, 3);                                  // 서랍장
-    doors(e1, cabSinkX, scW, 2);                            // 싱크 하부장(2도어)
-    pnl(e1, cabDishX, cyTop, dw, cyH, { fill: "#e7ecee" }); // 식기세척기
-    ln(e1, cabDishX + 34, cyTop + 78, cabDishX + dw - 34, cyTop + 78, { stroke: "#9aa7ad", sw: 9 });
-    txt(e1, cabDishX + dw / 2, cyTop + cyH / 2 + 20, "식기\n세척기", { fs: 72, fill: "#5a6f78" });
-    if (corner > 0) pnl(e1, cabCornerX, cyTop, corner, cyH, { fill: C.fill2 }); // 코너
+    pnl(e1, A.corner, cyTop, cornerW, cyH, { fill: C.fill2 });  // 코너(왼쪽, 인덕션 연결)
+    drawers(e1, A.drawer, dr, 3);                               // 서랍장
+    doors(e1, A.sink, scW, 2);                                  // 싱크 하부장(2도어)
+    pnl(e1, A.dish, cyTop, dw, cyH, { fill: "#e7ecee" });       // 식기세척기(오른쪽)
+    ln(e1, A.dish + 34, cyTop + 78, A.dish + dw - 34, cyTop + 78, { stroke: "#9aa7ad", sw: 9 });
+    txt(e1, A.dish + dw / 2, cyTop + cyH / 2 + 20, "식기\n세척기", { fs: 72, fill: "#5a6f78" });
     // 싱크(상판 매립, 히든) + 수전 — 싱크하부장 중앙
-    sv("rect", { x: sinkLeft, y: -6, width: ISL.sink.w, height: CT + 60, fill: "none", stroke: C.sinkLine, "stroke-width": 5, "stroke-dasharray": "40 26", rx: 14 }, e1);
-    const fxc = sinkLeft + ISL.sink.w / 2;
+    sv("rect", { x: sinkAisleLeft, y: -6, width: ISL.sink.w, height: CT + 60, fill: "none", stroke: C.sinkLine, "stroke-width": 5, "stroke-dasharray": "40 26", rx: 14 }, e1);
+    const fxc = sinkAisleLeft + ISL.sink.w / 2;
     ln(e1, fxc, -175, fxc, -10, { stroke: "#7f9aa6", sw: 9 });
     ln(e1, fxc, -175, fxc + 120, -175, { stroke: "#7f9aa6", sw: 9 });
-    dimH(e1, cabSinkX, sinkLeft, H + 250, "여백 " + Math.round(sinkM), { fs: 76, below: true });
-    dimH(e1, sinkLeft, sinkLeft + ISL.sink.w, H + 250, String(ISL.sink.w), { fs: 80, below: true });
-    txt(e1, dr / 2, H + 500, "서랍장 " + dr, { fs: 72, fill: C.accent });
-    txt(e1, cabSinkX + scW / 2, H + 500, "싱크 하부장 " + scW, { fs: 72, fill: C.accent });
-    txt(e1, cabDishX + dw / 2, H + 660, "식세기 " + dw, { fs: 72, fill: C.accent });
-    if (corner > 0) txt(e1, cabCornerX + corner / 2, H + 500, "코너 " + corner + "\n(인덕션 연결)", { fs: 66, fill: C.accent });
+    dimH(e1, A.sink, sinkAisleLeft, H + 250, "여백 " + Math.round(sinkM), { fs: 76, below: true });
+    dimH(e1, sinkAisleLeft, sinkAisleLeft + ISL.sink.w, H + 250, String(ISL.sink.w), { fs: 80, below: true });
+    txt(e1, A.corner + cornerW / 2, H + 500, "코너 " + cornerW + "\n(인덕션 연결)", { fs: 66, fill: C.accent });
+    txt(e1, A.drawer + dr / 2, H + 500, "서랍장 " + dr, { fs: 72, fill: C.accent });
+    txt(e1, A.sink + scW / 2, H + 660, "싱크 하부장 " + scW, { fs: 72, fill: C.accent });
+    txt(e1, A.dish + dw / 2, H + 500, "식세기 " + dw, { fs: 72, fill: C.accent });
 
     // (나) 인덕션 팔 정면 — 하부 장(2도어) + 상판 매립 인덕션
     cap("인덕션 팔 쪽 정면 — W" + armD + " × H" + H + " · 인덕션 상판 매립(600은 깊이) · ㄱ코너는 본체와 이어짐");
@@ -1340,7 +1345,7 @@
       `<li><b>아일랜드 ㄱ자</b> (기둥에 붙음, 통로 없음) — 인덕션 팔 ${armW}×${armD}(=기둥~싱크볼, 인덕션 포함) + 본체 ${barW}×${barD} (상판 H${ISL.bar.height})</li>` +
       `<li><b>인덕션</b> ${ISL.induction.w}×${ISL.induction.d} — 벽(뒤)에서 ${ISL.induction.gapWall} · 통로(왼쪽)에서 ${ISL.induction.gapAisle}</li>` +
       `<li><b>싱크볼</b> ${ISL.sink.w}×${ISL.sink.d} — 통로(본체 윗변)에서 ${ISL.sink.gapAisle} · 싱크하부장(${cabSink}) 중앙</li>` +
-      `<li><b>하부장</b> 서랍 ${cabDrawer} · 싱크하부장 ${cabSink} · 식세기 ${cabDish} · 코너 ${barW - cabCornerX}</li>` +
+      `<li><b>하부장</b> (통로 왼→오) 코너 ${cornerW}(인덕션 연결) · 서랍 ${cabDrawer} · 싱크하부장 ${cabSink} · 식세기 ${cabDish}</li>` +
       `</ul>` +
       `<p class="kz-verify"><b>⚠ 실측 필요</b>: 장 깊이 <code>${runD}</code> · 키큰장 폭 <code>${runW}</code> · 장 높이 <code>${runH}</code> · 기둥 넓이 <code>${pillarW}</code></p>` +
       `<p class="kz-todo"><b>확정 필요:</b> ① ㄱ자 꺾임 방향(인덕션 팔 위치) · ② 오븐/로봇청소기 위치</p>`;

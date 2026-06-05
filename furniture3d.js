@@ -19,12 +19,13 @@ const barW = ISL.bar.w, barD = ISL.bar.d, H = ISL.bar.height, armW = ISL.arm.w, 
 const barR = pillarR, barX = barR - barW, armX = barR - armW;
 const armTop = runD, armBot = armTop + armD, barTop = armBot, barBot = barTop + barD;
 const IND = ISL.induction, indX = armX + (IND.gapAisle || 0), indY = armTop + (IND.gapWall || 0);
-// 하부장 레이아웃(입면 왼→오, 본체 좌끝 기준): 서랍 | 싱크하부장 | 식세기 | 코너. 싱크볼=싱크하부장 중앙
-const cab = ISL.cab || { drawer: 1000, sinkCab: 1140, dishwasher: 600 };
-const cabDrawer = cab.drawer, cabSink = cab.sinkCab, cabDish = cab.dishwasher;
-const cabSinkX = cabDrawer, cabDishX = cabDrawer + cabSink, cabCornerX = cabDrawer + cabSink + cabDish;
-const sinkLeft = cabSinkX + (cabSink - ISL.sink.w) / 2;
-const skX = barX + sinkLeft, skY = barTop + (ISL.sink.gapAisle || 0);
+// 하부장 — 통로(입면) 좌→우 정본: 코너(인덕션 연결) | 서랍 | 싱크하부장(싱크 중앙) | 식세기. 코너 = arm.w.
+const cab = ISL.cab || { drawer: 600, sinkCab: 1000, dishwasher: 600 };
+const cabDrawer = cab.drawer, cabSink = cab.sinkCab, cabDish = cab.dishwasher, cornerW = armW;
+const A = { corner: 0, drawer: cornerW, sink: cornerW + cabDrawer, dish: cornerW + cabDrawer + cabSink };
+const sinkAisleLeft = A.sink + (cabSink - ISL.sink.w) / 2;
+const planX = (aL, w) => barR - aL - w; // 통로뷰 왼끝 → 평면 절대 x (거울)
+const skX = planX(sinkAisleLeft, ISL.sink.w), skY = barTop + (ISL.sink.gapAisle || 0);
 
 const cX = (pillarR / 2) * S, cZ = (barBot / 2) * S; // 씬 중심(평면)
 
@@ -104,21 +105,17 @@ segs.forEach((s) => {
 WALL(addBox("기둥", pillarX, 0, 0, pillarW, runD, runH, COL.pillar));
 addBox("인덕션 팔", armX, armTop, 0, armW, armD, H, COL.island);
 addBox("아일랜드 본체", barX, barTop, 0, barW, barD, H, COL.island);
-// 하부장(앞=통로/본체 윗변 면). 통로뷰는 x축이 거울 → 입면도(③)와 같게 보이도록 본체 중심 기준 미러링.
-// 입면도 좌→우: 서랍장 | 싱크하부장(싱크 중앙) | 식기세척기 | 코너. 미러 후 plan-x: 서랍=코너(arm)쪽, 식세기=barX쪽.
+// 하부장 — 통로뷰 좌→오: 코너|서랍|싱크하부장|식세기. 평면 절대 x는 planX()로 거울 매핑(통로 카메라에서 정상).
 const TOE3 = 80, cabH = H - TOE3;
-const mir = (xFromLeft, w) => barR - xFromLeft - w; // 입면 왼쪽기준 → plan-x (거울)
 function frontHandle(xk, zc) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.022, 0.026), new THREE.MeshStandardMaterial({ color: 0x6b5f4c, roughness: 0.5, metalness: 0.35 })); m.position.set(xk * S, zc * S, barTop * S - 0.016); scene.add(m); }
-const drX = mir(0, cabDrawer), scX = mir(cabSinkX, cabSink), dwX = mir(cabDishX, cabDish); // 서랍 / 싱크하부장 / 식세기
-const corner3 = barW - cabCornerX, coX = mir(cabCornerX, corner3); // 코너(나머지)
+const drX = planX(A.drawer, cabDrawer), scX = planX(A.sink, cabSink), dwX = planX(A.dish, cabDish), coX = planX(A.corner, cornerW);
 for (let i = 0; i < 3; i++) { const dz = TOE3 + cabH * i / 3; addBox(`서랍 ${i + 1}`, drX, barTop - 26, dz, cabDrawer, 32, cabH / 3, COL.island, `${cabDrawer}×${Math.round(cabH / 3)}`); frontHandle(drX + cabDrawer / 2, dz + cabH / 6); }
 addBox("싱크 하부장", scX, barTop - 26, TOE3, cabSink, 32, cabH, COL.island, `${cabSink}×${cabH}`);
 addBox("식기세척기", dwX, barTop - 26, TOE3, cabDish, 32, cabH, 0xdfe6e9, `${cabDish}×${cabH}`);
-if (corner3 > 0) addBox("코너", coX, barTop - 26, TOE3, corner3, 32, cabH, COL.island, `${corner3}×${cabH}`);
+addBox("코너(인덕션 연결)", coX, barTop - 26, TOE3, cornerW, 32, cabH, COL.island, `${cornerW}×${cabH}`);
 addBox("인덕션 하부장", armX - 26, armTop, TOE3, 32, armD, cabH, COL.island, `${armD}×${cabH}`);
 addBox("인덕션", indX, indY, H, IND.w, IND.d, 50, COL.ind, `${IND.w}×${IND.d}`);
-const skXm = barR - sinkLeft - ISL.sink.w; // 싱크볼도 미러(싱크하부장 중앙)
-addBox("싱크볼", skXm, skY, H - 180, ISL.sink.w, ISL.sink.d, 180, COL.sink, `${ISL.sink.w}×${ISL.sink.d}`);
+addBox("싱크볼", skX, skY, H - 180, ISL.sink.w, ISL.sink.d, 180, COL.sink, `${ISL.sink.w}×${ISL.sink.d}`);
 
 /* ---- 인덕션 버너(원형) ---- */
 [[0.3, 0.33], [0.7, 0.33], [0.3, 0.7], [0.7, 0.7]].forEach((c) => {
