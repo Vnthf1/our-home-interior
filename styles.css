@@ -167,7 +167,7 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .ba-compact .ba-head{margin-bottom:8px}
 .ba-compact .ba-head h4{font-size:14px}
 .ba-compact .ba-note{font-size:11px}
-.ba-compact .ba-pair{gap:10px}
+.ba-compact .ba-pair{gap:10px;grid-template-columns:1fr}
 .ba-compact .ba-col-label{font-size:11px;margin-bottom:5px}
 .ba-compact .ba-thumbs{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px}
 

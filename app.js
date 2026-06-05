@@ -361,7 +361,8 @@
   }
 
   /* ---------- 현장 → 변화 (As-Is / To-Be) ---------- */
-  function baCardHTML(b) {
+  function baCardHTML(b, opts) {
+    const hideToBe = opts && opts.hideToBe;
     const arr = (x) => Array.isArray(x) ? x.filter(Boolean) : (x ? [x] : []);
     const thumbs = (files, cls) => files.length
       ? `<div class="ba-thumbs">${files.map((f) => `<img class="ba-thumb zoom" src="images/${esc(f)}" alt="${esc(b.area || "")}" loading="lazy">`).join("")}</div>`
@@ -371,14 +372,14 @@
         <div class="ba-head"><h4>${esc(b.area || "")}</h4>${b.note ? `<span class="ba-note">${esc(b.note)}</span>` : ""}</div>
         <div class="ba-pair">
           <div class="ba-col"><div class="ba-col-label asis">현장 · As-Is</div>${thumbs(arr(b.asis), "asis")}</div>
-          <div class="ba-col"><div class="ba-col-label tobe">🤖 AI 시안 · To-Be</div>${thumbs(arr(b.tobe), "tobe")}</div>
+          ${hideToBe ? "" : `<div class="ba-col"><div class="ba-col-label tobe">🤖 AI 시안 · To-Be</div>${thumbs(arr(b.tobe), "tobe")}</div>`}
         </div>
       </div>`;
   }
   function renderBeforeAfter() {
     const el = $("ba-grid"); if (!el) return;
     const list = (typeof BEFORE_AFTER !== "undefined" ? BEFORE_AFTER : []);
-    el.innerHTML = list.map(baCardHTML).join("") || `<div class="stub">현장/AI 시안 사진을 <code>images/</code> 에 넣고 <code>data.js</code>의 <code>BEFORE_AFTER</code>에 추가하세요.</div>`;
+    el.innerHTML = list.map((b) => baCardHTML(b, { hideToBe: true })).join("") || `<div class="stub">현장 사진을 <code>images/</code> 에 넣고 <code>data.js</code>의 <code>BEFORE_AFTER</code>에 추가하세요.</div>`;
   }
 
   /* ---------- 레퍼런스 갤러리 ---------- */
