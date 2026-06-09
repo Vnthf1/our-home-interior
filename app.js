@@ -114,7 +114,7 @@
     const PALETTE = ["#5b8def","#e0883e","#6a9c5c","#c97a8a","#7b6dab","#3aa5b8","#d9a13a","#8b5e3b","#46708f","#c14d4d","#71a07a","#9b6bb0","#d68c2e","#5b8a7e","#b56c50","#7691c4","#a47ad6","#3f8a6c","#c46161","#5d7da1"];
     const phaseColor = {};
     PHASES.forEach((p, i) => phaseColor[p.id] = PALETTE[i % PALETTE.length]);
-    const colorFor = (taskName) => phaseColor[NAME2PHASE[taskName]] || "#888";
+    const colorFor = (taskName, override) => override || phaseColor[NAME2PHASE[taskName]] || "#888";
 
     const holidays = new Set(SCHEDULE.holidays || []);
     const parse = (str) => { const [y,m,d] = str.split("-").map(Number); return new Date(y,m-1,d); };
@@ -162,11 +162,11 @@
             const ok = inSpan && !isOff(d);
             if (ok) { if (runStart < 0) runStart = i; }
             else if (runStart >= 0) {
-              segs.push({ start: runStart, end: i-1, name: t.name, color: colorFor(t.name), pid: NAME2PHASE[t.name] });
+              segs.push({ start: runStart, end: i-1, name: t.name, color: colorFor(t.name, t.color), pid: NAME2PHASE[t.name] });
               runStart = -1;
             }
           }
-          if (runStart >= 0) segs.push({ start: runStart, end: 5, name: t.name, color: colorFor(t.name), pid: NAME2PHASE[t.name] });
+          if (runStart >= 0) segs.push({ start: runStart, end: 5, name: t.name, color: colorFor(t.name, t.color), pid: NAME2PHASE[t.name] });
         });
       });
 
