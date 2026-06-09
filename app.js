@@ -25,6 +25,7 @@
     "목공 (방음)": "carpentry",
     "타일": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile",
     "타일 줄눈": "tile", "줄눈": "tile",
+    "세라믹 (실측)": "ceramic", "세라믹·안방세면대 설치": "ceramic", "세라믹": "ceramic",
     "필름": "film", "도배": "wallpaper", "장판": "floor",
     "가구 (신발장·부엌·붙박이장)": "furniture",
     "전기 (조명)": "electric",
