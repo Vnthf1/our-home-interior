@@ -207,13 +207,33 @@
     };
   }
 
-  function maybeMount() {
+  // PWA 앱에선 주소창(#admin)을 못 치니, "레퍼런스" 제목을 5번 탭하면 업로더가 열림
+  function bindSecret() {
+    var h = document.querySelector("section .sec-head");
+    if (!h || h.__secret) return;
+    h.__secret = true;
+    var n = 0, last = 0;
+    h.addEventListener("click", function () {
+      var now = Date.now();
+      if (now - last > 1500) n = 0;
+      last = now; n++;
+      if (n >= 5) {
+        n = 0;
+        mountBar();
+        var b = document.getElementById("uploader-bar");
+        if (b) b.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (!getToken()) setToken();
+      }
+    });
+  }
+  function init() {
     if (getToken() || location.hash === "#admin") mountBar();
+    bindSecret();
   }
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", maybeMount);
+    document.addEventListener("DOMContentLoaded", init);
   } else {
-    maybeMount();
+    init();
   }
-  window.addEventListener("hashchange", maybeMount);
+  window.addEventListener("hashchange", function () { if (getToken() || location.hash === "#admin") mountBar(); });
 })();

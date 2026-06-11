@@ -417,15 +417,32 @@
   }
   // uploader.js 등 외부에서도 카드 마크업을 쓸 수 있게 공개
   window.refCardHTML = refCardHTML;
+  let refFilter = null;
+  function renderRefFilter(bar, all) {
+    const order = (typeof PHASES !== "undefined" ? PHASES.map((p) => p.id) : []);
+    const present = [];
+    all.forEach((r) => (r.phases || []).forEach((p) => { if (present.indexOf(p) < 0) present.push(p); }));
+    present.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    const chip = (id, label) => `<button type="button" class="ref-chip${refFilter === id ? " on" : ""}" data-f="${esc(id == null ? "" : id)}">${esc(label)}</button>`;
+    bar.innerHTML = chip(null, "전체") + present.map((p) => chip(p, phaseName(p))).join("");
+    bar.querySelectorAll(".ref-chip").forEach((b) => b.addEventListener("click", () => {
+      refFilter = b.dataset.f || null;
+      if (bar.__paint) bar.__paint();
+    }));
+  }
   function renderReferences() {
     const el = $("ref-grid"); if (!el) return;
-    const refs = allRefs();
-    const draw = (extra) => {
-      const all = refs.concat(extra || []);
-      el.innerHTML = all.map(refCardHTML).join("") || `<div class="stub">아직 레퍼런스가 없어요. 사진을 images/ 에 넣고 data.js의 REFERENCES에 추가하세요.</div>`;
+    let bar = $("ref-filter");
+    if (!bar) { bar = document.createElement("div"); bar.id = "ref-filter"; bar.className = "ref-filter"; el.parentNode.insertBefore(bar, el); }
+    let combined = allRefs().slice();
+    const paint = () => {
+      const shown = refFilter ? combined.filter((r) => (r.phases || []).includes(refFilter)) : combined;
+      el.innerHTML = shown.map(refCardHTML).join("") || `<div class="stub">이 태그에 해당하는 레퍼런스가 없어요.</div>`;
+      renderRefFilter(bar, combined);
     };
-    draw([]);
-    // 브라우저에서 올린 사진(uploads.json) — 있으면 큐레이션 레퍼런스와 함께 표시 (최신 먼저)
+    bar.__paint = paint;
+    paint();
+    // 브라우저에서 올린 사진(uploads.json) — 큐레이션 레퍼런스와 함께 표시 (최신 먼저)
     fetch("uploads.json", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : []))
       .then((ups) => {
@@ -433,7 +450,8 @@
         const extra = ups.slice().reverse().map((u) => ({
           file: u.file, title: u.title || "올린 사진", desc: u.desc || "", phases: u.phases || [],
         }));
-        draw(extra);
+        combined = allRefs().concat(extra);
+        paint();
       })
       .catch(() => {});
   }
