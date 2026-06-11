@@ -3,6 +3,25 @@
  *  data.js 를 먼저 로드한 뒤 이 파일을 로드하세요.
  * ============================================================ */
 (function () {
+  // ---- PWA: manifest·아이콘 주입 + 서비스워커 등록 (모든 페이지 공통, HTML 수정 불필요) ----
+  (function setupPWA() {
+    try {
+      const head = document.head;
+      const add = (tag, attrs) => { const el = document.createElement(tag); for (const k in attrs) el.setAttribute(k, attrs[k]); head.appendChild(el); };
+      if (!head.querySelector('link[rel="manifest"]')) add("link", { rel: "manifest", href: "manifest.webmanifest" });
+      add("meta", { name: "theme-color", content: "#5a3a22" });
+      add("meta", { name: "apple-mobile-web-app-capable", content: "yes" });
+      add("meta", { name: "mobile-web-app-capable", content: "yes" });
+      add("meta", { name: "apple-mobile-web-app-status-bar-style", content: "default" });
+      add("meta", { name: "apple-mobile-web-app-title", content: "우리집" });
+      add("link", { rel: "apple-touch-icon", href: "icons/icon-180.png" });
+      add("link", { rel: "icon", type: "image/png", href: "icons/favicon-64.png" });
+    } catch (e) { /* head 없음 등 — 무시 */ }
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+    }
+  })();
+
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   // 휴대폰 마스킹 — 사이트가 public 이라 ****-**** 로만 노출. 실제 번호는 data.js 에 있고 소유자만 접근.
