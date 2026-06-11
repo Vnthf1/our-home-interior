@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link rel="stylesheet" as="style" crossorigin
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.6.1/dist/css/tabulator_simple.min.css" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="materials">
@@ -16,14 +17,15 @@
 <section><div class="wrap">
   <div class="sec-title">MATERIALS</div>
   <h2 class="sec-head">자재</h2>
-  <p class="ov-lead">검토 / 비교 / 발주 / 구매한 자재를 한눈에. <code>data.js</code>의 <code>MATERIALS</code>에서 수정합니다.</p>
-  <div id="mat-summary" class="mat-summary"></div>
-  <div id="mat-filters" class="mat-filters"></div>
-  <div id="mat-list" class="mat-list"></div>
+  <p class="ov-lead">검토 / 비교 / 발주 / 구매한 자재를 한눈에. <code>data.js</code>의 <code>MATERIALS</code>에서 수정합니다. 컬럼 클릭으로 정렬, 헤더 입력칸으로 검색, 행 클릭으로 펼침.</p>
+  <div id="mat-summary" class="mat-sum"></div>
+  <div id="mat-statusbar" class="mat-statusbar"></div>
+  <div id="mat-table"></div>
 </div></section>
 
 <footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.6.1/dist/js/tabulator.min.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>

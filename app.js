@@ -560,8 +560,10 @@
         : cands.length
           ? `<span class="qp-stat pending">⏳ 견적 진행 중 · 후보 ${cands.length}곳</span>`
           : `<span class="qp-stat none">🔍 후보 찾는 중</span>`;
-      const cards = cands.length
-        ? cands.map(quoteCard).join("")
+      const sRank = { decided: 0, received: 1, candidate: 2 };
+      const orderedCands = [...cands].sort((a, b) => (sRank[a.status] == null ? 3 : sRank[a.status]) - (sRank[b.status] == null ? 3 : sRank[b.status]));
+      const cards = orderedCands.length
+        ? orderedCands.map(quoteCard).join("")
         : `<div class="stub">아직 후보·견적이 없어요. 업체를 알아보면 여기에 정리할게요.</div>`;
       return `<div class="qphase" id="q-${esc(q.phase)}">
         <div class="qp-head"><span class="ic">${esc(p ? p.icon : (q.icon || "📦"))}</span><h3>${esc(p ? p.name : (q.name || q.phase))}</h3>${head}</div>
@@ -958,14 +960,18 @@
       </div>` : "");
   }
 
-  /* ---------- 자재 (materials.html) ---------- */
+  /* ---------- 자재 (materials.html) — Tabulator ---------- */
   function renderMaterials() {
-    const list = $("mat-list");
-    if (!list || typeof MATERIALS === "undefined") return;
+    if (typeof MATERIALS === "undefined") return;
+    const tableEl = $("mat-table");
+    if (!tableEl) return;
+    if (typeof Tabulator === "undefined") {
+      tableEl.innerHTML = `<div class="stub">Tabulator 로딩 실패 — 네트워크 확인 (CDN: tabulator-tables 5.6.1)</div>`;
+      return;
+    }
     const sumEl = $("mat-summary");
-    const filtersEl = $("mat-filters");
+    const sbEl = $("mat-statusbar");
 
-    // 5상태: pending → looking → decided → ordered → bought
     const STATUS = {
       pending: { label: "미정",   cls: "st-pending" },
       looking: { label: "검토중", cls: "st-looking" },
@@ -984,95 +990,11 @@
       return { min, n };
     };
 
-    // 요약 (구매·발주 합계 + 확정·검토·미정 카운트)
-    let boughtSum = 0, orderedSum = 0, decidedN = 0, lookingN = 0, pendingN = 0;
-    MATERIALS.forEach(g => (g.items||[]).forEach(it => {
-      if (it.status === "bought") boughtSum += totalPurchased(it.purchased);
-      if (it.status === "ordered") orderedSum += totalPurchased(it.purchased);
-      if (it.status === "decided") decidedN++;
-      if (it.status === "looking") lookingN++;
-      if (it.status === "pending") pendingN++;
-    }));
-    if (sumEl) sumEl.innerHTML = `
-      <div class="ms-card ms-bought">🛒 구매완료 <b>₩${fmt(boughtSum)}</b></div>
-      <div class="ms-card ms-ordered">📦 발주 <b>₩${fmt(orderedSum)}</b></div>
-      <div class="ms-card">✅ 확정 <b>${decidedN}</b>개</div>
-      <div class="ms-card">🔍 검토중 <b>${lookingN}</b>개</div>
-      <div class="ms-card">⊝ 미정 <b>${pendingN}</b>개</div>`;
-
-    // 필터 칩
-    let fGroup = "all", fStatus = "all";
-    if (filtersEl) filtersEl.innerHTML = `
-      <div class="mf-row">
-        <span class="mf-key">대분류</span>
-        <div class="mf-chips" data-key="group">
-          <button class="mf-chip on" data-v="all">전체</button>
-          ${MATERIALS.map(g => `<button class="mf-chip" data-v="${esc(g.group)}">${esc(g.group)}</button>`).join("")}
-        </div>
-      </div>
-      <div class="mf-row">
-        <span class="mf-key">상태</span>
-        <div class="mf-chips" data-key="status">
-          <button class="mf-chip on" data-v="all">전체</button>
-          ${Object.entries(STATUS).map(([k,s]) => `<button class="mf-chip" data-v="${k}">${s.label}</button>`).join("")}
-        </div>
-      </div>`;
-
-    function priceCell(it) {
-      const wrap = (num, extra) => `<span class="m-price-num">${num}</span><span class="m-price-extra">${extra || ""}</span>`;
-      // 구매·발주 → purchased 합계
-      if (it.purchased) {
-        const t = totalPurchased(it.purchased);
-        return t ? wrap(`₩${fmt(t)}`, "") : wrap("-", "");
-      }
-      // 확정 → 결정된 후보의 최저 견적
-      if (it.status === "decided") {
-        const dc = decidedCand(it);
-        const prices = dc ? (dc.offers||[]).map(o=>o.price).filter(Boolean) : [];
-        return prices.length ? wrap(`₩${fmt(Math.min(...prices))}`, "") : wrap("-", "");
-      }
-      // 검토중 → 모든 후보의 모든 견적 중 최저 + 외 N
-      const r = minOfferAll(it);
-      if (r.min == null) return wrap("-", "");
-      return wrap(`₩${fmt(r.min)}`, r.n > 1 ? `외 ${r.n-1}` : "");
-    }
-    function noteCell(it) {
-      if (it.status === "bought" || it.status === "ordered") {
-        return it.purchased && it.purchased.vendor ? esc(it.purchased.vendor) : "";
-      }
-      if (it.status === "decided") return esc(it.decided || "");
-      // looking / pending — 단일 후보+단일 견적이면 그 판매처, 그 외엔 purpose
-      const cs = it.candidates || [];
-      if (cs.length === 1 && cs[0].offers && cs[0].offers.length === 1) {
-        return esc(cs[0].offers[0].vendor || "") || esc(it.purpose || "");
-      }
-      return esc(it.purpose || "");
-    }
-    function photoCell(it) {
-      const dc = decidedCand(it);
-      let p = (dc && dc.photo) ? dc.photo : ((it.candidates||[])[0] && it.candidates[0].photo) || "";
-      return p ? `<img src="images/${esc(p)}" alt="${esc(it.category)}" loading="lazy">` : `<div class="m-photo-ph">📦</div>`;
-    }
-    function canExpand(it) {
-      const cs = it.candidates || [];
-      if (it.purchased) return true;
-      if (cs.length > 1) return true;
-      if (cs.length === 1 && (cs[0].offers||[]).length > 1) return true;
-      if (it.note) return true;
-      return false;
-    }
+    // 펼침 HTML 빌더
     function offerRow(o) {
       const price = o.price ? `₩${fmt(o.price)}` : "-";
       const noteLink = `${esc(o.note||"")}${o.url ? ` <a href="${esc(o.url)}" target="_blank" rel="noopener">↗</a>` : ""}`;
-      return `<div class="m-orow">
-        <div></div>
-        <div class="m-cell m-orow-name">${esc(o.vendor || "-")}</div>
-        <div></div>
-        <div class="m-cell m-cell-price"><span class="m-price-num">${price}</span><span class="m-price-extra"></span></div>
-        <div></div>
-        <div class="m-cell m-cell-note">${noteLink}</div>
-        <div></div>
-      </div>`;
+      return `<div class="t-orow"><span class="t-orow-vendor">${esc(o.vendor || "-")}</span><span class="t-orow-price">${price}</span><span class="t-orow-note">${noteLink}</span></div>`;
     }
     function expandHTML(it) {
       const cs = it.candidates || [];
@@ -1082,14 +1004,13 @@
       } else if (cs.length > 1) {
         candsHTML = cs.map(c => {
           const isDecided = it.decided === c.name;
-          const head = `<div class="m-chead${isDecided ? ' is-decided' : ''}">${isDecided ? '✓ ' : ''}${esc(c.name)}</div>`;
-          const offers = (c.offers||[]).map(offerRow).join("");
-          return head + offers;
+          const head = `<div class="t-chead${isDecided ? ' is-decided' : ''}">${isDecided ? '✓ ' : ''}${esc(c.name)}</div>`;
+          return head + (c.offers||[]).map(offerRow).join("");
         }).join("");
       }
       const p = it.purchased;
-      const purchasedBlock = p ? `<div class="m-purchased">
-        <div class="m-sec-h">${it.status === "bought" ? "🛒 구매완료" : "📦 발주"}</div>
+      const purchasedBlock = p ? `<div class="t-purchased">
+        <div class="t-sec-h">${it.status === "bought" ? "🛒 구매완료" : "📦 발주"}</div>
         <ul>
           ${p.vendor ? `<li><b>판매처:</b> ${esc(p.vendor)}</li>` : ""}
           ${p.unitPrice ? `<li><b>단가:</b> ₩${fmt(p.unitPrice)}</li>` : ""}
@@ -1098,61 +1019,181 @@
           ${p.date ? `<li><b>날짜:</b> ${esc(p.date)}</li>` : ""}
           ${p.note ? `<li><b>메모:</b> ${esc(p.note)}</li>` : ""}
         </ul>
-        ${p.receipt ? `<div class="m-receipt"><a href="${esc(p.receipt)}" target="_blank" rel="noopener">📎 영수증 보기</a></div>` : ""}
+        ${p.receipt ? `<div class="t-receipt-link"><a href="${esc(p.receipt)}" target="_blank" rel="noopener">📎 영수증 보기</a></div>` : ""}
       </div>` : "";
-      const noteBlock = it.note ? `<div class="m-memo-block"><p>${esc(it.note)}</p></div>` : "";
-      return `<div class="m-body">${candsHTML}${purchasedBlock}${noteBlock}</div>`;
+      const noteBlock = it.note ? `<div class="t-memo-block">${esc(it.note)}</div>` : "";
+      return `<div class="t-detail-body">${candsHTML}${purchasedBlock}${noteBlock}</div>`;
     }
-    function itemRow(it) {
-      const s = STATUS[it.status] || STATUS.pending;
-      const ph = photoCell(it);
-      const expandable = canExpand(it);
+
+    // 데이터 평탄화 + 요약 카운트
+    const rows = [];
+    let boughtSum = 0, orderedSum = 0, decidedN = 0, lookingN = 0, pendingN = 0;
+    MATERIALS.forEach((g, gi) => (g.items || []).forEach((it, idx) => {
+      if (it.status === "bought") boughtSum += totalPurchased(it.purchased);
+      if (it.status === "ordered") orderedSum += totalPurchased(it.purchased);
+      if (it.status === "decided") decidedN++;
+      if (it.status === "looking") lookingN++;
+      if (it.status === "pending") pendingN++;
+
+      const dc = decidedCand(it);
+      const photo = (dc && dc.photo) || ((it.candidates||[])[0] && it.candidates[0].photo) || "";
       const qty = it.qty || 1;
-      const inner = `
-        <div class="m-photo">${ph}</div>
-        <div class="m-cell-name"><span class="m-name">${esc(it.category)}</span></div>
-        <div class="m-cell m-cell-status"><span class="m-status ${s.cls}">${s.label}</span></div>
-        <div class="m-cell m-cell-price">${priceCell(it)}</div>
-        <div class="m-cell m-cell-qty">${qty}개</div>
-        <div class="m-cell m-cell-note">${noteCell(it)}</div>
-        ${expandable ? `<div class="m-chev">▾</div>` : `<div></div>`}`;
-      if (expandable) {
-        return `<details class="m-item"><summary>${inner}</summary>${expandHTML(it)}</details>`;
+      let unitPrice = 0, totalPrice = 0, priceExtra = "";
+      if (it.purchased) {
+        const p = it.purchased;
+        totalPrice = totalPurchased(p);
+        unitPrice = p.unitPrice || (p.qty ? Math.round(totalPrice / p.qty) : totalPrice);
+      } else if (it.status === "decided" && dc) {
+        const prices = (dc.offers||[]).map(o => o.price).filter(Boolean);
+        if (prices.length) { unitPrice = Math.min(...prices); totalPrice = unitPrice * qty; }
+      } else {
+        const r = minOfferAll(it);
+        if (r.min != null) {
+          unitPrice = r.min; totalPrice = unitPrice * qty;
+          if (r.n > 1) priceExtra = `외 ${r.n-1}`;
+        }
       }
-      return `<div class="m-item m-noex">${inner}</div>`;
+      const cs = it.candidates || [];
+      const candCount = cs.length;
+      const offerCount = cs.reduce((n, c) => n + (c.offers||[]).length, 0);
+      let note = "";
+      if (it.status === "bought" || it.status === "ordered") note = (it.purchased && it.purchased.vendor) || "";
+      else if (it.status === "decided") note = it.decided || "";
+      else if (cs.length === 1 && (cs[0].offers||[]).length === 1) note = cs[0].offers[0].vendor || it.purpose || "";
+      else note = it.purpose || "";
+      const canExp = !!it.purchased || cs.length > 1 || (cs.length === 1 && (cs[0].offers||[]).length > 1) || !!it.note;
+
+      rows.push({
+        _idx: gi * 1000 + idx,
+        _group: g.group,
+        category: it.category,
+        _purpose: it.purpose || "",
+        photo,
+        status: it.status || "pending",
+        qty,
+        _unitPrice: unitPrice,
+        _totalPrice: totalPrice,
+        _priceExtra: priceExtra,
+        _candCount: candCount,
+        _offerCount: offerCount,
+        _note: note,
+        _receipt: (it.purchased && it.purchased.receipt) || "",
+        _canExpand: canExp,
+        _detailHTML: canExp ? expandHTML(it) : "",
+      });
+    }));
+
+    // 요약 1줄
+    if (sumEl) sumEl.innerHTML = `
+      <span class="ms-pill ms-bought">🛒 구매완료 <b>₩${fmt(boughtSum)}</b></span>
+      <span class="ms-pill ms-ordered">📦 발주 <b>₩${fmt(orderedSum)}</b></span>
+      <span class="ms-pill">✅ 확정 <b>${decidedN}</b></span>
+      <span class="ms-pill">🔍 검토중 <b>${lookingN}</b></span>
+      <span class="ms-pill">⊝ 미정 <b>${pendingN}</b></span>`;
+
+    // 상태 칩 바
+    let currentStatus = "all";
+    if (sbEl) {
+      sbEl.innerHTML = `<button class="sb-chip on" data-v="all">전체</button>` +
+        Object.entries(STATUS).map(([k,s]) => `<button class="sb-chip" data-v="${k}">${s.label}</button>`).join("");
     }
-    function paint() {
-      const html = MATERIALS.filter(g => fGroup === "all" || g.group === fGroup).map(g => {
-        const items = (g.items || []).filter(it => fStatus === "all" || it.status === fStatus);
-        if (!items.length) return "";
-        return `<div class="m-group">
-          <div class="m-group-h">${esc(g.group)} <span class="m-count">[${items.length}]</span></div>
-          <div class="m-items">
-            <div class="m-thead">
-              <div></div><div>자재 종류</div><div>상태</div><div class="num">가격</div><div>수량</div><div>비고</div><div></div>
-            </div>
-            ${items.map(itemRow).join("")}
-          </div></div>`;
-      }).join("");
-      list.innerHTML = html || `<div class="stub">조건에 맞는 자재가 없어요.</div>`;
-    }
-    if (filtersEl) filtersEl.addEventListener("click", (e) => {
-      const btn = e.target.closest(".mf-chip"); if (!btn) return;
-      const key = btn.parentElement.dataset.key, val = btn.dataset.v;
-      if (key === "group") fGroup = val;
-      else if (key === "status") fStatus = val;
-      btn.parentElement.querySelectorAll(".mf-chip").forEach(b => b.classList.toggle("on", b === btn));
-      paint();
+
+    // Tabulator 초기화
+    const table = new Tabulator("#mat-table", {
+      data: rows,
+      layout: "fitColumns",
+      height: "auto",
+      placeholder: "조건에 맞는 자재가 없어요.",
+      initialSort: [{ column: "_idx", dir: "asc" }],
+      groupBy: "_group",
+      groupHeader: (value, count) => `${esc(value)} <span class="t-gcount">${count}</span>`,
+      columns: [
+        { title: "", field: "photo", width: 56, hozAlign: "center", headerSort: false,
+          formatter: (cell) => {
+            const v = cell.getValue();
+            return v ? `<img class="t-photo" src="images/${esc(v)}" alt="${esc(cell.getRow().getData().category)}" loading="lazy">` : `<div class="t-photo-ph"></div>`;
+          }},
+        { title: "자재 종류", field: "category", widthGrow: 2, minWidth: 160,
+          headerFilter: "input", headerFilterPlaceholder: "🔍 검색",
+          formatter: (cell) => {
+            const d = cell.getRow().getData();
+            const sub = d._purpose ? `<div class="t-name-sub">${esc(d._purpose)}</div>` : "";
+            const chev = d._canExpand ? `<span class="t-chev">▾</span>` : "";
+            return `<div class="t-name"><div class="t-name-main">${esc(cell.getValue())}${chev}</div>${sub}</div>`;
+          }},
+        { title: "단가", field: "_unitPrice", width: 110, hozAlign: "right", sorter: "number",
+          formatter: (cell) => {
+            const v = cell.getValue();
+            if (!v) return `<span class="t-dim">-</span>`;
+            const ex = cell.getRow().getData()._priceExtra;
+            return `<span class="t-pnum">₩${fmt(v)}</span>${ex ? `<span class="t-px"> ${ex}</span>` : ""}`;
+          }},
+        { title: "수량", field: "qty", width: 60, hozAlign: "center", sorter: "number",
+          formatter: (cell) => `${cell.getValue()}EA` },
+        { title: "합계", field: "_totalPrice", width: 120, hozAlign: "right", sorter: "number",
+          formatter: (cell) => {
+            const v = cell.getValue();
+            if (!v) return `<span class="t-dim">-</span>`;
+            return `<span class="t-pnum t-total">₩${fmt(v)}</span>`;
+          }},
+        { title: "상태", field: "status", width: 84, hozAlign: "center",
+          formatter: (cell) => {
+            const s = STATUS[cell.getValue()] || STATUS.pending;
+            return `<span class="t-status ${s.cls}">${s.label}</span>`;
+          }},
+        { title: "비고", field: "_note", widthGrow: 1, minWidth: 120,
+          formatter: (cell) => `<span class="t-note">${esc(cell.getValue() || "")}</span>` },
+        { title: "📎", field: "_receipt", width: 48, hozAlign: "center", headerSort: false,
+          formatter: (cell) => cell.getValue()
+            ? `<a class="t-rcpt" href="${esc(cell.getValue())}" target="_blank" rel="noopener">📎</a>`
+            : `<span class="t-dim">-</span>` },
+      ],
+      rowFormatter: (row) => {
+        const data = row.getData();
+        if (!data._canExpand) return;
+        const el = row.getElement();
+        el.classList.add("t-expandable");
+        el.__detailHTML = data._detailHTML;
+        if (el.__hasExpandClick) return;
+        el.__hasExpandClick = true;
+        el.addEventListener("click", function (e) {
+          if (e.target.closest(".t-photo, .t-rcpt, a, input, button")) return;
+          e.stopPropagation();
+          const next = el.nextElementSibling;
+          if (next && next.classList.contains("t-detail-row")) {
+            next.remove();
+            el.classList.remove("t-open");
+          } else {
+            const d = document.createElement("div");
+            d.className = "t-detail-row";
+            d.innerHTML = el.__detailHTML || "";
+            el.parentNode.insertBefore(d, el.nextSibling);
+            el.classList.add("t-open");
+          }
+        }, true);
+      },
     });
-    // 이미지 클릭 → 라이트박스 (자재 카드의 사진) — summary 토글 차단
-    list.addEventListener("click", (e) => {
-      const img = e.target.closest(".m-photo img");
-      if (!img) return;
-      e.preventDefault();
-      e.stopPropagation();
+
+    // 상태 칩 → 필터
+    function applyStatusFilter() {
+      if (currentStatus === "all") table.removeFilter("status", "=", "_anything_");
+      // 단일 status 필터로 교체
+      table.setFilter((data) => currentStatus === "all" || data.status === currentStatus);
+    }
+    if (sbEl) sbEl.addEventListener("click", (e) => {
+      const btn = e.target.closest(".sb-chip"); if (!btn) return;
+      sbEl.querySelectorAll(".sb-chip").forEach(b => b.classList.toggle("on", b === btn));
+      currentStatus = btn.dataset.v;
+      applyStatusFilter();
+    });
+
+    // 사진 클릭 → 라이트박스
+    tableEl.addEventListener("click", (e) => {
+      const img = e.target.closest(".t-photo");
+      if (!img || img.tagName !== "IMG") return;
+      e.preventDefault(); e.stopPropagation();
       openLightbox(img.src, img.alt);
     }, true);
-    paint();
   }
 
   /* ---------- 이미지 라이트박스 (자재 페이지에서 사용) ---------- */
