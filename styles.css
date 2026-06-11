@@ -171,6 +171,14 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .ba-compact .ba-col-label{font-size:11px;margin-bottom:5px}
 .ba-compact .ba-thumbs{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px}
 
+/* Before 접기/펼치기 */
+.ba-toggle > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;width:fit-content}
+.ba-toggle > summary::-webkit-details-marker{display:none}
+.ba-toggle > summary::before{content:"▸";color:var(--accent);font-size:14px;transition:transform .15s}
+.ba-toggle[open] > summary::before{transform:rotate(90deg)}
+.ba-toggle-hint{font-size:12px;color:var(--muted);font-weight:500}
+.ba-toggle[open] > .ba-grid{margin-top:12px}
+
 /* 레퍼런스 태그 필터 */
 .ref-filter{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .ref-chip{background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:99px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
