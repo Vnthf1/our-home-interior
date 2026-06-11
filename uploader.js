@@ -118,6 +118,7 @@
       "</div>" +
       '<div id="up-status" class="up-status"></div>';
     grid.parentNode.insertBefore(bar, grid);
+    if (localStorage.getItem("gh_admin") === "1") { var _cb0 = bar.querySelector("#up-check"); if (_cb0) _cb0.style.display = "none"; }
 
     var fileEl = bar.querySelector("#up-file");
     var formEl = bar.querySelector("#up-form");
@@ -144,11 +145,18 @@
         var perm = res[1] && res[1].permissions;
         var canPush = !!(perm && perm.push);
         var ownerOk = login && login.toLowerCase() === OWNER.toLowerCase();
-        status(
-          "계정: " + (login || "?") + (ownerOk ? " ✅" : " ⚠️(repo 주인 아님)") +
-          " / 쓰기권한(push): " + (canPush ? "있음 ✅" : "없음 ❌ → Contents:write + repo 선택 확인"),
-          (canPush && ownerOk) ? "ok" : "err"
-        );
+        if (canPush && ownerOk) {
+          localStorage.setItem("gh_admin", "1");
+          var cb = bar.querySelector("#up-check"); if (cb) cb.style.display = "none";
+          status("✅ 관리자 모드 — 견적·연락처가 열립니다. (새로고침하면 메뉴에 표시)", "ok");
+        } else {
+          localStorage.removeItem("gh_admin");
+          status(
+            "계정: " + (login || "?") + (ownerOk ? " ✅" : " ⚠️(repo 주인 아님)") +
+            " / 쓰기권한(push): " + (canPush ? "있음 ✅" : "없음 ❌ → Contents:write + repo 선택 확인"),
+            "err"
+          );
+        }
       }).catch(function (e) { status("점검 실패: " + (e && e.message || e), "err"); });
     };
     bar.querySelector("#up-pick").onclick = function () {

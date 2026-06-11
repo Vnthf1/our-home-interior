@@ -24,12 +24,16 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  // 휴대폰 마스킹 — 사이트가 public 이라 ****-**** 로만 노출. 실제 번호는 data.js 에 있고 소유자만 접근.
+  // 관리자(소유자) 여부 — references 페이지에서 GitHub 토큰을 검증하면 localStorage.gh_admin='1'
+  const isAdmin = () => { try { return localStorage.getItem("gh_admin") === "1"; } catch (e) { return false; } };
+  // 휴대폰 마스킹 — 사이트가 public 이라 비관리자에겐 ****-**** 로만 노출. 관리자는 실제 번호.
   const maskPhone = (p) => {
     if (!p) return "";
+    if (isAdmin()) return String(p).trim();
     const m = String(p).trim().match(/^(\d{2,3})[- ]?(\d{3,4})[- ]?(\d{4})$/);
     return m ? `${m[1]}-****-****` : "****-****";
   };
+  const telHref = (p) => String(p || "").replace(/[^0-9+]/g, "");
   const phaseName = (id) => { const p = PHASES.find((x) => x.id === id); return p ? `${p.icon} ${p.name}` : id; };
 
   // 공정표 작업명 → 작업계획서 공정 id (더블클릭 이동용)
@@ -71,10 +75,26 @@
     // 전체 사이트(견적·연락처 포함)를 본 적 있는 브라우저 = 소유자. 작업자 공유 페이지에서 '전체 사이트' 링크 노출 판단용.
     try { localStorage.setItem("oh-owner", "1"); } catch (e) {}
     const active = document.body.dataset.page;
+    // 견적/연락처는 관리자에게만 노출
+    const adminOnly = { quotes: 1, contacts: 1 };
+    const nav = NAV.filter((n) => isAdmin() || !adminOnly[n.key]);
     el.innerHTML =
       `<div class="wrap"><a class="brand" href="index.html">🏠 ${esc(PROJECT.title)}</a>` +
-      NAV.map((n) => `<a class="link${n.key === active ? " active" : ""}" href="${n.href}">${esc(n.label)}</a>`).join("") +
+      nav.map((n) => `<a class="link${n.key === active ? " active" : ""}" href="${n.href}">${esc(n.label)}</a>`).join("") +
       `</div>`;
+  }
+  // 견적·연락처 페이지 직접 접근 차단 (비관리자)
+  function guardAdminPage() {
+    const page = document.body.dataset.page;
+    if ((page === "quotes" || page === "contacts") && !isAdmin()) {
+      const wrap = document.querySelector("section .wrap");
+      if (wrap) wrap.innerHTML =
+        `<div class="sec-title">접근 제한</div>` +
+        `<h2 class="sec-head">🔒 관리자 전용</h2>` +
+        `<p class="ov-lead">이 페이지는 관리자만 볼 수 있어요. <a href="references.html">레퍼런스</a> 페이지에서 GitHub 토큰을 등록·검증(🩺)하면 접근할 수 있습니다.</p>`;
+      return true;
+    }
+    return false;
   }
 
   /* ---------- 공통 조각 ---------- */
@@ -459,17 +479,22 @@
   /* ---------- 연락처 ---------- */
   function renderContacts() {
     const el = $("contacts-grid");
-    if (el) el.innerHTML = CONTACTS.map((c) => `
+    if (!el) return;
+    el.innerHTML = CONTACTS.map((c) => {
+      const tel = telHref(c.phone);
+      const phoneRow = c.phone
+        ? `<div class="phone-row"><span class="phone">${esc(maskPhone(c.phone))}</span>` +
+          `<a class="cbtn call" href="tel:${esc(tel)}" aria-label="전화 걸기">📞 전화</a>` +
+          `<a class="cbtn sms" href="sms:${esc(tel)}" aria-label="문자 보내기">💬 문자</a></div>`
+        : `<div class="note">연락처 미정</div>`;
+      return `
       <div class="contact-card">
         <div class="role">${esc(c.role)}</div>
         <div class="name">${esc(c.name)}${c.company ? ` · ${esc(c.company)}` : ""}</div>
-        ${c.phone ? `<div class="phone">${esc(maskPhone(c.phone))}</div>` : `<div class="note">연락처 미정</div>`}
+        ${phoneRow}
         ${c.note ? `<div class="note">${esc(c.note)}</div>` : ""}
-      </div>`).join("");
-    const cand = $("candidates");
-    if (cand) cand.innerHTML = DESIGN_CANDIDATES.map((c) => `
-      <div class="cand"><span><b>${esc(c.name)}</b>${c.note ? ` · <span style="color:var(--muted);font-size:13px">${esc(c.note)}</span>` : ""}</span>
-      ${c.link ? `<a href="${esc(c.link)}" target="_blank" rel="noopener">링크 열기 ↗</a>` : ""}</div>`).join("");
+      </div>`;
+    }).join("");
   }
 
   /* ---------- 견적 / 후보 (공정별) ---------- */
@@ -1413,7 +1438,9 @@
 
   /* ---------- 부팅 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
+    if (isAdmin()) document.body.classList.add("is-admin");  // 관리자 전용 요소 노출(.admin-only)
     mountNav();
+    guardAdminPage();   // 비관리자가 견적/연락처 직접 접근 시 잠금 화면으로
     renderHome();
     renderConcept();
     renderCalendar();
