@@ -104,6 +104,7 @@
       '<input type="file" id="up-file" accept="image/*" hidden>' +
       '<button type="button" id="up-pick" class="up-btn">📷 사진 올리기</button>' +
       '<button type="button" id="up-token" class="up-btn ghost" title="GitHub 토큰 설정">🔑</button>' +
+      '<button type="button" id="up-check" class="up-btn ghost" title="토큰 점검">🩺 점검</button>' +
       '<div id="up-form" class="up-form" hidden>' +
         '<img id="up-prev" class="up-prev" alt="">' +
         '<div class="up-fields">' +
@@ -130,6 +131,26 @@
     };
 
     bar.querySelector("#up-token").onclick = function () { setToken(); status("토큰 저장됨.", "ok"); };
+    bar.querySelector("#up-check").onclick = function () {
+      var tok = getToken();
+      if (!tok) { status("토큰이 없어요 — 🔑 로 먼저 등록하세요.", "err"); return; }
+      status("점검 중…", "");
+      var H = { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json" };
+      Promise.all([
+        fetch("https://api.github.com/user", { headers: H }).then(function (r) { return r.json(); }),
+        fetch("https://api.github.com/repos/" + OWNER + "/" + REPO, { headers: H }).then(function (r) { return r.json(); }),
+      ]).then(function (res) {
+        var login = res[0] && res[0].login;
+        var perm = res[1] && res[1].permissions;
+        var canPush = !!(perm && perm.push);
+        var ownerOk = login && login.toLowerCase() === OWNER.toLowerCase();
+        status(
+          "계정: " + (login || "?") + (ownerOk ? " ✅" : " ⚠️(repo 주인 아님)") +
+          " / 쓰기권한(push): " + (canPush ? "있음 ✅" : "없음 ❌ → Contents:write + repo 선택 확인"),
+          (canPush && ownerOk) ? "ok" : "err"
+        );
+      }).catch(function (e) { status("점검 실패: " + (e && e.message || e), "err"); });
+    };
     bar.querySelector("#up-pick").onclick = function () {
       if (!getToken()) { if (!setToken()) { status("토큰이 없어 올릴 수 없어요.", "err"); return; } }
       fileEl.click();
