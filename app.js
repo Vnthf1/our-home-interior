@@ -544,7 +544,13 @@
     const el = $("quotes"); if (!el || typeof QUOTES === "undefined") return;
     const order = PHASES.map((p) => p.id);
     const rank = (ph) => { const i = order.indexOf(ph); return i === -1 ? Infinity : i; };
-    const sorted = [...QUOTES].sort((a, b) => rank(a.phase) - rank(b.phase));
+    // 확정(있는 공정) → 견적/후보 있는 공정 → 빈 공정(후보 찾는 중) 순, 각 그룹 안에서는 PHASES 순서
+    const tier = (q) => {
+      const cs = q.candidates || [];
+      if (cs.some((c) => c.status === "decided")) return 0;
+      return cs.length ? 1 : 2;
+    };
+    const sorted = [...QUOTES].sort((a, b) => (tier(a) - tier(b)) || (rank(a.phase) - rank(b.phase)));
     el.innerHTML = sorted.map((q) => {
       const p = PHASES.find((x) => x.id === q.phase);
       const cands = q.candidates || [];
