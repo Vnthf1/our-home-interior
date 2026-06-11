@@ -60,13 +60,13 @@
   const NAV = [
     { href: "index.html", label: "홈", key: "home" },
     { href: "schedule.html", label: "공정표", key: "schedule" },
+    { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
     { href: "furniture.html", label: "가구도면", key: "furniture" },
-    { href: "quotes.html", label: "견적/후보", key: "quotes" },
-    { href: "materials.html", label: "자재", key: "materials" },
-    { href: "references.html", label: "레퍼런스", key: "refs" },
+    { href: "quotes.html", label: "견적/공정", key: "quotes" },
+    { href: "materials.html", label: "견적/자재", key: "materials" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
   ];
   function mountNav() {
