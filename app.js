@@ -403,19 +403,39 @@
   }
 
   /* ---------- 레퍼런스 갤러리 ---------- */
-  function renderReferences() {
-    const el = $("ref-grid"); if (!el) return;
-    const refs = allRefs();
-    el.innerHTML = refs.map((r) => `
+  function refCardHTML(r) {
+    return `
       <div class="ref-card">
         <div class="media">${zoomImg(r.file, r.title)}</div>
         <div class="body">
-          <h4>${esc(r.title)}</h4>
+          <h4>${esc(r.title || "")}</h4>
           <p>${esc(r.desc || "")}</p>
           ${r.link ? `<a class="ref-link" href="${esc(r.link)}" target="_blank" rel="noopener">제품 링크 ↗</a>` : ""}
           ${(r.phases && r.phases.length) ? `<div class="ref-tags">${r.phases.map((pid) => `<span class="t">${esc(phaseName(pid))}</span>`).join("")}</div>` : ""}
         </div>
-      </div>`).join("") || `<div class="stub">아직 레퍼런스가 없어요. 사진을 images/ 에 넣고 data.js의 REFERENCES에 추가하세요.</div>`;
+      </div>`;
+  }
+  // uploader.js 등 외부에서도 카드 마크업을 쓸 수 있게 공개
+  window.refCardHTML = refCardHTML;
+  function renderReferences() {
+    const el = $("ref-grid"); if (!el) return;
+    const refs = allRefs();
+    const draw = (extra) => {
+      const all = refs.concat(extra || []);
+      el.innerHTML = all.map(refCardHTML).join("") || `<div class="stub">아직 레퍼런스가 없어요. 사진을 images/ 에 넣고 data.js의 REFERENCES에 추가하세요.</div>`;
+    };
+    draw([]);
+    // 브라우저에서 올린 사진(uploads.json) — 있으면 큐레이션 레퍼런스와 함께 표시 (최신 먼저)
+    fetch("uploads.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((ups) => {
+        if (!Array.isArray(ups) || !ups.length) return;
+        const extra = ups.slice().reverse().map((u) => ({
+          file: u.file, title: u.title || "올린 사진", desc: u.desc || "", phases: u.phases || [],
+        }));
+        draw(extra);
+      })
+      .catch(() => {});
   }
 
   /* ---------- 연락처 ---------- */

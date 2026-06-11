@@ -171,6 +171,21 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .ba-compact .ba-col-label{font-size:11px;margin-bottom:5px}
 .ba-compact .ba-thumbs{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px}
 
+/* 레퍼런스 업로더 바 */
+.uploader-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--card);border:1px dashed var(--accent);border-radius:12px;padding:10px 12px;margin-bottom:14px}
+.up-btn{background:var(--accent);color:#fff;border:none;border-radius:99px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.up-btn:hover{filter:brightness(1.08)}
+.up-btn:disabled{opacity:.5;cursor:default}
+.up-btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.up-form{display:flex;gap:12px;align-items:flex-start;width:100%;margin-top:6px}
+.up-prev{width:96px;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--line);flex:none}
+.up-fields{display:flex;flex-direction:column;gap:8px;flex:1;min-width:200px}
+.up-input{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:var(--ink)}
+.up-actions{display:flex;gap:8px}
+.up-status{width:100%;font-size:13px;color:var(--muted)}
+.up-status.ok{color:var(--done)}
+.up-status.err{color:#d9534f}
+
 /* references gallery */
 .ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
 .ref-card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
