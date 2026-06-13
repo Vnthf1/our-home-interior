@@ -2018,7 +2018,7 @@ const PHASES = [
 const KITCHEN = {
   tall: {
     depth: 800, depthVerify: true,   // 실측필요
-    height: 2500, heightVerify: true, // 실측필요
+    height: 2300, // 키큰장 높이 2300 (실측)
     widthVerify: true,                // 키큰장 전체폭(합계) 실측필요
     segs: [
       { w: 500, label: "장1" },
