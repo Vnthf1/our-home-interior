@@ -510,6 +510,10 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .sb-chip{padding:4px 11px;border:1px solid var(--line);background:var(--card);border-radius:99px;cursor:pointer;font-size:12.5px;color:var(--muted);transition:.15s;font-family:inherit}
 .sb-chip:hover{border-color:var(--accent);color:var(--accent)}
 .sb-chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mat-search-wrap{margin-bottom:10px}
+#mat-search{width:100%;max-width:360px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit;background:#fff;color:var(--ink);transition:.15s;box-sizing:border-box}
+#mat-search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+#mat-search::placeholder{color:var(--muted)}
 
 /* ─── Tabulator 테마 (엑셀형 — 회색 헤더 + 진한 그리드) ─── */
 #mat-table{font-family:Pretendard,-apple-system,sans-serif;overflow-x:auto}
@@ -536,9 +540,31 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .tabulator-row.t-expandable{cursor:pointer}
 .tabulator-row.t-open{background:#ece3d4!important}
 
-/* 펼침 — Tabulator row 바로 아래 sibling div (display:block 강제, full width) */
-.t-detail-row{display:block!important;width:100%!important;background:#fbf9f5;border-top:1px solid var(--accent);border-bottom:1px solid #c8c2b6;box-sizing:border-box;position:relative;z-index:1}
-.t-detail-row .t-detail-body{padding:0}
+/* 펼침 — Tabulator addRow로 추가된 행 (실제 Tabulator 행). 부모와 동일한 컬럼 구조를 따르되 시각적으로만 자식 느낌. */
+.tabulator-tableholder,.tabulator-table{overflow:visible!important;height:auto!important;min-height:0!important}
+.tabulator-row.t-detail-row{background:#fbf6ec!important;min-height:42px!important;border-bottom:1px dashed #d8cfb8!important}
+.tabulator-row.t-detail-row .tabulator-cell{font-size:12.5px;color:#5a4a35;background:transparent}
+.tabulator-row.t-detail-row .tabulator-cell[tabulator-field="photo"]{background:#fbf6ec!important}
+.tabulator-row.t-detail-row .tabulator-cell[tabulator-field="photo"] .t-photo-ph{background:transparent}
+.tabulator-row.t-detail-row .t-name-product{font-weight:400;color:#5a4a35;font-size:13px;letter-spacing:-.1px}
+.tabulator-row.t-detail-row .t-pnum{font-weight:500;color:#5a4a35;font-size:13px}
+.tabulator-row.t-detail-row .t-note{color:#7a6a55;font-weight:500}
+.t-name-product{font-weight:400;color:var(--ink);font-size:13.5px;letter-spacing:-.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-detail-inline{padding:0;width:100%}
+.t-detail-inline .t-orow{display:flex;gap:16px;padding:8px 14px;border-bottom:1px solid #e0d8c5;font-size:12.5px}
+.t-detail-inline .t-orow:last-child{border-bottom:none}
+.t-detail-inline .t-orow-vendor{flex:0 0 160px;font-weight:600;color:var(--ink)}
+.t-detail-inline .t-orow-price{flex:0 0 120px;text-align:right;font-family:Pretendard,sans-serif;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.t-detail-inline .t-orow-note{flex:1;color:var(--muted)}
+.t-detail-inline .t-orow a{color:var(--accent);text-decoration:none}
+.t-detail-inline .t-chead{padding:7px 14px 4px;background:#f0eee9;font-size:11.5px;font-weight:700;color:var(--ink);border-top:1px solid #e0d8c5}
+.t-detail-inline .t-chead:first-child{border-top:none}
+.t-detail-inline .t-chead.is-decided{background:var(--accent-soft);color:var(--accent)}
+.t-detail-inline .t-purchased{background:#eef7e8;border-top:1px solid #cfe5c2;padding:10px 14px}
+.t-detail-inline .t-purchased ul{margin:0;padding-left:18px;line-height:1.65;font-size:12.5px}
+.t-detail-inline .t-sec-h{font-size:10.5px;font-weight:700;color:var(--done);letter-spacing:.4px;margin-bottom:5px;text-transform:uppercase}
+.t-detail-inline .t-memo-block{padding:8px 14px;border-top:1px solid #e0d8c5;font-size:12.5px;color:#5a4a35;line-height:1.55}
+.tabulator-row.t-open{background:#ece3d4!important}
 
 /* 사진 셀 — 최대 55×53 고정, 셀에 풀핏, 빈 셀은 #eee */
 .tabulator-row .tabulator-cell[tabulator-field="photo"]{padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden;background:#eee}

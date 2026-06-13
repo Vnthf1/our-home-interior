@@ -1056,18 +1056,54 @@
       const cs = it.candidates || [];
       const candCount = cs.length;
       const offerCount = cs.reduce((n, c) => n + (c.offers||[]).length, 0);
+      // 구매처 컬럼 — 실제 구매처/판매처(vendor)만. 용도·일반 메모는 넣지 않음
       let note = "";
       if (it.status === "bought" || it.status === "ordered") note = (it.purchased && it.purchased.vendor) || "";
-      else if (it.status === "decided") note = it.decided || "";
-      else if (cs.length === 1 && (cs[0].offers||[]).length === 1) note = cs[0].offers[0].vendor || it.purpose || "";
-      else note = it.purpose || "";
-      const canExp = !!it.purchased || cs.length > 1 || (cs.length === 1 && (cs[0].offers||[]).length > 1) || !!it.note;
+      else if (it.status === "decided") {
+        // 확정 후보의 첫 offer vendor
+        note = (dc && dc.offers && dc.offers[0] && dc.offers[0].vendor) || "";
+      }
+      else if (cs.length === 1 && (cs[0].offers||[]).length === 1) note = cs[0].offers[0].vendor || "";
+      // 품명(parent): 단일 후보 / 확정 / 발주·구매면 채움. 다중 후보면 비움(자식 행에서 표시)
+      let prodName = "";
+      if ((it.status === "decided" || it.status === "ordered" || it.status === "bought") && it.decided) prodName = it.decided;
+      else if (cs.length === 1) prodName = cs[0].name;
+
+      // 자식 행(offer 단위)
+      const canExp = (cs.length > 1) || (cs.length === 1 && (cs[0].offers || []).length > 1);
+      const dRows = [];
+      if (canExp) {
+        cs.forEach((c, ci) => {
+          (c.offers || []).forEach((o, oi) => {
+            dRows.push({
+              id: "detail-" + (gi * 1000 + idx) + "-" + ci + "-" + oi,
+              _isDetail: true,
+              _group: g.group,
+              category: "",
+              _name: c.name,
+              _purpose: "",
+              photo: "",
+              status: null,
+              qty: null,
+              _unitPrice: o.price || 0,
+              _totalPrice: null,
+              _priceExtra: "",
+              _candCount: 0,
+              _offerCount: 0,
+              _note: o.vendor || (o.note || ""),
+              _receipt: "",
+              _canExpand: false,
+            });
+          });
+        });
+      }
 
       rows.push({
         _idx: gi * 1000 + idx,
         _group: g.group,
         category: it.category,
         _purpose: it.purpose || "",
+        _name: prodName,
         photo,
         status: it.status || "pending",
         qty,
@@ -1079,7 +1115,7 @@
         _note: note,
         _receipt: (it.purchased && it.purchased.receipt) || "",
         _canExpand: canExp,
-        _detailHTML: canExp ? expandHTML(it) : "",
+        _detailRows: dRows,
       });
     }));
 
@@ -1108,40 +1144,52 @@
       groupBy: "_group",
       groupHeader: (value, count) => `${esc(value)} <span class="t-gcount">${count}</span>`,
       columns: [
+        { title: "자재 종류", field: "category", width: 130, minWidth: 110,
+          formatter: (cell) => {
+            const d = cell.getRow().getData();
+            const v = cell.getValue();
+            if (!v) return "";
+            const sub = d._purpose ? `<div class="t-name-sub">${esc(d._purpose)}</div>` : "";
+            const chev = d._canExpand ? `<span class="t-chev">▾</span>` : "";
+            return `<div class="t-name"><div class="t-name-main">${esc(v)}${chev}</div>${sub}</div>`;
+          }},
         { title: "", field: "photo", width: 56, hozAlign: "center", headerSort: false,
           formatter: (cell) => {
             const v = cell.getValue();
             return v ? `<img class="t-photo" src="images/${esc(v)}" alt="${esc(cell.getRow().getData().category)}" loading="lazy">` : `<div class="t-photo-ph"></div>`;
           }},
-        { title: "자재 종류", field: "category", widthGrow: 2, minWidth: 160,
-          headerFilter: "input", headerFilterPlaceholder: "🔍 검색",
+        { title: "품명", field: "_name", widthGrow: 1.5, minWidth: 140,
           formatter: (cell) => {
-            const d = cell.getRow().getData();
-            const sub = d._purpose ? `<div class="t-name-sub">${esc(d._purpose)}</div>` : "";
-            const chev = d._canExpand ? `<span class="t-chev">▾</span>` : "";
-            return `<div class="t-name"><div class="t-name-main">${esc(cell.getValue())}${chev}</div>${sub}</div>`;
+            const v = cell.getValue() || "";
+            if (!v) return "";
+            return `<span class="t-name-product">${esc(v)}</span>`;
           }},
         { title: "단가", field: "_unitPrice", width: 110, hozAlign: "right", sorter: "number",
           formatter: (cell) => {
             const v = cell.getValue();
-            if (!v) return `<span class="t-dim">-</span>`;
+            if (!v) return "";
             const ex = cell.getRow().getData()._priceExtra;
             return `<span class="t-pnum">₩${fmt(v)}</span>${ex ? `<span class="t-px"> ${ex}</span>` : ""}`;
           }},
         { title: "수량", field: "qty", width: 60, hozAlign: "center", sorter: "number",
-          formatter: (cell) => `${cell.getValue()}EA` },
+          formatter: (cell) => {
+            const v = cell.getValue();
+            return v == null ? "" : `${v}EA`;
+          }},
         { title: "합계", field: "_totalPrice", width: 120, hozAlign: "right", sorter: "number",
           formatter: (cell) => {
             const v = cell.getValue();
-            if (!v) return `<span class="t-dim">-</span>`;
+            if (!v) return "";
             return `<span class="t-pnum t-total">₩${fmt(v)}</span>`;
           }},
         { title: "상태", field: "status", width: 84, hozAlign: "center",
           formatter: (cell) => {
-            const s = STATUS[cell.getValue()] || STATUS.pending;
+            const v = cell.getValue();
+            if (!v) return "";
+            const s = STATUS[v] || STATUS.pending;
             return `<span class="t-status ${s.cls}">${s.label}</span>`;
           }},
-        { title: "비고", field: "_note", widthGrow: 1, minWidth: 120,
+        { title: "구매처", field: "_note", widthGrow: 1, minWidth: 120,
           formatter: (cell) => `<span class="t-note">${esc(cell.getValue() || "")}</span>` },
         { title: "📎", field: "_receipt", width: 48, hozAlign: "center", headerSort: false,
           formatter: (cell) => cell.getValue()
@@ -1150,41 +1198,84 @@
       ],
       rowFormatter: (row) => {
         const data = row.getData();
-        if (!data._canExpand) return;
         const el = row.getElement();
-        el.classList.add("t-expandable");
-        el.__detailHTML = data._detailHTML;
-        if (el.__hasExpandClick) return;
-        el.__hasExpandClick = true;
-        el.addEventListener("click", function (e) {
-          if (e.target.closest(".t-photo, .t-rcpt, a, input, button")) return;
-          e.stopPropagation();
-          const next = el.nextElementSibling;
-          if (next && next.classList.contains("t-detail-row")) {
-            next.remove();
-            el.classList.remove("t-open");
-          } else {
-            const d = document.createElement("div");
-            d.className = "t-detail-row";
-            d.innerHTML = el.__detailHTML || "";
-            el.parentNode.insertBefore(d, el.nextSibling);
-            el.classList.add("t-open");
-          }
-        }, true);
+        if (data._isDetail) {
+          el.classList.add("t-detail-row");
+          return;
+        }
+        if (data._canExpand) {
+          el.classList.add("t-expandable");
+        }
       },
     });
 
-    // 상태 칩 → 필터
-    function applyStatusFilter() {
-      if (currentStatus === "all") table.removeFilter("status", "=", "_anything_");
-      // 단일 status 필터로 교체
-      table.setFilter((data) => currentStatus === "all" || data.status === currentStatus);
+    // 펼침 토글 — _detailRows(offer별 행)를 부모 행 아래에 차례로 끼워 넣음
+    function toggleDetail(rowComp) {
+      const data = rowComp.getData();
+      if (!data._canExpand) return;
+      const key = data._idx;
+      const dRows = data._detailRows || [];
+      if (!dRows.length) return;
+      const firstId = dRows[0].id;
+      const existing = table.getRow(firstId);
+      if (existing) {
+        // 닫기: 부모에 속한 detail 행 모두 제거
+        dRows.forEach((d) => {
+          const r = table.getRow(d.id);
+          if (r) r.delete();
+        });
+        rowComp.getElement().classList.remove("t-open");
+      } else {
+        // 열기: 역순으로 부모 바로 아래에 삽입(순서 유지)
+        for (let i = dRows.length - 1; i >= 0; i--) {
+          table.addRow({ ...dRows[i], _idx: key + (i + 1) * 0.001 }, false, rowComp);
+        }
+        rowComp.getElement().classList.add("t-open");
+      }
+    }
+
+    tableEl.addEventListener("click", (e) => {
+      if (e.target.closest(".t-photo, .t-rcpt, a, input, button, .tabulator-header, .tabulator-group")) return;
+      const rowEl = e.target.closest(".tabulator-row.t-expandable");
+      if (!rowEl) return;
+      const rowComp = table.getRow(rowEl);
+      if (rowComp) toggleDetail(rowComp);
+    });
+
+    // 검색 인풋 — 표 상단으로 분리
+    const tableHostEl = $("mat-table");
+    let searchTerm = "";
+    if (tableHostEl && !document.getElementById("mat-search")) {
+      const sw = document.createElement("div");
+      sw.className = "mat-search-wrap";
+      sw.innerHTML = `<input id="mat-search" type="search" placeholder="🔍 자재 종류·품명 검색" autocomplete="off">`;
+      tableHostEl.parentNode.insertBefore(sw, tableHostEl);
+    }
+    const searchInput = document.getElementById("mat-search");
+    if (searchInput) {
+      searchInput.addEventListener("input", () => {
+        searchTerm = searchInput.value.trim().toLowerCase();
+        applyFilters();
+      });
+    }
+
+    // 상태 칩 + 검색 → 합성 필터
+    function applyFilters() {
+      table.setFilter((data) => {
+        if (data._isDetail) return true; // 자식 행은 부모와 함께 노출
+        if (currentStatus !== "all" && data.status !== currentStatus) return false;
+        if (searchTerm) {
+          const hay = ((data.category || "") + " " + (data._name || "") + " " + (data._purpose || "")).toLowerCase();
+          if (hay.indexOf(searchTerm) === -1) return false;
+        }
+        return true;
+      });
     }
     if (sbEl) sbEl.addEventListener("click", (e) => {
       const btn = e.target.closest(".sb-chip"); if (!btn) return;
       sbEl.querySelectorAll(".sb-chip").forEach(b => b.classList.toggle("on", b === btn));
       currentStatus = btn.dataset.v;
-      applyStatusFilter();
+      applyFilters();
     });
 
     // 사진 클릭 → 라이트박스
