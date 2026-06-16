@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link rel="stylesheet" as="style" crossorigin
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabulator-tables@5.6.1/dist/css/tabulator_simple.min.css" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="quotes">
@@ -16,13 +17,15 @@
 <section><div class="wrap">
   <div class="sec-title">QUOTES</div>
   <h2 class="sec-head">견적 / 공정</h2>
-  <p class="ov-lead">공정별로 후보 업체와 받은 견적을 모아둔 곳이에요. 현재 <b>전기·목공</b>만 확정이고 나머지는 견적을 받는 중입니다.</p>
-  <div class="banner">📄 견적서를 받으면 파일이나 내용을 캡틴에게 주세요. 이름·가격·세부내역으로 요약해 정리하고, 파일은 여기서 바로 열어볼 수 있게 연결합니다. (파일은 <code>quotes/</code> 폴더에 넣어요)</div>
+  <h3 class="qs-title">✅ 확정 공정 비용 요약</h3>
+  <div id="quote-summary"></div>
+  <p class="qs-cap">※ 목공은 가견적(범위 하한 기준 합산), 천장은 실측 후 결정.</p>
   <div id="quotes"></div>
 </div></section>
 
 <footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/tabulator-tables@5.6.1/dist/js/tabulator.min.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>

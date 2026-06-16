@@ -170,6 +170,23 @@ const CONTACTS = [
 ];
 
 /* ------------------------------------------------------------
+ *  확정 공정 비용 요약 (견적/공정 페이지 맨 위 표)
+ *  - 확정된 공정만 적습니다. price=견적가(숫자, 원), deposit=선입금, final=최종비용.
+ *  - priceText 가 있으면 견적가 칸에 그 문구를 대신 표시(범위·미정 등).
+ *  - 맨 아래 합계는 자동 계산(숫자 칸 합).
+ * ------------------------------------------------------------ */
+const QUOTE_SUMMARY = [
+  { phase: "입주민 동의", company: "셀프 진행", price: 380000, deposit: null, final: null, note: "동의 선물·엘베 사용비 포함" },
+  { phase: "철거·설비·방수", company: "벨류연구소", price: 8385000, deposit: null, final: null, note: "보양·설비·방수 일괄" },
+  { phase: "전기", company: "하린 전기조명", price: 4400000, deposit: null, final: null, note: "VAT 포함" },
+  { phase: "목공", company: "국선디자인", price: 10100000, priceText: "1,010~1,065만 (가견적)", deposit: null, final: null, note: "자재+인건비, VAT 별도" },
+  { phase: "타일", company: "최반장", price: 3200000, deposit: null, final: null, note: "" },
+  { phase: "도기", company: "(별도)", price: 450000, deposit: null, final: null, note: "" },
+  { phase: "천장", company: "(실측 후)", price: null, priceText: "실측 후 결정", deposit: null, final: null, note: "" },
+  { phase: "장판", company: "대동벽지", price: 3500000, deposit: 300000, final: null, note: "온누리 175만 + 계약금 30만" },
+];
+
+/* ------------------------------------------------------------
  *  견적 / 후보  (공정별)
  *  ────────────────────────────────────────────────────────────
  *  공정마다 후보 업체를 모아두고, 견적을 받으면 채워 넣는 곳입니다.

@@ -540,6 +540,42 @@
       ${files}
     </div>`;
   }
+  // 확정 공정 비용 요약 표 (Tabulator)
+  function renderQuoteSummary() {
+    const el = $("quote-summary"); if (!el || typeof QUOTE_SUMMARY === "undefined") return;
+    if (typeof Tabulator === "undefined") { el.innerHTML = `<div class="stub">표 라이브러리 로딩 실패 — 네트워크 확인</div>`; return; }
+    const won = (v) => (v == null || v === "") ? "" : "₩" + Number(v).toLocaleString("ko-KR");
+    const moneyCol = (title, field) => ({
+      title, field, hozAlign: "right", headerSort: false, minWidth: 90,
+      formatter: (cell) => {
+        const d = cell.getRow().getData();
+        if (field === "price" && d.priceText) return `<span class="qs-approx">${esc(d.priceText)}</span>`;
+        const v = cell.getValue();
+        return (v == null || v === "") ? `<span class="qs-dash">–</span>` : won(v);
+      },
+      bottomCalc: "sum",
+      bottomCalcFormatter: (cell) => { const v = cell.getValue(); return v ? `<b>${won(v)}</b>` : ""; },
+    });
+    new Tabulator("#quote-summary", {
+      data: QUOTE_SUMMARY.slice(),
+      layout: "fitColumns",
+      height: "auto",
+      columns: [
+        { title: "공정", field: "phase", widthGrow: 2, minWidth: 90, headerSort: false,
+          formatter: (c) => `<b>${esc(c.getValue() || "")}</b>`,
+          bottomCalc: () => "합계", bottomCalcFormatter: (c) => `<b>${esc(c.getValue())}</b>` },
+        { title: "회사", field: "company", widthGrow: 3, minWidth: 120, headerSort: false,
+          formatter: (c) => {
+            const d = c.getRow().getData();
+            const sub = d.note ? `<div class="qs-sub">${esc(d.note)}</div>` : "";
+            return `<div class="qs-co">${esc(c.getValue() || "")}</div>${sub}`;
+          } },
+        moneyCol("견적가", "price"),
+        moneyCol("선입금", "deposit"),
+        moneyCol("최종비용", "final"),
+      ],
+    });
+  }
   function renderQuotes() {
     const el = $("quotes"); if (!el || typeof QUOTES === "undefined") return;
     const order = PHASES.map((p) => p.id);
@@ -1592,6 +1628,7 @@
     renderPhases();
     renderBeforeAfter();
     renderReferences();
+    renderQuoteSummary();
     renderQuotes();
     renderContacts();
     renderFloorplan();
