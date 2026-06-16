@@ -539,27 +539,27 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 #mat-search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 #mat-search::placeholder{color:var(--muted)}
 
-/* ─── Tabulator 테마 (엑셀형 — 회색 헤더 + 진한 그리드) ─── */
-#mat-table{font-family:Pretendard,-apple-system,sans-serif;overflow-x:auto}
-.tabulator{background:#fff;border:1px solid #8a8378;border-radius:0;overflow:visible;font-size:13px}
+/* ─── Tabulator 테마 (옅은 회색 테두리 · 미니멀 — 요약표와 통일) ─── */
+#mat-table{font-family:Pretendard,-apple-system,sans-serif;overflow-x:auto;border-radius:14px}
+.tabulator{background:var(--card);border:1px solid #ece9e3;border-radius:14px;overflow:hidden;font-size:13px;box-shadow:0 1px 3px rgba(60,50,40,.05)}
 
-/* 헤더 — 엑셀 회색 */
-.tabulator .tabulator-header{background:#e8e6e1;border-bottom:1.5px solid #6b6b6b;color:var(--ink);font-weight:700}
-.tabulator .tabulator-header .tabulator-col{background:transparent;border-right:1px solid #b8b3a8;padding:8px 10px}
+/* 헤더 — 옅은 베이지 */
+.tabulator .tabulator-header{background:#faf8f5;border-bottom:1px solid #ece9e3;color:var(--muted);font-weight:700}
+.tabulator .tabulator-header .tabulator-col{background:transparent;border-right:1px solid #f1efe9;padding:8px 10px}
 .tabulator .tabulator-header .tabulator-col:last-of-type{border-right:none}
 .tabulator .tabulator-header .tabulator-col-content{padding:0}
 .tabulator .tabulator-header .tabulator-col-title{font-weight:700;font-size:13px;letter-spacing:0;color:var(--ink);text-transform:none;text-align:center}
 .tabulator .tabulator-header .tabulator-arrow{border-bottom-color:#555!important;border-top-color:#555!important}
 .tabulator .tabulator-header .tabulator-header-filter{padding-top:4px}
-.tabulator .tabulator-header .tabulator-header-filter input{background:#fff;border:1px solid #b8b3a8;border-radius:0;padding:3px 6px;font-size:12px;color:var(--ink);font-family:inherit;width:100%}
+.tabulator .tabulator-header .tabulator-header-filter input{background:#fff;border:1px solid #e2dccf;border-radius:6px;padding:4px 7px;font-size:12px;color:var(--ink);font-family:inherit;width:100%}
 .tabulator .tabulator-header .tabulator-header-filter input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 
 /* 본문 행 — 한 줄 유지(가로스크롤), 두 줄로 안 끊김 */
-.tabulator-row{background:#fff;border-bottom:1px solid #c8c2b6;min-height:54px;height:auto!important;display:flex!important;flex-wrap:nowrap!important;transition:background .12s}
-.tabulator-row:hover{background:#f1efea}
-.tabulator-row.tabulator-row-even{background:#fff}
-.tabulator-row.tabulator-row-even:hover{background:#f1efea}
-.tabulator-row .tabulator-cell{padding:8px 10px;border-right:1px solid #c8c2b6;font-size:13px;color:var(--ink);display:flex;align-items:center;background:transparent;box-sizing:border-box;flex-shrink:0;white-space:nowrap}
+.tabulator-row{background:var(--card);border-bottom:1px solid #f1efe9;min-height:54px;height:auto!important;display:flex!important;flex-wrap:nowrap!important;transition:background .12s}
+.tabulator-row:hover{background:#f6f1ea}
+.tabulator-row.tabulator-row-even{background:#fdfcfa}
+.tabulator-row.tabulator-row-even:hover{background:#f6f1ea}
+.tabulator-row .tabulator-cell{padding:8px 10px;border-right:1px solid #f1efe9;font-size:13px;color:var(--ink);display:flex;align-items:center;background:transparent;box-sizing:border-box;flex-shrink:0;white-space:nowrap}
 .tabulator-row .tabulator-cell:last-of-type{border-right:none}
 .tabulator-row.t-expandable{cursor:pointer}
 .tabulator-row.t-open{background:#ece3d4!important}
@@ -596,7 +596,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .t-photo-ph{width:55px;height:53px;max-width:55px;max-height:53px;border-radius:0;background:#eee;border:none;display:block}
 
 /* 그룹 헤더 — #eee + 위아래 보더 */
-.tabulator .tabulator-group{background:#eeeeee;border-top:1px solid #c8c2b6;border-bottom:1px solid #c8c2b6;border-left:none;border-right:none;color:var(--ink);font-weight:600;font-size:12px;padding:4px 12px;letter-spacing:0;min-height:auto;line-height:1.7}
+.tabulator .tabulator-group{background:#f7f4ef;border-top:1px solid #ece9e3;border-bottom:1px solid #ece9e3;border-left:none;border-right:none;color:var(--ink);font-weight:700;font-size:12px;padding:5px 12px;letter-spacing:0;min-height:auto;line-height:1.7}
 .tabulator .tabulator-group .tabulator-group-toggle{margin-right:6px;color:var(--muted);font-size:11px}
 .t-gcount{color:var(--muted);font-weight:500;font-size:11px;margin-left:6px;background:#fff;padding:0 7px;border-radius:99px;border:none}
 
