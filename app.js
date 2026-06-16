@@ -546,7 +546,7 @@
     if (typeof Tabulator === "undefined") { el.innerHTML = `<div class="stub">표 라이브러리 로딩 실패 — 네트워크 확인</div>`; return; }
     const won = (v) => (v == null || v === "") ? "" : "₩" + Number(v).toLocaleString("ko-KR");
     const moneyCol = (title, field) => ({
-      title, field, hozAlign: "right", headerSort: false, minWidth: 90,
+      title, field, hozAlign: "right", headerHozAlign: "right", headerSort: false, width: 96,
       formatter: (cell) => {
         const d = cell.getRow().getData();
         if (field === "price" && d.priceText) return `<span class="qs-approx">${esc(d.priceText)}</span>`;
@@ -561,18 +561,16 @@
       layout: "fitColumns",
       height: "auto",
       columns: [
-        { title: "공정", field: "phase", widthGrow: 2, minWidth: 90, headerSort: false,
+        { title: "공정", field: "phase", width: 92, headerSort: false,
           formatter: (c) => `<b>${esc(c.getValue() || "")}</b>`,
           bottomCalc: () => "합계", bottomCalcFormatter: (c) => `<b>${esc(c.getValue())}</b>` },
-        { title: "회사", field: "company", widthGrow: 3, minWidth: 120, headerSort: false,
-          formatter: (c) => {
-            const d = c.getRow().getData();
-            const sub = d.note ? `<div class="qs-sub">${esc(d.note)}</div>` : "";
-            return `<div class="qs-co">${esc(c.getValue() || "")}</div>${sub}`;
-          } },
+        { title: "회사", field: "company", width: 104, headerSort: false,
+          formatter: (c) => esc(c.getValue() || "") },
         moneyCol("견적가", "price"),
         moneyCol("선입금", "deposit"),
         moneyCol("최종비용", "final"),
+        { title: "비고", field: "note", widthGrow: 2, minWidth: 110, headerSort: false,
+          formatter: (c) => `<span class="qs-sub">${esc(c.getValue() || "")}</span>` },
       ],
     });
   }

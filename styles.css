@@ -171,15 +171,27 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 .ba-compact .ba-col-label{font-size:11px;margin-bottom:5px}
 .ba-compact .ba-thumbs{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px}
 
-/* 확정 공정 비용 요약 표 */
+/* 확정 공정 비용 요약 표 — 옅은 회색 테두리 · 미니멀 */
 .qs-title{font-size:17px;font-weight:800;margin:4px 0 10px}
 .qs-cap{font-size:12px;color:var(--muted);margin:8px 0 22px}
 #quote-summary{margin-bottom:8px}
-#quote-summary .qs-co{font-weight:600}
-#quote-summary .qs-sub{font-size:11px;color:var(--muted);line-height:1.3;margin-top:1px}
+#quote-summary .qs-sub{font-size:12px;color:var(--muted);line-height:1.35}
 #quote-summary .qs-approx{color:var(--accent);font-weight:600}
-#quote-summary .qs-dash{color:var(--line)}
-#quote-summary .tabulator-calcs-bottom{background:var(--accent-soft);font-weight:700}
+#quote-summary .qs-dash{color:#d9d6cf}
+#quote-summary .tabulator{border:1px solid #ece9e3;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 1px 3px rgba(60,50,40,.05)}
+#quote-summary .tabulator,#quote-summary .tabulator-cell,#quote-summary .tabulator-col-title{font-size:13.5px}
+#quote-summary .tabulator-header{background:#faf8f5;border-bottom:1px solid #ece9e3;color:var(--muted)}
+#quote-summary .tabulator-header .tabulator-col{background:transparent;border-right:none}
+#quote-summary .tabulator-col .tabulator-col-content{padding:9px 12px}
+#quote-summary .tabulator-col-title{font-weight:700;letter-spacing:.2px}
+#quote-summary .tabulator-row{border-bottom:1px solid #f1efe9;background:var(--card)}
+#quote-summary .tabulator-row:last-of-type{border-bottom:none}
+#quote-summary .tabulator-row .tabulator-cell{border-right:none;padding:11px 12px}
+#quote-summary .tabulator-row.tabulator-row-even{background:#fdfcfa}
+#quote-summary .tabulator-row:hover{background:#f6f1ea}
+#quote-summary .tabulator-row.tabulator-calcs{background:var(--accent-soft) !important;border-top:1.5px solid #e2dccf;font-weight:800}
+#quote-summary .tabulator-row.tabulator-calcs:hover{background:var(--accent-soft) !important}
+#quote-summary .tabulator .tabulator-footer{display:none}
 
 /* 관리자 전용 요소 (기본 숨김, body.is-admin 일 때만 노출) */
 .admin-only{display:none !important}
