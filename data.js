@@ -165,6 +165,7 @@ const CONTACTS = [
   { role: "장판", name: "대동벽지", phone: "", company: "", decided: true, note: "포레스톤 인피니트스톤 5T 장판 확정 (350만 · 온누리 175만+계약금 30만)" },
   { role: "샷시·창호", name: "한길창호", phone: "010-9495-4637", company: "E-MAX·KCC", decided: true, note: "덧창 확정 (421.19만 · VAT 포함)" },
   { role: "이사", name: "로젠이사", phone: "", company: "", decided: true, note: "이사 200만 + 보관 48만 = 248만" },
+  { role: "전열교환기·환기", name: "클린코퍼레이션", phone: "070-5067-5281", company: "", decided: true, note: "전열교환기 확정 (560만 · 선입금 100만)" },
   // 아래는 후보(미확정) — 연락처 페이지엔 안 나옴, 참고용
   { role: "타일(자재 후보)", name: "류기문 사장님", phone: "010-5320-8019", company: "용세라믹스", note: "개인사업자 / 최저가" },
   { role: "온도조절기", name: "지온서비스", phone: "", company: "", note: "" },
@@ -181,6 +182,8 @@ const QUOTE_SUMMARY = [
   { phase: "입주민 동의", company: "셀프 진행", price: 380000, deposit: 80000, final: null, note: "동의 선물·엘베 사용비 포함" },
   { phase: "철거·설비·방수", company: "벨류연구소", price: 8385000, deposit: 4037500, final: null, note: "보양·설비·방수 일괄" },
   { phase: "전기", company: "하린 전기조명", price: 4400000, deposit: 300000, final: null, note: "VAT 포함" },
+  { phase: "전열교환기", company: "클린코퍼레이션", price: 5600000, deposit: 1000000, final: null, note: "THE650-200 환기 · VAT 포함" },
+  { phase: "에어컨", company: "", price: 5900000, deposit: 5900000, final: 5900000, note: "에어컨 550만 + 선작업 40만 · 완납" },
   { phase: "목공", company: "국선디자인", price: 10100000, priceText: "1,010~1,065만 (가견적)", deposit: null, final: null, note: "자재+인건비, VAT 별도" },
   { phase: "타일", company: "최반장", price: 3200000, deposit: null, final: null, note: "" },
   { phase: "도기", company: "(별도)", price: 450000, deposit: null, final: null, note: "" },
@@ -677,8 +680,37 @@ const QUOTES = [
 
   /* ===== 아직 후보를 찾는 중인 공정들 (PHASES 순서대로 표시됨) ===== */
   {
-    phase: "hvac", // 냉난방·환기 — 견적 2건 비교 중
+    phase: "hvac", // 냉난방·환기 — ✅ 전열교환기(클린코퍼레이션)·에어컨 확정
     candidates: [
+      {
+        name: "클린코퍼레이션 (전열교환기)", company: "", phone: "070-5067-5281", price: "5,600,000원 (VAT 포함)",
+        status: "decided",
+        scope: "✅ 확정 — 전열교환기(환기) THE650-200 개별 우타입. 시공·부자재·코아작업 포함. ※ 전기/통신 인입, 천장 철거·마감은 별도(인테리어분).",
+        summary: "✅ 확정 — 전열교환기 THE650-200 환기. 합계 560만원(VAT 포함). 선입금 100만.",
+        items: [
+          { label: "THE650-200(개별) 우타입 [환기]", amount: "2,500,000원" },
+          { label: "시공비", amount: "1,540,000원" },
+          { label: "부자재", amount: "880,000원" },
+          { label: "코아작업", amount: "770,000원" },
+          { label: "D/C", amount: "-90,000원" },
+          { label: "합계 (VAT 포함)", amount: "5,600,000원" },
+        ],
+        files: [],
+        note: "✅ 전열교환기 확정 — 클린코퍼레이션(대표 윤석훈). 선입금 100만원. 견적번호 Q260500019 · 견적일 2026-05-29 · 사업자 301-32-55923 · 담당 송창환 · FAX 043-908-0367. 입금 국민 97533-03-6759 윤석훈.",
+      },
+      {
+        name: "에어컨", company: "", phone: "", price: "5,900,000원 (완납)",
+        status: "decided",
+        scope: "✅ 확정 — 에어컨 + 선작업. 돈 전액 납부 완료.",
+        summary: "✅ 확정 — 에어컨 550만 + 선작업 40만 = 590만원. 완납.",
+        items: [
+          { label: "에어컨", amount: "5,500,000원" },
+          { label: "선작업", amount: "400,000원" },
+          { label: "합계", amount: "5,900,000원" },
+        ],
+        files: [],
+        note: "✅ 에어컨 확정 — 완납 완료. (업체명 미기재)",
+      },
       {
         name: "에어윈프로", company: "㈜에어윈프로", phone: "1577-7927 / 010-2657-4140",
         price: "16,500,000원 (VAT 포함)",
