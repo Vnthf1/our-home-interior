@@ -296,13 +296,9 @@
   function renderOverview() {
     const el = $("overview-grid"); if (!el) return;
     el.innerHTML = PHASES.map((p, i) => {
-      const badges = [];
-      if (p.decisions && p.decisions.length) badges.push(`<span class="b-dec">⚠️ 결정 ${p.decisions.length}</span>`);
-      if (p.checks && p.checks.length) badges.push(`<span class="b-chk">✓ 확인 ${p.checks.length}</span>`);
       return `<a class="ov-card" href="plans.html#${p.id}">
         <div class="top"><span class="num">${i + 1}</span><span class="ic">${esc(p.icon)}</span><span class="nm">${esc(p.name)}</span></div>
         <div class="sm">${esc(p.summary || "")}</div>
-        ${badges.length ? `<div class="badges">${badges.join("")}</div>` : ""}
       </a>`;
     }).join("");
   }
@@ -346,12 +342,6 @@
     }
     const phaseAsks = (!opts.hideAsk && p.asks && p.asks.length)
       ? `<div class="phase-asks">${p.asks.map((q) => `<div class="it-ask">💬 업자 확인: ${esc(q)}</div>`).join("")}</div>` : "";
-    const dec = (p.decisions && p.decisions.length) ? `
-      <div class="phase-dec"><div class="dt">⚠️ 결정 필요</div>
-      <ul class="items">${p.decisions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>` : "";
-    const chk = (p.checks && p.checks.length) ? `
-      <div class="phase-chk"><div class="dt">✓ 확인 필요 (놓치기 쉬운 것)</div>
-      <ul class="items">${p.checks.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></div>` : "";
     const imgs = (p.images && p.images.length) ? `
       <div class="imgs">${p.images.map((im) => `
         <div class="img-ph">
@@ -375,7 +365,7 @@
       ${highlights}
       ${phaseAsks}
       ${imgs}${refBlock}
-      <div class="cols">${groups}</div>${dec}${chk}
+      <div class="cols">${groups}</div>
       ${keyNotes}
     </div>`;
   }
