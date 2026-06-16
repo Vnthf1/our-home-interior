@@ -181,12 +181,14 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 #quote-summary .tabulator{border:1px solid #ece9e3;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 1px 3px rgba(60,50,40,.05)}
 #quote-summary .tabulator,#quote-summary .tabulator-cell,#quote-summary .tabulator-col-title{font-size:13.5px}
 #quote-summary .tabulator-header{background:#faf8f5;border-bottom:1px solid #ece9e3;color:var(--muted)}
-#quote-summary .tabulator-header .tabulator-col{background:transparent;border-right:none}
+#quote-summary .tabulator-header .tabulator-col{background:transparent;border-right:1px solid #f1efe9}
+#quote-summary .tabulator-header .tabulator-col:last-child{border-right:none}
 #quote-summary .tabulator-col .tabulator-col-content{padding:9px 12px}
-#quote-summary .tabulator-col-title{font-weight:700;letter-spacing:.2px}
+#quote-summary .tabulator-col-title{font-weight:700;letter-spacing:.2px;white-space:normal;text-overflow:clip}
 #quote-summary .tabulator-row{border-bottom:1px solid #f1efe9;background:var(--card)}
 #quote-summary .tabulator-row:last-of-type{border-bottom:none}
-#quote-summary .tabulator-row .tabulator-cell{border-right:none;padding:11px 12px}
+#quote-summary .tabulator-row .tabulator-cell{border-right:1px solid #f1efe9;padding:11px 12px;white-space:normal;text-overflow:clip}
+#quote-summary .tabulator-row .tabulator-cell:last-child{border-right:none}
 #quote-summary .tabulator-row.tabulator-row-even{background:#fdfcfa}
 #quote-summary .tabulator-row:hover{background:#f6f1ea}
 #quote-summary .tabulator-row.tabulator-calcs{background:var(--accent-soft) !important;border-top:1.5px solid #e2dccf;font-weight:800}
