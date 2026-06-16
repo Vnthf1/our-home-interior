@@ -188,7 +188,7 @@ const QUOTE_SUMMARY = [
   { phase: "장판", company: "대동벽지", price: 3500000, deposit: 300000, final: null, note: "온누리 175만 + 계약금 30만" },
   { phase: "샷시", company: "한길창호", price: 4211900, deposit: null, final: null, note: "VAT 포함 · 덧창(거실2·안방2)+통바" },
   { phase: "이사", company: "로젠이사", price: 2480000, deposit: 100000, final: null, note: "이사 200만 + 보관 48만" },
-  { phase: "임시거주", company: "자리톡 (예약)", price: 2513500, deposit: null, final: null, note: "6.28~8.14 거주 · 1,964,000 + 549,500" },
+  { phase: "임시거주", company: "자리톡 (예약)", price: 2513500, deposit: null, final: 2513500, note: "6.28~8.14 거주 · 완납 완료 (1,964,000 + 549,500)" },
 ];
 
 /* ------------------------------------------------------------
