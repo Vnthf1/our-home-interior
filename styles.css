@@ -462,6 +462,14 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-export{width:100%;min-height:130px;margin-top:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.5;padding:10px;border:1.5px solid var(--line);border-radius:8px;background:#fbf9f5;color:var(--ink);white-space:pre;box-sizing:border-box}
 .fp-draftbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--info-soft);border:1px solid #cfe0f1;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13.5px;font-weight:600;color:var(--info)}
 
+/* 모바일에서는 도면 라벨이 도면을 가려서 숨김/축소 */
+@media(max-width:560px){
+  .fp-box .lb{display:none}
+  .fp-box.line .lb,.fp-box.bar .lb,.fp-box.cove .lb{display:none}
+  .fp-text{font-size:9px;padding:1px 4px;border-width:1px;opacity:.7}
+  .fp-legend{font-size:9px;padding:6px 8px;gap:3px;line-height:1.25}
+}
+
 
 /* === 월간 캘린더 뷰 (공정표) === */
 .cm-head{display:flex;align-items:center;justify-content:space-between;padding:6px 4px 12px}
