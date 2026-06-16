@@ -418,16 +418,16 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-input{padding:6px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:14px;font-family:inherit;flex:1;min-width:150px;background:var(--card);color:var(--ink)}
 .fp-input.grow0{flex:0;min-width:120px}
 .fp-hint{font-size:12.5px;color:var(--muted)}
-.fp-stage{position:relative;display:inline-block;max-width:100%;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;line-height:0;container-type:inline-size}
+.fp-stage{position:relative;display:inline-block;max-width:100%;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;line-height:0}
 .fp-img{display:block;max-width:100%;height:auto}
 .fp-overlay{position:absolute;inset:0}
 .fp-overlay.editing{cursor:crosshair}
 .fp-marker{position:absolute;box-sizing:border-box}
-.fp-pin{width:clamp(13px,3.3cqw,26px);height:clamp(13px,3.3cqw,26px);border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:clamp(7px,1.8cqw,14px);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:pointer}
+.fp-pin{width:clamp(13px,2.5vw,26px);height:clamp(13px,2.5vw,26px);border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:clamp(7px,1.4vw,14px);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.35);cursor:pointer}
 .fp-pin.num{color:#fff;font-weight:800}
 .fp-pin.num::after{content:"구";font-size:.62em;font-weight:700;margin-left:1px;opacity:.9}
-.fp-pin.big{width:clamp(16px,4cqw,32px);height:clamp(16px,4cqw,32px);font-size:clamp(8px,1.9cqw,15px)}
-.fp-pin.small{width:clamp(11px,2.7cqw,21px);height:clamp(11px,2.7cqw,21px);font-size:clamp(6px,1.5cqw,12px);border-width:1.5px}
+.fp-pin.big{width:clamp(16px,3vw,32px);height:clamp(16px,3vw,32px);font-size:clamp(8px,1.5vw,15px)}
+.fp-pin.small{width:clamp(11px,2vw,21px);height:clamp(11px,2vw,21px);font-size:clamp(6px,1.2vw,12px);border-width:1.5px}
 .fp-pin.new{box-shadow:0 0 0 2.5px #fde047,0 1px 5px rgba(0,0,0,.4)}
 .fp-pin.new::before{content:"신";position:absolute;top:-7px;right:-8px;background:#f59e0b;color:#fff;border-radius:50%;width:13px;height:13px;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(0,0,0,.3);z-index:1;line-height:1}
 /* 통합 범례 카드 (한 번에 드래그) */
@@ -452,9 +452,9 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-box.bar{border-radius:2px;border-width:1.5px;min-width:3px;min-height:3px}
 .fp-box.cove{border-radius:6px;border-style:dashed;border-width:2px}
 .fp-box{border:2px solid;border-radius:4px;cursor:pointer}
-.fp-box .lb{position:absolute;top:0;left:0;font-size:clamp(6px,1.4cqw,11px);font-weight:700;color:#fff;padding:1px 6px;border-radius:3px 0 6px 0;white-space:nowrap;line-height:1.4}
-.fp-box.line .lb,.fp-box.bar .lb,.fp-box.cove .lb{font-size:clamp(5px,1.1cqw,8.5px);font-weight:600;opacity:.65;padding:0 4px}
-.fp-text{transform:translate(-50%,-50%);font-size:clamp(7px,1.6cqw,13px);font-weight:700;background:rgba(255,255,255,.88);padding:2px 8px;border-radius:6px;border:1.5px solid;cursor:pointer;white-space:nowrap;line-height:1.3}
+.fp-box .lb{position:absolute;top:0;left:0;font-size:clamp(6px,1.1vw,11px);font-weight:700;color:#fff;padding:1px 6px;border-radius:3px 0 6px 0;white-space:nowrap;line-height:1.4}
+.fp-box.line .lb,.fp-box.bar .lb,.fp-box.cove .lb{font-size:clamp(5px,.9vw,8.5px);font-weight:600;opacity:.65;padding:0 4px}
+.fp-text{transform:translate(-50%,-50%);font-size:clamp(7px,1.3vw,13px);font-weight:700;background:rgba(255,255,255,.88);padding:2px 8px;border-radius:6px;border:1.5px solid;cursor:pointer;white-space:nowrap;line-height:1.3}
 .fp-marker.sel{outline:2px dashed var(--ink);outline-offset:2px;z-index:5}
 .fp-handle{position:absolute;right:-7px;bottom:-7px;width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid var(--ink);cursor:nwse-resize}
 .fp-popup{position:absolute;z-index:20;background:var(--ink);color:#fff;font-size:13px;line-height:1.4;padding:7px 11px;border-radius:8px;max-width:240px;transform:translate(-50%,calc(-100% - 14px));box-shadow:0 4px 14px rgba(0,0,0,.3);pointer-events:none}
@@ -462,11 +462,11 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-export{width:100%;min-height:130px;margin-top:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.5;padding:10px;border:1.5px solid var(--line);border-radius:8px;background:#fbf9f5;color:var(--ink);white-space:pre;box-sizing:border-box}
 .fp-draftbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--info-soft);border:1px solid #cfe0f1;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13.5px;font-weight:600;color:var(--info)}
 
-/* 도면 라벨/범례 — 도면(.fp-stage) 폭에 비례. 핀·박스 라벨·텍스트는 위쪽 clamp(cqw)로 이미 스케일링됨 */
-.fp-legend{font-size:clamp(7px,1.4cqw,11px);padding:clamp(5px,1cqw,9px) clamp(6px,1.2cqw,11px);gap:clamp(2px,.5cqw,5px);line-height:1.3}
+/* 도면 라벨/범례 — 뷰포트 폭에 비례 (clamp(min, vw, max)) */
+.fp-legend{font-size:clamp(7px,1.1vw,11px);padding:clamp(5px,.8vw,9px) clamp(6px,1vw,11px);gap:clamp(2px,.4vw,5px);line-height:1.3}
 
-/* 도면 폭이 좁으면(모바일 등) box 라벨은 완전히 숨겨 도면 시인성 확보 */
-@container (max-width:520px){
+/* 모바일은 박스 라벨 숨김 — 도면 시인성 우선 */
+@media(max-width:560px){
   .fp-box .lb{display:none}
 }
 
