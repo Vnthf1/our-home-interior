@@ -2148,10 +2148,10 @@ const KITCHEN = {
  *   color: 도면 마커 색 + 표 색점 색
  *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
 const LIGHTING_KINDS = {
-  cob2:    { label: "2인치 COB",      icon: "●", short: "COB",     color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",          watt: 7 },
-  diff2:   { label: "확산형",          icon: "○", short: "확산",     color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치",            watt: 8 },
-  multi10: { label: "10구 멀티매입등", icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압)", watt: 20 },
-  strip:   { label: "스트립 조명",     icon: "▬", short: "스트립",   color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",     watt: 35 }, // 5M 한 롤당 약 35W
+  cob2:    { label: "2인치 COB",     icon: "●", short: "COB",     color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",                watt: 7 },
+  diff2:   { label: "2인치 확산형",  icon: "○", short: "확산",     color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42)",              watt: 8 },
+  multi10: { label: "10구 멀티매입등", icon: "◉", short: "10구",   color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20 },
+  strip:   { label: "스트립 조명",    icon: "▬", short: "스트립",  color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",           watt: 35 }, // 5M 한 롤당 약 35W
 };
 
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
@@ -2160,7 +2160,7 @@ const LIGHTING_DRIVERS = {
   aqara: { label: "Aqara 스트립 DR", short: "Aqara DR", color: "#8b5cf6", model: "Aqara LED 스트립 드라이버 DC24V (#140)" },
 };
 const LIGHTING_SMPS = {
-  u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2LM (#120)" },
+  u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2L (#120) — PF>0.6 가성비" },
   u200: { label: "유니온 200W SMPS", short: "200W", color: "#374151", model: "유니온 UP200S24W2L (#122)" },
 };
 
