@@ -1045,9 +1045,13 @@
       const drQty = (k) => (spec.drivers && spec.drivers[k]) || 0;
       const smQty = (k) => (spec.smps && spec.smps[k]) || 0;
 
-      // 회로 전력(W) = Σ(조명 수량 × kind.watt)
+      // 회로 전력(W): spec.watt 명시값 우선, 없으면 Σ(조명 수량 × kind.watt)
       let rowW = 0;
-      kindKeys.forEach((k) => { const w = (KINDS[k] || {}).watt || 0; rowW += lightQty(k) * w; });
+      if (typeof spec.watt === "number") {
+        rowW = spec.watt;
+      } else {
+        kindKeys.forEach((k) => { const w = (KINDS[k] || {}).watt || 0; rowW += lightQty(k) * w; });
+      }
 
       // 셀: 색 배경·강조 없이 깔끔한 흰셀 (사용자 요청)
       const qtyCell = (c, sepBefore) =>
