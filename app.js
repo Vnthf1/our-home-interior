@@ -1033,7 +1033,7 @@
       // 회로의 마커들에 length가 있으면 길이 줄 추가 (예: "180·100·200·200cm = 680cm")
       const lens = arr.map((g) => g.it.length).filter((n) => typeof n === "number" && n > 0);
       const lenLine = lens.length
-        ? '<div class="lt-lens">' + lens.join('·') + 'cm = <b>' + lens.reduce((a, b) => a + b, 0) + 'cm</b></div>'
+        ? '<div class="lt-lens">' + lens.length + '개 · ' + lens.join('·') + 'cm = <b>' + lens.reduce((a, b) => a + b, 0) + 'cm</b></div>'
         : '';
       const circuitCell = cid === "_unset"
         ? '<span class="lt-unset">미지정 (회로 ID 없음)</span><div class="lt-circuit-hint">data.js의 light 항목에 <code>circuit:"…"</code> 추가하면 회로별 분리됨</div>'
