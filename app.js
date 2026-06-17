@@ -1032,7 +1032,9 @@
       const switchLabel = sw.switch ? esc(sw.switch) : (cid === "_unset" ? '<span class="lt-mut">—</span>' : '<span class="lt-mut">미정</span>');
       const circuitCell = cid === "_unset"
         ? '<span class="lt-unset">미지정 (회로 ID 없음)</span><div class="lt-circuit-hint">data.js의 light 항목에 <code>circuit:"…"</code> 추가하면 회로별 분리됨</div>'
-        : '<b class="lt-cid">' + esc(cid) + '</b>' + (sw.desc ? ' <span class="lt-cd">(' + esc(sw.desc) + ')</span>' : '');
+        : (sw.zone ? '<span class="lt-cid-zone">' + esc(sw.zone) + '</span> ' : '') +
+          '<b class="lt-cid">' + esc(cid) + '</b>' +
+          (sw.desc ? ' <span class="lt-cd">(' + esc(sw.desc) + ')</span>' : '');
       const idxList = arr.map((g) => g.idx).join(",");
       const isZoneStart = (ri in zoneSpanAt);
       const zoneTd = isZoneStart
