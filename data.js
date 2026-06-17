@@ -2189,10 +2189,9 @@ const LIGHTING_SWITCHES = {
   // 복도 (2구)
   "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "복도" },
   "HW-2": { zone: "복도", switch: "복도 2구 #2", desc: "아트월" },
-  // 현관 (3구)
-  "EN-1": { zone: "현관", switch: "현관 3구 #1", desc: "" },
-  "EN-2": { zone: "현관", switch: "현관 3구 #2", desc: "" },
-  "EN-3": { zone: "현관", switch: "현관 3구 #3", desc: "" },
+  // 현관 (2구)
+  "EN-1": { zone: "현관", switch: "현관 2구 #1", desc: "현관등 + 간접등" },
+  "EN-2": { zone: "현관", switch: "현관 2구 #2", desc: "일괄소등" },
   // 발코니 (2구)
   "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "" },
   "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "" },
@@ -2203,13 +2202,13 @@ const LIGHTING_SWITCHES = {
   "DR-1": { zone: "드레스룸", switch: "드레스룸 2구 #1", desc: "" },
   "DR-2": { zone: "드레스룸", switch: "드레스룸 2구 #2", desc: "" },
   // 거실화장실 (3구)
-  "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "" },
-  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "" },
-  "LB-3": { zone: "거실화장실", switch: "거실화장실 3구 #3", desc: "" },
+  "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트" },
+  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "간접등" },
+  "LB-3": { zone: "거실화장실", switch: "거실화장실 3구 #3", desc: "환풍기" },
   // 안방화장실 (3구)
-  "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "" },
-  "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "" },
-  "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "" },
+  "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트" },
+  "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "간접등" },
+  "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 안방 (2구 + 2구 = 두 위치)
   "MR-A1": { zone: "안방", switch: "안방 2구A #1", desc: "" },
   "MR-A2": { zone: "안방", switch: "안방 2구A #2", desc: "" },
