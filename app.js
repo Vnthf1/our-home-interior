@@ -64,6 +64,7 @@
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
+    { href: "lighting.html", label: "조명 계획", key: "lighting" },
     { href: "furniture.html", label: "가구도면", key: "furniture" },
     { href: "quotes.html", label: "견적/공정", key: "quotes" },
     { href: "materials.html", label: "견적/자재", key: "materials" },
@@ -911,6 +912,356 @@
     checkDraft();
   }
 
+  /* ---------- 조명 계획 (도면 + 회로별 매트릭스 표) ----------
+   * - 엑셀 사례 포맷: 행=회로, 열=조명 종류(4종). 셀=수량.
+   * - FLOORPLAN.items 중 layer:"light" 만 보여줌. 마커는 kind 색.
+   * - 도면(floorplan)과 같은 LS 키("fp-draft:"+image) 공유 → 양방향 동기화.
+   * - 행 hover ↔ 도면 마커 강조 (같은 회로). */
+  function renderLighting() {
+    const root = $("lighting-app");
+    if (!root || typeof FLOORPLAN === "undefined") return;
+    const FP = FLOORPLAN;
+    const KINDS = (typeof LIGHTING_KINDS !== "undefined") ? LIGHTING_KINDS : {};
+    const SWITCHES = (typeof LIGHTING_SWITCHES !== "undefined") ? LIGHTING_SWITCHES : {};
+    const DRIVERS = (typeof LIGHTING_DRIVERS !== "undefined") ? LIGHTING_DRIVERS : {};
+    const SMPSES = (typeof LIGHTING_SMPS !== "undefined") ? LIGHTING_SMPS : {};
+    const LS_KEY = "fp-draft:" + FP.image;
+    const hexA = (hex, a) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); if (!m) return hex; const n = parseInt(m[1], 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+
+    // draft 읽기 (floorplan과 동일 키 공유 = 양방향 동기화)
+    let items = JSON.parse(JSON.stringify(FP.items));
+    let usingDraft = false;
+    try { const r = localStorage.getItem(LS_KEY); if (r) { items = JSON.parse(r); usingDraft = true; } } catch (e) {}
+
+    // light 항목 + 원본 인덱스 보존
+    const lights = [];
+    items.forEach((it, idx) => { if (it.layer === "light") lights.push({ it, idx }); });
+
+    // 매트릭스 컬럼 순서 — 정의 순서 그대로
+    const kindKeys = Object.keys(KINDS);
+    const driverKeys = Object.keys(DRIVERS);
+    const smpsKeys = Object.keys(SMPSES);
+
+    // 회로별 그룹화 (light이 묶인 회로)
+    const groups = {};
+    lights.forEach(({ it, idx }) => {
+      const cid = it.circuit || "_unset";
+      if (!groups[cid]) groups[cid] = [];
+      groups[cid].push({ it, idx });
+    });
+    // LIGHTING_SWITCHES에 정의됐지만 아직 비어 있는 회로도 빈 행으로 표시
+    Object.keys(SWITCHES).forEach((cid) => { if (!groups[cid]) groups[cid] = []; });
+    // 정렬: SWITCHES 정의 순서 → (정의 외 회로) → _unset
+    const switchOrder = Object.keys(SWITCHES);
+    const cids = Object.keys(groups).sort((a, b) => {
+      if (a === "_unset") return 1;
+      if (b === "_unset") return -1;
+      const ai = switchOrder.indexOf(a), bi = switchOrder.indexOf(b);
+      if (ai !== -1 && bi !== -1) return ai - bi;
+      if (ai !== -1) return -1;
+      if (bi !== -1) return 1;
+      return a.localeCompare(b);
+    });
+    const realCircuitCount = cids.filter((c) => c !== "_unset").length;
+    const unsetCount = groups._unset ? groups._unset.length : 0;
+
+    // 총개수 집계 — 종류 / 드라이버 / SMPS
+    const totalsByKind = {}; kindKeys.forEach((k) => { totalsByKind[k] = 0; });
+    lights.forEach(({ it }) => { if (totalsByKind[it.kind] != null) totalsByKind[it.kind]++; });
+    const totalsByDriver = {}; driverKeys.forEach((k) => { totalsByDriver[k] = 0; });
+    const totalsBySmps = {}; smpsKeys.forEach((k) => { totalsBySmps[k] = 0; });
+    Object.values(SWITCHES).forEach((sw) => {
+      const sp = sw && sw.spec; if (!sp) return;
+      if (sp.drivers) Object.keys(sp.drivers).forEach((k) => { if (totalsByDriver[k] != null) totalsByDriver[k] += sp.drivers[k] || 0; });
+      if (sp.smps) Object.keys(sp.smps).forEach((k) => { if (totalsBySmps[k] != null) totalsBySmps[k] += sp.smps[k] || 0; });
+    });
+
+    // 헤더 셀 생성 헬퍼 (조명·드라이버·SMPS 모두 같은 3줄 포맷)
+    const mkColorTh = (info, sepBefore) =>
+      `<th class="lt-h-mk${sepBefore ? " lt-sep" : ""}"><span class="lt-mk-dot" style="color:${(info && info.color) || "#888"}">${esc((info && info.icon) || "●")}</span></th>`;
+    const mkLabelTh = (info, sepBefore, fallback) =>
+      `<th${sepBefore ? ' class="lt-sep"' : ""}>${esc((info && info.label) || fallback)}</th>`;
+    const mkModelTh = (info, sepBefore) => {
+      const m = info && info.model;
+      return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}">${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}</th>`;
+    };
+
+    // 헤더 (3줄): 색점 / 종류명 / 모델 — 조명 4컬럼 + (구분선) + 드라이버 + (구분선) + SMPS + 합계
+    const headColors = '<tr class="lt-h-color">' +
+      '<th rowspan="3" class="lt-h-fix">구역</th>' +
+      '<th rowspan="3" class="lt-h-fix">스위치</th>' +
+      '<th rowspan="3" class="lt-h-fix">회로명</th>' +
+      kindKeys.map((k) => mkColorTh(KINDS[k], false)).join("") +
+      driverKeys.map((k, i) => mkColorTh(DRIVERS[k], i === 0)).join("") +
+      smpsKeys.map((k, i) => mkColorTh(SMPSES[k], i === 0)).join("") +
+      '<th rowspan="3" class="lt-h-fix num lt-sep">W 합계</th>' +
+      '</tr>';
+    const headLabels = '<tr class="lt-h-label">' +
+      kindKeys.map((k) => mkLabelTh(KINDS[k], false, k)).join("") +
+      driverKeys.map((k, i) => mkLabelTh(DRIVERS[k], i === 0, k)).join("") +
+      smpsKeys.map((k, i) => mkLabelTh(SMPSES[k], i === 0, k)).join("") +
+      '</tr>';
+    const headModels = '<tr class="lt-h-model">' +
+      kindKeys.map((k) => mkModelTh(KINDS[k], false)).join("") +
+      driverKeys.map((k, i) => mkModelTh(DRIVERS[k], i === 0)).join("") +
+      smpsKeys.map((k, i) => mkModelTh(SMPSES[k], i === 0)).join("") +
+      '</tr>';
+
+    // 사전계산: 각 행의 zone (연속 같은 zone → rowspan 셀병합)
+    const rowZone = cids.map((cid) => {
+      const arr = groups[cid];
+      const sw = SWITCHES[cid] || {};
+      const zs = Array.from(new Set(arr.map((g) => g.it.zone).filter(Boolean)));
+      return zs.join(", ") || sw.zone || "—";
+    });
+    const zoneSpanAt = {}; // {firstRowIdx: span}
+    let lastZS = -1;
+    rowZone.forEach((z, i) => {
+      if (i === 0 || z !== rowZone[i - 1]) { zoneSpanAt[i] = 1; lastZS = i; }
+      else { zoneSpanAt[lastZS]++; }
+    });
+
+    // 본문 행 (회로 1개 = 1행, 같은 zone 연속이면 zone 셀 rowspan으로 병합)
+    let bodyHTML = '';
+    cids.forEach((cid, ri) => {
+      const arr = groups[cid];
+      const sw = SWITCHES[cid] || {};
+      const countByKind = {}; kindKeys.forEach((k) => { countByKind[k] = 0; });
+      arr.forEach(({ it }) => { if (countByKind[it.kind] != null) countByKind[it.kind]++; });
+
+      const switchLabel = sw.switch ? esc(sw.switch) : (cid === "_unset" ? '<span class="lt-mut">—</span>' : '<span class="lt-mut">미정</span>');
+      const circuitCell = cid === "_unset"
+        ? '<span class="lt-unset">미지정 (회로 ID 없음)</span><div class="lt-circuit-hint">data.js의 light 항목에 <code>circuit:"…"</code> 추가하면 회로별 분리됨</div>'
+        : '<b class="lt-cid">' + esc(cid) + '</b>' + (sw.desc ? ' <span class="lt-cd">(' + esc(sw.desc) + ')</span>' : '');
+      const idxList = arr.map((g) => g.idx).join(",");
+      const isZoneStart = (ri in zoneSpanAt);
+      const zoneTd = isZoneStart
+        ? '<td class="lt-zone" rowspan="' + zoneSpanAt[ri] + '">' + (rowZone[ri] === "—" ? '<span class="lt-mut">—</span>' : esc(rowZone[ri])) + '</td>'
+        : '';
+
+      const spec = sw.spec || {};
+      // spec.lights[k]가 있으면 자재 수량으로 오버라이드 (예: 스트립 마커 2개 ≠ 5M 롤 3개)
+      const lightQty = (k) => (spec.lights && spec.lights[k] != null) ? spec.lights[k] : countByKind[k];
+      const drQty = (k) => (spec.drivers && spec.drivers[k]) || 0;
+      const smQty = (k) => (spec.smps && spec.smps[k]) || 0;
+
+      // 회로 전력(W) = Σ(조명 수량 × kind.watt)
+      let rowW = 0;
+      kindKeys.forEach((k) => { const w = (KINDS[k] || {}).watt || 0; rowW += lightQty(k) * w; });
+
+      // 셀: 색 배경·강조 없이 깔끔한 흰셀 (사용자 요청)
+      const qtyCell = (c, sepBefore) =>
+        '<td class="num lt-qty' + (c ? ' has' : '') + (sepBefore ? ' lt-sep' : '') + '">' +
+        (c || '') + '</td>';
+
+      bodyHTML += '<tr data-cid="' + esc(cid) + '" data-idxs="' + esc(idxList) + '"' +
+        (isZoneStart ? ' class="lt-zone-start"' : '') + '>' +
+        zoneTd +
+        '<td class="lt-sw">' + switchLabel + '</td>' +
+        '<td class="lt-name">' + circuitCell + '</td>' +
+        kindKeys.map((k) => qtyCell(lightQty(k), false)).join("") +
+        driverKeys.map((k, i) => qtyCell(drQty(k), i === 0)).join("") +
+        smpsKeys.map((k, i) => qtyCell(smQty(k), i === 0)).join("") +
+        '<td class="num lt-rowtot lt-sep">' + (rowW ? rowW + 'W' : '') + '</td>' +
+        '</tr>';
+    });
+
+    // 종류별 자재 총수량 (spec.lights 우선)
+    const matKindTotal = {}; kindKeys.forEach((k) => { matKindTotal[k] = 0; });
+    cids.forEach((cid) => {
+      const arr = groups[cid];
+      const sw = SWITCHES[cid] || {};
+      const spec = sw.spec || {};
+      const cbk = {}; kindKeys.forEach((k) => { cbk[k] = 0; });
+      arr.forEach(({ it }) => { if (cbk[it.kind] != null) cbk[it.kind]++; });
+      kindKeys.forEach((k) => {
+        matKindTotal[k] += (spec.lights && spec.lights[k] != null) ? spec.lights[k] : cbk[k];
+      });
+    });
+    // 전체 W 합계
+    let totalW = 0;
+    kindKeys.forEach((k) => { totalW += matKindTotal[k] * ((KINDS[k] || {}).watt || 0); });
+
+    // 합계 행 (tfoot) — 조명·드라이버·SMPS 자재수량 + 우측 끝 W 합계
+    const footHTML = '<tfoot><tr class="lt-foot-row">' +
+      '<th colspan="3" class="lt-foot-label">총 ' + lights.length + '개 마커</th>' +
+      kindKeys.map((k) => '<td class="num">' + (matKindTotal[k] || '') + '</td>').join("") +
+      driverKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (totalsByDriver[k] || '') + '</td>').join("") +
+      smpsKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (totalsBySmps[k] || '') + '</td>').join("") +
+      '<td class="num lt-sep">' + (totalW ? totalW + 'W' : '') + '</td>' +
+      '</tr></tfoot>';
+
+    // 배너 — 임시저장(draft) 발견 시. 클릭으로 폐기 후 정본 보기 가능.
+    const draftBanner = usingDraft
+      ? '<div class="lt-draftbar">' +
+          '<b>📝 임시저장(draft) 사용 중</b> — 도면 페이지에서 편집한 내용을 보여주고 있습니다. ' +
+          '<span class="lt-draftbar-sub">정본(data.js)을 보려면 임시저장을 폐기하세요.</span>' +
+          '<button type="button" class="lt-draft-discard" id="lt-draft-discard">🗑 임시저장 폐기 + 새로고침</button>' +
+        '</div>'
+      : '';
+
+    // 종류 범례 (좌측 평면도 아래)
+    const legendHTML = kindKeys.map((k) => {
+      const ki = KINDS[k] || {};
+      return `<span class="lt-leg-item"><span class="lt-leg-dot" style="background:${ki.color || "#888"}">${esc(ki.icon || "●")}</span>${esc(ki.label || k)}</span>`;
+    }).join("");
+
+    root.innerHTML =
+      draftBanner +
+      '<div class="lt-grid">' +
+        '<div class="lt-floor">' +
+          '<div class="lt-stage"><img class="lt-img" src="images/' + esc(FP.image) + '" alt="평면도" />' +
+            '<div class="lt-overlay" id="lt-overlay"></div></div>' +
+          '<div class="lt-legend">' + legendHTML + '</div>' +
+          '<p class="lt-hint">💡 마커에 마우스 올리면 이름 노출 · 표 행을 가리키면 같은 회로의 조명이 강조됩니다.</p>' +
+        '</div>' +
+        '<div class="lt-side">' +
+          '<div class="lt-summary">' +
+            '<div class="lt-sum-row"><b>조명 ' + lights.length + '개</b> · 회로 ' + realCircuitCount + '개' +
+            (unsetCount ? ' <span class="lt-unset">+ 미지정 ' + unsetCount + '개</span>' : '') + '</div>' +
+          '</div>' +
+          '<div class="lt-tbl-wrap">' +
+            '<table class="lt-matrix">' +
+              '<thead>' + headColors + headLabels + headModels + '</thead>' +
+              '<tbody id="lt-tbody">' + bodyHTML + '</tbody>' +
+              footHTML +
+            '</table>' +
+          '</div>' +
+          '<p class="lt-foot">표의 빈 칸(이름·구역·회로·모델)은 <a href="floorplan.html">도면 페이지 ✏️ 편집</a> 또는 data.js를 직접 편집해 채울 수 있어요. 양쪽 페이지는 같은 임시저장(localStorage)을 공유합니다.</p>' +
+        '</div>' +
+      '</div>';
+
+    const overlay = $("lt-overlay");
+    const tbody = $("lt-tbody");
+
+    // 임시저장 폐기 버튼
+    const discardBtn = $("lt-draft-discard");
+    if (discardBtn) discardBtn.addEventListener("click", () => {
+      try { localStorage.removeItem(LS_KEY); } catch (e) {}
+      location.reload();
+    });
+
+    // 즉각 표시되는 popup (브라우저 기본 title은 1초 지연 → 직접 만듦)
+    const tipEl = document.createElement("div");
+    tipEl.className = "lt-tip"; tipEl.hidden = true;
+    overlay.appendChild(tipEl);
+
+    // zone 약자 — 마커 번호에 사용 (예: "거1", "주2", "안욕3")
+    // zone 미지정 마커는 "?N" (사용자가 zone 채우면 자동으로 zone번호로 재매김됨).
+    const ZONE_ABBR = {
+      "거실": "거", "주방": "주", "복도": "복", "현관": "현",
+      "발코니": "발", "작은방": "작", "드레스룸": "드",
+      "거실화장실": "거욕", "안방화장실": "안욕", "안방": "안",
+    };
+    // 각 마커에 lid 부여: zone 있으면 "<약자>+번호", 없으면 "?N"
+    const zoneCnt = {};
+    lights.forEach((entry) => {
+      const z = entry.it.zone || "";
+      if (z) {
+        zoneCnt[z] = (zoneCnt[z] || 0) + 1;
+        entry.lid = (ZONE_ABBR[z] || z.slice(0, 2)) + zoneCnt[z];
+      } else {
+        zoneCnt._unset = (zoneCnt._unset || 0) + 1;
+        entry.lid = "?" + zoneCnt._unset;
+      }
+    });
+
+    // 마커 렌더 — kind 색 + zone+번호 라벨
+    lights.forEach(({ it, idx, lid }) => {
+      const cid = it.circuit || "_unset";
+      const ki = KINDS[it.kind] || { icon: "💡", label: it.kind || "?", color: "#888" };
+      const el = document.createElement("div");
+      el.className = "lt-marker";
+      el.dataset.idx = String(idx);
+      el.dataset.cid = cid;
+      el.dataset.lid = lid;
+      el.dataset.kind = it.kind || "";
+      // 한글 약자 길이에 따라 폰트 크기 동적 조정 (2자 → 작게, 3자 → 더 작게)
+      const lidLen = lid.length;
+      const fontPx = lidLen >= 4 ? 7 : lidLen === 3 ? 8 : 9;
+      if (it.type === "box") {
+        el.classList.add("box");
+        el.style.left = it.x + "%";
+        el.style.top = it.y + "%";
+        el.style.width = Math.max(0.6, it.w || 0) + "%";
+        el.style.height = Math.max(0.6, it.h || 0) + "%";
+        el.style.borderColor = ki.color;
+        el.style.background = hexA(ki.color, 0.18);
+        const num = document.createElement("span");
+        num.className = "lt-mk-num box";
+        num.style.background = ki.color;
+        num.style.fontSize = fontPx + "px";
+        num.textContent = lid;
+        el.appendChild(num);
+      } else {
+        el.classList.add("pin");
+        el.style.left = it.x + "%";
+        el.style.top = it.y + "%";
+        el.style.background = ki.color;
+        el.style.fontSize = fontPx + "px";
+        el.textContent = lid;
+      }
+      overlay.appendChild(el);
+    });
+
+    // 마커 hover popup — 번호 + 이름 + 종류 + 회로 (즉각 표시)
+    function showTip(m, ev) {
+      const idx = parseInt(m.dataset.idx, 10);
+      const it = items[idx];
+      if (!it) return;
+      const lid = m.dataset.lid;
+      const ki = KINDS[it.kind] || { label: it.kind || "?" };
+      const name = it.name || it.label || "(이름 없음)";
+      const cid = it.circuit || "";
+      const sw = SWITCHES[cid];
+      const swText = sw && sw.switch ? sw.switch : (cid ? cid : "회로 미지정");
+      tipEl.innerHTML =
+        '<div class="lt-tip-head"><b class="lt-tip-num">' + esc(lid) + '</b> <span>' + esc(name) + '</span></div>' +
+        '<div class="lt-tip-meta">' + esc(ki.label || "") + ' · ' + esc(swText) + '</div>';
+      const r = overlay.getBoundingClientRect();
+      tipEl.style.left = (ev.clientX - r.left) + "px";
+      tipEl.style.top = (ev.clientY - r.top - 14) + "px";
+      tipEl.hidden = false;
+    }
+    overlay.addEventListener("mousemove", (e) => {
+      const m = e.target.closest(".lt-marker");
+      if (m) showTip(m, e); else tipEl.hidden = true;
+    });
+    overlay.addEventListener("mouseleave", () => { tipEl.hidden = true; });
+
+    // 양방향 강조 — 표 hover ↔ 도면 마커
+    tbody.addEventListener("mouseover", (e) => {
+      const tr = e.target.closest("tr"); if (!tr) return;
+      const cid = tr.dataset.cid;
+      const idxs = (tr.dataset.idxs || "").split(",");
+      overlay.querySelectorAll(".lt-marker").forEach((m) => {
+        m.classList.toggle("flash", idxs.indexOf(m.dataset.idx) >= 0);
+        m.classList.toggle("dim", idxs.indexOf(m.dataset.idx) < 0);
+      });
+      tbody.querySelectorAll("tr").forEach((row) => {
+        row.classList.toggle("flash", row.dataset.cid === cid);
+      });
+    });
+    tbody.addEventListener("mouseleave", () => {
+      overlay.querySelectorAll(".lt-marker").forEach((m) => m.classList.remove("flash", "dim"));
+      tbody.querySelectorAll("tr").forEach((row) => row.classList.remove("flash"));
+    });
+    overlay.addEventListener("mouseover", (e) => {
+      const m = e.target.closest(".lt-marker"); if (!m) return;
+      const cid = m.dataset.cid;
+      tbody.querySelectorAll("tr").forEach((row) => {
+        row.classList.toggle("flash", row.dataset.cid === cid);
+      });
+      overlay.querySelectorAll(".lt-marker").forEach((mk) => {
+        mk.classList.toggle("dim", mk.dataset.cid !== cid);
+      });
+    });
+    overlay.addEventListener("mouseleave", () => {
+      overlay.querySelectorAll(".lt-marker").forEach((mk) => mk.classList.remove("dim"));
+      tbody.querySelectorAll("tr").forEach((row) => row.classList.remove("flash"));
+    });
+  }
+
   /* ---------- 작업 안내 (작업자 공유용 · 탭형, 각 공정마다 URL) ---------- */
   function renderWork() {
     const tabsEl = $("work-tabs"), contentEl = $("work-content");
@@ -1620,6 +1971,7 @@
     renderQuotes();
     renderContacts();
     renderFloorplan();
+    renderLighting();
     renderFurniture();
     renderWork();
     // 견적용 요약 복사 버튼 (작업계획서·작업안내 공용)

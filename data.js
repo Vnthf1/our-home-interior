@@ -1416,59 +1416,60 @@ const FLOORPLAN = {
     { layer: "thermostat", type: "pin", x: 41.1, y: 66.1, label: "온도조절기 (복도/욕실)" },
     { layer: "thermostat", type: "pin", x: 35.6, y: 58.8, label: "온도조절기 (안방)" },
     { layer: "thermostat", type: "pin", x: 48.8, y: 41.8, label: "온도조절기 (침실1)" },
-    { layer: "light", type: "box", x: 66.6, y: 19.2, w: 0.1, h: 16.5, label: "간접조명" },
-    { layer: "light", type: "box", x: 66.8, y: 40.3, w: 0.1, h: 9.7, label: "간접조명" },
-    { layer: "light", type: "box", x: 41.4, y: 45.9, w: 0.2, h: 12.3, label: "간접조명" },
-    { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명" },
-    { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명" },
-    { layer: "light", type: "box", x: 55.9, y: 51, w: 11.1, h: 0.4, label: "간접조명" },
-    { layer: "light", type: "box", x: 48.8, y: 21.4, w: 0.1, h: 8.3, label: "간접조명" },
-    { layer: "light", type: "box", x: 52.3, y: 18.1, w: 6.1, h: 0, label: "간접조명" },
-    { layer: "light", type: "box", x: 34.4, y: 43.7, w: 4.5, h: 0.1, label: "간접조명" },
-    { layer: "light", type: "box", x: 31.5, y: 54.3, w: 3.3, h: 0, label: "간접조명" },
-    { layer: "light", type: "box", x: 34.4, y: 47.1, w: 0.3, h: 5.7, label: "간접조명" },
-    { layer: "light", type: "box", x: 32.2, y: 46.4, w: 0.2, h: 6.4, label: "간접조명" },
-    { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명" },
-    { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명" },
-    { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등" },
-    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등" },
-    { layer: "light", type: "box", x: 48.7, y: 35.6, w: 2.5, h: 0, label: "멀티매입등" },
-    { layer: "light", type: "box", x: 62.1, y: 35.7, w: 2.6, h: 0, label: "멀티매입등" },
-    { layer: "light", type: "box", x: 22.1, y: 67.4, w: 0.1, h: 2.9, label: "멀티매입등" },
-    { layer: "light", type: "box", x: 21.9, y: 83.4, w: 0.1, h: 2.9, label: "멀티매입등" },
-    { layer: "light", type: "pin", x: 65.2, y: 20.2, label: "COB조명" },
-    { layer: "light", type: "pin", x: 63.9, y: 20.1, label: "COB조명" },
-    { layer: "light", type: "pin", x: 51.8, y: 20.4, label: "COB조명" },
-    { layer: "light", type: "pin", x: 50.5, y: 20.4, label: "COB조명" },
-    { layer: "light", type: "pin", x: 42.3, y: 23.5, label: "COB조명" },
-    { layer: "light", type: "pin", x: 42.2, y: 29.3, label: "COB조명" },
-    { layer: "light", type: "pin", x: 42, y: 34.2, label: "COB조명" },
-    { layer: "light", type: "pin", x: 46.1, y: 40.3, label: "COB조명" },
-    { layer: "light", type: "pin", x: 45.8, y: 51, label: "COB조명" },
-    { layer: "light", type: "pin", x: 45.7, y: 59.8, label: "COB조명" },
-    { layer: "light", type: "pin", x: 65, y: 46.9, label: "COB조명" },
-    { layer: "light", type: "pin", x: 57.8, y: 47, label: "COB조명" },
-    { layer: "light", type: "pin", x: 56.2, y: 47, label: "COB조명" },
-    { layer: "light", type: "pin", x: 63.8, y: 47, label: "COB조명" },
-    { layer: "light", type: "pin", x: 36.4, y: 40.4, label: "COB조명" },
-    { layer: "light", type: "pin", x: 39.2, y: 55.6, label: "COB조명" },
-    { layer: "light", type: "pin", x: 25.8, y: 52.7, label: "COB조명" },
-    { layer: "light", type: "box", x: 22.1, y: 50.9, w: 0.1, h: 3.8, label: "간접조명" },
-    { layer: "light", type: "pin", x: 27.8, y: 42.6, label: "COB조명" },
-    { layer: "light", type: "pin", x: 29, y: 49.6, label: "COB조명" },
-    { layer: "light", type: "pin", x: 28.2, y: 59, label: "COB조명" },
-    { layer: "light", type: "pin", x: 33.7, y: 67.6, label: "COB조명" },
-    { layer: "light", type: "pin", x: 33.8, y: 65.9, label: "COB조명" },
-    { layer: "light", type: "pin", x: 33.3, y: 86.4, label: "COB조명" },
-    { layer: "light", type: "pin", x: 33.3, y: 84.9, label: "COB조명" },
-    { layer: "light", type: "pin", x: 41.3, y: 85.7, label: "COB조명" },
-    { layer: "light", type: "pin", x: 41.3, y: 81.6, label: "COB조명" },
-    { layer: "light", type: "pin", x: 41.3, y: 76.7, label: "COB조명" },
-    { layer: "light", type: "pin", x: 41.3, y: 70.9, label: "COB조명" },
-    { layer: "light", type: "pin", x: 50.8, y: 57.9, label: "확산조명" },
-    { layer: "light", type: "pin", x: 50.8, y: 63.5, label: "확산조명" },
-    { layer: "light", type: "pin", x: 29.8, y: 59.1, label: "COB조명" },
+    { layer: "light", type: "box", x: 66.6, y: 19.2, w: 0.1, h: 16.5, label: "간접조명", kind: "strip" , circuit: "LR-3", zone: "거실", name: "거실 우측 커튼박스 스트립" },
+    { layer: "light", type: "box", x: 66.8, y: 40.3, w: 0.1, h: 9.7, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip" , circuit: "LR-3", zone: "거실", name: "거실 우물천장 스트립" },
+    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip" },
+    { layer: "light", type: "box", x: 48.7, y: 35.6, w: 2.5, h: 0, label: "멀티매입등", kind: "multi10" , circuit: "LR-1", zone: "거실", name: "거실 TV 좌측 10구" },
+    { layer: "light", type: "box", x: 62.1, y: 35.7, w: 2.6, h: 0, label: "멀티매입등", kind: "multi10" , circuit: "LR-1", zone: "거실", name: "거실 TV 우측 10구" },
+    { layer: "light", type: "pin", x: 65.2, y: 20.2, label: "COB조명", kind: "cob2" , circuit: "LR-2", zone: "거실", name: "거실 우측상단 COB-A" },
+    { layer: "light", type: "pin", x: 63.9, y: 20.1, label: "COB조명", kind: "cob2" , circuit: "LR-2", zone: "거실", name: "거실 우측상단 COB-B" },
+    { layer: "light", type: "pin", x: 51.8, y: 20.4, label: "COB조명", kind: "cob2" , circuit: "LR-2", zone: "거실", name: "거실 좌측상단 COB-A" },
+    { layer: "light", type: "pin", x: 50.5, y: 20.4, label: "COB조명", kind: "cob2" , circuit: "LR-2", zone: "거실", name: "거실 좌측상단 COB-B" },
+    { layer: "light", type: "pin", x: 42.3, y: 23.5, label: "COB조명", kind: "cob2" , circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-1" },
+    { layer: "light", type: "pin", x: 42.25, y: 26.4, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-2" },
+    { layer: "light", type: "pin", x: 42.2, y: 29.3, label: "COB조명", kind: "cob2" , circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-3" },
+    { layer: "light", type: "pin", x: 42, y: 34.2, label: "COB조명", kind: "cob2" , circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-4" },
+    { layer: "light", type: "pin", x: 45.2, y: 40.6, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 42.4, y: 50.9, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 42.3, y: 57, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 60, y: 39.4, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 51.6, y: 47.3, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 49.9, y: 47.4, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 60, y: 41.5, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 36.4, y: 40.4, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 39.2, y: 55.6, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 25.8, y: 52.7, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 27.8, y: 42.6, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 29.7, y: 48.9, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 28.2, y: 59, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 22.8, y: 68.7, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 22.9, y: 66.9, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 22.5, y: 85.4, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 22.5, y: 83.7, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 41.2, y: 84.1, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 41.3, y: 79.9, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 41.3, y: 75.5, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 41.3, y: 70.9, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 50.8, y: 57.9, label: "확산조명", kind: "diff2" },
+    { layer: "light", type: "pin", x: 50.7, y: 65.5, label: "확산조명", kind: "diff2" },
+    { layer: "light", type: "pin", x: 29.8, y: 59.1, label: "COB조명", kind: "cob2" },
     { layer: "note", type: "legend", x: 5, y: 2.5, label: "" },
+    { layer: "furniture", type: "pin", x: 41.7, y: 51.5, label: "" },
+    { layer: "light", type: "pin", x: 42.3, y: 53.9, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 59.8, y: 47.1, label: "확산조명", kind: "diff2" },
+    { layer: "light", type: "pin", x: 33, y: 57.2, label: "COB조명", kind: "cob2" },
+    { layer: "light", type: "pin", x: 43.3, y: 20.7, label: "확산조명", kind: "diff2" , circuit: "KT-1", zone: "주방", name: "주방 아일랜드 확산-1" },
+    { layer: "light", type: "pin", x: 47.1, y: 23.7, label: "확산조명", kind: "diff2" , circuit: "KT-1", zone: "주방", name: "주방 아일랜드 확산-2" },
+    { layer: "light", type: "pin", x: 47.1, y: 29.1, label: "확산조명", kind: "diff2" , circuit: "KT-1", zone: "주방", name: "주방 아일랜드 확산-3" },
+    { layer: "light", type: "pin", x: 41.3, y: 72.2, label: "확산조명", kind: "diff2" },
+    { layer: "light", type: "pin", x: 41.3, y: 77, label: "확산조명", kind: "diff2" },
+    { layer: "light", type: "pin", x: 32.9, y: 63.2, label: "확산조명", kind: "diff2" },
+    { layer: "light", type: "pin", x: 26.5, y: 66.6, label: "확산조명", kind: "diff2" },
   ],
 };
 
@@ -2127,4 +2128,83 @@ const KITCHEN = {
     // 코너 = arm.w(620). 정면 가용폭 = bar.w - 620 = 2380 = 서랍+싱크하부장+식세기 합.
     cab: { drawer: 780, sinkCab: 1000, dishwasher: 600 }, // 780+1000+600 = 2380, +코너620 = 3000
   },
+};
+
+/* ===== 조명 계획 =====
+ * - LIGHTING_KINDS: 우리집에 쓰는 등기구 4종 (FLOORPLAN.items의 light.kind와 매칭)
+ * - LIGHTING_SWITCHES: 스위치 회로 메타 (FLOORPLAN.items의 light.circuit과 매칭)
+ *   회로 id 형식: "<zone약자>-S<번호>" 권장 (예: LR-S1, BR1-S2). 자유.
+ * - FLOORPLAN.items의 light 항목은 4필드(name/kind/circuit/zone)를 가질 수 있음:
+ *     name    : "거실조명1" — 마우스 hover 시 표시 (미설정이면 label로 대체)
+ *     kind    : "cob2" | "diff2" | "multi10" | "strip"
+ *     circuit : LIGHTING_SWITCHES의 키 (어느 스위치에 묶이는지)
+ *     zone    : "거실" | "주방" | "안방" ... (구역명)
+ * - 양방향 동기화: 도면(floorplan.html)·조명계획(lighting.html) 두 페이지가
+ *   같은 localStorage 키("fp-draft:" + FLOORPLAN.image)를 공유한다.
+ *   어디서 편집하든 다른 페이지 진입 시 그대로 반영되며, 영구반영은 [📋 코드 복사]로 data.js에 붙여넣기.
+ */
+/* 우리집 등기구 4종 — 모두 2인치 통일.
+ *   icon : 표 헤더 색점 + 도면 마커 글자
+ *   color: 도면 마커 색 + 표 색점 색
+ *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
+const LIGHTING_KINDS = {
+  cob2:    { label: "2인치 COB",      icon: "●", short: "COB",     color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",          watt: 7 },
+  diff2:   { label: "확산형",          icon: "○", short: "확산",     color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치",            watt: 8 },
+  multi10: { label: "10구 멀티매입등", icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압)", watt: 20 },
+  strip:   { label: "스트립 조명",     icon: "▬", short: "스트립",   color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",     watt: 35 }, // 5M 한 롤당 약 35W
+};
+
+/* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
+ *   회로별 spec.drivers / spec.smps 가 여기 키를 참조. 수량은 spec에서. */
+const LIGHTING_DRIVERS = {
+  aqara: { label: "Aqara 스트립 DR", short: "Aqara DR", color: "#8b5cf6", model: "Aqara LED 스트립 드라이버 DC24V (#140)" },
+};
+const LIGHTING_SMPS = {
+  u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2LM (#120)" },
+  u200: { label: "유니온 200W SMPS", short: "200W", color: "#374151", model: "유니온 UP200S24W2L (#122)" },
+};
+
+/* 스위치 회로 메타.
+ *   id: { zone, switch, desc }  // switch="거실 3구 #1" 형태 — 표 2열에 그대로 표시
+ *   desc 는 회로명/메모(채우는 중). 비어도 됨.
+ * 회로 ID 약자 (짧게 영문, 표 헤더에 들어감):
+ *   LR=거실 KT=주방 HW=복도 EN=현관 BC=발코니
+ *   BR=작은방 DR=드레스룸 LB=거실화장실 MB=안방화장실 MR=안방 */
+const LIGHTING_SWITCHES = {
+  // 거실 (3구) — 주방 2구와 같은 위치에 5구로 함께 설치
+  "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
+  "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
+  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 1 }, note: "스트립 5M × 3롤 · SMPS 200W는 우물천장 공용" } },
+  // 주방 (2구) — 거실 스위치 옆
+  "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
+  "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
+  // 복도 (2구)
+  "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "" },
+  "HW-2": { zone: "복도", switch: "복도 2구 #2", desc: "" },
+  // 현관 (3구)
+  "EN-1": { zone: "현관", switch: "현관 3구 #1", desc: "" },
+  "EN-2": { zone: "현관", switch: "현관 3구 #2", desc: "" },
+  "EN-3": { zone: "현관", switch: "현관 3구 #3", desc: "" },
+  // 발코니 (2구)
+  "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "" },
+  "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "" },
+  // 작은방 (2구)
+  "BR-1": { zone: "작은방", switch: "작은방 2구 #1", desc: "" },
+  "BR-2": { zone: "작은방", switch: "작은방 2구 #2", desc: "" },
+  // 드레스룸 (2구)
+  "DR-1": { zone: "드레스룸", switch: "드레스룸 2구 #1", desc: "" },
+  "DR-2": { zone: "드레스룸", switch: "드레스룸 2구 #2", desc: "" },
+  // 거실화장실 (3구)
+  "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "" },
+  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "" },
+  "LB-3": { zone: "거실화장실", switch: "거실화장실 3구 #3", desc: "" },
+  // 안방화장실 (3구)
+  "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "" },
+  "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "" },
+  "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "" },
+  // 안방 (2구 + 2구 = 두 위치)
+  "MR-A1": { zone: "안방", switch: "안방 2구A #1", desc: "" },
+  "MR-A2": { zone: "안방", switch: "안방 2구A #2", desc: "" },
+  "MR-B1": { zone: "안방", switch: "안방 2구B #1", desc: "" },
+  "MR-B2": { zone: "안방", switch: "안방 2구B #2", desc: "" },
 };

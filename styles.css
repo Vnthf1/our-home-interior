@@ -697,3 +697,98 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .kz3d-btn{position:absolute;top:12px;right:12px;z-index:6;background:rgba(255,255,255,.92);border:1px solid var(--line);color:var(--accent);font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:999px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12)}
 .kz3d-btn:hover{background:#fff}
 .kz3d-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ===== 조명 계획 (lighting.html) ===== */
+.lt-draftbar{margin:0 0 14px;padding:12px 14px;background:#fef3c7;border:1px solid #f0dcb8;color:#7a5c3a;border-radius:10px;font-size:13.5px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.lt-draftbar a{color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px dashed currentColor}
+.lt-draftbar a:hover{color:#3a2616}
+.lt-draftbar-sub{color:#a68b5e;font-size:12.5px}
+.lt-draft-discard{margin-left:auto;background:var(--accent);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.2px}
+.lt-draft-discard:hover{background:#3a2616}
+
+/* 레이아웃 — 좌: 평면도, 우: 매트릭스 표 (와이드) */
+.lt-grid{display:grid;grid-template-columns:minmax(300px,0.85fr) minmax(560px,1.5fr);gap:18px;align-items:start}
+@media (max-width:1024px){.lt-grid{grid-template-columns:1fr}}
+
+.lt-floor{position:sticky;top:64px}
+@media (max-width:1024px){.lt-floor{position:static}}
+.lt-stage{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 1px 3px rgba(60,50,40,.05)}
+.lt-img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+.lt-overlay{position:absolute;inset:0}
+.lt-legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+.lt-leg-item{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#faf8f5;border:1px solid #ece9e3;border-radius:99px;font-size:12.5px;color:var(--ink)}
+.lt-leg-dot{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;color:#fff;font-size:10px;font-weight:700;box-shadow:0 0 0 1px #fff,0 1px 2px rgba(0,0,0,.2)}
+.lt-hint{margin:8px 2px 0;font-size:12.5px;color:var(--muted);text-align:center;line-height:1.5}
+
+.lt-marker{position:absolute;transition:transform .12s,box-shadow .15s,opacity .12s;cursor:default}
+.lt-marker.pin{width:20px;height:20px;border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;line-height:1;letter-spacing:-.5px;box-shadow:0 0 0 1.25px #fff,0 2px 4px rgba(0,0,0,.22);font-variant-numeric:tabular-nums;padding:0 2px}
+.lt-marker.box{border:1.5px solid;border-radius:3px;box-sizing:border-box;min-width:6px;min-height:6px;pointer-events:auto}
+.lt-marker.flash{transform:translate(-50%,-50%) scale(1.35);box-shadow:0 0 0 2px #fff,0 0 0 5px currentColor,0 4px 10px rgba(0,0,0,.35);z-index:5;animation:lt-pulse 1s ease-in-out infinite}
+.lt-marker.box.flash{transform:scale(1);outline:3px solid currentColor;outline-offset:1px;animation:lt-pulse 1s ease-in-out infinite}
+.lt-marker.dim{opacity:.22}
+@keyframes lt-pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
+
+/* box 마커 번호 라벨 (모서리에 작게) */
+.lt-mk-num.box{position:absolute;top:-8px;left:-8px;display:flex;align-items:center;justify-content:center;min-width:16px;height:12px;padding:0 4px;border-radius:6px;background:#888;color:#fff;font-size:9px;font-weight:800;line-height:1;box-shadow:0 0 0 1.25px #fff,0 1px 2px rgba(0,0,0,.22);font-variant-numeric:tabular-nums}
+
+/* 마커 hover popup (즉시 표시) */
+.lt-tip{position:absolute;pointer-events:none;background:rgba(40,32,24,.94);color:#fff;font-size:12px;padding:7px 11px;border-radius:8px;line-height:1.4;transform:translate(-50%,-100%);white-space:nowrap;z-index:20;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.lt-tip[hidden]{display:none}
+.lt-tip-head{display:flex;align-items:center;gap:6px;font-weight:700}
+.lt-tip-num{display:inline-block;padding:1px 6px;background:#ffd9a8;color:#5a3a22;border-radius:4px;font-size:11px;font-weight:800;letter-spacing:.4px;font-variant-numeric:tabular-nums}
+.lt-tip-meta{color:#ffd9a8;font-size:11px;margin-top:3px}
+
+.lt-side{min-width:0}
+.lt-summary{margin-bottom:10px;padding:10px 14px;background:#faf8f5;border:1px solid #ece9e3;border-radius:12px;font-size:13.5px;color:var(--ink)}
+.lt-sum-row b{color:var(--accent);font-size:15px}
+.lt-unset{color:#94a3b8;font-style:italic;font-size:12.5px}
+.lt-mut{color:#b3aea4;font-size:12.5px}
+
+/* 매트릭스 표 — 엑셀 사례 포맷, 견적/공정 톤 차용 */
+.lt-tbl-wrap{border:1px solid #ece9e3;border-radius:14px;overflow:auto;background:var(--card);box-shadow:0 1px 3px rgba(60,50,40,.05)}
+.lt-matrix{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;table-layout:auto}
+
+/* 헤더 3줄 */
+.lt-matrix thead th{background:#faf8f5;color:var(--muted);font-weight:700;padding:7px 10px;text-align:center;border-bottom:1px solid #ece9e3;border-right:1px solid #f1efe9;letter-spacing:.2px;white-space:nowrap}
+.lt-matrix thead th:last-child{border-right:none}
+.lt-matrix thead .lt-h-fix{background:#f3efe7;color:var(--accent);font-size:13.5px;border-right:1px solid #e6dfd2;vertical-align:middle}
+.lt-matrix thead .lt-h-fix.num{text-align:right}
+.lt-matrix thead .lt-h-mk{padding:8px 10px 2px;font-size:18px;line-height:1}
+.lt-mk-dot{display:inline-block;font-size:20px;font-weight:900;line-height:1}
+.lt-matrix thead .lt-h-label th{padding:2px 10px 4px;color:var(--ink);font-size:12.5px;font-weight:700;background:#faf8f5;border-bottom:none}
+.lt-matrix thead .lt-h-model th{padding:4px 10px 8px;color:var(--muted);font-size:11px;font-weight:500;background:#faf8f5;border-bottom:1px solid #ece9e3;white-space:normal;line-height:1.4;min-width:90px;max-width:140px}
+.lt-h-mdl-empty{color:#c0b8aa;font-style:italic}
+
+/* 그룹 구분선 — 그룹 사이 옅게(통일감) */
+.lt-matrix .lt-sep{border-left:1px solid #ece9e3 !important}
+.lt-matrix tfoot td.lt-sep{border-left:1px solid #e6dfd2 !important}
+
+/* 본문 — 깔끔한 흰 셀, 색 배경 없음 */
+.lt-matrix tbody td{border-bottom:1px solid #f1efe9;border-right:1px solid #f1efe9;padding:9px 10px;vertical-align:top;color:var(--ink);background:var(--card)}
+.lt-matrix tbody td:last-child{border-right:none}
+.lt-matrix tbody tr.flash td{background:var(--accent-soft) !important}
+.lt-matrix tbody td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);min-width:42px}
+.lt-matrix tbody td.lt-qty{text-align:center;color:#cfcabf;font-weight:400}
+.lt-matrix tbody td.lt-qty.has{color:var(--ink);font-weight:800;font-size:14px}
+.lt-matrix tbody td.lt-rowtot{font-weight:800;color:var(--accent)}
+
+.lt-zone{font-weight:800;color:var(--accent);white-space:nowrap;text-align:center;vertical-align:middle;font-size:14px;border-right:1px solid #e6dfd2 !important;letter-spacing:.5px}
+.lt-matrix tbody tr.lt-zone-start td{border-top:1.5px solid #e2dccf}
+.lt-matrix tbody tr.lt-zone-start:first-child td{border-top:none}
+.lt-sw{color:var(--ink);white-space:nowrap;font-size:12.5px}
+.lt-name{min-width:220px}
+.lt-cid{color:var(--accent);font-size:13.5px;letter-spacing:.3px}
+.lt-cd{font-size:12.5px;color:var(--muted);font-weight:500}
+.lt-circuit-hint{font-size:11.5px;color:#b3aea4;margin-top:4px;line-height:1.45}
+.lt-circuit-hint code{background:#faf8f5;color:var(--accent);padding:1px 5px;border-radius:4px;font-size:11px;border:1px solid #ece9e3}
+
+/* 합계 행 */
+.lt-matrix tfoot td,.lt-matrix tfoot th{background:var(--accent-soft);border-top:1.5px solid #e2dccf;padding:10px 10px;font-weight:800;color:var(--accent);font-size:13.5px;text-align:center}
+.lt-matrix tfoot th.lt-foot-label{text-align:right;padding-right:14px;border-right:1px solid #e2dccf}
+.lt-matrix tfoot td{border-right:1px solid #e6dfd2}
+.lt-matrix tfoot td:last-child{border-right:none}
+.lt-matrix tfoot td.num{text-align:right;font-variant-numeric:tabular-nums}
+
+.lt-foot{margin:10px 2px 0;font-size:12.5px;color:var(--muted);line-height:1.55}
+.lt-foot a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px dashed currentColor}
+.lt-foot a:hover{color:#3a2616}
