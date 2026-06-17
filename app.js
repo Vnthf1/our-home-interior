@@ -1222,9 +1222,10 @@
       const cid = it.circuit || "";
       const sw = SWITCHES[cid];
       const swText = sw && sw.switch ? sw.switch : (cid ? cid : "회로 미지정");
+      const lenText = it.length ? (' · ' + it.length + 'cm') : '';
       tipEl.innerHTML =
         '<div class="lt-tip-head"><b class="lt-tip-num">' + esc(lid) + '</b> <span>' + esc(name) + '</span></div>' +
-        '<div class="lt-tip-meta">' + esc(ki.label || "") + ' · ' + esc(swText) + '</div>';
+        '<div class="lt-tip-meta">' + esc(ki.label || "") + ' · ' + esc(swText) + esc(lenText) + '</div>';
       const r = overlay.getBoundingClientRect();
       tipEl.style.left = (ev.clientX - r.left) + "px";
       tipEl.style.top = (ev.clientY - r.top - 14) + "px";
