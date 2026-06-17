@@ -1182,7 +1182,10 @@
       el.dataset.kind = it.kind || "";
       // 한글 약자 길이에 따라 폰트 크기 동적 조정 (2자 → 작게, 3자 → 더 작게)
       const lidLen = lid.length;
+      // pin 마커 안 폰트
       const fontPx = lidLen >= 4 ? 6 : lidLen === 3 ? 7 : 8;
+      // box 칩(외부 라벨) 폰트 — 칩이 좁아 더 작게
+      const boxFontPx = lidLen >= 4 ? 5 : lidLen === 3 ? 6 : 7;
       if (it.type === "box") {
         el.classList.add("box");
         el.style.left = it.x + "%";
@@ -1194,7 +1197,7 @@
         const num = document.createElement("span");
         num.className = "lt-mk-num box";
         num.style.background = ki.color;
-        num.style.fontSize = fontPx + "px";
+        num.style.fontSize = boxFontPx + "px";
         num.textContent = lid;
         el.appendChild(num);
       } else {

@@ -729,7 +729,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 @keyframes lt-pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
 
 /* box 마커 번호 라벨 (모서리에 작게) */
-.lt-mk-num.box{position:absolute;top:-8px;left:-8px;display:flex;align-items:center;justify-content:center;min-width:16px;height:12px;padding:0 4px;border-radius:6px;background:#888;color:#fff;font-size:9px;font-weight:800;line-height:1;box-shadow:0 0 0 1.25px #fff,0 1px 2px rgba(0,0,0,.22);font-variant-numeric:tabular-nums}
+.lt-mk-num.box{position:absolute;top:-7px;left:-7px;display:inline-flex;align-items:center;justify-content:center;width:max-content;min-width:14px;height:11px;padding:0 3px;border-radius:5px;background:#888;color:#fff;font-size:7px;font-weight:800;line-height:1;white-space:nowrap;letter-spacing:-.3px;box-shadow:0 0 0 1px #fff,0 1px 2px rgba(0,0,0,.22);font-variant-numeric:tabular-nums}
 
 /* 마커 hover popup (즉시 표시) */
 .lt-tip{position:absolute;pointer-events:none;background:rgba(40,32,24,.94);color:#fff;font-size:12px;padding:7px 11px;border-radius:8px;line-height:1.4;transform:translate(-50%,-100%);white-space:nowrap;z-index:20;box-shadow:0 4px 12px rgba(0,0,0,.3)}
