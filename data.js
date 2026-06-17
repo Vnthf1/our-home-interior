@@ -2148,10 +2148,12 @@ const KITCHEN = {
  *   color: 도면 마커 색 + 표 색점 색
  *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
 const LIGHTING_KINDS = {
-  cob2:    { label: "2인치 COB",     icon: "●", short: "COB",     color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",                watt: 7 },
-  diff2:   { label: "2인치 확산형",  icon: "○", short: "확산",     color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42)",              watt: 8 },
-  multi10: { label: "10구 멀티매입등", icon: "◉", short: "10구",   color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20 },
-  strip:   { label: "스트립 조명",    icon: "▬", short: "스트립",  color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",           watt: 35 }, // 5M 한 롤당 약 35W
+  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",                watt: 7 },
+  cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0 },
+  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42)",              watt: 8 },
+  diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0 },
+  multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20 },
+  strip:   { label: "스트립 조명",         icon: "▬", short: "스트립",   color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",           watt: 35 }, // 5M 한 롤당 약 35W
 };
 
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
@@ -2179,8 +2181,8 @@ const LIGHTING_SWITCHES = {
   "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
   "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
   // 복도 (2구)
-  "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "" },
-  "HW-2": { zone: "복도", switch: "복도 2구 #2", desc: "" },
+  "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "복도" },
+  "HW-2": { zone: "복도", switch: "복도 2구 #2", desc: "아트월" },
   // 현관 (3구)
   "EN-1": { zone: "현관", switch: "현관 3구 #1", desc: "" },
   "EN-2": { zone: "현관", switch: "현관 3구 #2", desc: "" },
