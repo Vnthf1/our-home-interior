@@ -721,10 +721,10 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-hint{margin:8px 2px 0;font-size:12.5px;color:var(--muted);text-align:center;line-height:1.5}
 
 .lt-marker{position:absolute;transition:transform .12s,box-shadow .15s,opacity .12s;cursor:default}
-.lt-marker.pin{width:17px;height:17px;border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:800;line-height:1;letter-spacing:-.5px;box-shadow:0 0 0 1px #fff,0 1px 3px rgba(0,0,0,.22);font-variant-numeric:tabular-nums;padding:0 1.5px}
+.lt-marker.pin{width:15px;height:15px;border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:7px;font-weight:800;line-height:1;letter-spacing:-.5px;box-shadow:0 0 0 .8px #fff,0 1px 2px rgba(0,0,0,.2);font-variant-numeric:tabular-nums;padding:0 1px}
 .lt-marker.box{border:1.5px solid;border-radius:3px;box-sizing:border-box;min-width:6px;min-height:6px;pointer-events:auto}
-.lt-marker.flash{transform:translate(-50%,-50%) scale(1.35);box-shadow:0 0 0 2px #fff,0 0 0 5px currentColor,0 4px 10px rgba(0,0,0,.35);z-index:5;animation:lt-pulse 1s ease-in-out infinite}
-.lt-marker.box.flash{transform:scale(1);outline:3px solid currentColor;outline-offset:1px;animation:lt-pulse 1s ease-in-out infinite}
+.lt-marker.flash{transform:translate(-50%,-50%) scale(1.3);box-shadow:0 0 0 1px #fff,0 0 0 3px currentColor,0 3px 7px rgba(0,0,0,.3);z-index:5;animation:lt-pulse 1s ease-in-out infinite}
+.lt-marker.box.flash{transform:scale(1);outline:2px solid currentColor;outline-offset:1px;animation:lt-pulse 1s ease-in-out infinite}
 .lt-marker.dim{opacity:.22}
 @keyframes lt-pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
 
