@@ -2215,8 +2215,8 @@ const LIGHTING_SWITCHES = {
   "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
             spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
   "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "간접등",
-            spec: { lights: { strip_cct: 2 }, drivers: { aqara: 2 }, smps: { u100: 2 }, watt: 48,
-                    note: "SR 8mm CCT 10M(#60) 2롤 · 간접 4군데 길이 180+100+200+200 = 680cm · 6.8m × 7W = 47.6W · 드라이버·SMPS 각 2개로 안정 운영" } },
+            spec: { lights: { strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 48,
+                    note: "SR 8mm CCT 10M(#60) 1롤로 4군데 분배 · 길이 180+100+200+200 = 680cm · 6.8m × 7W = 47.6W (한 롤 70W 안 충분)" } },
   "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 안방 (2구 + 2구 = 두 위치)
   "MR-A1": { zone: "안방", switch: "안방 2구A #1", desc: "" },
