@@ -1476,6 +1476,11 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 32.4, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip" },
     { layer: "light", type: "pin", x: 61.5, y: 46.9, label: "확산조명", kind: "diff2" },
     { layer: "light", type: "box", x: 34.1, y: 43.9, w: 5.2, h: 0, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 46.6, y: 37.5, w: 0, h: 1.3, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 46.5, y: 42.5, w: 0, h: 1.3, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 35.1, y: 69.6, w: 0.4, h: 15.6, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "box", x: 31.2, y: 54.1, w: 3.7, h: 0, label: "간접조명", kind: "strip" },
+    { layer: "light", type: "pin", x: 39, y: 49.4, label: "COB조명", kind: "cob2" },
   ],
 };
 
