@@ -1178,7 +1178,7 @@
       el.dataset.kind = it.kind || "";
       // 한글 약자 길이에 따라 폰트 크기 동적 조정 (2자 → 작게, 3자 → 더 작게)
       const lidLen = lid.length;
-      const fontPx = lidLen >= 4 ? 7 : lidLen === 3 ? 8 : 9;
+      const fontPx = lidLen >= 4 ? 6 : lidLen === 3 ? 7 : 8;
       if (it.type === "box") {
         el.classList.add("box");
         el.style.left = it.x + "%";
