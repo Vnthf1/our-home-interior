@@ -343,22 +343,22 @@
     }
     const phaseAsks = (!opts.hideAsk && p.asks && p.asks.length)
       ? `<div class="phase-asks">${p.asks.map((q) => `<div class="it-ask">💬 업자 확인: ${esc(q)}</div>`).join("")}</div>` : "";
-    const imgs = (p.images && p.images.length) ? `
-      <div class="imgs">${p.images.map((im) => `
+    // 작업계획서(우리 검토용)는 사진을 크게 안 띄우고 링크만(opts.imgLinks). 작업안내(work)는 썸네일 그대로.
+    const imgs = (p.images && p.images.length)
+      ? (opts.imgLinks
+          ? `<div class="phase-imglinks">📎 ${p.images.map((im) => `<a href="images/${esc(im.file)}" target="_blank" rel="noopener">${esc(im.label)}</a>`).join(" · ")}</div>`
+          : `<div class="imgs">${p.images.map((im) => `
         <div class="img-ph">
           ${zoomImg(im.file, im.label)}
           <div class="cap">${esc(im.label)}</div>
-        </div>`).join("")}</div>` : "";
+        </div>`).join("")}</div>`) : "";
     const refs = relatedRefs(p.id);
-    const refBlock = refs.length ? `
-      <div class="phase-refs"><div class="rt">🖼️ 관련 레퍼런스</div>
-      <div class="ref-thumbs">${refs.map(refThumb).join("")}</div></div>` : "";
+    const refBlock = refs.length
+      ? (opts.imgLinks
+          ? `<div class="phase-imglinks">🖼️ 레퍼런스: ${refs.map((r) => `<a href="images/${esc(r.file)}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join(" · ")}</div>`
+          : `<div class="phase-refs"><div class="rt">🖼️ 관련 레퍼런스</div>
+      <div class="ref-thumbs">${refs.map(refThumb).join("")}</div></div>`) : "";
     const team = opts.hideTeam ? "" : `<div class="phase-team">👷 ${esc(p.team)}</div>`;
-    const keyNotes = (typeof KEY_NOTES !== "undefined" && KEY_NOTES.length) ? `
-      <div class="phase-keynotes">
-        <div class="kn-h">🏠 우리집 주요 변경 — 모든 공정 공통</div>
-        <ul>${KEY_NOTES.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
-      </div>` : "";
     return `<div class="phase"${opts.noId ? "" : ` id="${p.id}"`}>
       <div class="phase-head"><span class="num">${i + 1}</span><span class="icon">${esc(p.icon)}</span><h3>${esc(p.name)}</h3></div>
       ${team}
@@ -367,12 +367,16 @@
       ${phaseAsks}
       ${imgs}${refBlock}
       <div class="cols">${groups}</div>
-      ${keyNotes}
     </div>`;
   }
   function renderPhases() {
     const el = $("phases"); if (!el) return;
-    el.innerHTML = PHASES.map((p, i) => phaseCardHTML(p, i)).join("");
+    const keyNotes = (typeof KEY_NOTES !== "undefined" && KEY_NOTES.length) ? `
+      <div class="phase-keynotes">
+        <div class="kn-h">🏠 우리집 주요 변경 — 모든 공정 공통</div>
+        <ul>${KEY_NOTES.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
+      </div>` : "";
+    el.innerHTML = keyNotes + PHASES.map((p, i) => phaseCardHTML(p, i, { imgLinks: true })).join("");
     // 해시(#electric 등)로 들어오면 해당 공정으로 스크롤 — 이미지가 lazy 로드되며 위쪽 높이가 변해도 다시 정렬
     const scrollToHash = () => {
       const id = decodeURIComponent((location.hash || "").slice(1));
