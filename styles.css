@@ -798,13 +798,15 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .phase-imglinks a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px dashed var(--accent)}
 .phase-imglinks a:hover{background:var(--accent-soft)}
 
-/* 작업계획서(검토용) — 그룹 항목을 한 줄로 인라인 나열 */
+/* 작업계획서(검토용) — 그룹별 리스트(•). 그룹=한 줄, 항목은 쉼표 나열 */
 .cols-stack{display:block;column-count:initial}
-.group-line{padding:7px 0;border-bottom:1px dashed var(--line);font-size:14.5px;line-height:1.7}
-.group-line:last-child{border-bottom:0}
-.group-line .gtitle-inline{font-weight:700;color:var(--accent);margin-right:6px}
-.group-line .gtitle-inline::after{content:" —";color:var(--muted);font-weight:400}
-.group-line .items-inline{color:var(--ink)}
-.group-line .it-flag.undecided{font-size:11px;border:1px dashed #c0392b;color:#c0392b;border-radius:6px;padding:0 5px}
-.group-line .it-memo{font-size:12px;color:var(--muted)}
-.group-line .it-caution,.group-line .it-ask{margin-top:5px;font-size:13px}
+.group-list{margin:6px 0 0;padding-left:4px;list-style:none}
+.group-list>li{position:relative;padding:8px 0 8px 18px;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.7}
+.group-list>li:last-child{border-bottom:0}
+.group-list>li::before{content:"•";position:absolute;left:0;top:8px;color:var(--accent);font-weight:700}
+.group-list .gtitle-inline{font-weight:700;color:var(--accent)}
+.group-list .gtitle-inline::after{content:" — ";color:var(--muted);font-weight:400}
+.group-list .items-inline{color:var(--ink)}
+.group-list .it-flag.undecided{font-size:11px;border:1px dashed #c0392b;color:#c0392b;border-radius:6px;padding:0 5px}
+.group-list .it-memo{font-size:12px;color:var(--muted)}
+.group-list .it-caution,.group-list .it-ask{margin-top:5px;font-size:13px}

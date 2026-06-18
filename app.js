@@ -336,11 +336,8 @@
         asks.map((q) => `<div class="it-ask">💬 업자 확인: ${esc(q)}</div>`).join("");
     };
     const groups = opts.inline
-      ? (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
-      <div class="group-line">
-        ${g.title ? `<span class="gtitle-inline">${esc(g.title)}</span> ` : ""}<span class="items-inline">${g.items.map(itemInlineText).join(", ")}</span>
-        ${g.items.map(itemExtras).join("")}
-      </div>`).join("")
+      ? `<ul class="group-list">${(p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
+        <li>${g.title ? `<span class="gtitle-inline">${esc(g.title)}</span>` : ""}<span class="items-inline">${g.items.map(itemInlineText).join(", ")}</span>${g.items.map(itemExtras).join("")}</li>`).join("")}</ul>`
       : (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
       <div class="group">
         ${g.title ? `<div class="gtitle">${esc(g.title)}</div>` : ""}
