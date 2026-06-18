@@ -2141,7 +2141,7 @@ const LIGHTING_KINDS = {
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V" },
   strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M 한 롤당 약 35W
   strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000 }, // 10M 한 롤당 약 70W (7W/m)
-  strip_aqara_wp: { label: "스트립 방수 (욕실)", icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M, IP65 추정 35W
+  strip_aqara_wp: { label: "스트립 방수",       icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M, IP65 추정 35W (욕실용)
   strip_normal:   { label: "스트립 (일반)",      icon: "▭", short: "일반스트립",   color: "#fbbf24", model: "일반 스트립 조명 or T5 (미정)",                    watt: 0,  volt: "AC 220V" }, // 작은방·드레스룸 간접등용
   surface_n:      { label: "직부등 (일반)",      icon: "◈", short: "직부등",      color: "#a3e635", model: "일반 직부등 (미정)",                                watt: 0,  volt: "AC 220V" }, // 발코니 등 표면 설치형
 };
