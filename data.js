@@ -1420,7 +1420,7 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명", kind: "strip" , circuit: "MR-3", zone: "안방", name: "안방 간접 #3" },
     { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명", kind: "strip_normal" , circuit: "DR-3", zone: "드레스룸", name: "드레스룸 간접" },
     { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #1", length: 180 },
-    { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip" , circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #2" },
+    { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip_aqara_wp" , circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #2", length: 165 },
     { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip" , circuit: "LR-3", zone: "거실", name: "거실 우물천장 스트립" },
     { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip" , circuit: "MR-3", zone: "안방", name: "안방 간접 #2" },
     { layer: "light", type: "box", x: 49.2, y: 35.3, w: 2.5, h: 0, label: "멀티매입등", kind: "multi10" , circuit: "LR-1", zone: "거실", name: "거실 좌측 10구 멀티" },
@@ -1446,16 +1446,16 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 27.8, y: 42.6, label: "COB조명", kind: "cob2n" , circuit: "MB-1", zone: "안방화장실", name: "안방화장실 다운라이트 #2" },
     { layer: "light", type: "pin", x: 29.7, y: 48.9, label: "COB조명", kind: "cob2n" , circuit: "MB-1", zone: "안방화장실", name: "안방화장실 다운라이트 #3" },
     { layer: "light", type: "pin", x: 26.3, y: 58.6, label: "COB조명", kind: "cob2"  , circuit: "MRH-1", zone: "안방복도", name: "안방복도 COB #1" },
-    { layer: "light", type: "pin", x: 22.8, y: 68.7, label: "COB조명", kind: "cob2n" , circuit: "MR-1", zone: "안방", name: "안방 COB #3" },
-    { layer: "light", type: "pin", x: 22.9, y: 66.9, label: "COB조명", kind: "cob2n"   , circuit: "MR-1", zone: "안방", name: "안방 추가 COB" },
-    { layer: "light", type: "pin", x: 22.5, y: 85.4, label: "COB조명", kind: "cob2n" , circuit: "MR-1", zone: "안방", name: "안방 COB #4" },
-    { layer: "light", type: "pin", x: 22.5, y: 83.7, label: "COB조명", kind: "cob2n" , circuit: "MR-1", zone: "안방", name: "안방 COB #1" },
+    { layer: "light", type: "pin", x: 22.8, y: 68.7, label: "COB조명", kind: "cob2" , circuit: "MR-1", zone: "안방", name: "안방 COB #3" },
+    { layer: "light", type: "pin", x: 22.9, y: 66.9, label: "COB조명", kind: "cob2"   , circuit: "MR-1", zone: "안방", name: "안방 추가 COB" },
+    { layer: "light", type: "pin", x: 22.5, y: 85.4, label: "COB조명", kind: "cob2" , circuit: "MR-1", zone: "안방", name: "안방 COB #4" },
+    { layer: "light", type: "pin", x: 22.5, y: 83.7, label: "COB조명", kind: "cob2" , circuit: "MR-1", zone: "안방", name: "안방 COB #1" },
     { layer: "light", type: "pin", x: 41.1, y: 80.9, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #3" },
     { layer: "light", type: "pin", x: 41.1, y: 76.2, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #2" },
     { layer: "light", type: "pin", x: 41.1, y: 71.6, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #1" },
     { layer: "light", type: "pin", x: 41.2, y: 66.4, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB 추가" },
-    { layer: "light", type: "pin", x: 50.6, y: 57.4, label: "확산조명", kind: "diff2" , circuit: "BC-1", zone: "발코니", name: "발코니 확산 #1" },
-    { layer: "light", type: "pin", x: 50.7, y: 65.5, label: "확산조명", kind: "diff2" , circuit: "BC-2", zone: "발코니", name: "발코니 확산 #2" },
+    { layer: "light", type: "pin", x: 50.6, y: 57.4, label: "확산조명", kind: "surface_n" , circuit: "BC-1", zone: "발코니", name: "발코니 확산 #1" },
+    { layer: "light", type: "pin", x: 50.7, y: 65.5, label: "확산조명", kind: "surface_n" , circuit: "BC-2", zone: "발코니", name: "발코니 확산 #2" },
     { layer: "light", type: "pin", x: 28, y: 58.6, label: "COB조명", kind: "cob2"  , circuit: "MRH-1", zone: "안방복도", name: "안방복도 COB #2" },
     { layer: "note", type: "legend", x: 5, y: 2.5, label: "" },
     { layer: "furniture", type: "pin", x: 41.7, y: 51.5, label: "" },
@@ -1470,7 +1470,7 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 33.4, y: 67.3, label: "확산조명", kind: "diff2"   , circuit: "MR-2", zone: "안방", name: "안방 확산 #1" },
     { layer: "light", type: "pin", x: 33.3, y: 85.4, label: "확산조명", kind: "diff2"  , circuit: "MR-2", zone: "안방", name: "안방 확산" },
     { layer: "light", type: "box", x: 22.4, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #2", length: 100 },
-    { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip" , circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #1" },
+    { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp" , circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #1", length: 165 },
     { layer: "light", type: "box", x: 22, y: 50.6, w: 0.1, h: 3.6, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #3", length: 200 },
     { layer: "light", type: "box", x: 32.4, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #4", length: 200 },
     { layer: "light", type: "pin", x: 61.5, y: 46.9, label: "확산조명", kind: "diff2n" , circuit: "BR-2", zone: "작은방", name: "작은방 확산 #2" },
@@ -2142,6 +2142,7 @@ const LIGHTING_KINDS = {
   strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000 }, // 10M 한 롤당 약 70W (7W/m)
   strip_aqara_wp: { label: "스트립 방수 (욕실)", icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M, IP65 추정 35W
   strip_normal:   { label: "스트립 (일반)",      icon: "▭", short: "일반스트립",   color: "#fbbf24", model: "일반 스트립 조명 or T5 (미정)",                    watt: 0,  volt: "AC 220V" }, // 작은방·드레스룸 간접등용
+  surface_n:      { label: "직부등 (일반)",      icon: "◈", short: "직부등",      color: "#a3e635", model: "일반 직부등 (미정)",                                watt: 0,  volt: "AC 220V" }, // 발코니 등 표면 설치형
 };
 
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
@@ -2181,8 +2182,8 @@ const LIGHTING_SWITCHES = {
                     note: "COB IoT 2개(14W) + 스트립 CCT 0.28롤(100+180=280cm) · 2.8m × 7W = 19.6W · 합 33.6W ≈ 34W (100W SMPS 충분)" } },
   "EN-2": { zone: "현관", switch: "현관 2구 #2", desc: "일괄소등" },
   // 발코니 (2구)
-  "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "확산 #1" },
-  "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "확산 #2" },
+  "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "직부등 #1" },
+  "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "직부등 #2" },
   // 작은방 (3구)
   "BR-1": { zone: "작은방", switch: "작은방 3구 #1", desc: "COB 4개" },
   "BR-2": { zone: "작은방", switch: "작은방 3구 #2", desc: "확산" },
@@ -2193,7 +2194,9 @@ const LIGHTING_SWITCHES = {
   "DR-3": { zone: "드레스룸", switch: "드레스룸 3구 #3", desc: "간접" },
   // 거실화장실 (3구)
   "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트" },
-  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "간접등" },
+  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "간접등",
+            spec: { lights: { strip_aqara_wp: 0.66 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 33,
+                    note: "아카라 방수 H2 5M(#167) 0.66롤 = 330cm (165+165) · 3.3m × 10W = 33W · 100W SMPS 충분" } },
   "LB-3": { zone: "거실화장실", switch: "거실화장실 3구 #3", desc: "환풍기" },
   // 안방화장실 (3구)
   "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
