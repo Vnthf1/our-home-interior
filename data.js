@@ -1481,7 +1481,6 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 46.5, y: 42.5, w: 0, h: 1.3, label: "간접조명", kind: "strip_cct" , circuit: "HW-1", zone: "복도", name: "복도 간접 #2", length: 220 },
     { layer: "light", type: "box", x: 35.1, y: 69.6, w: 0.4, h: 15.6, label: "간접조명", kind: "strip_cct" , circuit: "MR-3", zone: "안방", name: "안방 간접 #1", length: 370 },
     { layer: "light", type: "box", x: 32, y: 56, w: 0, h: 1.5, label: "간접조명", kind: "strip_cct", circuit: "MRH-2", zone: "안방복도", name: "안방복도 MRH-2 간접", length: 200 },
-    { layer: "light", type: "box", x: 31.2, y: 54.1, w: 3.7, h: 0, label: "간접조명", kind: "strip"  },
     { layer: "light", type: "pin", x: 39, y: 49.4, label: "COB조명", kind: "cob2n" , circuit: "LB-1", zone: "거실화장실", name: "거실화장실 다운라이트 추가" },
     { layer: "light", type: "pin", x: 34.5, y: 40.4, label: "COB조명", kind: "cob2" , circuit: "EN-1", zone: "현관", name: "현관 COB #2" },
     { layer: "light", type: "pin", x: 42.2, y: 61.5, label: "COB조명", kind: "cob2" , circuit: "HW-2", zone: "복도", name: "아트월 COB #4" },
