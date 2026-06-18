@@ -2164,12 +2164,12 @@ const LIGHTING_SMPS = {
  *   BR=작은방 DR=드레스룸 LB=거실화장실 MB=안방화장실 MR=안방 */
 const LIGHTING_SWITCHES = {
   // 거실 (3구) — 주방 2구와 같은 위치에 5구로 함께 설치
-  "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
-  "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
-  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 1 }, note: "스트립 5M × 3롤 · SMPS 200W는 우물천장 공용" } },
+  "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { lights: { multi10: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 40 } },
+  "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
+  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 1 }, watt: 105, note: "스트립 5M × 3롤 · SMPS 200W는 우물천장 공용 · 15m × 5W=75W (실 부하). 105W는 3롤 발주 기준 최대치." } },
   // 주방 (2구) — 거실 스위치 옆
-  "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
-  "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
+  "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
+  "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
   // 복도 (2구)
   "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "아트월",
             spec: { lights: { cob2: 1, strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 39,
