@@ -2178,6 +2178,9 @@ const LIGHTING_EXTRAS = [
   { id: "curtain_ctrl", label: "아카라 전동커튼 컨트롤러 (#154)",                qty: 6, priceB2B: 127075, priceB2C: 170000 },
   { id: "rail_4_5m",   label: "[주문제작] 무소음 레일 4.0m~5.0m (#163)",         qty: 4, priceB2B: 210600, priceB2C: 270000 },
   { id: "rail_3_4m",   label: "[주문제작] 무소음 레일 3.0m~4.0m (#162)",         qty: 2, priceB2B: 170182, priceB2C: 218182 },
+  // 구글 네스트(이지엉클 외) — 최저가 입력 → 표시 ×1.1 = VAT 포함 가격이 되도록 ÷1.1 후 저장
+  { id: "nest_4",      label: "구글 네스트 4세대",                              qty: 1, priceB2B: 326364, priceB2C: 326364 }, // 최저가 359,000원 (VAT포함) 기준
+  { id: "nest_35",     label: "구글 네스트 3.5세대",                            qty: 2, priceB2B: 125455, priceB2C: 125455 }, // 최저가 138,000원 (VAT포함) 기준
 ];
 
 /* 스위치 회로 메타.
