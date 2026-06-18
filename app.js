@@ -1144,14 +1144,17 @@
     let totalW = 0;
     kindKeys.forEach((k) => { totalW += matKindTotal[k] * ((KINDS[k] || {}).watt || 0); });
 
-    // 합계 행 (tfoot) — IoT 조명 → 드라이버 → SMPS → W합계 → 일반 조명
+    // 합계 행 (tfoot) — 부동소수점 오차 제거 + 스트립 발주량은 올림(정수)
+    const isStripKind = (k) => /^strip/.test(k);
+    const fmtInt = (v) => (!v ? '' : (Number.isInteger(v) ? v : Math.round(v * 100) / 100));
+    const fmtRolls = (v) => (!v ? '' : Math.ceil(Math.round(v * 100) / 100));
     const footHTML = '<tfoot><tr class="lt-foot-row">' +
       '<th colspan="3" class="lt-foot-label">총 ' + lights.length + '개 마커</th>' +
-      iotKinds.map((k) => '<td class="num">' + (matKindTotal[k] || '') + '</td>').join("") +
-      driverKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (totalsByDriver[k] || '') + '</td>').join("") +
-      smpsKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (totalsBySmps[k] || '') + '</td>').join("") +
-      '<td class="num lt-sep">' + (totalW ? totalW + 'W' : '') + '</td>' +
-      normalKinds.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (matKindTotal[k] || '') + '</td>').join("") +
+      iotKinds.map((k) => '<td class="num">' + (isStripKind(k) ? fmtRolls(matKindTotal[k]) : fmtInt(matKindTotal[k])) + '</td>').join("") +
+      driverKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + fmtInt(totalsByDriver[k]) + '</td>').join("") +
+      smpsKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + fmtInt(totalsBySmps[k]) + '</td>').join("") +
+      '<td class="num lt-sep">' + (totalW ? Math.round(totalW) + 'W' : '') + '</td>' +
+      normalKinds.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (isStripKind(k) ? fmtRolls(matKindTotal[k]) : fmtInt(matKindTotal[k])) + '</td>').join("") +
       '</tr></tfoot>';
 
     // 배너 — 임시저장(draft) 발견 시. 클릭으로 폐기 후 정본 보기 가능.
@@ -2078,5 +2081,7 @@
       }
     }, true);
     const y = $("year"); if (y) y.textContent = new Date().getFullYear();
+    // 로딩 오버레이 제거 — 페이지 콘텐츠가 그려진 다음 프레임에 fade-out
+    requestAnimationFrame(() => document.body.classList.add("app-ready"));
   });
 })();
