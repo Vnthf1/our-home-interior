@@ -972,17 +972,33 @@
         items.push({ label: info.label, qty: qty, ordered: qty, pb: info.priceB2B, pc: info.priceB2C });
       });
     }
+
+    // 추가 자재 (센서·도어락·매직패드·박스·플레이트 등) — qty=0이면 "?" 표시
+    if (typeof LIGHTING_EXTRAS !== "undefined") {
+      LIGHTING_EXTRAS.forEach((ex) => {
+        items.push({
+          label: ex.label,
+          qty: ex.qty || 0,
+          ordered: ex.qty || 0,
+          pb: ex.priceB2B,
+          pc: ex.priceB2C,
+          isExtra: true,
+          unknownQty: !ex.qty,
+        });
+      });
+    }
     let grandB = 0, grandC = 0;
     const rows = items.map((it) => {
-      const qtyTxt = (it.qty % 1 === 0) ? it.qty : (Math.round(it.qty * 100) / 100);
-      const sumB = it.pb != null ? it.ordered * it.pb : null;
-      const sumC = it.pc != null ? it.ordered * it.pc : null;
+      const qtyTxt = it.unknownQty ? '<span class="lt-mut">?</span>' : ((it.qty % 1 === 0) ? it.qty : (Math.round(it.qty * 100) / 100));
+      const orderedTxt = it.unknownQty ? '<span class="lt-mut">?</span>' : it.ordered;
+      const sumB = (it.pb != null && !it.unknownQty) ? it.ordered * it.pb : null;
+      const sumC = (it.pc != null && !it.unknownQty) ? it.ordered * it.pc : null;
       if (sumB != null) grandB += sumB;
       if (sumC != null) grandC += sumC;
       return '<tr>' +
         '<td>' + esc(it.label) + '</td>' +
         '<td class="num">' + qtyTxt + '</td>' +
-        '<td class="num">' + it.ordered + '</td>' +
+        '<td class="num">' + orderedTxt + '</td>' +
         '<td class="num lt-price">' + (it.pb != null ? fmt(it.pb) : '<span class="lt-mut">—</span>') + '</td>' +
         '<td class="num lt-price">' + (sumB != null ? fmt(sumB) : '<span class="lt-mut">—</span>') + '</td>' +
         '<td class="num lt-price">' + (sumC != null ? fmt(sumC) : '<span class="lt-mut">—</span>') + '</td>' +

@@ -2163,6 +2163,18 @@ const LIGHTING_SWITCH_PRICES = {
   "3": { label: "Aqara H1 Pro 3구 (#183)", priceB2B: 105105, priceB2C: 147000 },
 };
 
+/* 추가 자재 — 견적 표에 별도 행으로 표시. qty=0이면 "?" 표시(사용자가 채울 항목) */
+const LIGHTING_EXTRAS = [
+  { id: "fp2",         label: "아카라 재실 센서 FP2 (#195)",                   qty: 2, priceB2B: 106145, priceB2C: 142000 },
+  { id: "fp2_bracket", label: "FP2 센서용 브래킷 3인치 75파이 매입형 (#220)",  qty: 2, priceB2B: 9900,   priceB2C: 16364 },
+  { id: "fp300",       label: "아카라 재실 멀티 센서 FP300 (#196)",            qty: 3, priceB2B: 67500,  priceB2C: 90000 },
+  { id: "k100",        label: "아카라 스마트 도어락 K100 (#238)",              qty: 1, priceB2B: 330000, priceB2C: 494000 },
+  { id: "s1plus",      label: "아카라 매직패드 S1 Plus (#233)",                qty: 1, priceB2B: 459420, priceB2C: 589000 },
+  { id: "wago",        label: "와고 커넥터 221-2411 (#211)",                   qty: 0, priceB2B: 403,    priceB2C: 436 },
+  { id: "h1box",       label: "H1 86 스위치 박스 (#223)",                      qty: 0, priceB2B: 2000,   priceB2C: 4000 },
+  { id: "plate2",      label: "아카라 벽 스위치 플레이트 (행프레임) 2구 (#227)", qty: 0, priceB2B: 13860,  priceB2C: 14000 },
+];
+
 /* 스위치 회로 메타.
  *   id: { zone, switch, desc }  // switch="거실 3구 #1" 형태 — 표 2열에 그대로 표시
  *   desc 는 회로명/메모(채우는 중). 비어도 됨.
