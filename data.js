@@ -2182,30 +2182,6 @@ const LIGHTING_SWITCHES = {
             spec: { lights: { cob2: 2, strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 34,
                     note: "COB IoT 2개(14W) + 스트립 CCT 0.28롤(100+180=280cm) · 2.8m × 7W = 19.6W · 합 33.6W ≈ 34W (100W SMPS 충분)" } },
   "EN-2": { zone: "현관", switch: "현관 2구 #2", desc: "일괄소등" },
-  // 발코니 (2구)
-  "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "직부등 #1" },
-  "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "직부등 #2" },
-  // 작은방 (3구)
-  "BR-1": { zone: "작은방", switch: "작은방 3구 #1", desc: "COB 4개" },
-  "BR-2": { zone: "작은방", switch: "작은방 3구 #2", desc: "확산" },
-  "BR-3": { zone: "작은방", switch: "작은방 3구 #3", desc: "간접등" },
-  // 드레스룸 (3구)
-  "DR-1": { zone: "드레스룸", switch: "드레스룸 3구 #1", desc: "COB" },
-  "DR-2": { zone: "드레스룸", switch: "드레스룸 3구 #2", desc: "확산" },
-  "DR-3": { zone: "드레스룸", switch: "드레스룸 3구 #3", desc: "간접" },
-  // 거실화장실 (3구)
-  "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트" },
-  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "간접등",
-            spec: { lights: { strip_aqara_wp: 1.34 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 67,
-                    note: "아카라 방수 H2 5M(#167) 1.34롤 = 670cm (335+335) · 6.7m × 10W = 67W · 100W SMPS 충분(33W 여유)" } },
-  "LB-3": { zone: "거실화장실", switch: "거실화장실 3구 #3", desc: "환풍기" },
-  // 안방화장실 (3구)
-  "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
-            spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
-  "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "간접등",
-            spec: { lights: { strip_aqara_wp: 1.36 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 68,
-                    note: "아카라 방수 H2 5M(#167) 1.36롤 사용 (5m 1롤 + 1.8m / 발주는 2롤) · 길이 180+100+200+200 = 680cm · 10W/m × 6.8m = 68W · 100W SMPS 충분(32W 여유)" } },
-  "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 안방 (3구)
   "MR-1": { zone: "안방", switch: "안방 3구 #1", desc: "COB 4개",
             spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32,
@@ -2220,4 +2196,28 @@ const LIGHTING_SWITCHES = {
   "MRH-1": { zone: "안방복도", switch: "안방복도 3구 #1", desc: "COB 2개" },
   "MRH-2": { zone: "안방복도", switch: "안방복도 3구 #2", desc: "확산" },
   "MRH-3": { zone: "안방복도", switch: "안방복도 3구 #3", desc: "간접" },
+  // 거실화장실 (3구)
+  "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트" },
+  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "간접등",
+            spec: { lights: { strip_aqara_wp: 1.34 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 67,
+                    note: "아카라 방수 H2 5M(#167) 1.34롤 = 670cm (335+335) · 6.7m × 10W = 67W · 100W SMPS 충분(33W 여유)" } },
+  "LB-3": { zone: "거실화장실", switch: "거실화장실 3구 #3", desc: "환풍기" },
+  // 안방화장실 (3구)
+  "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
+            spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
+  "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "간접등",
+            spec: { lights: { strip_aqara_wp: 1.36 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 68,
+                    note: "아카라 방수 H2 5M(#167) 1.36롤 사용 (5m 1롤 + 1.8m / 발주는 2롤) · 길이 180+100+200+200 = 680cm · 10W/m × 6.8m = 68W · 100W SMPS 충분(32W 여유)" } },
+  "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
+  // 작은방 (3구)
+  "BR-1": { zone: "작은방", switch: "작은방 3구 #1", desc: "COB 4개" },
+  "BR-2": { zone: "작은방", switch: "작은방 3구 #2", desc: "확산" },
+  "BR-3": { zone: "작은방", switch: "작은방 3구 #3", desc: "간접등" },
+  // 드레스룸 (3구)
+  "DR-1": { zone: "드레스룸", switch: "드레스룸 3구 #1", desc: "COB" },
+  "DR-2": { zone: "드레스룸", switch: "드레스룸 3구 #2", desc: "확산" },
+  "DR-3": { zone: "드레스룸", switch: "드레스룸 3구 #3", desc: "간접" },
+  // 발코니 (2구)
+  "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "직부등 #1" },
+  "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "직부등 #2" },
 };
