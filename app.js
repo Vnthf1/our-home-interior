@@ -948,7 +948,10 @@
         items.push({ label: info.label || k, qty: qty, ordered: ordered, pb: hasPrice ? info.priceB2B : null, pc: hasPrice ? info.priceB2C : null });
       });
     };
-    collect(kindKeys, KINDS, matKindTotal, true);
+    // IoT 조명 먼저, 일반(AC 220V) 조명은 견적 마지막에 — 진한 구분선
+    const iotKinds = kindKeys.filter((k) => (KINDS[k] || {}).volt !== "AC 220V");
+    const normalKinds = kindKeys.filter((k) => (KINDS[k] || {}).volt === "AC 220V");
+    collect(iotKinds, KINDS, matKindTotal, true);
     collect(driverKeys, DRIVERS, totalsByDriver, false);
     collect(smpsKeys, SMPSES, totalsBySmps, false);
 
@@ -987,6 +990,11 @@
         });
       });
     }
+
+    // 일반 조명(AC 220V)은 IoT 묶음 뒤에 — 첫 항목에 진한 구분선
+    const normalStart = items.length;
+    collect(normalKinds, KINDS, matKindTotal, true);
+    if (items[normalStart]) items[normalStart].isNormalStart = true;
     let grandB = 0, grandC = 0;
     const rows = items.map((it) => {
       const qtyTxt = it.unknownQty ? '<span class="lt-mut">?</span>' : ((it.qty % 1 === 0) ? it.qty : (Math.round(it.qty * 100) / 100));
@@ -995,7 +1003,7 @@
       const sumC = (it.pc != null && !it.unknownQty) ? it.ordered * it.pc : null;
       if (sumB != null) grandB += sumB;
       if (sumC != null) grandC += sumC;
-      return '<tr>' +
+      return '<tr' + (it.isNormalStart ? ' class="lt-row-normal-start"' : '') + '>' +
         '<td>' + esc(it.label) + '</td>' +
         '<td class="num">' + qtyTxt + '</td>' +
         '<td class="num">' + orderedTxt + '</td>' +
