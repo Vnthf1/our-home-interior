@@ -1419,7 +1419,7 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 66.8, y: 40.3, w: 0.1, h: 9.7, label: "간접조명", kind: "strip" , circuit: "BR-3", zone: "작은방", name: "작은방 간접" },
     { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명", kind: "strip" },
     { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명", kind: "strip" },
-    { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip_cct" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #1", length: 180 },
+    { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #1", length: 180 },
     { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip" },
     { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip" , circuit: "LR-3", zone: "거실", name: "거실 우물천장 스트립" },
     { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip" },
@@ -1469,10 +1469,10 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 41.1, y: 85, label: "확산조명", kind: "diff2" },
     { layer: "light", type: "pin", x: 33.4, y: 67.3, label: "확산조명", kind: "diff2" },
     { layer: "light", type: "pin", x: 33.3, y: 85.4, label: "확산조명", kind: "diff2" },
-    { layer: "light", type: "box", x: 22.4, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_cct" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #2", length: 100 },
+    { layer: "light", type: "box", x: 22.4, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #2", length: 100 },
     { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip" },
-    { layer: "light", type: "box", x: 22, y: 50.6, w: 0.1, h: 3.6, label: "간접조명", kind: "strip_cct" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #3", length: 200 },
-    { layer: "light", type: "box", x: 32.4, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_cct" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #4", length: 200 },
+    { layer: "light", type: "box", x: 22, y: 50.6, w: 0.1, h: 3.6, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #3", length: 200 },
+    { layer: "light", type: "box", x: 32.4, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #4", length: 200 },
     { layer: "light", type: "pin", x: 61.5, y: 46.9, label: "확산조명", kind: "diff2" , circuit: "BR-2", zone: "작은방", name: "작은방 확산 #2" },
     { layer: "light", type: "box", x: 34.1, y: 43.9, w: 5.2, h: 0, label: "간접조명", kind: "strip" , circuit: "EN-1", zone: "현관", name: "현관 간접 #1" },
     { layer: "light", type: "box", x: 46.6, y: 37.5, w: 0, h: 1.3, label: "간접조명", kind: "strip" , circuit: "HW-1", zone: "복도", name: "복도 간접 #1" },
@@ -2137,8 +2137,9 @@ const LIGHTING_KINDS = {
   diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42)",              watt: 8 },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0 },
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20 },
-  strip:     { label: "스트립 RGBTW",       icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35 }, // 5M 한 롤당 약 35W
-  strip_cct: { label: "스트립 CCT",         icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70 }, // 10M 한 롤당 약 70W (7W/m)
+  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35 }, // 5M 한 롤당 약 35W
+  strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70 }, // 10M 한 롤당 약 70W (7W/m)
+  strip_aqara_wp: { label: "스트립 방수 (욕실)", icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35 }, // 5M, IP65 추정 35W
 };
 
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
@@ -2189,8 +2190,8 @@ const LIGHTING_SWITCHES = {
   "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
             spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
   "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "간접등",
-            spec: { lights: { strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 48,
-                    note: "SR 8mm CCT 10M(#60) 1롤로 4군데 분배 · 길이 180+100+200+200 = 680cm · 6.8m × 7W = 47.6W (한 롤 70W 안 충분)" } },
+            spec: { lights: { strip_aqara_wp: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 68,
+                    note: "아카라 방수 H2 5M(#167) 2롤 필요 · 길이 180+100+200+200 = 680cm · 10W/m × 6.8m = 68W (5m 1롤로 부족 → 2롤)" } },
   "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 안방 (2구 + 2구 = 두 위치)
   "MR-A1": { zone: "안방", switch: "안방 2구A #1", desc: "" },
