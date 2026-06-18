@@ -42,7 +42,7 @@
     "입주민 동의": "consent",
     "보양": "demolition",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
-    "샷시": "window", "설비": "demolition",
+    "샷시": "window", "샷시 (실측)": "window", "설비": "demolition",
     "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공 (방음)": "carpentry",
@@ -235,7 +235,11 @@
         const left = (s.start / 6) * 100;
         const width = ((s.end - s.start + 1) / 6) * 100;
         const top = 32 + s.lane * 22;
-        return `<div class="cm-ev" ${s.pid?`data-pid="${s.pid}"`:""} style="left:calc(${left}% + 2px);width:calc(${width}% - 4px);top:${top}px;background:${s.color}" title="${esc(s.name)}">${esc(s.name)}</div>`;
+        const isMeasure = /실측/.test(s.name);
+        const styleColor = isMeasure
+          ? `background:#fff;color:${s.color};border:1.5px solid ${s.color}`
+          : `background:${s.color}`;
+        return `<div class="cm-ev${isMeasure?" cm-ev-measure":""}" ${s.pid?`data-pid="${s.pid}"`:""} style="left:calc(${left}% + 2px);width:calc(${width}% - 4px);top:${top}px;${styleColor}" title="${esc(s.name)}">${esc(s.name)}</div>`;
       }).join("");
 
       html += `<div class="cm-week"><div class="cm-day-grid" style="--minh:${minH}px">${cells}</div><div class="cm-events">${evtHtml}</div></div>`;
