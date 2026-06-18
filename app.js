@@ -954,8 +954,11 @@
     const lights = [];
     items.forEach((it, idx) => { if (it.layer === "light") lights.push({ it, idx }); });
 
-    // 매트릭스 컬럼 순서 — 정의 순서 그대로
-    const kindKeys = Object.keys(KINDS);
+    // 매트릭스 컬럼 순서 — IoT(DC 24V) 먼저, AC 220V 일반은 W 합계 뒤로 분리
+    const allKindKeys = Object.keys(KINDS);
+    const normalKinds = allKindKeys.filter((k) => (KINDS[k] || {}).volt === "AC 220V");
+    const iotKinds = allKindKeys.filter((k) => !normalKinds.includes(k));
+    const kindKeys = allKindKeys; // 호환용 (총합 계산 등에 그대로 사용)
     const driverKeys = Object.keys(DRIVERS);
     const smpsKeys = Object.keys(SMPSES);
 
@@ -1009,25 +1012,28 @@
       return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}">${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}${metaLine}</th>`;
     };
 
-    // 헤더 (3줄): 색점 / 종류명 / 모델 — 조명 4컬럼 + (구분선) + 드라이버 + (구분선) + SMPS + 합계
+    // 헤더 (3줄): IoT 조명 → 드라이버 → SMPS → W합계 → 일반 조명 (분리)
     const headColors = '<tr class="lt-h-color">' +
       '<th rowspan="3" class="lt-h-fix">구역</th>' +
       '<th rowspan="3" class="lt-h-fix">스위치</th>' +
       '<th rowspan="3" class="lt-h-fix">회로명</th>' +
-      kindKeys.map((k) => mkColorTh(KINDS[k], false)).join("") +
+      iotKinds.map((k) => mkColorTh(KINDS[k], false)).join("") +
       driverKeys.map((k, i) => mkColorTh(DRIVERS[k], i === 0)).join("") +
       smpsKeys.map((k, i) => mkColorTh(SMPSES[k], i === 0)).join("") +
       '<th rowspan="3" class="lt-h-fix num lt-sep">W 합계</th>' +
+      normalKinds.map((k, i) => mkColorTh(KINDS[k], i === 0)).join("") +
       '</tr>';
     const headLabels = '<tr class="lt-h-label">' +
-      kindKeys.map((k) => mkLabelTh(KINDS[k], false, k)).join("") +
+      iotKinds.map((k) => mkLabelTh(KINDS[k], false, k)).join("") +
       driverKeys.map((k, i) => mkLabelTh(DRIVERS[k], i === 0, k)).join("") +
       smpsKeys.map((k, i) => mkLabelTh(SMPSES[k], i === 0, k)).join("") +
+      normalKinds.map((k, i) => mkLabelTh(KINDS[k], i === 0, k)).join("") +
       '</tr>';
     const headModels = '<tr class="lt-h-model">' +
-      kindKeys.map((k) => mkModelTh(KINDS[k], false)).join("") +
+      iotKinds.map((k) => mkModelTh(KINDS[k], false)).join("") +
       driverKeys.map((k, i) => mkModelTh(DRIVERS[k], i === 0)).join("") +
       smpsKeys.map((k, i) => mkModelTh(SMPSES[k], i === 0)).join("") +
+      normalKinds.map((k, i) => mkModelTh(KINDS[k], i === 0)).join("") +
       '</tr>';
 
     // 사전계산: 각 행의 zone (연속 같은 zone → rowspan 셀병합)
@@ -1110,10 +1116,11 @@
         zoneTd +
         '<td class="lt-sw">' + switchLabel + '</td>' +
         '<td class="lt-name">' + circuitCell + '</td>' +
-        kindKeys.map((k) => stripKinds[k] ? stripCell(k, false) : qtyCell(lightQty(k), false)).join("") +
+        iotKinds.map((k) => stripKinds[k] ? stripCell(k, false) : qtyCell(lightQty(k), false)).join("") +
         driverKeys.map((k, i) => qtyCell(drQty(k), i === 0)).join("") +
         smpsKeys.map((k, i) => qtyCell(smQty(k), i === 0)).join("") +
         '<td class="num lt-rowtot lt-sep">' + (rowW ? rowW + 'W' : '') + '</td>' +
+        normalKinds.map((k, i) => stripKinds[k] ? stripCell(k, i === 0) : qtyCell(lightQty(k), i === 0)).join("") +
         '</tr>';
     });
 
@@ -1133,13 +1140,14 @@
     let totalW = 0;
     kindKeys.forEach((k) => { totalW += matKindTotal[k] * ((KINDS[k] || {}).watt || 0); });
 
-    // 합계 행 (tfoot) — 조명·드라이버·SMPS 자재수량 + 우측 끝 W 합계
+    // 합계 행 (tfoot) — IoT 조명 → 드라이버 → SMPS → W합계 → 일반 조명
     const footHTML = '<tfoot><tr class="lt-foot-row">' +
       '<th colspan="3" class="lt-foot-label">총 ' + lights.length + '개 마커</th>' +
-      kindKeys.map((k) => '<td class="num">' + (matKindTotal[k] || '') + '</td>').join("") +
+      iotKinds.map((k) => '<td class="num">' + (matKindTotal[k] || '') + '</td>').join("") +
       driverKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (totalsByDriver[k] || '') + '</td>').join("") +
       smpsKeys.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (totalsBySmps[k] || '') + '</td>').join("") +
       '<td class="num lt-sep">' + (totalW ? totalW + 'W' : '') + '</td>' +
+      normalKinds.map((k, i) => '<td class="num' + (i === 0 ? ' lt-sep' : '') + '">' + (matKindTotal[k] || '') + '</td>').join("") +
       '</tr></tfoot>';
 
     // 배너 — 임시저장(draft) 발견 시. 클릭으로 폐기 후 정본 보기 가능.
