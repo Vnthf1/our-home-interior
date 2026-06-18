@@ -938,6 +938,11 @@
     const fmt = (v) => v.toLocaleString();
     const items = [];
     const isStrip = (k) => /^strip/.test(k);
+    const labelWithNum = (info, fallback) => {
+      const base = (info && info.label) || fallback;
+      const num = info && info.model && info.model.match(/\(#\d+\)/);
+      return num ? base + " " + num[0] : base;
+    };
     const collect = (keys, dict, qtyMap, rollable) => {
       keys.forEach((k) => {
         const info = dict[k] || {};
@@ -945,7 +950,7 @@
         if (!qty) return;
         const ordered = rollable && isStrip(k) ? Math.ceil(Math.round(qty * 100) / 100) : Math.round(qty);
         const hasPrice = typeof info.priceB2B === "number";
-        items.push({ label: info.label || k, qty: qty, ordered: ordered, pb: hasPrice ? info.priceB2B : null, pc: hasPrice ? info.priceB2C : null });
+        items.push({ label: labelWithNum(info, k), qty: qty, ordered: ordered, pb: hasPrice ? info.priceB2B : null, pc: hasPrice ? info.priceB2C : null });
       });
     };
     // IoT 조명 먼저, 일반(AC 220V) 조명은 견적 마지막에 — 진한 구분선
