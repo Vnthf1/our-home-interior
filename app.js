@@ -1108,11 +1108,12 @@
     });
 
     // 헤더 셀 생성 헬퍼 (조명·드라이버·SMPS 모두 같은 3줄 포맷)
-    const mkColorTh = (info, sepBefore) =>
-      `<th class="lt-h-mk${sepBefore ? " lt-sep" : ""}"><span class="lt-mk-dot" style="color:${(info && info.color) || "#888"}">${esc((info && info.icon) || "●")}</span></th>`;
-    const mkLabelTh = (info, sepBefore, fallback) =>
-      `<th${sepBefore ? ' class="lt-sep"' : ""}>${esc((info && info.label) || fallback)}</th>`;
-    const mkModelTh = (info, sepBefore) => {
+    // dataKind: 종류 키(있으면 hover로 도면 마커 강조). drivers/smps는 없음.
+    const mkColorTh = (info, sepBefore, dataKind) =>
+      `<th class="lt-h-mk${sepBefore ? " lt-sep" : ""}"${dataKind ? ' data-kind="' + dataKind + '"' : ''}><span class="lt-mk-dot" style="color:${(info && info.color) || "#888"}">${esc((info && info.icon) || "●")}</span></th>`;
+    const mkLabelTh = (info, sepBefore, fallback, dataKind) =>
+      `<th${sepBefore ? ' class="lt-sep"' : ""}${dataKind ? ' data-kind="' + dataKind + '"' : ''}>${esc((info && info.label) || fallback)}</th>`;
+    const mkModelTh = (info, sepBefore, dataKind) => {
       const m = info && info.model;
       const v = info && info.volt;
       const w = info && info.watt;
@@ -1120,7 +1121,7 @@
       if (v) metaParts.push(esc(v));
       if (w) metaParts.push(esc(w + "W"));
       const metaLine = metaParts.length ? `<div class="lt-h-volt">${metaParts.join(" · ")}</div>` : '';
-      return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}">${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}${metaLine}</th>`;
+      return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}"${dataKind ? ' data-kind="' + dataKind + '"' : ''}>${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}${metaLine}</th>`;
     };
 
     // 헤더 (3줄): IoT 조명 → 드라이버 → SMPS → W합계 → 일반 조명 (분리)
@@ -1128,23 +1129,23 @@
       '<th rowspan="3" class="lt-h-fix">구역</th>' +
       '<th rowspan="3" class="lt-h-fix">스위치</th>' +
       '<th rowspan="3" class="lt-h-fix">회로명</th>' +
-      iotKinds.map((k) => mkColorTh(KINDS[k], false)).join("") +
+      iotKinds.map((k) => mkColorTh(KINDS[k], false, k)).join("") +
       driverKeys.map((k, i) => mkColorTh(DRIVERS[k], i === 0)).join("") +
       smpsKeys.map((k, i) => mkColorTh(SMPSES[k], i === 0)).join("") +
       '<th rowspan="3" class="lt-h-fix num lt-sep">W 합계</th>' +
-      normalKinds.map((k, i) => mkColorTh(KINDS[k], i === 0)).join("") +
+      normalKinds.map((k, i) => mkColorTh(KINDS[k], i === 0, k)).join("") +
       '</tr>';
     const headLabels = '<tr class="lt-h-label">' +
-      iotKinds.map((k) => mkLabelTh(KINDS[k], false, k)).join("") +
+      iotKinds.map((k) => mkLabelTh(KINDS[k], false, k, k)).join("") +
       driverKeys.map((k, i) => mkLabelTh(DRIVERS[k], i === 0, k)).join("") +
       smpsKeys.map((k, i) => mkLabelTh(SMPSES[k], i === 0, k)).join("") +
-      normalKinds.map((k, i) => mkLabelTh(KINDS[k], i === 0, k)).join("") +
+      normalKinds.map((k, i) => mkLabelTh(KINDS[k], i === 0, k, k)).join("") +
       '</tr>';
     const headModels = '<tr class="lt-h-model">' +
-      iotKinds.map((k) => mkModelTh(KINDS[k], false)).join("") +
+      iotKinds.map((k) => mkModelTh(KINDS[k], false, k)).join("") +
       driverKeys.map((k, i) => mkModelTh(DRIVERS[k], i === 0)).join("") +
       smpsKeys.map((k, i) => mkModelTh(SMPSES[k], i === 0)).join("") +
-      normalKinds.map((k, i) => mkModelTh(KINDS[k], i === 0)).join("") +
+      normalKinds.map((k, i) => mkModelTh(KINDS[k], i === 0, k)).join("") +
       '</tr>';
 
     // 사전계산: 각 행의 zone (연속 같은 zone → rowspan 셀병합)
@@ -1169,7 +1170,19 @@
       const countByKind = {}; kindKeys.forEach((k) => { countByKind[k] = 0; });
       arr.forEach(({ it }) => { if (countByKind[it.kind] != null) countByKind[it.kind]++; });
 
-      const switchLabel = sw.switch ? esc(sw.switch) : (cid === "_unset" ? '<span class="lt-mut">—</span>' : '<span class="lt-mut">미정</span>');
+      // 스위치 라벨 분리: "거실 3구 #1" → "거실 3구" + "#1" (모바일에서 prefix 숨김)
+      let switchLabel;
+      if (sw.switch) {
+        const swText = sw.switch;
+        const m = /^(.+?)\s*(#\d+)$/.exec(swText);
+        if (m) {
+          switchLabel = '<span class="lt-sw-prefix">' + esc(m[1]) + ' </span><span class="lt-sw-num">' + esc(m[2]) + '</span>';
+        } else {
+          switchLabel = esc(swText);
+        }
+      } else {
+        switchLabel = (cid === "_unset" ? '<span class="lt-mut">—</span>' : '<span class="lt-mut">미정</span>');
+      }
       // 회로의 마커들에 length가 있으면 길이 줄 추가 (예: "180·100·200·200cm = 680cm")
       const lens = arr.map((g) => g.it.length).filter((n) => typeof n === "number" && n > 0);
       const lenLine = lens.length
@@ -1439,6 +1452,23 @@
       overlay.querySelectorAll(".lt-marker").forEach((mk) => mk.classList.remove("dim"));
       tbody.querySelectorAll("tr").forEach((row) => row.classList.remove("flash"));
     });
+
+    // 종류 헤더 hover → 도면에서 해당 kind 마커 강조
+    const matrixThead = root.querySelector(".lt-matrix thead");
+    if (matrixThead) {
+      matrixThead.addEventListener("mouseover", (e) => {
+        const th = e.target.closest("[data-kind]");
+        if (!th) return;
+        const k = th.dataset.kind;
+        overlay.querySelectorAll(".lt-marker").forEach((m) => {
+          m.classList.toggle("flash", m.dataset.kind === k);
+          m.classList.toggle("dim", m.dataset.kind !== k);
+        });
+      });
+      matrixThead.addEventListener("mouseleave", () => {
+        overlay.querySelectorAll(".lt-marker").forEach((m) => m.classList.remove("flash", "dim"));
+      });
+    }
   }
 
   /* ---------- 작업 안내 (작업자 공유용 · 탭형, 각 공정마다 URL) ---------- */
