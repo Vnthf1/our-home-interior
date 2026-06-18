@@ -800,10 +800,9 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 
 /* 작업계획서(검토용) — 그룹별 리스트(•). 그룹=한 줄, 항목은 쉼표 나열 */
 .cols-stack{display:block;column-count:initial}
-.group-list{margin:6px 0 0;padding-left:4px;list-style:none}
-.group-list>li{position:relative;padding:8px 0 8px 18px;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.7}
-.group-list>li:last-child{border-bottom:0}
-.group-list>li::before{content:"•";position:absolute;left:0;top:8px;color:var(--accent);font-weight:700}
+.group-list{margin:4px 0 0;padding-left:2px;list-style:none}
+.group-list>li{position:relative;padding:2px 0 2px 16px;font-size:14.5px;line-height:1.55}
+.group-list>li::before{content:"•";position:absolute;left:0;top:2px;color:var(--accent);font-weight:700}
 .group-list .gtitle-inline{font-weight:700;color:var(--accent)}
 .group-list .gtitle-inline::after{content:" — ";color:var(--muted);font-weight:400}
 .group-list .items-inline{color:var(--ink)}
