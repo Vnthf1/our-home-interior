@@ -1447,7 +1447,7 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 29.7, y: 48.9, label: "COB조명", kind: "cob2n" , circuit: "MB-1", zone: "안방화장실", name: "안방화장실 다운라이트 #3" },
     { layer: "light", type: "pin", x: 26.3, y: 58.6, label: "COB조명", kind: "cob2" , circuit: "MR-2", zone: "안방", name: "안방 COB #7" },
     { layer: "light", type: "pin", x: 22.8, y: 68.7, label: "COB조명", kind: "cob2" , circuit: "MR-1", zone: "안방", name: "안방 COB #3" },
-    { layer: "light", type: "pin", x: 22.9, y: 66.9, label: "COB조명", kind: "cob2" , circuit: "MR-1", zone: "안방", name: "안방 COB #2" },
+    { layer: "light", type: "pin", x: 22.9, y: 66.9, label: "COB조명", kind: "cob2"  , circuit: "LB-1", zone: "거실화장실", name: "거실화장실 다운라이트 #2" },
     { layer: "light", type: "pin", x: 22.5, y: 85.4, label: "COB조명", kind: "cob2" , circuit: "MR-1", zone: "안방", name: "안방 COB #4" },
     { layer: "light", type: "pin", x: 22.5, y: 83.7, label: "COB조명", kind: "cob2" , circuit: "MR-1", zone: "안방", name: "안방 COB #1" },
     { layer: "light", type: "pin", x: 41.1, y: 80.9, label: "COB조명", kind: "cob2" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #3" },
