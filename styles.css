@@ -837,4 +837,4 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-quote-tbl tfoot th{text-align:right;padding-right:14px}
 .lt-quote-tbl tfoot td.num{text-align:right;font-variant-numeric:tabular-nums}
 /* 가격 셀 — 관리자만 노출 (body.is-admin 없으면 숨김) */
-body:not(.is-admin) .lt-quote-tbl .lt-price{display:none}
+body:not(.is-admin) .lt-quote-sec .lt-price{display:none}

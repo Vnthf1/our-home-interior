@@ -2135,9 +2135,9 @@ const KITCHEN = {
  *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
 const LIGHTING_KINDS = {
   cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 9600,  priceB2C: 16364 },
-  cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V" },
+  cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
   diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 8580,  priceB2C: 16364 },
-  diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V" },
+  diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
   strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 46000, priceB2C: 60000 }, // 5M 한 롤당 약 35W
   strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000, priceB2B: 44400, priceB2C: 80000 }, // 10M 한 롤당 약 70W (7W/m)
@@ -2154,6 +2154,13 @@ const LIGHTING_DRIVERS = {
 const LIGHTING_SMPS = {
   u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2L (#120) — PF>0.6 가성비", priceB2B: 16692, priceB2C: 21818 },
   u200: { label: "유니온 200W SMPS", short: "200W", color: "#374151", model: "유니온 UP200S24W2L (#122)",                priceB2B: 25488, priceB2C: 33182 },
+};
+
+/* 스위치 단가 — 회로별 switch 필드의 "X구"를 카운트하여 발주량 자동 산정 */
+const LIGHTING_SWITCH_PRICES = {
+  "1": { label: "Aqara H1 Pro 1구 (#181)", priceB2B: 92235,  priceB2C: 129000 },
+  "2": { label: "Aqara H1 Pro 2구 (#182)", priceB2B: 98670,  priceB2C: 138000 },
+  "3": { label: "Aqara H1 Pro 3구 (#183)", priceB2B: 105105, priceB2C: 147000 },
 };
 
 /* 스위치 회로 메타.

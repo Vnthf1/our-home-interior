@@ -951,6 +951,27 @@
     collect(kindKeys, KINDS, matKindTotal, true);
     collect(driverKeys, DRIVERS, totalsByDriver, false);
     collect(smpsKeys, SMPSES, totalsBySmps, false);
+
+    // 스위치 카운트 — LIGHTING_SWITCHES.switch 필드의 "X구"를 같은 위치(예: "거실 3구")끼리 묶어 1개로 카운트
+    if (typeof LIGHTING_SWITCHES !== "undefined" && typeof LIGHTING_SWITCH_PRICES !== "undefined") {
+      const switchPositions = new Set();
+      Object.values(LIGHTING_SWITCHES).forEach((sw) => {
+        if (!sw || !sw.switch) return;
+        const pos = sw.switch.replace(/\s*#\d+\s*$/, "").trim(); // "거실 3구 #1" → "거실 3구"
+        switchPositions.add(pos);
+      });
+      const swCounts = {};
+      switchPositions.forEach((pos) => {
+        const m = /(\d)구/.exec(pos);
+        if (m) { const ch = m[1]; swCounts[ch] = (swCounts[ch] || 0) + 1; }
+      });
+      Object.keys(swCounts).sort().forEach((ch) => {
+        const info = LIGHTING_SWITCH_PRICES[ch];
+        if (!info) return;
+        const qty = swCounts[ch];
+        items.push({ label: info.label, qty: qty, ordered: qty, pb: info.priceB2B, pc: info.priceB2C });
+      });
+    }
     let grandB = 0, grandC = 0;
     const rows = items.map((it) => {
       const qtyTxt = (it.qty % 1 === 0) ? it.qty : (Math.round(it.qty * 100) / 100);
@@ -968,7 +989,7 @@
         '</tr>';
     }).join('');
     return '<section class="lt-quote-sec">' +
-      '<h3 class="lt-quote-h">📋 자재 견적 <span class="lt-quote-sub">(가격은 관리자만 노출 · 이지엉클 단가표 기준)</span></h3>' +
+      '<h3 class="lt-quote-h">📋 자재 견적<span class="lt-quote-sub lt-price"> (가격은 관리자만 노출 · 이지엉클 단가표 기준)</span></h3>' +
       '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
         '<thead><tr>' +
           '<th>품목</th><th class="num">사용량</th><th class="num">발주</th>' +
