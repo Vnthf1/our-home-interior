@@ -2175,6 +2175,9 @@ const LIGHTING_EXTRAS = [
   { id: "plate2",      label: "아카라 벽 스위치 플레이트 (행프레임) 2구 (#227)", qty: 0, priceB2B: 13860,  priceB2C: 14000 },
   { id: "door_t1",     label: "아카라 열림 감지 센서 T1 (#170)",                qty: 2, priceB2B: 17160,  priceB2C: 22000 },
   { id: "hub_m3",      label: "아카라 스마트 허브 M3 (#151)",                   qty: 1, priceB2B: 122590, priceB2C: 164000 },
+  { id: "curtain_ctrl", label: "아카라 전동커튼 컨트롤러 (#154)",                qty: 6, priceB2B: 127075, priceB2C: 170000 },
+  { id: "rail_4_5m",   label: "[주문제작] 무소음 레일 4.0m~5.0m (#163)",         qty: 4, priceB2B: 210600, priceB2C: 270000 },
+  { id: "rail_3_4m",   label: "[주문제작] 무소음 레일 3.0m~4.0m (#162)",         qty: 2, priceB2B: 170182, priceB2C: 218182 },
 ];
 
 /* 스위치 회로 메타.
