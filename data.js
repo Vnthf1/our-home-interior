@@ -2190,8 +2190,8 @@ const LIGHTING_SWITCHES = {
   "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
             spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
   "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "간접등",
-            spec: { lights: { strip_aqara_wp: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 68,
-                    note: "아카라 방수 H2 5M(#167) 2롤 필요 · 길이 180+100+200+200 = 680cm · 10W/m × 6.8m = 68W (5m 1롤로 부족 → 2롤)" } },
+            spec: { lights: { strip_aqara_wp: 1.36 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 68,
+                    note: "아카라 방수 H2 5M(#167) 1.36롤 사용 (5m 1롤 + 1.8m / 발주는 2롤) · 길이 180+100+200+200 = 680cm · 10W/m × 6.8m = 68W · 100W SMPS 충분(32W 여유)" } },
   "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 안방 (2구 + 2구 = 두 위치)
   "MR-A1": { zone: "안방", switch: "안방 2구A #1", desc: "" },
