@@ -1036,7 +1036,6 @@
           '<td class="num lt-price">' + fmt(grandC) + '원</td>' +
         '</tr></tfoot>' +
       '</table></div>' +
-      '<p class="lt-foot">일반조명(뤼네브 · 솔레아 · 일반스트립 · 직부등)은 단가 미정으로 제외. 표 가격은 이지엉클 B2B 단가표 기준이며 실제 견적과 다를 수 있어요.</p>' +
     '</section>';
   }
 
