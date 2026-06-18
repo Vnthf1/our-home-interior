@@ -1000,7 +1000,9 @@
       `<th${sepBefore ? ' class="lt-sep"' : ""}>${esc((info && info.label) || fallback)}</th>`;
     const mkModelTh = (info, sepBefore) => {
       const m = info && info.model;
-      return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}">${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}</th>`;
+      const v = info && info.volt;
+      const voltLine = v ? `<div class="lt-h-volt">${esc(v)}</div>` : '';
+      return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}">${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}${voltLine}</th>`;
     };
 
     // 헤더 (3줄): 색점 / 종류명 / 모델 — 조명 4컬럼 + (구분선) + 드라이버 + (구분선) + SMPS + 합계

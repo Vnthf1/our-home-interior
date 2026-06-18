@@ -1475,8 +1475,8 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 32.4, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #4", length: 200 },
     { layer: "light", type: "pin", x: 61.5, y: 46.9, label: "확산조명", kind: "diff2" , circuit: "BR-2", zone: "작은방", name: "작은방 확산 #2" },
     { layer: "light", type: "box", x: 34.1, y: 43.9, w: 5.2, h: 0, label: "간접조명", kind: "strip" , circuit: "EN-1", zone: "현관", name: "현관 간접 #1" },
-    { layer: "light", type: "box", x: 46.6, y: 37.5, w: 0, h: 1.3, label: "간접조명", kind: "strip" , circuit: "HW-1", zone: "복도", name: "복도 간접 #1" },
-    { layer: "light", type: "box", x: 46.5, y: 42.5, w: 0, h: 1.3, label: "간접조명", kind: "strip" , circuit: "HW-1", zone: "복도", name: "복도 간접 #2" },
+    { layer: "light", type: "box", x: 46.6, y: 37.5, w: 0, h: 1.3, label: "간접조명", kind: "strip" , circuit: "HW-1", zone: "복도", name: "복도 간접 #1", length: 220 },
+    { layer: "light", type: "box", x: 46.5, y: 42.5, w: 0, h: 1.3, label: "간접조명", kind: "strip" , circuit: "HW-1", zone: "복도", name: "복도 간접 #2", length: 220 },
     { layer: "light", type: "box", x: 35.1, y: 69.6, w: 0.4, h: 15.6, label: "간접조명", kind: "strip" , circuit: "MR-3", zone: "안방", name: "안방 간접 #1" },
     { layer: "light", type: "box", x: 31.2, y: 54.1, w: 3.7, h: 0, label: "간접조명", kind: "strip" , circuit: "MRH-3", zone: "안방복도", name: "안방복도 간접" },
     { layer: "light", type: "pin", x: 39, y: 49.4, label: "COB조명", kind: "cob2" , circuit: "LB-1", zone: "거실화장실", name: "거실화장실 다운라이트 추가" },
@@ -2132,14 +2132,14 @@ const KITCHEN = {
  *   color: 도면 마커 색 + 표 색점 색
  *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
 const LIGHTING_KINDS = {
-  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",                watt: 7 },
-  cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0 },
-  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42)",              watt: 8 },
-  diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0 },
-  multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20 },
-  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35 }, // 5M 한 롤당 약 35W
-  strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70 }, // 10M 한 롤당 약 70W (7W/m)
-  strip_aqara_wp: { label: "스트립 방수 (욕실)", icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35 }, // 5M, IP65 추정 35W
+  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",                watt: 7,  volt: "DC 24V" },
+  cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V" },
+  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42)",              watt: 8,  volt: "DC 24V" },
+  diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V" },
+  multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V" },
+  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V" }, // 5M 한 롤당 약 35W
+  strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V" }, // 10M 한 롤당 약 70W (7W/m)
+  strip_aqara_wp: { label: "스트립 방수 (욕실)", icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V" }, // 5M, IP65 추정 35W
 };
 
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
@@ -2167,7 +2167,9 @@ const LIGHTING_SWITCHES = {
   "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
   "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { drivers: { aqara: 1 }, smps: { u100: 1 } } },
   // 복도 (2구)
-  "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "복도" },
+  "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "복도",
+            spec: { lights: { cob2: 1, strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 38,
+                    note: "COB IoT 1개(7W) + 스트립 CCT 10M(#60) 0.44롤(220+220=440cm 사용) · 4.4m × 7W = 30.8W · 합 37.8W (100W SMPS 충분)" } },
   "HW-2": { zone: "복도", switch: "복도 2구 #2", desc: "아트월" },
   // 현관 (2구)
   "EN-1": { zone: "현관", switch: "현관 2구 #1", desc: "현관등 + 간접등" },
