@@ -1128,8 +1128,7 @@
         '</tr>';
     });
 
-    // 종류별 자재 총수량 — 스트립은 length 기반(셀 표시와 동일), 비스트립은 spec.lights 우선
-    const stripKindSet = { strip: 1, strip_cct: 1, strip_aqara_wp: 1, strip_normal: 1 };
+    // 종류별 자재 총수량 — spec.lights 우선 (스트립 발주량 단위, 한 롤 절단해 여러 회로 분할 가능)
     const matKindTotal = {}; kindKeys.forEach((k) => { matKindTotal[k] = 0; });
     cids.forEach((cid) => {
       const arr = groups[cid];
@@ -1138,18 +1137,7 @@
       const cbk = {}; kindKeys.forEach((k) => { cbk[k] = 0; });
       arr.forEach(({ it }) => { if (cbk[it.kind] != null) cbk[it.kind]++; });
       kindKeys.forEach((k) => {
-        if (stripKindSet[k]) {
-          // 스트립: 마커 length 합 / rollCm (셀 표시 기준)
-          const rollCm = (KINDS[k] || {}).rollCm;
-          const lenSum = arr.reduce((acc, { it }) => (it.kind === k && typeof it.length === "number") ? acc + it.length : acc, 0);
-          if (lenSum > 0 && rollCm) {
-            matKindTotal[k] += lenSum / rollCm;
-          } else {
-            matKindTotal[k] += (spec.lights && spec.lights[k] != null) ? spec.lights[k] : cbk[k];
-          }
-        } else {
-          matKindTotal[k] += (spec.lights && spec.lights[k] != null) ? spec.lights[k] : cbk[k];
-        }
+        matKindTotal[k] += (spec.lights && spec.lights[k] != null) ? spec.lights[k] : cbk[k];
       });
     });
     // 전체 W 합계
