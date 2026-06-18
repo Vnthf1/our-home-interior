@@ -325,7 +325,23 @@
       `</li>`;
   }
   function phaseCardHTML(p, i, opts = {}) {
-    const groups = (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
+    // 인라인(한 줄) 모드용 — 항목 텍스트만 쉼표로 잇고, 미정/메모는 인라인, 주의/확인은 줄 밑 블록으로 유지
+    const itemInlineText = (it) => typeof it === "string" ? esc(it)
+      : esc(it.text) + (it.undecided ? ` <span class="it-flag undecided">미정</span>` : "") + (it.memo ? ` <span class="it-memo">📝 ${esc(it.memo)}</span>` : "");
+    const itemExtras = (it) => {
+      if (typeof it === "string") return "";
+      const cautions = !opts.hideCaution && it.caution ? (Array.isArray(it.caution) ? it.caution : [it.caution]) : [];
+      const asks = !opts.hideAsk && it.ask ? (Array.isArray(it.ask) ? it.ask : [it.ask]) : [];
+      return cautions.map((q) => `<div class="it-caution">⚠️ 공정 시 주의: ${esc(q)}</div>`).join("") +
+        asks.map((q) => `<div class="it-ask">💬 업자 확인: ${esc(q)}</div>`).join("");
+    };
+    const groups = opts.inline
+      ? (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
+      <div class="group-line">
+        ${g.title ? `<span class="gtitle-inline">${esc(g.title)}</span> ` : ""}<span class="items-inline">${g.items.map(itemInlineText).join(", ")}</span>
+        ${g.items.map(itemExtras).join("")}
+      </div>`).join("")
+      : (p.groups || []).filter((g) => g.items && g.items.length).map((g) => `
       <div class="group">
         ${g.title ? `<div class="gtitle">${esc(g.title)}</div>` : ""}
         <ul class="items">${g.items.map((it) => itemHTML(it, opts)).join("")}</ul>
@@ -366,7 +382,7 @@
       ${highlights}
       ${phaseAsks}
       ${imgs}${refBlock}
-      <div class="cols">${groups}</div>
+      <div class="cols${opts.inline ? " cols-stack" : ""}">${groups}</div>
     </div>`;
   }
   function renderPhases() {
@@ -376,7 +392,7 @@
         <div class="kn-h">🏠 우리집 주요 변경 — 모든 공정 공통</div>
         <ul>${KEY_NOTES.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
       </div>` : "";
-    el.innerHTML = keyNotes + PHASES.map((p, i) => phaseCardHTML(p, i, { imgLinks: true })).join("");
+    el.innerHTML = keyNotes + PHASES.map((p, i) => phaseCardHTML(p, i, { imgLinks: true, inline: true })).join("");
     // 해시(#electric 등)로 들어오면 해당 공정으로 스크롤 — 이미지가 lazy 로드되며 위쪽 높이가 변해도 다시 정렬
     const scrollToHash = () => {
       const id = decodeURIComponent((location.hash || "").slice(1));

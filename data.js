@@ -1488,6 +1488,40 @@ const FLOORPLAN = {
  *  공정(工程) — 시공 순서대로
  * ------------------------------------------------------------ */
 const PHASES = [
+  /* ===== 이사 (착공 전) ===== */
+  {
+    id: "move",
+    name: "이사",
+    icon: "📦",
+    team: "이사 업체",
+    status: "예정",
+    groups: [{ title: null, items: [
+      "이사 업체 선정 + 견적",
+      "포장 / 보관 / 운반 방법 결정 (보관이사 vs 신축지 직배)",
+      "공사 종료일 + 입주청소 + 입주일 기준 일정 역산",
+    ] }],
+    decisions: ["이사 형태 — 보관이사 vs 직접 보관 vs 임시거처"],
+    checks: ["엘리베이터 사용 시간 관리실 예약", "주차·짐 적치 동선"],
+    images: [],
+  },
+
+  /* ===== 입주민 동의 (착공 전 필수 서류) ===== */
+  {
+    id: "consent",
+    name: "입주민 동의",
+    icon: "📝",
+    team: "총괄 (별도 업체)",
+    status: "예정",
+    groups: [{ title: null, items: [
+      "동·라인 입주민 동의서 (서명) — 별도 업체 섭외 필요",
+      "관리사무소 공사 신고 + 보양·엘리베이터 예약",
+      "공사 시간·소음·먼지 안내문 부착",
+    ] }],
+    decisions: ["⚠️ 동의서 받아줄 업체 선정 (벨류연구소는 안 함)"],
+    checks: ["동의서 미회수 세대 — 대면 방문 시도", "관리사무소 보증금·요금 확인"],
+    images: [],
+  },
+
   /* ===== 1. 철거 · 설비 · 방수 ===== */
   {
     id: "demolition",
@@ -1495,7 +1529,6 @@ const PHASES = [
     icon: "🔨",
     team: "철거·설비·방수 / 벨류연구소",
     status: "예정",
-    summary: "공사 시작 전 보양 → 기존 마감재·가구·설비 전면 철거 → 급배수·수전 이전·분배기 교체·배관 매립·욕실 1차 방수까지. 벨류연구소 일괄.",
     groups: [
       {
         title: "보양 (공사 시작 전)",
@@ -1595,7 +1628,6 @@ const PHASES = [
     icon: "🌬️",
     team: "설비 / 에어컨 / 보일러",
     status: "예정",
-    summary: "전열교환기·시스템에어컨·보일러 설치. 천장 철거 단계와 맞물려 진행.",
     groups: [
       {
         title: "전열교환기",
@@ -1643,7 +1675,6 @@ const PHASES = [
     icon: "🪟",
     team: "창호 / 아름창호",
     status: "예정",
-    summary: "덧창 설치 여부 검토.",
     groups: [{ title: null, items: [] }],
     decisions: ["덧창 설치 여부 (안방만 450 / 거실까지 1100)"],
     checks: ["덧창 시 단열·결로 개선 효과 및 기존 샷시 상태 확인"],
@@ -1658,7 +1689,6 @@ const PHASES = [
     icon: "⚡",
     team: "전기 / 하린 전기조명",
     status: "예정",
-    summary: "",
     // 견적용 요약 — 큰 변경·추가 위주
     highlights: [
       { value: "여러 종", label: "조명", note: "멀티매입등 · COB · 확산형 · 간접등 (CCT 스트립 or T5) / 공용부 IoT 조명 (CCT)" },
@@ -1736,7 +1766,6 @@ const PHASES = [
     icon: "🪵",
     team: "목공 (후보 검토 중)",
     status: "예정",
-    summary: "천장·우물천장·실링팬 타공, 슬라이딩 도어, 방음, 아트월, 침대 프레임 제작 등.",
     groups: [
       {
         title: "천장 · 도어",
@@ -1788,7 +1817,6 @@ const PHASES = [
     icon: "🧱",
     team: "타일팀",
     status: "예정",
-    summary: "전체 철거 후 시공. 안방욕실 1200×600(MAGMA GRIGIO) · 공용욕실 600×600(60SR02) · 현관 600×600(60CM07) · 주방 벽면 600×1200(MAGA BROWN) · 베란다 600×600 덧방.",
     groups: [
       {
         title: "공통",
@@ -1877,7 +1905,6 @@ const PHASES = [
     icon: "🎞️",
     team: "필름팀",
     status: "예정",
-    summary: "문·창틀·가구 필름 시공 범위 결정 필요.",
     groups: [{ title: null, items: [] }],
     decisions: ["필름 시공 범위 결정 (아트월/필름부 미정)"],
     checks: ["문·몰딩을 필름 vs 도장 중 무엇으로 마감할지 (목공 결정과 연동)"],
@@ -1892,7 +1919,6 @@ const PHASES = [
     icon: "🧻",
     team: "도배팀",
     status: "예정",
-    summary: "디아망 벽지 · 회벽 블랑그레이.",
     groups: [
       {
         title: "시공 범위",
@@ -1919,7 +1945,6 @@ const PHASES = [
     icon: "🟫",
     team: "마루/장판팀 (대동벽지 ✅ 확정)",
     status: "예정",
-    summary: "포레스톤 인피니트스톤 5T 장판 시공 (회색 톤). 35평 350만원, 대동벽지 시공, 1년 A/S.",
     groups: [
       {
         title: "자재 — 포레스톤 인피니트스톤 5T (확정)",
@@ -1947,7 +1972,6 @@ const PHASES = [
     icon: "🪑",
     team: "가구 업체",
     status: "예정",
-    summary: "아일랜드·싱크대·신발장·붙박이장·제작가구.",
     groups: [
       {
         title: "아일랜드",
@@ -1995,7 +2019,6 @@ const PHASES = [
     icon: "🪨",
     team: "세라믹 업체 (다우세라믹 후보)",
     status: "예정",
-    summary: "주방 상판·벽면, 거실 아트월, 장식장, 안방 세면대(제작). 실측 8/4, 설치 8/10 예정.",
     groups: [
       {
         title: null,
@@ -2029,7 +2052,6 @@ const PHASES = [
     icon: "💡",
     team: "전기 / 하린 전기조명",
     status: "예정",
-    summary: "조명기구 설치 및 스위치·콘센트 커버 마감, 전체 점등 테스트.",
     groups: [
       {
         title: null,
@@ -2056,7 +2078,6 @@ const PHASES = [
     icon: "🚪",
     team: "중문 업체",
     status: "예정",
-    summary: "현관 중문 설치 (목공 구조틀과 연계).",
     groups: [{ title: null, items: ["중문 구조틀 마감"] }],
     decisions: ["중문에 슬라이딩 가능할지 (목공과 연계)"],
     checks: [],
@@ -2070,7 +2091,6 @@ const PHASES = [
     icon: "✨",
     team: "청소팀",
     status: "예정",
-    summary: "전체 입주청소 후 하자 점검.",
     groups: [{ title: null, items: ["전체 입주청소", "하자 체크리스트 점검 및 보수"] }],
     decisions: [],
     checks: [],
