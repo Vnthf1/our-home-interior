@@ -995,19 +995,22 @@
     const normalStart = items.length;
     collect(normalKinds, KINDS, matKindTotal, true);
     if (items[normalStart]) items[normalStart].isNormalStart = true;
+    const VAT = 1.1; // VAT 포함 = 단가표 × 1.1
     let grandB = 0, grandC = 0;
     const rows = items.map((it) => {
       const qtyTxt = it.unknownQty ? '<span class="lt-mut">?</span>' : ((it.qty % 1 === 0) ? it.qty : (Math.round(it.qty * 100) / 100));
       const orderedTxt = it.unknownQty ? '<span class="lt-mut">?</span>' : it.ordered;
-      const sumB = (it.pb != null && !it.unknownQty) ? it.ordered * it.pb : null;
-      const sumC = (it.pc != null && !it.unknownQty) ? it.ordered * it.pc : null;
+      const pbVat = it.pb != null ? Math.round(it.pb * VAT) : null;
+      const pcVat = it.pc != null ? Math.round(it.pc * VAT) : null;
+      const sumB = (pbVat != null && !it.unknownQty) ? it.ordered * pbVat : null;
+      const sumC = (pcVat != null && !it.unknownQty) ? it.ordered * pcVat : null;
       if (sumB != null) grandB += sumB;
       if (sumC != null) grandC += sumC;
       return '<tr' + (it.isNormalStart ? ' class="lt-row-normal-start"' : '') + '>' +
         '<td>' + esc(it.label) + '</td>' +
         '<td class="num">' + qtyTxt + '</td>' +
         '<td class="num">' + orderedTxt + '</td>' +
-        '<td class="num lt-price">' + (it.pb != null ? fmt(it.pb) : '<span class="lt-mut">—</span>') + '</td>' +
+        '<td class="num lt-price">' + (pbVat != null ? fmt(pbVat) : '<span class="lt-mut">—</span>') + '</td>' +
         '<td class="num lt-price">' + (sumB != null ? fmt(sumB) : '<span class="lt-mut">—</span>') + '</td>' +
         '<td class="num lt-price">' + (sumC != null ? fmt(sumC) : '<span class="lt-mut">—</span>') + '</td>' +
         '</tr>';
@@ -1017,7 +1020,9 @@
       '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
         '<thead><tr>' +
           '<th>품목</th><th class="num">사용량</th><th class="num">발주</th>' +
-          '<th class="num lt-price">B2B 단가</th><th class="num lt-price">B2B 합계</th><th class="num lt-price">B2C 합계</th>' +
+          '<th class="num lt-price">B2B 단가<br><span class="lt-mut" style="font-size:11px;font-weight:500">(VAT 포함)</span></th>' +
+          '<th class="num lt-price">B2B 합계<br><span class="lt-mut" style="font-size:11px;font-weight:500">(VAT 포함)</span></th>' +
+          '<th class="num lt-price">B2C 합계<br><span class="lt-mut" style="font-size:11px;font-weight:500">(VAT 포함)</span></th>' +
         '</tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
         '<tfoot><tr><th colspan="3">합계</th>' +
