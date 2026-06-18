@@ -2134,14 +2134,14 @@ const KITCHEN = {
  *   color: 도면 마커 색 + 표 색점 색
  *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
 const LIGHTING_KINDS = {
-  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V" },
+  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 9600,  priceB2C: 16364 },
   cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V" },
-  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V" },
+  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 8580,  priceB2C: 16364 },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V" },
-  multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V" },
-  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M 한 롤당 약 35W
-  strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000 }, // 10M 한 롤당 약 70W (7W/m)
-  strip_aqara_wp: { label: "스트립 방수",       icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M, IP65 추정 35W (욕실용)
+  multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
+  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 46000, priceB2C: 60000 }, // 5M 한 롤당 약 35W
+  strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000, priceB2B: 44400, priceB2C: 80000 }, // 10M 한 롤당 약 70W (7W/m)
+  strip_aqara_wp: { label: "스트립 방수",       icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 76050, priceB2C: 90000 }, // 5M, IP65 추정 35W (욕실용)
   strip_normal:   { label: "스트립 (일반)",      icon: "▭", short: "일반스트립",   color: "#fbbf24", model: "일반 스트립 조명 or T5 (미정)",                    watt: 0,  volt: "AC 220V" }, // 작은방·드레스룸 간접등용
   surface_n:      { label: "직부등 (일반)",      icon: "◈", short: "직부등",      color: "#a3e635", model: "일반 직부등 (미정)",                                watt: 0,  volt: "AC 220V" }, // 발코니 등 표면 설치형
 };
@@ -2149,11 +2149,11 @@ const LIGHTING_KINDS = {
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
  *   회로별 spec.drivers / spec.smps 가 여기 키를 참조. 수량은 spec에서. */
 const LIGHTING_DRIVERS = {
-  aqara: { label: "Aqara 스트립 DR", short: "Aqara DR", color: "#8b5cf6", model: "Aqara LED 스트립 드라이버 DC24V (#140)" },
+  aqara: { label: "Aqara 스트립 DR", short: "Aqara DR", color: "#8b5cf6", model: "Aqara LED 스트립 드라이버 DC24V (#140)", priceB2B: 48620, priceB2C: 68000 },
 };
 const LIGHTING_SMPS = {
-  u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2L (#120) — PF>0.6 가성비" },
-  u200: { label: "유니온 200W SMPS", short: "200W", color: "#374151", model: "유니온 UP200S24W2L (#122)" },
+  u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2L (#120) — PF>0.6 가성비", priceB2B: 16692, priceB2C: 21818 },
+  u200: { label: "유니온 200W SMPS", short: "200W", color: "#374151", model: "유니온 UP200S24W2L (#122)",                priceB2B: 25488, priceB2C: 33182 },
 };
 
 /* 스위치 회로 메타.

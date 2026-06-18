@@ -933,6 +933,58 @@
     checkDraft();
   }
 
+  /* 조명 자재 견적 표 — 표는 모두 노출, 가격 셀(.lt-price)은 관리자만 (CSS .admin-only 패턴) */
+  function buildQuoteHTML(kindKeys, driverKeys, smpsKeys, KINDS, DRIVERS, SMPSES, matKindTotal, totalsByDriver, totalsBySmps) {
+    const fmt = (v) => v.toLocaleString();
+    const items = [];
+    const isStrip = (k) => /^strip/.test(k);
+    const collect = (keys, dict, qtyMap, rollable) => {
+      keys.forEach((k) => {
+        const info = dict[k] || {};
+        const qty = qtyMap[k] || 0;
+        if (!qty) return;
+        const ordered = rollable && isStrip(k) ? Math.ceil(Math.round(qty * 100) / 100) : Math.round(qty);
+        const hasPrice = typeof info.priceB2B === "number";
+        items.push({ label: info.label || k, qty: qty, ordered: ordered, pb: hasPrice ? info.priceB2B : null, pc: hasPrice ? info.priceB2C : null });
+      });
+    };
+    collect(kindKeys, KINDS, matKindTotal, true);
+    collect(driverKeys, DRIVERS, totalsByDriver, false);
+    collect(smpsKeys, SMPSES, totalsBySmps, false);
+    let grandB = 0, grandC = 0;
+    const rows = items.map((it) => {
+      const qtyTxt = (it.qty % 1 === 0) ? it.qty : (Math.round(it.qty * 100) / 100);
+      const sumB = it.pb != null ? it.ordered * it.pb : null;
+      const sumC = it.pc != null ? it.ordered * it.pc : null;
+      if (sumB != null) grandB += sumB;
+      if (sumC != null) grandC += sumC;
+      return '<tr>' +
+        '<td>' + esc(it.label) + '</td>' +
+        '<td class="num">' + qtyTxt + '</td>' +
+        '<td class="num">' + it.ordered + '</td>' +
+        '<td class="num lt-price">' + (it.pb != null ? fmt(it.pb) : '<span class="lt-mut">—</span>') + '</td>' +
+        '<td class="num lt-price">' + (sumB != null ? fmt(sumB) : '<span class="lt-mut">—</span>') + '</td>' +
+        '<td class="num lt-price">' + (sumC != null ? fmt(sumC) : '<span class="lt-mut">—</span>') + '</td>' +
+        '</tr>';
+    }).join('');
+    return '<section class="lt-quote-sec">' +
+      '<h3 class="lt-quote-h">📋 자재 견적 <span class="lt-quote-sub">(가격은 관리자만 노출 · 이지엉클 단가표 기준)</span></h3>' +
+      '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
+        '<thead><tr>' +
+          '<th>품목</th><th class="num">사용량</th><th class="num">발주</th>' +
+          '<th class="num lt-price">B2B 단가</th><th class="num lt-price">B2B 합계</th><th class="num lt-price">B2C 합계</th>' +
+        '</tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+        '<tfoot><tr><th colspan="3">합계</th>' +
+          '<td class="num lt-price">—</td>' +
+          '<td class="num lt-price">' + fmt(grandB) + '원</td>' +
+          '<td class="num lt-price">' + fmt(grandC) + '원</td>' +
+        '</tr></tfoot>' +
+      '</table></div>' +
+      '<p class="lt-foot">일반조명(뤼네브 · 솔레아 · 일반스트립 · 직부등)은 단가 미정으로 제외. 표 가격은 이지엉클 B2B 단가표 기준이며 실제 견적과 다를 수 있어요.</p>' +
+    '</section>';
+  }
+
   /* ---------- 조명 계획 (도면 + 회로별 매트릭스 표) ----------
    * - 엑셀 사례 포맷: 행=회로, 열=조명 종류(4종). 셀=수량.
    * - FLOORPLAN.items 중 layer:"light" 만 보여줌. 마커는 kind 색.
@@ -1195,7 +1247,9 @@
           '</div>' +
           '<p class="lt-foot">표의 빈 칸(이름·구역·회로·모델)은 <a href="floorplan.html">도면 페이지 ✏️ 편집</a> 또는 data.js를 직접 편집해 채울 수 있어요. 양쪽 페이지는 같은 임시저장(localStorage)을 공유합니다.</p>' +
         '</div>' +
-      '</div>';
+      '</div>' +
+      // 견적 표 — 항상 노출 (가격 컬럼만 관리자 노출)
+      buildQuoteHTML(kindKeys, driverKeys, smpsKeys, KINDS, DRIVERS, SMPSES, matKindTotal, totalsByDriver, totalsBySmps);
 
     const overlay = $("lt-overlay");
     const tbody = $("lt-tbody");

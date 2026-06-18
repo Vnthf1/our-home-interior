@@ -820,3 +820,21 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .group-list .it-flag.undecided{font-size:11px;border:1px dashed #c0392b;color:#c0392b;border-radius:6px;padding:0 5px}
 .group-list .it-memo{font-size:12px;color:var(--muted)}
 .group-list .it-caution,.group-list .it-ask{margin-top:5px;font-size:13px}
+
+/* ===== 조명 견적 표 ===== */
+.lt-quote-sec{margin-top:30px}
+.lt-quote-h{margin:0 0 10px;font-size:17px;font-weight:800;color:var(--accent);letter-spacing:.3px}
+.lt-quote-sub{font-size:12px;font-weight:500;color:var(--muted);margin-left:8px;letter-spacing:.1px}
+.lt-quote-tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px;background:var(--card)}
+.lt-quote-tbl thead th{background:#faf8f5;border-bottom:1px solid #ece9e3;border-right:1px solid #f1efe9;color:var(--muted);font-weight:700;padding:10px 12px;letter-spacing:.2px}
+.lt-quote-tbl thead th:last-child{border-right:none}
+.lt-quote-tbl thead th.num{text-align:right}
+.lt-quote-tbl tbody td{border-bottom:1px solid #f1efe9;border-right:1px solid #f1efe9;padding:9px 12px;color:var(--ink)}
+.lt-quote-tbl tbody td:last-child{border-right:none}
+.lt-quote-tbl tbody td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.lt-quote-tbl tbody tr:nth-child(even) td{background:#fdfcfa}
+.lt-quote-tbl tfoot th,.lt-quote-tbl tfoot td{background:var(--accent-soft);border-top:1.5px solid #e2dccf;padding:11px 12px;font-weight:800;color:var(--accent);font-size:14px}
+.lt-quote-tbl tfoot th{text-align:right;padding-right:14px}
+.lt-quote-tbl tfoot td.num{text-align:right;font-variant-numeric:tabular-nums}
+/* 가격 셀 — 관리자만 노출 (body.is-admin 없으면 숨김) */
+body:not(.is-admin) .lt-quote-tbl .lt-price{display:none}
