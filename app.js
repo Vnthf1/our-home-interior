@@ -1066,6 +1066,14 @@
       const spec = sw.spec || {};
       // spec.lights[k]가 있으면 자재 수량으로 오버라이드 (예: 스트립 마커 2개 ≠ 5M 롤 3개)
       const lightQty = (k) => (spec.lights && spec.lights[k] != null) ? spec.lights[k] : countByKind[k];
+      // 스트립 종류 — 회로 안 마커들의 length 합산 (있으면 셀에 cm 표시)
+      const stripKinds = { strip: 1, strip_cct: 1, strip_aqara_wp: 1 };
+      const lenByKind = {};
+      arr.forEach(({ it }) => {
+        if (stripKinds[it.kind] && typeof it.length === "number" && it.length > 0) {
+          lenByKind[it.kind] = (lenByKind[it.kind] || 0) + it.length;
+        }
+      });
       const drQty = (k) => (spec.drivers && spec.drivers[k]) || 0;
       const smQty = (k) => (spec.smps && spec.smps[k]) || 0;
 
@@ -1081,13 +1089,21 @@
       const qtyCell = (c, sepBefore) =>
         '<td class="num lt-qty' + (c ? ' has' : '') + (sepBefore ? ' lt-sep' : '') + '">' +
         (c || '') + '</td>';
+      // 스트립 셀 — 길이가 있으면 cm로 표시 (예: 440cm), 없으면 수량
+      const stripCell = (k, sepBefore) => {
+        const len = lenByKind[k];
+        if (len > 0) {
+          return '<td class="num lt-qty has' + (sepBefore ? ' lt-sep' : '') + '">' + len + 'cm</td>';
+        }
+        return qtyCell(lightQty(k), sepBefore);
+      };
 
       bodyHTML += '<tr data-cid="' + esc(cid) + '" data-idxs="' + esc(idxList) + '"' +
         (isZoneStart ? ' class="lt-zone-start"' : '') + '>' +
         zoneTd +
         '<td class="lt-sw">' + switchLabel + '</td>' +
         '<td class="lt-name">' + circuitCell + '</td>' +
-        kindKeys.map((k) => qtyCell(lightQty(k), false)).join("") +
+        kindKeys.map((k) => stripKinds[k] ? stripCell(k, false) : qtyCell(lightQty(k), false)).join("") +
         driverKeys.map((k, i) => qtyCell(drQty(k), i === 0)).join("") +
         smpsKeys.map((k, i) => qtyCell(smQty(k), i === 0)).join("") +
         '<td class="num lt-rowtot lt-sep">' + (rowW ? rowW + 'W' : '') + '</td>' +
