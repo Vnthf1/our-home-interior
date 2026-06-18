@@ -2133,14 +2133,14 @@ const KITCHEN = {
  *   color: 도면 마커 색 + 표 색점 색
  *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
 const LIGHTING_KINDS = {
-  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41)",                watt: 7,  volt: "DC 24V" },
+  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V" },
   cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V" },
-  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42)",              watt: 8,  volt: "DC 24V" },
+  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V" },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V" },
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V" },
-  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V" }, // 5M 한 롤당 약 35W
-  strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V" }, // 10M 한 롤당 약 70W (7W/m)
-  strip_aqara_wp: { label: "스트립 방수 (욕실)", icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V" }, // 5M, IP65 추정 35W
+  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M 한 롤당 약 35W
+  strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000 }, // 10M 한 롤당 약 70W (7W/m)
+  strip_aqara_wp: { label: "스트립 방수 (욕실)", icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500 }, // 5M, IP65 추정 35W
 };
 
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.

@@ -1001,8 +1001,12 @@
     const mkModelTh = (info, sepBefore) => {
       const m = info && info.model;
       const v = info && info.volt;
-      const voltLine = v ? `<div class="lt-h-volt">${esc(v)}</div>` : '';
-      return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}">${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}${voltLine}</th>`;
+      const w = info && info.watt;
+      const metaParts = [];
+      if (v) metaParts.push(esc(v));
+      if (w) metaParts.push(esc(w + "W"));
+      const metaLine = metaParts.length ? `<div class="lt-h-volt">${metaParts.join(" · ")}</div>` : '';
+      return `<th class="lt-h-mdl${sepBefore ? " lt-sep" : ""}">${m ? esc(m) : '<span class="lt-h-mdl-empty">모델 미정</span>'}${metaLine}</th>`;
     };
 
     // 헤더 (3줄): 색점 / 종류명 / 모델 — 조명 4컬럼 + (구분선) + 드라이버 + (구분선) + SMPS + 합계
@@ -1089,11 +1093,14 @@
       const qtyCell = (c, sepBefore) =>
         '<td class="num lt-qty' + (c ? ' has' : '') + (sepBefore ? ' lt-sep' : '') + '">' +
         (c || '') + '</td>';
-      // 스트립 셀 — 길이가 있으면 cm로 표시 (예: 440cm), 없으면 수량
+      // 스트립 셀 — 길이가 있으면 롤 수로 환산해 표시 (예: 0.44), 없으면 수량
       const stripCell = (k, sepBefore) => {
         const len = lenByKind[k];
-        if (len > 0) {
-          return '<td class="num lt-qty has' + (sepBefore ? ' lt-sep' : '') + '">' + len + 'cm</td>';
+        const rollCm = (KINDS[k] || {}).rollCm;
+        if (len > 0 && rollCm) {
+          const rolls = (len / rollCm);
+          const txt = (rolls % 1 === 0) ? String(rolls) : rolls.toFixed(2);
+          return '<td class="num lt-qty has' + (sepBefore ? ' lt-sep' : '') + '">' + txt + '</td>';
         }
         return qtyCell(lightQty(k), sepBefore);
       };
