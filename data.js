@@ -2173,6 +2173,8 @@ const LIGHTING_EXTRAS = [
   { id: "wago",        label: "와고 커넥터 221-2411 (#211)",                   qty: 0, priceB2B: 403,    priceB2C: 436 },
   { id: "h1box",       label: "H1 86 스위치 박스 (#223)",                      qty: 0, priceB2B: 2000,   priceB2C: 4000 },
   { id: "plate2",      label: "아카라 벽 스위치 플레이트 (행프레임) 2구 (#227)", qty: 0, priceB2B: 13860,  priceB2C: 14000 },
+  { id: "door_t1",     label: "아카라 열림 감지 센서 T1 (#170)",                qty: 2, priceB2B: 17160,  priceB2C: 22000 },
+  { id: "hub_m3",      label: "아카라 스마트 허브 M3 (#151)",                   qty: 1, priceB2B: 122590, priceB2C: 164000 },
 ];
 
 /* 스위치 회로 메타.
