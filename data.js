@@ -1245,7 +1245,7 @@ const MATERIALS = [
         category: "안방욕실 타일", qty: 1, status: "looking", purpose: "안방욕실 바닥·벽",
         candidates: [
           { name: "BK 1265 600×1200", photo: "mat_타일_안방BK1265.jpg",
-            offers: [{ vendor: "용타일", price: 45000, note: "3장 / 2.16㎡" }] },
+            offers: [{ vendor: "용타일", price: 690000, note: "3.3×2.4 + 벽 = 33㎡ · 46장 × 15,000원 (단가 45,000/3장)" }] },
         ],
         decided: null, purchased: null, note: "",
       },
@@ -1253,7 +1253,7 @@ const MATERIALS = [
         category: "공용욕실 타일", qty: 1, status: "looking", purpose: "공용욕실 바닥·벽 — 600×600만 사용",
         candidates: [
           { name: "66191DW 600×600", photo: "mat_타일_공용66191DW.jpg",
-            offers: [{ vendor: "용타일", price: 22000, note: "4장 / 1.44㎡" }] },
+            offers: [{ vendor: "용타일", price: 325000, note: "1.5×2.5 + 벽 = 21㎡ · 59장 × 5,500원 (단가 22,000/4장)" }] },
         ],
         decided: null, purchased: null, note: "",
       },
@@ -1261,9 +1261,9 @@ const MATERIALS = [
         category: "현관 타일", qty: 1, status: "looking", purpose: "현관 바닥",
         candidates: [
           { name: "용타일 로마디크그레이(DG) 600×1200", photo: "mat_타일_용타일로마DG.jpg",
-            offers: [{ vendor: "용타일", price: 31000, note: "장당" }] },
+            offers: [{ vendor: "용타일", price: 155000, note: "2.4×1.4 = 3.36㎡ · 5장 × 31,000원" }] },
           { name: "용타일 로마 DG 600×600", photo: "mat_타일_용타일로마DG.jpg",
-            offers: [{ vendor: "용타일", price: 16000, note: "장당" }] },
+            offers: [{ vendor: "용타일", price: 160000, note: "10장 × 16,000원" }] },
         ],
         decided: null, purchased: null, note: "",
       },
@@ -1271,9 +1271,9 @@ const MATERIALS = [
         category: "베란다 타일", qty: 1, status: "looking", purpose: "베란다 바닥",
         candidates: [
           { name: "용타일 로마디크그레이(DG) 600×1200", photo: "mat_타일_용타일로마DG.jpg",
-            offers: [{ vendor: "용타일", price: 31000, note: "장당" }] },
+            offers: [{ vendor: "용타일", price: 217000, note: "1.4×3.5 = 4.9㎡ · 7장 × 31,000원" }] },
           { name: "용타일 로마 DG 600×600", photo: "mat_타일_용타일로마DG.jpg",
-            offers: [{ vendor: "용타일", price: 16000, note: "장당" }] },
+            offers: [{ vendor: "용타일", price: 224000, note: "14장 × 16,000원" }] },
         ],
         decided: null, purchased: null, note: "",
       },
@@ -1316,11 +1316,7 @@ const MATERIALS_ESTIMATED = {
   "휴지걸이":         30000,
   "욕조":            800000,
   "샤워헤드·매립수전": 400000,
-  // 마감재 — 타일은 면적 산정 후 자재비
-  "안방욕실 타일":   690000,  // 3.3×2.4(7.92㎡) + 벽 둘레 11.4m×2.4m(27.36㎡) ≈ 33㎡ · BK 1265 600×1200 → 46장 × 15,000
-  "공용욕실 타일":   325000,  // 1.5×2.5 + 벽 ≈ 21㎡ · 66191DW 600×600 → 59장 × 5,500
-  "현관 타일":       155000,  // 2.4×1.4 = 3.36㎡ · 600×1200 → 5장 × 31,000
-  "베란다 타일":     217000,  // 1.4×3.5 = 4.9㎡ · 600×1200 → 7장 × 31,000
+  // 마감재 — 타일은 candidates(MATERIALS)에 환산 총액으로 정정됨
   "방수용품":        300000,
   // 하드웨어·기타
   "자동 빨래건조대":  600000,
