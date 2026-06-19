@@ -1299,7 +1299,7 @@ const MATERIALS = [
         decided: null, purchased: null, note: "750,000원 × 2개 = 1,500,000원",
       },
       { category: "후드",            qty: 1, status: "pending", purpose: "주방", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "실링팬",          qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "실링팬",          qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
     ],
   },
 ];
