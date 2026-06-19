@@ -889,4 +889,8 @@ body:not(.is-admin) .tq-grand-sec{display:none}
 .fq-table .fq-name{font-weight:700;color:var(--accent)}
 .fq-table td.fq-best{background:#fdf3e0;color:var(--accent);font-weight:800;position:relative}
 .fq-table td.fq-best::after{content:"★";margin-left:6px;color:#d97706;font-size:11px}
+.tq-extra-list{margin-top:12px;padding:10px 14px;background:#fdf6ea;border:1px dashed #ede0c8;border-radius:10px;font-size:13px;color:#7a5c3a}
+.tq-extra-list b{color:var(--accent)}
+.tq-extra-row{margin-top:5px;padding-left:8px;font-variant-numeric:tabular-nums}
+.tq-extra-row b{color:var(--accent);margin-left:6px;letter-spacing:.2px}
 body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-wrap{display:none}

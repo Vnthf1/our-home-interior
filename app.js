@@ -1652,6 +1652,33 @@
         else { procRows.push(r); procTotal += v; }
       });
     }
+    // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
+    // 가격 미정/모호 phase는 사용자 협의 가정값
+    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1 };
+    const QUOTE_OVERRIDE = { ceramic: 4000000, film: 1000000 };
+    const estimatedExtras = [];
+    if (typeof QUOTES !== "undefined") {
+      const parsePrice = (s) => {
+        if (typeof s !== "string") return 0;
+        const m = s.match(/([0-9,]+)\s*만/);
+        if (m) return parseInt(m[1].replace(/,/g, '')) * 10000;
+        const n = s.match(/[0-9,]+/);
+        return n ? parseInt(n[0].replace(/,/g, '')) : 0;
+      };
+      QUOTES.forEach((q) => {
+        if (QUOTE_SKIP_PHASES[q.phase]) return;
+        let amount = QUOTE_OVERRIDE[q.phase] || 0;
+        let source = QUOTE_OVERRIDE[q.phase] ? "협의 가정값" : "";
+        if (!amount) {
+          const cand = (q.candidates || [])[0];
+          if (cand) { amount = parsePrice(cand.price); source = cand.name || ""; }
+        }
+        if (amount > 0) {
+          estimatedExtras.push({ phase: q.name || q.phase, amount: amount, source: source });
+          procTotal += amount;
+        }
+      });
+    }
     // 4) 가구 · 5) 가전 견적 — 각 항목에서 최저가 자동 선택 (+업체명)
     const pickBest = (arr) => arr.map((f) => {
       const offers = (f.offers || []).filter((o) => o && typeof o.price === "number");
@@ -1807,8 +1834,17 @@
         '</div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터 · 임시거주/입주민 동의/보험 제외)</span></h3>' +
+        '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터 + 미확정 공정 가견적)</span></h3>' +
         '<div id="total-quote-proc"></div>' +
+        (estimatedExtras.length ?
+          '<div class="tq-extra-list lt-price"><b>+ 미확정 공정 가견적 (첫 후보 또는 협의값)</b>' +
+            estimatedExtras.map((e) =>
+              '<div class="tq-extra-row">· ' + esc(e.phase) +
+              (e.source ? ' <span class="lt-mut">(' + esc(e.source) + ')</span>' : '') +
+              ' <b>' + won(e.amount) + '</b></div>'
+            ).join('') +
+          '</div>'
+        : '') +
         '<div class="tq-subtotal lt-price">공정 합계: <b>' + won(procTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
