@@ -239,6 +239,7 @@ const APPLIANCE_QUOTE = [
   { name: "인덕션", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 1174000, note: "NZ63DB503CFT 블랙" },
     { vendor: "삼성 공홈",            price: 1551030, note: "" },
+    { vendor: "엘지 공홈",            price: 1131800, note: "" },
   ]},
   { name: "식기세척기", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 1419000, note: "DW90F79F1U01T 14인용 코타화이트" },
@@ -247,6 +248,7 @@ const APPLIANCE_QUOTE = [
   { name: "광파오븐", qty: 1, offers: [] },
   { name: "빌트인 냉장고", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 3776000, note: "1도어 냉동(RZ34) + 냉장(RR40) + 김치(RQ34) + 연결키트 ×2" },
+    { vendor: "엘지 공홈",            price: 4287200, note: "1,418,800 + 1,326,300 + 1,371,000 + 171,100 합산 (4분리)" },
   ]},
   { name: "세탁기·건조기", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 5385000, note: "WH90F2522 원바디 25/22kg(3,679,000) + AI스팀 VR90F01SAG(1,706,000)" },
@@ -255,11 +257,16 @@ const APPLIANCE_QUOTE = [
   { name: "로봇청소기", qty: 1, offers: [
     { vendor: "삼성 공홈",            price: 1754730, note: "" },
   ]},
-  { name: "사운드바", qty: 1, offers: [] },
+  { name: "사운드바", qty: 1, offers: [
+    { vendor: "삼성 공홈",            price: 1419110, note: "" },
+  ]},
   { name: "정수기", qty: 1, offers: [
     { vendor: "삼성 공홈",            price: 954480,  note: "체감가 757,481원 (온누리상품권 20% 환급 반영)" },
   ]},
   { name: "85인치 TV", qty: 1, offers: [] },
+  { name: "에어컨", qty: 1, offers: [
+    { vendor: "삼성 공홈",            price: 6933560, note: "" },
+  ]},
 ];
 
 /* ------------------------------------------------------------
