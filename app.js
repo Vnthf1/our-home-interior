@@ -1512,11 +1512,21 @@
     const VAT = 1.1;
     const won = (v) => "₩" + Math.round(v).toLocaleString("ko-KR");
 
-    // 1) 공정 견적 합계 (QUOTE_SUMMARY의 final 또는 price)
+    // 1) 공정 견적 vs 5) 기타잡비 분리
+    const ETC_PHASES = { "입주민 동의": 1, "임시거주": 1, "화재/누수 보험": 1 };
+    const procRows = [];
+    const etcRows = [];
     let procTotal = 0;
+    let etcTotal = 0;
     if (typeof QUOTE_SUMMARY !== "undefined") {
-      QUOTE_SUMMARY.forEach((r) => { procTotal += Number(r.final) || Number(r.price) || 0; });
+      QUOTE_SUMMARY.forEach((r) => {
+        const v = Number(r.final) || Number(r.price) || 0;
+        if (ETC_PHASES[r.phase]) { etcRows.push(r); etcTotal += v; }
+        else { procRows.push(r); procTotal += v; }
+      });
     }
+    // 4) 가구 견적 — 데이터 미정 (자리만 마련)
+    const furnitureTotal = 0;
 
     // 2) 조명 자재 합계 — LIGHTING_SWITCHES의 spec 순회 + LIGHTING_SWITCH_PRICES + LIGHTING_EXTRAS
     let lightTotal = 0;
@@ -1590,7 +1600,23 @@
       });
     }
 
-    const grandTotal = procTotal + lightTotal + materialTotal;
+    const grandTotal = procTotal + lightTotal + materialTotal + furnitureTotal + etcTotal;
+
+    // 기타잡비 표 HTML
+    const etcRowsHTML = etcRows.map((r) => {
+      const amt = Number(r.final) || Number(r.price) || 0;
+      return '<tr>' +
+        '<td>' + esc(r.phase) + '</td>' +
+        '<td>' + esc(r.company || '') + '</td>' +
+        '<td class="num lt-price">' + (amt ? won(amt) : '<span class="lt-mut">미정</span>') + '</td>' +
+        '<td class="lt-mat-note"><span class="lt-mut">' + esc(r.note || '') + '</span></td>' +
+      '</tr>';
+    }).join('');
+    const etcQuoteHTML = '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
+      '<thead><tr><th>항목</th><th>업체</th><th class="num lt-price">금액</th><th>비고</th></tr></thead>' +
+      '<tbody>' + etcRowsHTML + '</tbody>' +
+      '<tfoot><tr><th colspan="2">합계</th><td class="num lt-price">' + won(etcTotal) + '</td><td></td></tr></tfoot>' +
+    '</table></div>';
 
     // 조명 견적 상세표 (buildQuoteHTML과 동일) — kindKeys 등 인자 만들어 호출
     const kindKeys = Object.keys(KINDS);
@@ -1631,8 +1657,17 @@
     '</table></div>';
 
     root.innerHTML =
+      '<section class="tq-section tq-grand-sec">' +
+        '<h3 class="lt-quote-h">💰 총 합계</h3>' +
+        '<div class="tq-grand lt-price">' + won(grandTotal) + '</div>' +
+        '<div class="tq-grand-sub lt-price">' +
+          '공정 ' + won(procTotal) + ' + 조명 자재 ' + won(lightTotal) + ' + 자재 ' + won(materialTotal) +
+          (furnitureTotal ? ' + 가구 ' + won(furnitureTotal) : '') +
+          ' + 기타잡비 ' + won(etcTotal) +
+        '</div>' +
+      '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터)</span></h3>' +
+        '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터 · 임시거주/입주민 동의/보험 제외)</span></h3>' +
         '<div id="total-quote-proc"></div>' +
         '<div class="tq-subtotal lt-price">공정 합계: <b>' + won(procTotal) + '</b></div>' +
       '</section>' +
@@ -1646,10 +1681,15 @@
         materialQuoteHTML +
         '<div class="tq-subtotal lt-price">자재 합계: <b>' + won(materialTotal) + '</b></div>' +
       '</section>' +
-      '<section class="tq-section tq-grand-sec">' +
-        '<h3 class="lt-quote-h">💰 총 합계</h3>' +
-        '<div class="tq-grand lt-price">' + won(grandTotal) + '</div>' +
-        '<div class="tq-grand-sub lt-price">공정 ' + won(procTotal) + ' + 조명 자재 ' + won(lightTotal) + ' + 자재 ' + won(materialTotal) + '</div>' +
+      '<section class="tq-section">' +
+        '<h3 class="lt-quote-h">4. 가구 견적 <span class="lt-quote-sub">(가구도면 페이지 — 견적 미정)</span></h3>' +
+        '<div class="tq-light-summary">아직 가구별 견적이 정해지지 않았어요. 정해지면 여기에 자동 합산됩니다.</div>' +
+        '<div class="tq-subtotal lt-price">가구 합계: <b>' + won(furnitureTotal) + '</b></div>' +
+      '</section>' +
+      '<section class="tq-section">' +
+        '<h3 class="lt-quote-h">5. 기타잡비 <span class="lt-quote-sub">(입주민 동의·임시거주·화재/누수 보험)</span></h3>' +
+        etcQuoteHTML +
+        '<div class="tq-subtotal lt-price">기타잡비 합계: <b>' + won(etcTotal) + '</b></div>' +
       '</section>';
 
     // 공정 견적 표 (renderQuoteSummary와 동일 Tabulator 형태)
@@ -1666,7 +1706,7 @@
         bottomCalcFormatter: (cell) => { const v = cell.getValue(); return v ? `<b>${won(v)}</b>` : ""; },
       });
       new Tabulator("#total-quote-proc", {
-        data: QUOTE_SUMMARY.slice(),
+        data: procRows.slice(),
         layout: "fitColumns",
         height: "auto",
         columns: [
