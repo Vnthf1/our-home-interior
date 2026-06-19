@@ -1809,9 +1809,32 @@
     const matKindTotal = {}; kindKeys.forEach((k) => { matKindTotal[k] = 0; });
     const totalsByDriver = {}; driverKeys.forEach((k) => { totalsByDriver[k] = 0; });
     const totalsBySmps = {}; smpsKeys.forEach((k) => { totalsBySmps[k] = 0; });
-    Object.values(typeof LIGHTING_SWITCHES !== "undefined" ? LIGHTING_SWITCHES : {}).forEach((sw) => {
+    // 회로별 light 마커 그룹화 (renderLighting과 동일한 로직 — spec.lights 미명시 종류도 마커 카운트로 포함)
+    const stripKindSetTQ = { strip: 1, strip_cct: 1, strip_aqara_wp: 1, strip_normal: 1 };
+    const lightsByCircuit = {};
+    const fpItems = (typeof FLOORPLAN !== "undefined") ? (FLOORPLAN.items || []) : [];
+    fpItems.forEach((it) => {
+      if (it.layer !== "light") return;
+      const cid = it.circuit || "_unset";
+      if (!lightsByCircuit[cid]) lightsByCircuit[cid] = [];
+      lightsByCircuit[cid].push(it);
+    });
+    Object.entries(typeof LIGHTING_SWITCHES !== "undefined" ? LIGHTING_SWITCHES : {}).forEach(([cid, sw]) => {
       const spec = (sw && sw.spec) || {};
-      Object.keys(spec.lights || {}).forEach((k) => { if (matKindTotal[k] != null) matKindTotal[k] += spec.lights[k] || 0; });
+      const arr = lightsByCircuit[cid] || [];
+      const cbk = {}; kindKeys.forEach((k) => { cbk[k] = 0; });
+      arr.forEach((it) => { if (cbk[it.kind] != null) cbk[it.kind]++; });
+      kindKeys.forEach((k) => {
+        if (stripKindSetTQ[k]) {
+          if (spec.lights && spec.lights[k] != null) { matKindTotal[k] += spec.lights[k]; return; }
+          const rollCm = (KINDS[k] || {}).rollCm;
+          const lenSum = arr.reduce((acc, it) => (it.kind === k && typeof it.length === "number") ? acc + it.length : acc, 0);
+          if (lenSum > 0 && rollCm) matKindTotal[k] += lenSum / rollCm;
+          else matKindTotal[k] += cbk[k];
+        } else {
+          matKindTotal[k] += (spec.lights && spec.lights[k] != null) ? spec.lights[k] : cbk[k];
+        }
+      });
       Object.keys(spec.drivers || {}).forEach((k) => { if (totalsByDriver[k] != null) totalsByDriver[k] += spec.drivers[k] || 0; });
       Object.keys(spec.smps || {}).forEach((k) => { if (totalsBySmps[k] != null) totalsBySmps[k] += spec.smps[k] || 0; });
     });
