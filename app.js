@@ -1295,10 +1295,18 @@
       draftBanner +
       '<div class="lt-grid">' +
         '<div class="lt-floor">' +
-          '<div class="lt-stage"><img class="lt-img" src="images/' + esc(FP.image) + '" alt="평면도" />' +
-            '<div class="lt-overlay" id="lt-overlay"></div></div>' +
+          '<div class="lt-zoom-bar">' +
+            '<button type="button" class="lt-zoom-btn" id="lt-zoom-out" title="축소">−</button>' +
+            '<span class="lt-zoom-level" id="lt-zoom-level">100%</span>' +
+            '<button type="button" class="lt-zoom-btn" id="lt-zoom-in" title="확대">+</button>' +
+            '<button type="button" class="lt-zoom-btn lt-zoom-reset" id="lt-zoom-reset" title="원래대로">↺</button>' +
+          '</div>' +
+          '<div class="lt-zoom-viewport" id="lt-zoom-viewport">' +
+            '<div class="lt-stage" id="lt-stage"><img class="lt-img" src="images/' + esc(FP.image) + '" alt="평면도" />' +
+              '<div class="lt-overlay" id="lt-overlay"></div></div>' +
+          '</div>' +
           '<div class="lt-legend">' + legendHTML + '</div>' +
-          '<p class="lt-hint">💡 마커에 마우스 올리면 이름 노출 · 표 행을 가리키면 같은 회로의 조명이 강조됩니다.</p>' +
+          '<p class="lt-hint">💡 마커에 마우스 올리면 이름 노출 · 표 행을 가리키면 같은 회로의 조명이 강조됩니다. · 도면이 작으면 위 + 버튼으로 확대하세요(마커 크기는 그대로).</p>' +
         '</div>' +
         '<div class="lt-side">' +
           '<div class="lt-summary">' +
@@ -1451,6 +1459,21 @@
       overlay.querySelectorAll(".lt-marker").forEach((mk) => mk.classList.remove("dim"));
       tbody.querySelectorAll("tr").forEach((row) => row.classList.remove("flash"));
     });
+
+    // 평면도 줌 (+/− 버튼) — 도면만 확대, 마커 크기는 그대로 (% 좌표라 자동 비례 이동)
+    const stageEl = $("lt-stage");
+    const zoomLevelEl = $("lt-zoom-level");
+    let zoomLevel = 1;
+    const updateZoom = () => {
+      if (stageEl) stageEl.style.width = (zoomLevel * 100) + "%";
+      if (zoomLevelEl) zoomLevelEl.textContent = Math.round(zoomLevel * 100) + "%";
+    };
+    const zoomInBtn = $("lt-zoom-in");
+    const zoomOutBtn = $("lt-zoom-out");
+    const zoomResetBtn = $("lt-zoom-reset");
+    if (zoomInBtn) zoomInBtn.addEventListener("click", () => { zoomLevel = Math.min(3, +(zoomLevel + 0.25).toFixed(2)); updateZoom(); });
+    if (zoomOutBtn) zoomOutBtn.addEventListener("click", () => { zoomLevel = Math.max(1, +(zoomLevel - 0.25).toFixed(2)); updateZoom(); });
+    if (zoomResetBtn) zoomResetBtn.addEventListener("click", () => { zoomLevel = 1; updateZoom(); });
 
     // 종류 헤더 hover → 도면에서 해당 kind 마커 강조
     const matrixThead = root.querySelector(".lt-matrix thead");
