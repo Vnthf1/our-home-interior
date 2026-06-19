@@ -1472,8 +1472,8 @@
       if (ltGrid) {
         const floorPct = Math.min(100, 36 + (zoomLevel - 1) * 64);
         ltGrid.style.setProperty("--floor-w", floorPct + "%");
-        // 200% 이상이면 표는 아래로 이동, sticky 해제
-        ltGrid.classList.toggle("lt-zoomed", zoomLevel >= 2);
+        // 140% 이상이면 표는 아래로 이동, sticky 해제 (도면 잘림 방지)
+        ltGrid.classList.toggle("lt-zoomed", zoomLevel >= 1.4);
       }
     };
     const zoomInBtn = $("lt-zoom-in");
