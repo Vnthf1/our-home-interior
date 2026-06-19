@@ -1469,13 +1469,13 @@
       if (stageEl) stageEl.style.width = (zoomLevel * 100) + "%";
       if (zoomLevelEl) zoomLevelEl.textContent = Math.round(zoomLevel * 100) + "%";
       // 확대 시 도면 영역을 전체 폭으로 — 표는 아래로 이동
-      if (ltGrid) ltGrid.classList.toggle("lt-zoomed", zoomLevel > 1);
+      if (ltGrid) ltGrid.classList.toggle("lt-zoomed", zoomLevel >= 2);
     };
     const zoomInBtn = $("lt-zoom-in");
     const zoomOutBtn = $("lt-zoom-out");
     const zoomResetBtn = $("lt-zoom-reset");
-    if (zoomInBtn) zoomInBtn.addEventListener("click", () => { zoomLevel = Math.min(3, +(zoomLevel + 0.25).toFixed(2)); updateZoom(); });
-    if (zoomOutBtn) zoomOutBtn.addEventListener("click", () => { zoomLevel = Math.max(1, +(zoomLevel - 0.25).toFixed(2)); updateZoom(); });
+    if (zoomInBtn) zoomInBtn.addEventListener("click", () => { zoomLevel = Math.min(3, +(zoomLevel + 0.1).toFixed(2)); updateZoom(); });
+    if (zoomOutBtn) zoomOutBtn.addEventListener("click", () => { zoomLevel = Math.max(1, +(zoomLevel - 0.1).toFixed(2)); updateZoom(); });
     if (zoomResetBtn) zoomResetBtn.addEventListener("click", () => { zoomLevel = 1; updateZoom(); });
 
     // 종류 헤더 hover → 도면에서 해당 kind 마커 강조
