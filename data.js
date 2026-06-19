@@ -238,21 +238,27 @@ const FURNITURE_QUOTE = [
 const APPLIANCE_QUOTE = [
   { name: "인덕션", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 1174000, note: "NZ63DB503CFT 블랙" },
+    { vendor: "삼성 공홈",            price: 1551030, note: "" },
   ]},
   { name: "식기세척기", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 1419000, note: "DW90F79F1U01T 14인용 코타화이트" },
+    { vendor: "삼성 공홈",            price: 1745030, note: "체감가 1,385,030원 (온누리상품권 20% 환급 반영)" },
   ]},
   { name: "광파오븐", qty: 1, offers: [] },
   { name: "빌트인 냉장고", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 3776000, note: "1도어 냉동(RZ34) + 냉장(RR40) + 김치(RQ34) + 연결키트 ×2" },
   ]},
   { name: "세탁기·건조기", qty: 1, offers: [
-    { vendor: "영림 (삼성 비스포크) — 25/22kg + AI스팀", price: 5385000, note: "WH90F2522 원바디 25/22kg(3,679,000) + AI스팀 VR90F01SAG(1,706,000)" },
-    { vendor: "영림 (삼성 비스포크) — 24/20kg + AI스팀", price: 4305000, note: "WH90F2520 원바디 24/20kg(2,599,000) + AI스팀 VR90F01SAG(1,706,000)" },
+    { vendor: "영림 (삼성 비스포크)", price: 5385000, note: "WH90F2522 원바디 25/22kg(3,679,000) + AI스팀 VR90F01SAG(1,706,000)" },
+    { vendor: "삼성 공홈",            price: 2569530, note: "비스포크 세탁기 단품" },
   ]},
-  { name: "로봇청소기", qty: 1, offers: [] },
+  { name: "로봇청소기", qty: 1, offers: [
+    { vendor: "삼성 공홈",            price: 1754730, note: "" },
+  ]},
   { name: "사운드바", qty: 1, offers: [] },
-  { name: "정수기", qty: 1, offers: [] },
+  { name: "정수기", qty: 1, offers: [
+    { vendor: "삼성 공홈",            price: 954480,  note: "체감가 757,481원 (온누리상품권 20% 환급 반영)" },
+  ]},
   { name: "85인치 TV", qty: 1, offers: [] },
 ];
 
