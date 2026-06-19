@@ -78,7 +78,7 @@
     try { localStorage.setItem("oh-owner", "1"); } catch (e) {}
     const active = document.body.dataset.page;
     // 견적/연락처는 관리자에게만 노출
-    const adminOnly = { quotes: 1, contacts: 1 };
+    const adminOnly = { quotes: 1, contacts: 1, totalquote: 1, materials: 1 };
     const nav = NAV.filter((n) => isAdmin() || !adminOnly[n.key]);
     el.innerHTML =
       `<div class="wrap"><a class="brand" href="index.html">🏠 ${esc(PROJECT.title)}</a>` +
@@ -88,7 +88,7 @@
   // 견적·연락처 페이지 직접 접근 차단 (비관리자)
   function guardAdminPage() {
     const page = document.body.dataset.page;
-    if ((page === "quotes" || page === "contacts") && !isAdmin()) {
+    if ((page === "quotes" || page === "contacts" || page === "totalquote" || page === "materials") && !isAdmin()) {
       const wrap = document.querySelector("section .wrap");
       if (wrap) wrap.innerHTML =
         `<div class="sec-title">접근 제한</div>` +
@@ -1567,6 +1567,21 @@
 
     const grandTotal = procTotal + lightTotal;
 
+    // 조명 견적 상세표 (buildQuoteHTML과 동일) — kindKeys 등 인자 만들어 호출
+    const kindKeys = Object.keys(KINDS);
+    const driverKeys = Object.keys(DRIVERS);
+    const smpsKeys = Object.keys(SMPSES);
+    const matKindTotal = {}; kindKeys.forEach((k) => { matKindTotal[k] = 0; });
+    const totalsByDriver = {}; driverKeys.forEach((k) => { totalsByDriver[k] = 0; });
+    const totalsBySmps = {}; smpsKeys.forEach((k) => { totalsBySmps[k] = 0; });
+    Object.values(typeof LIGHTING_SWITCHES !== "undefined" ? LIGHTING_SWITCHES : {}).forEach((sw) => {
+      const spec = (sw && sw.spec) || {};
+      Object.keys(spec.lights || {}).forEach((k) => { if (matKindTotal[k] != null) matKindTotal[k] += spec.lights[k] || 0; });
+      Object.keys(spec.drivers || {}).forEach((k) => { if (totalsByDriver[k] != null) totalsByDriver[k] += spec.drivers[k] || 0; });
+      Object.keys(spec.smps || {}).forEach((k) => { if (totalsBySmps[k] != null) totalsBySmps[k] += spec.smps[k] || 0; });
+    });
+    const lightingQuoteHTML = buildQuoteHTML(kindKeys, driverKeys, smpsKeys, KINDS, DRIVERS, SMPSES, matKindTotal, totalsByDriver, totalsBySmps);
+
     root.innerHTML =
       '<section class="tq-section">' +
         '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터)</span></h3>' +
@@ -1574,10 +1589,8 @@
         '<div class="tq-subtotal lt-price">공정 합계: <b>' + won(procTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">2. 조명 자재 견적 <span class="lt-quote-sub">(조명 계획 페이지와 동일 데이터 · VAT 포함)</span></h3>' +
-        '<div class="tq-light-summary">' +
-          '<a href="lighting.html">→ 조명 계획 페이지</a>에서 상세 내역(품목·수량·단가) 확인 가능' +
-        '</div>' +
+        '<h3 class="lt-quote-h">2. 조명 자재 견적 <span class="lt-quote-sub">(조명 계획 페이지와 동일 표 · VAT 포함)</span></h3>' +
+        lightingQuoteHTML +
         '<div class="tq-subtotal lt-price">조명 자재 합계: <b>' + won(lightTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section tq-grand-sec">' +
