@@ -1640,7 +1640,7 @@
     const won = (v) => "₩" + Math.round(v).toLocaleString("ko-KR");
 
     // 1) 공정 견적 vs 5) 기타잡비 분리
-    const ETC_PHASES = { "입주민 동의": 1, "임시거주": 1, "화재/누수 보험": 1 };
+    const ETC_PHASES = { "입주민 동의": 1, "임시거주": 1, "화재/누수 보험": 1, "찜질방": 1 };
     const procRows = [];
     const etcRows = [];
     let procTotal = 0;
@@ -1671,7 +1671,7 @@
         let source = QUOTE_OVERRIDE[q.phase] ? "협의 가정값" : "";
         if (!amount) {
           const cand = (q.candidates || [])[0];
-          if (cand) { amount = parsePrice(cand.price); source = cand.name || ""; }
+          if (cand) { amount = parsePrice(cand.price); source = "1차 후보"; }
         }
         if (amount > 0) {
           estimatedExtras.push({ phase: q.name || q.phase, amount: amount, source: source });
@@ -1837,7 +1837,7 @@
         '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터 + 미확정 공정 가견적)</span></h3>' +
         '<div id="total-quote-proc"></div>' +
         (estimatedExtras.length ?
-          '<div class="tq-extra-list lt-price"><b>+ 미확정 공정 가견적 (첫 후보 또는 협의값)</b>' +
+          '<div class="tq-extra-list lt-price"><b>+ 미확정 공정 가견적 (1차 후보 또는 협의 가정값)</b>' +
             estimatedExtras.map((e) =>
               '<div class="tq-extra-row">· ' + esc(e.phase) +
               (e.source ? ' <span class="lt-mut">(' + esc(e.source) + ')</span>' : '') +

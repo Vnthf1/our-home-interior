@@ -194,6 +194,7 @@ const QUOTE_SUMMARY = [
   { phase: "이사", company: "로젠이사", price: 2480000, deposit: 100000, final: null, note: "이사 200만 + 보관 48만" },
   { phase: "임시거주", company: "자리톡 (예약)", price: 2513500, deposit: 2513500, final: 2513500, note: "6.28~8.14 거주 · 완납 완료 (1,964,000 + 549,500)" },
   { phase: "화재/누수 보험", company: "", price: null, deposit: null, final: null, note: "가격 미정" },
+  { phase: "찜질방", company: "", price: 10000000, deposit: null, final: null, note: "공사 기간 대안 거주 — 가견적" },
 ];
 
 /* ===== 가구 견적 ===== — 요청서(구글 닥스 "가구 견적 요청서") 10항목.
@@ -245,7 +246,9 @@ const APPLIANCE_QUOTE = [
     { vendor: "영림 (삼성 비스포크)", price: 1419000, note: "DW90F79F1U01T 14인용 코타화이트" },
     { vendor: "삼성 공홈",            price: 1745030, note: "체감가 1,385,030원 (온누리상품권 20% 환급 반영)" },
   ]},
-  { name: "광파오븐", qty: 1, offers: [] },
+  { name: "광파오븐", qty: 1, offers: [
+    { vendor: "가견적",               price: 500000,  note: "시장 평균 추정" },
+  ]},
   { name: "빌트인 냉장고", qty: 1, offers: [
     { vendor: "영림 (삼성 비스포크)", price: 3776000, note: "1도어 냉동(RZ34) + 냉장(RR40) + 김치(RQ34) + 연결키트 ×2" },
     { vendor: "엘지 공홈",            price: 4287200, note: "1,418,800 + 1,326,300 + 1,371,000 + 171,100 합산 (4분리)" },
@@ -263,7 +266,9 @@ const APPLIANCE_QUOTE = [
   { name: "정수기", qty: 1, offers: [
     { vendor: "삼성 공홈",            price: 954480,  note: "체감가 757,481원 (온누리상품권 20% 환급 반영)" },
   ]},
-  { name: "85인치 TV", qty: 1, offers: [] },
+  { name: "85인치 TV", qty: 1, offers: [
+    { vendor: "가견적",               price: 1600000, note: "시장 평균 추정" },
+  ]},
   { name: "에어컨", qty: 1, offers: [
     { vendor: "삼성 공홈",            price: 6933560, note: "" },
   ]},
