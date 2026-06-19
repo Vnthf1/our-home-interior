@@ -188,7 +188,7 @@ const QUOTE_SUMMARY = [
   { phase: "목공", company: "국선디자인", price: 10100000, priceText: "1,010~1,065만 (가견적)", deposit: null, final: null, note: "자재+인건비, VAT 별도" },
   { phase: "타일", company: "최반장", price: 3200000, deposit: null, final: null, note: "" },
   { phase: "도기", company: "(별도)", price: 450000, deposit: null, final: null, note: "" },
-  { phase: "천장", company: "(실측 후)", price: null, priceText: "실측 후 결정", deposit: null, final: null, note: "" },
+  { phase: "천장", company: "", price: 950000, deposit: null, final: null, note: "" },
   { phase: "장판", company: "대동벽지", price: 3500000, deposit: 300000, final: null, note: "온누리 175만 + 계약금 30만" },
   { phase: "샷시", company: "한길창호", price: 4211900, deposit: null, final: null, note: "VAT 포함 · 덧창(거실2·안방2)+통바" },
   { phase: "이사", company: "로젠이사", price: 2480000, deposit: 100000, final: null, note: "이사 200만 + 보관 48만" },
