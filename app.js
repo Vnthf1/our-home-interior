@@ -1463,10 +1463,13 @@
     // 평면도 줌 (+/− 버튼) — 도면만 확대, 마커 크기는 그대로 (% 좌표라 자동 비례 이동)
     const stageEl = $("lt-stage");
     const zoomLevelEl = $("lt-zoom-level");
+    const ltGrid = root.querySelector(".lt-grid");
     let zoomLevel = 1;
     const updateZoom = () => {
       if (stageEl) stageEl.style.width = (zoomLevel * 100) + "%";
       if (zoomLevelEl) zoomLevelEl.textContent = Math.round(zoomLevel * 100) + "%";
+      // 확대 시 도면 영역을 전체 폭으로 — 표는 아래로 이동
+      if (ltGrid) ltGrid.classList.toggle("lt-zoomed", zoomLevel > 1);
     };
     const zoomInBtn = $("lt-zoom-in");
     const zoomOutBtn = $("lt-zoom-out");

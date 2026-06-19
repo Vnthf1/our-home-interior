@@ -728,6 +728,9 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-zoom-level{min-width:54px;text-align:center;font-size:12.5px;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
 .lt-zoom-viewport{overflow:auto;max-height:calc(100vh - 160px);border-radius:14px;background:var(--card);border:1px solid var(--line)}
 .lt-zoom-viewport .lt-stage{width:100%;border:none;border-radius:0;box-shadow:none}
+/* 줌 모드 — 도면을 전체 폭으로 확장(표는 아래로 이동), sticky 해제 */
+.lt-grid.lt-zoomed{grid-template-columns:1fr}
+.lt-grid.lt-zoomed .lt-floor{position:static}
 @media (max-width:1024px){.lt-floor{position:static}}
 .lt-stage{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 1px 3px rgba(60,50,40,.05)}
 .lt-img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
