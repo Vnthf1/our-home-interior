@@ -1741,27 +1741,45 @@
     });
     lightTotal = Math.round(lightTotal * VAT); // VAT 포함
 
-    // 3) 자재 견적 — MATERIALS 중 가격이 명시된 후보가 있는 항목만
+    // 3) 자재 견적 — 후보 가격 우선, 없으면 MATERIALS_ESTIMATED 가견적값 사용
     const materialItems = [];
     let materialTotal = 0;
+    const ESTIM = (typeof MATERIALS_ESTIMATED !== "undefined") ? MATERIALS_ESTIMATED : {};
     if (typeof MATERIALS !== "undefined") {
       MATERIALS.forEach((g) => {
         (g.items || []).forEach((it) => {
           const cand = (it.candidates || []).find((c) => (c.offers || []).some((o) => o && o.price));
-          if (!cand) return;
-          const offer = cand.offers.find((o) => o && o.price);
           const qty = it.qty || 1;
-          const total = offer.price * qty;
-          materialTotal += total;
-          materialItems.push({
-            group: g.group,
-            label: it.category + (cand.name ? " · " + cand.name : ""),
-            qty: qty,
-            unit: offer.price,
-            total: total,
-            vendor: offer.vendor || "",
-            note: offer.note || it.note || "",
-          });
+          if (cand) {
+            const offer = cand.offers.find((o) => o && o.price);
+            const total = offer.price * qty;
+            materialTotal += total;
+            materialItems.push({
+              group: g.group,
+              label: it.category + (cand.name ? " · " + cand.name : ""),
+              qty: qty,
+              unit: offer.price,
+              total: total,
+              vendor: offer.vendor || "",
+              note: offer.note || it.note || "",
+              isEstimated: false,
+            });
+          } else if (ESTIM[it.category]) {
+            // 가견적값 — 흐린 글씨
+            const unit = ESTIM[it.category];
+            const total = unit * qty;
+            materialTotal += total;
+            materialItems.push({
+              group: g.group,
+              label: it.category,
+              qty: qty,
+              unit: unit,
+              total: total,
+              vendor: "(가견적)",
+              note: it.note || "협의 가정값 · 시장 평균/면적 산정 기반",
+              isEstimated: true,
+            });
+          }
         });
       });
     }
@@ -1801,7 +1819,7 @@
 
     // 자재 표 HTML (조명 견적 스타일 차용)
     const materialRowsHTML = materialItems.map((m) =>
-      '<tr>' +
+      '<tr' + (m.isEstimated ? ' class="tq-row-est"' : '') + '>' +
         '<td>' + esc(m.group) + '</td>' +
         '<td>' + esc(m.label) + '</td>' +
         '<td class="num">' + m.qty + '</td>' +

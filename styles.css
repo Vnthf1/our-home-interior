@@ -893,4 +893,6 @@ body:not(.is-admin) .tq-grand-sec{display:none}
 .tq-extra-list b{color:var(--accent)}
 .tq-extra-row{margin-top:5px;padding-left:8px;font-variant-numeric:tabular-nums}
 .tq-extra-row b{color:var(--accent);margin-left:6px;letter-spacing:.2px}
+.lt-quote-tbl tbody tr.tq-row-est td{color:#a59c8a;font-style:italic;background:#fbfaf6}
+.lt-quote-tbl tbody tr.tq-row-est td.num{color:#8a7c63}
 body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-wrap{display:none}
