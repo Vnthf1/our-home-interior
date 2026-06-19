@@ -869,3 +869,17 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-quote-tbl tfoot td.num{text-align:right;font-variant-numeric:tabular-nums}
 /* 가격 셀 — 관리자만 노출 (body.is-admin 없으면 숨김) */
 body:not(.is-admin) .lt-quote-sec .lt-price{display:none}
+
+/* ===== 총 견적 페이지 ===== */
+.tq-section{margin-bottom:24px}
+.tq-light-summary{padding:14px 16px;background:#faf8f5;border:1px solid #ece9e3;border-radius:10px;font-size:13.5px;color:var(--muted)}
+.tq-light-summary a{color:var(--accent);font-weight:700;text-decoration:none;border-bottom:1px dashed currentColor}
+.tq-light-summary a:hover{color:#3a2616}
+.tq-subtotal{margin-top:10px;padding:10px 14px;background:var(--accent-soft);border-radius:8px;text-align:right;font-size:14px;color:var(--accent);font-weight:600}
+.tq-subtotal b{font-size:17px;letter-spacing:.3px;margin-left:6px}
+body:not(.is-admin) .tq-subtotal{display:none}
+.tq-grand-sec{margin-top:30px;padding:20px 22px;background:linear-gradient(135deg,#fdf6ea,#fef3c7);border:1.5px solid #e2dccf;border-radius:14px}
+.tq-grand-sec .lt-quote-h{margin-bottom:14px}
+.tq-grand{font-size:32px;font-weight:900;color:var(--accent);letter-spacing:-.5px;text-align:right;font-variant-numeric:tabular-nums}
+.tq-grand-sub{margin-top:6px;text-align:right;font-size:13px;color:var(--muted);font-weight:500}
+body:not(.is-admin) .tq-grand-sec{display:none}

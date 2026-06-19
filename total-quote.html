@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>총 견적 · 우리집 인테리어</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css">
+<link rel="stylesheet" href="styles.css" />
+<script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+</head>
+<body data-page="totalquote">
+
+<nav id="nav"></nav>
+
+<section><div class="wrap">
+  <div class="sec-title">TOTAL QUOTE</div>
+  <h2 class="sec-head">총 견적 — 공정 + 조명 자재 통합</h2>
+  <p class="ov-lead">견적/공정 페이지의 공정별 비용과 조명 계획 페이지의 자재 견적을 한 화면에서 합산해 보여줍니다. 가격은 관리자(GitHub 토큰 검증)만 노출됩니다.</p>
+  <div id="total-quote-app"></div>
+</div></section>
+
+<footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

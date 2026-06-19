@@ -62,13 +62,14 @@
     { href: "schedule.html", label: "공정표", key: "schedule" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "plans.html", label: "작업계획서", key: "plans" },
-    { href: "work.html", label: "작업 안내", key: "work" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
     { href: "lighting.html", label: "조명 계획", key: "lighting" },
     { href: "furniture.html", label: "가구도면", key: "furniture" },
     { href: "quotes.html", label: "견적/공정", key: "quotes" },
     { href: "materials.html", label: "견적/자재", key: "materials" },
+    { href: "total-quote.html", label: "총 견적", key: "totalquote" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
+    { href: "work.html", label: "작업 안내", key: "work" },
   ];
   function mountNav() {
     const el = $("nav");
@@ -1501,6 +1502,123 @@
     }
   }
 
+  /* ---------- 총 견적 (공정 + 조명 자재 통합 한 페이지) ----------
+   * - 견적/공정 페이지의 QUOTE_SUMMARY + 조명 페이지의 LIGHTING_* 데이터를 그대로 가져와 합산.
+   * - 원본 페이지는 그대로 두고 한 화면에 모아 보기 위함.
+   * - 가격은 관리자(lt-price 클래스)만 노출. */
+  function renderTotalQuote() {
+    const root = $("total-quote-app");
+    if (!root) return;
+    const VAT = 1.1;
+    const won = (v) => "₩" + Math.round(v).toLocaleString("ko-KR");
+
+    // 1) 공정 견적 합계 (QUOTE_SUMMARY의 final 또는 price)
+    let procTotal = 0;
+    if (typeof QUOTE_SUMMARY !== "undefined") {
+      QUOTE_SUMMARY.forEach((r) => { procTotal += Number(r.final) || Number(r.price) || 0; });
+    }
+
+    // 2) 조명 자재 합계 — LIGHTING_SWITCHES의 spec 순회 + LIGHTING_SWITCH_PRICES + LIGHTING_EXTRAS
+    let lightTotal = 0;
+    const KINDS = (typeof LIGHTING_KINDS !== "undefined") ? LIGHTING_KINDS : {};
+    const DRIVERS = (typeof LIGHTING_DRIVERS !== "undefined") ? LIGHTING_DRIVERS : {};
+    const SMPSES = (typeof LIGHTING_SMPS !== "undefined") ? LIGHTING_SMPS : {};
+    const SWPRICES = (typeof LIGHTING_SWITCH_PRICES !== "undefined") ? LIGHTING_SWITCH_PRICES : {};
+    const EXTRAS = (typeof LIGHTING_EXTRAS !== "undefined") ? LIGHTING_EXTRAS : [];
+
+    // 회로 spec 합산 (kind/driver/smps)
+    const counts = {};
+    if (typeof LIGHTING_SWITCHES !== "undefined") {
+      Object.values(LIGHTING_SWITCHES).forEach((sw) => {
+        const spec = (sw && sw.spec) || {};
+        ["lights", "drivers", "smps"].forEach((group) => {
+          const obj = spec[group] || {};
+          Object.keys(obj).forEach((k) => { counts[k] = (counts[k] || 0) + (obj[k] || 0); });
+        });
+      });
+    }
+    Object.keys(counts).forEach((k) => {
+      const info = KINDS[k] || DRIVERS[k] || SMPSES[k];
+      if (!info || info.priceB2B == null) return;
+      const ordered = /^strip/.test(k) ? Math.ceil(Math.round(counts[k] * 100) / 100) : Math.round(counts[k]);
+      lightTotal += ordered * info.priceB2B;
+    });
+    // 스위치 (위치 단위 카운트)
+    const switchPositions = new Set();
+    Object.values(typeof LIGHTING_SWITCHES !== "undefined" ? LIGHTING_SWITCHES : {}).forEach((sw) => {
+      if (!sw || !sw.switch) return;
+      switchPositions.add(sw.switch.replace(/\s*#\d+\s*$/, "").trim());
+    });
+    const swCounts = {};
+    switchPositions.forEach((pos) => {
+      const m = /(\d)구/.exec(pos);
+      if (m) swCounts[m[1]] = (swCounts[m[1]] || 0) + 1;
+    });
+    Object.keys(swCounts).forEach((ch) => {
+      const info = SWPRICES[ch];
+      if (info && info.priceB2B != null) lightTotal += swCounts[ch] * info.priceB2B;
+    });
+    // EXTRAS
+    EXTRAS.forEach((ex) => {
+      if (!ex.qty || ex.priceB2B == null) return;
+      lightTotal += ex.qty * ex.priceB2B;
+    });
+    lightTotal = Math.round(lightTotal * VAT); // VAT 포함
+
+    const grandTotal = procTotal + lightTotal;
+
+    root.innerHTML =
+      '<section class="tq-section">' +
+        '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터)</span></h3>' +
+        '<div id="total-quote-proc"></div>' +
+        '<div class="tq-subtotal lt-price">공정 합계: <b>' + won(procTotal) + '</b></div>' +
+      '</section>' +
+      '<section class="tq-section">' +
+        '<h3 class="lt-quote-h">2. 조명 자재 견적 <span class="lt-quote-sub">(조명 계획 페이지와 동일 데이터 · VAT 포함)</span></h3>' +
+        '<div class="tq-light-summary">' +
+          '<a href="lighting.html">→ 조명 계획 페이지</a>에서 상세 내역(품목·수량·단가) 확인 가능' +
+        '</div>' +
+        '<div class="tq-subtotal lt-price">조명 자재 합계: <b>' + won(lightTotal) + '</b></div>' +
+      '</section>' +
+      '<section class="tq-section tq-grand-sec">' +
+        '<h3 class="lt-quote-h">💰 총 합계</h3>' +
+        '<div class="tq-grand lt-price">' + won(grandTotal) + '</div>' +
+        '<div class="tq-grand-sub lt-price">공정 ' + won(procTotal) + ' + 조명 자재 ' + won(lightTotal) + '</div>' +
+      '</section>';
+
+    // 공정 견적 표 (renderQuoteSummary와 동일 Tabulator 형태)
+    if (typeof Tabulator !== "undefined" && typeof QUOTE_SUMMARY !== "undefined") {
+      const moneyCol = (title, field) => ({
+        title, field, hozAlign: "right", headerHozAlign: "right", headerSort: false, width: 110,
+        formatter: (cell) => {
+          const d = cell.getRow().getData();
+          if (field === "price" && d.priceText) return `<span class="qs-approx">${esc(d.priceText)}</span>`;
+          const v = cell.getValue();
+          return (v == null || v === "") ? `<span class="qs-dash">–</span>` : won(v);
+        },
+        bottomCalc: "sum",
+        bottomCalcFormatter: (cell) => { const v = cell.getValue(); return v ? `<b>${won(v)}</b>` : ""; },
+      });
+      new Tabulator("#total-quote-proc", {
+        data: QUOTE_SUMMARY.slice(),
+        layout: "fitColumns",
+        height: "auto",
+        columns: [
+          { title: "공정", field: "phase", width: 108, headerSort: false,
+            formatter: (c) => `<b>${esc(c.getValue() || "")}</b>`,
+            bottomCalc: () => "합계", bottomCalcFormatter: (c) => `<b>${esc(c.getValue())}</b>` },
+          { title: "회사", field: "company", width: 124, headerSort: false,
+            formatter: (c) => esc(c.getValue() || "") },
+          moneyCol("견적가", "price"),
+          moneyCol("선입금", "deposit"),
+          moneyCol("최종비용", "final"),
+          { title: "비고", field: "note", widthGrow: 2, minWidth: 110, headerSort: false,
+            formatter: (c) => `<span class="qs-sub">${esc(c.getValue() || "")}</span>` },
+        ],
+      });
+    }
+  }
+
   /* ---------- 작업 안내 (작업자 공유용 · 탭형, 각 공정마다 URL) ---------- */
   function renderWork() {
     const tabsEl = $("work-tabs"), contentEl = $("work-content");
@@ -2211,6 +2329,7 @@
     renderContacts();
     renderFloorplan();
     renderLighting();
+    renderTotalQuote();
     renderFurniture();
     renderWork();
     // 견적용 요약 복사 버튼 (작업계획서·작업안내 공용)
