@@ -196,6 +196,20 @@ const QUOTE_SUMMARY = [
   { phase: "화재/누수 보험", company: "", price: null, deposit: null, final: null, note: "가격 미정" },
 ];
 
+/* ===== 가구 견적 ===== — 요청서(구글 닥스 "가구 견적 요청서") 9항목 기준.
+ * 가격은 영림 인천갤러리 견적(2026-05-17) 매칭 결과. 미정은 별도 견적 필요. */
+const FURNITURE_QUOTE = [
+  { name: "아일랜드 및 키큰장",       qty: 1, price: 12800000, vendor: "영림 인천갤러리", note: "키친 통합 (알토 팔콘 + 싱크볼·수전·세라믹 12T 상판)" },
+  { name: "드레스룸 붙박이장",        qty: 1, price: 6100000,  vendor: "영림 인천갤러리", note: "소프 토프베이지·YKH_PUSH" },
+  { name: "현관 신발장",              qty: 1, price: 1900000,  vendor: "영림 인천갤러리", note: "루나 화이트스톤·알토 팔콘" },
+  { name: "책상 + 상부장",            qty: 1, price: 1830000,  vendor: "영림 인천갤러리", note: "알토 팔콘·소프 포그그레이지" },
+  { name: "화장대",                   qty: 1, price: null,     vendor: "", note: "견적 미정" },
+  { name: "거실 장식장",              qty: 1, price: 4300000,  vendor: "영림 인천갤러리", note: "루체 (나투라 그렌)" },
+  { name: "안방화장실 세면대 밑 장",  qty: 1, price: null,     vendor: "", note: "방수등급 ↑ · 견적 미정" },
+  { name: "안방화장실 변기칸 위 장",  qty: 1, price: null,     vendor: "", note: "방수등급 ↑ · 견적 미정" },
+  { name: "안방화장실 큰 거울",       qty: 1, price: null,     vendor: "", note: "견적 미정" },
+];
+
 /* ------------------------------------------------------------
  *  견적 / 후보  (공정별)
  *  ────────────────────────────────────────────────────────────

@@ -1525,8 +1525,10 @@
         else { procRows.push(r); procTotal += v; }
       });
     }
-    // 4) 가구 견적 — 데이터 미정 (자리만 마련)
-    const furnitureTotal = 0;
+    // 4) 가구 견적 — FURNITURE_QUOTE 데이터
+    let furnitureTotal = 0;
+    const furnitureItems = (typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : [];
+    furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
 
     // 2) 조명 자재 합계 — LIGHTING_SWITCHES의 spec 순회 + LIGHTING_SWITCH_PRICES + LIGHTING_EXTRAS
     let lightTotal = 0;
@@ -1682,8 +1684,23 @@
         '<div class="tq-subtotal lt-price">자재 합계: <b>' + won(materialTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">4. 가구 견적 <span class="lt-quote-sub">(가구도면 페이지 — 견적 미정)</span></h3>' +
-        '<div class="tq-light-summary">아직 가구별 견적이 정해지지 않았어요. 정해지면 여기에 자동 합산됩니다.</div>' +
+        '<h3 class="lt-quote-h">4. 가구 견적 <span class="lt-quote-sub">(가구 견적 요청서 9항목 · 영림 인천갤러리 매칭)</span></h3>' +
+        '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
+          '<thead><tr><th>가구</th><th class="num">수량</th><th class="num lt-price">단가</th><th class="num lt-price">합계</th><th>업체·메모</th></tr></thead>' +
+          '<tbody>' +
+            furnitureItems.map((f) => {
+              const total = (Number(f.price) || 0) * (f.qty || 1);
+              return '<tr>' +
+                '<td>' + esc(f.name) + '</td>' +
+                '<td class="num">' + (f.qty || 1) + '</td>' +
+                '<td class="num lt-price">' + (f.price ? won(f.price) : '<span class="lt-mut">미정</span>') + '</td>' +
+                '<td class="num lt-price">' + (f.price ? won(total) : '<span class="lt-mut">—</span>') + '</td>' +
+                '<td class="lt-mat-note">' + esc(f.vendor || '') + (f.note ? ' <span class="lt-mut">· ' + esc(f.note) + '</span>' : '') + '</td>' +
+              '</tr>';
+            }).join('') +
+          '</tbody>' +
+          '<tfoot><tr><th colspan="3">합계</th><td class="num lt-price">' + won(furnitureTotal) + '</td><td></td></tr></tfoot>' +
+        '</table></div>' +
         '<div class="tq-subtotal lt-price">가구 합계: <b>' + won(furnitureTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
