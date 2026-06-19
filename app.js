@@ -1573,6 +1573,62 @@
       '</section>';
   }
 
+  /* ---------- 가전 견적 비교 표 (가구/가전 페이지) — 가구와 동일 구조 ---------- */
+  function renderApplianceQuote() {
+    const root = $("appliance-quote-wrap");
+    if (!root || typeof APPLIANCE_QUOTE === "undefined") return;
+    const won = (v) => "₩" + Math.round(v).toLocaleString("ko-KR");
+    const vendors = [];
+    APPLIANCE_QUOTE.forEach((f) => {
+      (f.offers || []).forEach((o) => { if (o && o.vendor && vendors.indexOf(o.vendor) < 0) vendors.push(o.vendor); });
+    });
+    const vendorTotals = {}; vendors.forEach((v) => { vendorTotals[v] = 0; });
+    let bestTotal = 0;
+    const rows = APPLIANCE_QUOTE.map((f) => {
+      const offerByVendor = {};
+      (f.offers || []).forEach((o) => { if (o && o.vendor) offerByVendor[o.vendor] = o; });
+      let bestPrice = null, bestVendor = "";
+      vendors.forEach((v) => {
+        const o = offerByVendor[v];
+        if (o && typeof o.price === "number") {
+          if (bestPrice == null || o.price < bestPrice) { bestPrice = o.price; bestVendor = v; }
+        }
+      });
+      if (bestPrice != null) bestTotal += bestPrice * (f.qty || 1);
+      const cells = vendors.map((v) => {
+        const o = offerByVendor[v];
+        if (!o || typeof o.price !== "number") return '<td class="num lt-price"><span class="lt-mut">—</span></td>';
+        if (o.price) vendorTotals[v] += o.price * (f.qty || 1);
+        const isBest = (o.price === bestPrice);
+        return '<td class="num lt-price' + (isBest ? ' fq-best' : '') + '" title="' + esc(o.note || '') + '">' + won(o.price) + '</td>';
+      }).join('');
+      return '<tr>' +
+        '<td class="fq-name">' + esc(f.name) + '</td>' +
+        '<td class="num">' + (f.qty || 1) + '</td>' +
+        cells +
+        '<td class="lt-mat-note">' + (bestVendor ? '<b>' + esc(bestVendor) + '</b>' : '<span class="lt-mut">—</span>') + '</td>' +
+        '</tr>';
+    }).join('');
+    const totalsCells = vendors.map((v) => '<td class="num lt-price">' + won(vendorTotals[v]) + '</td>').join('');
+    root.innerHTML =
+      '<section class="lt-quote-sec fq-section">' +
+        '<h3 class="lt-quote-h">📋 가전 견적 비교 <span class="lt-quote-sub lt-price">(가격은 관리자만 노출 · 최저가 강조)</span></h3>' +
+        '<div class="lt-tbl-wrap"><table class="lt-quote-tbl fq-table">' +
+          '<thead><tr>' +
+            '<th>가전</th><th class="num">수량</th>' +
+            vendors.map((v) => '<th class="num lt-price">' + esc(v) + '</th>').join('') +
+            '<th>최저가 업체</th>' +
+          '</tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+          '<tfoot><tr>' +
+            '<th colspan="2">합계</th>' +
+            totalsCells +
+            '<td class="num lt-price">최저가 합 ' + won(bestTotal) + '</td>' +
+          '</tr></tfoot>' +
+        '</table></div>' +
+      '</section>';
+  }
+
   /* ---------- 총 견적 (공정 + 조명 자재 통합 한 페이지) ----------
    * - 견적/공정 페이지의 QUOTE_SUMMARY + 조명 페이지의 LIGHTING_* 데이터를 그대로 가져와 합산.
    * - 원본 페이지는 그대로 두고 한 화면에 모아 보기 위함.
@@ -2532,6 +2588,7 @@
     renderFloorplan();
     renderLighting();
     renderFurnitureQuote();
+    renderApplianceQuote();
     renderTotalQuote();
     renderFurniture();
     renderWork();

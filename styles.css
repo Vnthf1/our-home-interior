@@ -889,3 +889,4 @@ body:not(.is-admin) .tq-grand-sec{display:none}
 .fq-table .fq-name{font-weight:700;color:var(--accent)}
 .fq-table td.fq-best{background:#fdf3e0;color:var(--accent);font-weight:800;position:relative}
 .fq-table td.fq-best::after{content:"★";margin-left:6px;color:#d97706;font-size:11px}
+body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-wrap{display:none}

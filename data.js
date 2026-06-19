@@ -234,6 +234,28 @@ const FURNITURE_QUOTE = [
   ]},
 ];
 
+/* ===== 가전 견적 ===== — MATERIALS에서 옮겨온 9항목. 가구처럼 업체별 비교. */
+const APPLIANCE_QUOTE = [
+  { name: "인덕션", qty: 1, offers: [
+    { vendor: "영림 (삼성 비스포크)", price: 1174000, note: "NZ63DB503CFT 블랙" },
+  ]},
+  { name: "식기세척기", qty: 1, offers: [
+    { vendor: "영림 (삼성 비스포크)", price: 1419000, note: "DW90F79F1U01T 14인용 코타화이트" },
+  ]},
+  { name: "광파오븐", qty: 1, offers: [] },
+  { name: "빌트인 냉장고", qty: 1, offers: [
+    { vendor: "영림 (삼성 비스포크)", price: 3776000, note: "1도어 냉동(RZ34) + 냉장(RR40) + 김치(RQ34) + 연결키트 ×2" },
+  ]},
+  { name: "세탁기·건조기", qty: 1, offers: [
+    { vendor: "영림 (삼성 비스포크) — 25/22kg + AI스팀", price: 5385000, note: "WH90F2522 원바디 25/22kg(3,679,000) + AI스팀 VR90F01SAG(1,706,000)" },
+    { vendor: "영림 (삼성 비스포크) — 24/20kg + AI스팀", price: 4305000, note: "WH90F2520 원바디 24/20kg(2,599,000) + AI스팀 VR90F01SAG(1,706,000)" },
+  ]},
+  { name: "로봇청소기", qty: 1, offers: [] },
+  { name: "사운드바", qty: 1, offers: [] },
+  { name: "정수기", qty: 1, offers: [] },
+  { name: "85인치 TV", qty: 1, offers: [] },
+];
+
 /* ------------------------------------------------------------
  *  견적 / 후보  (공정별)
  *  ────────────────────────────────────────────────────────────
@@ -1167,20 +1189,6 @@ const MATERIALS = [
         ],
         decided: null, purchased: null, note: "",
       },
-    ],
-  },
-  {
-    group: "가전",
-    items: [
-      { category: "인덕션",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "식기세척기",     qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "광파오븐",       qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "빌트인 냉장고",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "세탁기·건조기",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "로봇청소기",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "사운드바",      qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "정수기",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "85인치 TV",     qty: 1, status: "pending", purpose: "거실", candidates: [], decided: null, purchased: null, note: "" },
     ],
   },
   {
