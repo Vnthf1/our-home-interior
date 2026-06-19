@@ -721,7 +721,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-floor{flex:0 0 var(--floor-w,36%);min-width:300px;transition:flex-basis .25s ease;position:sticky;top:64px}
 .lt-side{flex:1 1 0;min-width:300px}
 @media (max-width:1024px){.lt-floor{flex-basis:100% !important}.lt-side{flex-basis:100%}}
-.lt-zoom-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;padding:4px 0}
+.lt-zoom-bar{display:flex;align-items:center;justify-content:flex-start;gap:6px;margin-bottom:8px;padding:4px 0}
 .lt-zoom-btn{width:32px;height:32px;border-radius:8px;border:1px solid #ece9e3;background:var(--card);color:var(--accent);font-size:18px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:.12s}
 .lt-zoom-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 .lt-zoom-btn.lt-zoom-reset{font-size:14px}
