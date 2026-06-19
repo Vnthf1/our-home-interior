@@ -1565,7 +1565,32 @@
     });
     lightTotal = Math.round(lightTotal * VAT); // VAT 포함
 
-    const grandTotal = procTotal + lightTotal;
+    // 3) 자재 견적 — MATERIALS 중 가격이 명시된 후보가 있는 항목만
+    const materialItems = [];
+    let materialTotal = 0;
+    if (typeof MATERIALS !== "undefined") {
+      MATERIALS.forEach((g) => {
+        (g.items || []).forEach((it) => {
+          const cand = (it.candidates || []).find((c) => (c.offers || []).some((o) => o && o.price));
+          if (!cand) return;
+          const offer = cand.offers.find((o) => o && o.price);
+          const qty = it.qty || 1;
+          const total = offer.price * qty;
+          materialTotal += total;
+          materialItems.push({
+            group: g.group,
+            label: it.category + (cand.name ? " · " + cand.name : ""),
+            qty: qty,
+            unit: offer.price,
+            total: total,
+            vendor: offer.vendor || "",
+            note: offer.note || it.note || "",
+          });
+        });
+      });
+    }
+
+    const grandTotal = procTotal + lightTotal + materialTotal;
 
     // 조명 견적 상세표 (buildQuoteHTML과 동일) — kindKeys 등 인자 만들어 호출
     const kindKeys = Object.keys(KINDS);
@@ -1582,6 +1607,29 @@
     });
     const lightingQuoteHTML = buildQuoteHTML(kindKeys, driverKeys, smpsKeys, KINDS, DRIVERS, SMPSES, matKindTotal, totalsByDriver, totalsBySmps);
 
+    // 자재 표 HTML (조명 견적 스타일 차용)
+    const materialRowsHTML = materialItems.map((m) =>
+      '<tr>' +
+        '<td>' + esc(m.group) + '</td>' +
+        '<td>' + esc(m.label) + '</td>' +
+        '<td class="num">' + m.qty + '</td>' +
+        '<td class="num lt-price">' + won(m.unit) + '</td>' +
+        '<td class="num lt-price">' + won(m.total) + '</td>' +
+        '<td class="lt-mat-note">' + esc(m.vendor) + (m.note ? ' <span class="lt-mut">· ' + esc(m.note) + '</span>' : '') + '</td>' +
+      '</tr>'
+    ).join('');
+    const materialQuoteHTML = '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
+      '<thead><tr>' +
+        '<th>그룹</th><th>품목</th><th class="num">수량</th>' +
+        '<th class="num lt-price">단가</th><th class="num lt-price">합계</th><th>업체·메모</th>' +
+      '</tr></thead>' +
+      '<tbody>' + materialRowsHTML + '</tbody>' +
+      '<tfoot><tr><th colspan="4">합계</th>' +
+        '<td class="num lt-price">' + won(materialTotal) + '</td>' +
+        '<td></td>' +
+      '</tr></tfoot>' +
+    '</table></div>';
+
     root.innerHTML =
       '<section class="tq-section">' +
         '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터)</span></h3>' +
@@ -1593,10 +1641,15 @@
         lightingQuoteHTML +
         '<div class="tq-subtotal lt-price">조명 자재 합계: <b>' + won(lightTotal) + '</b></div>' +
       '</section>' +
+      '<section class="tq-section">' +
+        '<h3 class="lt-quote-h">3. 자재 견적 <span class="lt-quote-sub">(견적/자재 페이지에 가격이 명시된 항목만)</span></h3>' +
+        materialQuoteHTML +
+        '<div class="tq-subtotal lt-price">자재 합계: <b>' + won(materialTotal) + '</b></div>' +
+      '</section>' +
       '<section class="tq-section tq-grand-sec">' +
         '<h3 class="lt-quote-h">💰 총 합계</h3>' +
         '<div class="tq-grand lt-price">' + won(grandTotal) + '</div>' +
-        '<div class="tq-grand-sub lt-price">공정 ' + won(procTotal) + ' + 조명 자재 ' + won(lightTotal) + '</div>' +
+        '<div class="tq-grand-sub lt-price">공정 ' + won(procTotal) + ' + 조명 자재 ' + won(lightTotal) + ' + 자재 ' + won(materialTotal) + '</div>' +
       '</section>';
 
     // 공정 견적 표 (renderQuoteSummary와 동일 Tabulator 형태)
