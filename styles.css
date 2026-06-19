@@ -883,3 +883,9 @@ body:not(.is-admin) .tq-subtotal{display:none}
 .tq-grand{font-size:32px;font-weight:900;color:var(--accent);letter-spacing:-.5px;text-align:right;font-variant-numeric:tabular-nums}
 .tq-grand-sub{margin-top:6px;text-align:right;font-size:13px;color:var(--muted);font-weight:500}
 body:not(.is-admin) .tq-grand-sec{display:none}
+
+/* ===== 가구 견적 비교 표 ===== */
+.fq-section{margin-top:30px}
+.fq-table .fq-name{font-weight:700;color:var(--accent)}
+.fq-table td.fq-best{background:#fdf3e0;color:var(--accent);font-weight:800;position:relative}
+.fq-table td.fq-best::after{content:"★";margin-left:6px;color:#d97706;font-size:11px}

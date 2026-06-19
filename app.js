@@ -64,7 +64,7 @@
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
     { href: "lighting.html", label: "조명 계획", key: "lighting" },
-    { href: "furniture.html", label: "가구도면", key: "furniture" },
+    { href: "furniture.html", label: "가구/가전", key: "furniture" },
     { href: "quotes.html", label: "견적/공정", key: "quotes" },
     { href: "materials.html", label: "견적/자재", key: "materials" },
     { href: "total-quote.html", label: "총 견적", key: "totalquote" },
@@ -1502,6 +1502,77 @@
     }
   }
 
+  /* ---------- 가구 견적 비교 표 (가구/가전 페이지 하단) ----------
+   * - FURNITURE_QUOTE 데이터를 가구(행) × 업체(열) 비교 표로 렌더.
+   * - 가격 셀은 .lt-price → 관리자만 노출. */
+  function renderFurnitureQuote() {
+    const root = $("furniture-quote-wrap");
+    if (!root || typeof FURNITURE_QUOTE === "undefined") return;
+    const won = (v) => "₩" + Math.round(v).toLocaleString("ko-KR");
+
+    // 전체 업체 목록(컬럼) 추출
+    const vendors = [];
+    FURNITURE_QUOTE.forEach((f) => {
+      (f.offers || []).forEach((o) => { if (o && o.vendor && vendors.indexOf(o.vendor) < 0) vendors.push(o.vendor); });
+    });
+
+    // 업체별 총합
+    const vendorTotals = {}; vendors.forEach((v) => { vendorTotals[v] = 0; });
+    // 최저가 묶음 (각 가구별 최저가만 합산 → "최적 선택" 합계)
+    let bestTotal = 0;
+
+    const rows = FURNITURE_QUOTE.map((f) => {
+      const offerByVendor = {};
+      (f.offers || []).forEach((o) => { if (o && o.vendor) offerByVendor[o.vendor] = o; });
+      // 최저가 찾기
+      let bestPrice = null, bestVendor = "";
+      vendors.forEach((v) => {
+        const o = offerByVendor[v];
+        if (o && typeof o.price === "number") {
+          if (bestPrice == null || o.price < bestPrice) { bestPrice = o.price; bestVendor = v; }
+        }
+      });
+      if (bestPrice != null) bestTotal += bestPrice * (f.qty || 1);
+
+      const cells = vendors.map((v) => {
+        const o = offerByVendor[v];
+        if (!o || typeof o.price !== "number") return '<td class="num lt-price"><span class="lt-mut">—</span></td>';
+        if (o.price) vendorTotals[v] += o.price * (f.qty || 1);
+        const isBest = (o.price === bestPrice);
+        return '<td class="num lt-price' + (isBest ? ' fq-best' : '') + '" title="' + esc(o.note || '') + '">' + won(o.price) + '</td>';
+      }).join('');
+
+      return '<tr>' +
+        '<td class="fq-name">' + esc(f.name) + '</td>' +
+        '<td class="num">' + (f.qty || 1) + '</td>' +
+        cells +
+        '<td class="lt-mat-note">' + (bestVendor ? '<b>' + esc(bestVendor) + '</b>' : '<span class="lt-mut">—</span>') + '</td>' +
+        '</tr>';
+    }).join('');
+
+    const totalsCells = vendors.map((v) =>
+      '<td class="num lt-price">' + won(vendorTotals[v]) + '</td>'
+    ).join('');
+
+    root.innerHTML =
+      '<section class="lt-quote-sec fq-section">' +
+        '<h3 class="lt-quote-h">📋 가구 견적 비교 <span class="lt-quote-sub lt-price">(가격은 관리자만 노출 · 최저가 강조)</span></h3>' +
+        '<div class="lt-tbl-wrap"><table class="lt-quote-tbl fq-table">' +
+          '<thead><tr>' +
+            '<th>가구</th><th class="num">수량</th>' +
+            vendors.map((v) => '<th class="num lt-price">' + esc(v) + '</th>').join('') +
+            '<th>최저가 업체</th>' +
+          '</tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+          '<tfoot><tr>' +
+            '<th colspan="2">합계</th>' +
+            totalsCells +
+            '<td class="num lt-price">최저가 합 ' + won(bestTotal) + '</td>' +
+          '</tr></tfoot>' +
+        '</table></div>' +
+      '</section>';
+  }
+
   /* ---------- 총 견적 (공정 + 조명 자재 통합 한 페이지) ----------
    * - 견적/공정 페이지의 QUOTE_SUMMARY + 조명 페이지의 LIGHTING_* 데이터를 그대로 가져와 합산.
    * - 원본 페이지는 그대로 두고 한 화면에 모아 보기 위함.
@@ -1525,9 +1596,17 @@
         else { procRows.push(r); procTotal += v; }
       });
     }
-    // 4) 가구 견적 — FURNITURE_QUOTE 데이터
+    // 4) 가구 견적 — FURNITURE_QUOTE의 각 항목에서 최저가 자동 선택 (+업체명)
     let furnitureTotal = 0;
-    const furnitureItems = (typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : [];
+    const furnitureItems = ((typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : []).map((f) => {
+      const offers = (f.offers || []).filter((o) => o && typeof o.price === "number");
+      let bestOffer = null;
+      offers.forEach((o) => { if (!bestOffer || o.price < bestOffer.price) bestOffer = o; });
+      const price = bestOffer ? bestOffer.price : null;
+      const vendor = bestOffer ? bestOffer.vendor : "";
+      const note = bestOffer ? (bestOffer.note || "") : "견적 미정";
+      return { name: f.name, qty: f.qty || 1, price: price, vendor: vendor, note: note };
+    });
     furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
 
     // 2) 조명 자재 합계 — LIGHTING_SWITCHES의 spec 순회 + LIGHTING_SWITCH_PRICES + LIGHTING_EXTRAS
@@ -2452,6 +2531,7 @@
     renderContacts();
     renderFloorplan();
     renderLighting();
+    renderFurnitureQuote();
     renderTotalQuote();
     renderFurniture();
     renderWork();

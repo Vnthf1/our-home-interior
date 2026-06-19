@@ -196,18 +196,42 @@ const QUOTE_SUMMARY = [
   { phase: "화재/누수 보험", company: "", price: null, deposit: null, final: null, note: "가격 미정" },
 ];
 
-/* ===== 가구 견적 ===== — 요청서(구글 닥스 "가구 견적 요청서") 9항목 기준.
- * 가격은 영림 인천갤러리 견적(2026-05-17) 매칭 결과. 미정은 별도 견적 필요. */
+/* ===== 가구 견적 ===== — 요청서(구글 닥스 "가구 견적 요청서") 10항목.
+ * offers: 업체별 가격(있으면). 총 견적 페이지는 최저가를 자동 선택. */
 const FURNITURE_QUOTE = [
-  { name: "아일랜드 및 키큰장",       qty: 1, price: 12800000, vendor: "영림 인천갤러리", note: "키친 통합 (알토 팔콘 + 싱크볼·수전·세라믹 12T 상판)" },
-  { name: "드레스룸 붙박이장",        qty: 1, price: 6100000,  vendor: "영림 인천갤러리", note: "소프 토프베이지·YKH_PUSH" },
-  { name: "현관 신발장",              qty: 1, price: 1900000,  vendor: "영림 인천갤러리", note: "루나 화이트스톤·알토 팔콘" },
-  { name: "책상 + 상부장",            qty: 1, price: 1830000,  vendor: "영림 인천갤러리", note: "알토 팔콘·소프 포그그레이지" },
-  { name: "화장대",                   qty: 1, price: null,     vendor: "", note: "견적 미정" },
-  { name: "거실 장식장",              qty: 1, price: 4300000,  vendor: "영림 인천갤러리", note: "루체 (나투라 그렌)" },
-  { name: "안방화장실 세면대 밑 장",  qty: 1, price: null,     vendor: "", note: "방수등급 ↑ · 견적 미정" },
-  { name: "안방화장실 변기칸 위 장",  qty: 1, price: null,     vendor: "", note: "방수등급 ↑ · 견적 미정" },
-  { name: "안방화장실 큰 거울",       qty: 1, price: null,     vendor: "", note: "견적 미정" },
+  { name: "아일랜드 및 키큰장", qty: 1, offers: [
+    { vendor: "영림 인천갤러리", price: 12800000, note: "키친 통합 (알토 팔콘·싱크볼·수전·12T 세라믹 상판)" },
+    { vendor: "싱크 삼형제",     price: 6766200,  note: "아일랜드+키큰장+냉장고장+하부장 합 · 상부장 미정 제외" },
+  ]},
+  { name: "드레스룸 붙박이장", qty: 1, offers: [
+    { vendor: "영림 인천갤러리", price: 6100000, note: "소프 토프베이지·YKH_PUSH" },
+    { vendor: "싱크 삼형제",     price: 5400000, note: "붙박이장 W5050(3,030,000) + W3950(2,370,000)" },
+  ]},
+  { name: "현관 신발장", qty: 1, offers: [
+    { vendor: "영림 인천갤러리", price: 1900000, note: "루나 화이트스톤·알토 팔콘" },
+    { vendor: "싱크 삼형제",     price: 1200000, note: "신발장 W2000" },
+  ]},
+  { name: "책상 + 상부장", qty: 1, offers: [
+    { vendor: "영림 인천갤러리", price: 1830000, note: "알토 팔콘·소프 포그그레이지" },
+    { vendor: "싱크 삼형제",     price: 2352000, note: "책상 W3200(1,216,000) + 상부장 W3200 유리도어(1,136,000)" },
+  ]},
+  { name: "화장대", qty: 1, offers: [
+    { vendor: "싱크 삼형제",     price: 600000,  note: "W1000 · 거울 별도" },
+  ]},
+  { name: "거실 장식장", qty: 1, offers: [
+    { vendor: "영림 인천갤러리", price: 4300000, note: "루체 (나투라 그렌)" },
+    { vendor: "싱크 삼형제",     price: 3359600, note: "장식장 W3545" },
+  ]},
+  { name: "안방화장실 세면대 밑 장", qty: 1, offers: [
+    { vendor: "싱크 삼형제",     price: 759000,  note: "세면대 W1500 (해당 항목으로 추정)" },
+  ]},
+  { name: "안방화장실 변기칸 위 장", qty: 1, offers: [
+    { vendor: "싱크 삼형제",     price: 374400,  note: "욕실 상부장 W1040" },
+  ]},
+  { name: "안방화장실 큰 거울", qty: 1, offers: [] },
+  { name: "침대", qty: 1, offers: [
+    { vendor: "싱크 삼형제",     price: 1200000, note: "침대 W2000" },
+  ]},
 ];
 
 /* ------------------------------------------------------------
