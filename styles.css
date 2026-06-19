@@ -717,10 +717,10 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-draft-discard:hover{background:#3a2616}
 
 /* 레이아웃 — 좌: 평면도, 우: 매트릭스 표 (와이드) */
-.lt-grid{display:grid;grid-template-columns:minmax(300px,0.85fr) minmax(560px,1.5fr);gap:18px;align-items:start}
-@media (max-width:1024px){.lt-grid{grid-template-columns:1fr}}
-
-.lt-floor{position:sticky;top:64px}
+.lt-grid{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.lt-floor{flex:0 0 var(--floor-w,36%);min-width:300px;transition:flex-basis .25s ease;position:sticky;top:64px}
+.lt-side{flex:1 1 0;min-width:300px}
+@media (max-width:1024px){.lt-floor{flex-basis:100% !important}.lt-side{flex-basis:100%}}
 .lt-zoom-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;padding:4px 0}
 .lt-zoom-btn{width:32px;height:32px;border-radius:8px;border:1px solid #ece9e3;background:var(--card);color:var(--accent);font-size:18px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:.12s}
 .lt-zoom-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -729,8 +729,8 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-zoom-viewport{overflow:auto;max-height:calc(100vh - 160px);border-radius:14px;background:var(--card);border:1px solid var(--line)}
 .lt-zoom-viewport .lt-stage{width:100%;border:none;border-radius:0;box-shadow:none}
 /* 줌 모드 — 도면을 전체 폭으로 확장(표는 아래로 이동), sticky 해제 */
-.lt-grid.lt-zoomed{grid-template-columns:1fr}
-.lt-grid.lt-zoomed .lt-floor{position:static}
+.lt-grid.lt-zoomed .lt-floor{flex-basis:100% !important;position:static}
+.lt-grid.lt-zoomed .lt-side{flex-basis:100%}
 @media (max-width:1024px){.lt-floor{position:static}}
 .lt-stage{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 1px 3px rgba(60,50,40,.05)}
 .lt-img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}

@@ -1468,8 +1468,13 @@
     const updateZoom = () => {
       if (stageEl) stageEl.style.width = (zoomLevel * 100) + "%";
       if (zoomLevelEl) zoomLevelEl.textContent = Math.round(zoomLevel * 100) + "%";
-      // 확대 시 도면 영역을 전체 폭으로 — 표는 아래로 이동
-      if (ltGrid) ltGrid.classList.toggle("lt-zoomed", zoomLevel >= 2);
+      // 도면 컨테이너 폭도 부드럽게 확장: 100% = 36%, 200% = 100%, 그 사이 점진
+      if (ltGrid) {
+        const floorPct = Math.min(100, 36 + (zoomLevel - 1) * 64);
+        ltGrid.style.setProperty("--floor-w", floorPct + "%");
+        // 200% 이상이면 표는 아래로 이동, sticky 해제
+        ltGrid.classList.toggle("lt-zoomed", zoomLevel >= 2);
+      }
     };
     const zoomInBtn = $("lt-zoom-in");
     const zoomOutBtn = $("lt-zoom-out");
