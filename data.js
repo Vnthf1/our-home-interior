@@ -188,7 +188,7 @@ const QUOTE_SUMMARY = [
   { phase: "목공", company: "국선디자인", price: 10100000, priceText: "1,010~1,065만 (가견적)", deposit: null, final: null, note: "자재+인건비, VAT 별도" },
   { phase: "타일", company: "최반장", price: 3200000, deposit: null, final: null, note: "" },
   { phase: "도기", company: "(별도)", price: 450000, deposit: null, final: null, note: "" },
-  { phase: "천장", company: "", price: 950000, deposit: null, final: null, note: "" },
+  { phase: "천장", company: "", price: 950000, deposit: null, final: null, note: "무광 SMC" },
   { phase: "장판", company: "대동벽지", price: 3500000, deposit: 300000, final: null, note: "온누리 175만 + 계약금 30만" },
   { phase: "샷시", company: "한길창호", price: 4211900, deposit: null, final: null, note: "VAT 포함 · 덧창(거실2·안방2)+통바" },
   { phase: "이사", company: "로젠이사", price: 2480000, deposit: 100000, final: null, note: "이사 200만 + 보관 48만" },
@@ -1112,35 +1112,14 @@ const MATERIALS = [
     group: "가전",
     items: [
       { category: "인덕션",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "후드",          qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "식기세척기",     qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "광파오븐",       qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "빌트인 냉장고",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "세탁기·건조기",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "시스템에어컨",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "전열교환기",     qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "보일러",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "로봇청소기",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-    ],
-  },
-  {
-    group: "조명",
-    items: [
-      { category: "매입등(다운라이트)",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "COB 조명",            qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "펜던트",              qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "간접등(스트립/T5)",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "실링팬",              qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-    ],
-  },
-  {
-    group: "스위치·콘센트·IoT",
-    items: [
-      { category: "스마트 스위치",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "콘센트",          qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "재실센서",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "온도조절기",      qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "허브·게이트웨이",  qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "사운드바",      qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "정수기",        qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "85인치 TV",     qty: 1, status: "pending", purpose: "거실", candidates: [], decided: null, purchased: null, note: "" },
     ],
   },
   {
@@ -1182,10 +1161,6 @@ const MATERIALS = [
         ],
         decided: null, purchased: null, note: "",
       },
-      { category: "벽지",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "필름",    qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "페인트",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "회벽재",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       {
         category: "방수용품", qty: 1, status: "looking", purpose: "욕실 바닥",
         candidates: [
@@ -1198,21 +1173,17 @@ const MATERIALS = [
   {
     group: "하드웨어·기타",
     items: [
-      { category: "커튼레일",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "자동 빨래건조대",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "액자레일",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "매트리스",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       {
-        category: "도어락", qty: 1, status: "looking", purpose: "현관",
+        category: "매트리스", qty: 2, status: "looking", purpose: "안방 퀸 × 2",
         candidates: [
-          { name: "아카라 N100 도어락 + 허브", offers: [
-            { vendor: "을지로 대일도기사 옆", price: 430000, note: "N100 허브 포함" },
-            { vendor: "을지로 대일도기사 옆", price: 400000, note: "도어락만 (허브 별도)" },
-          ]},
+          { name: "기본 매트리스", offers: [{ vendor: "", price: 750000, note: "1개 기준" }] },
         ],
-        decided: null, purchased: null,
-        note: "설치비 4만원 (목요일 3만원)",
+        decided: null, purchased: null, note: "750,000원 × 2개 = 1,500,000원",
       },
+      { category: "후드",            qty: 1, status: "pending", purpose: "주방", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "실링팬",          qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
     ],
   },
 ];
