@@ -951,7 +951,7 @@
         if (!qty) return;
         const ordered = rollable && isStrip(k) ? Math.ceil(Math.round(qty * 100) / 100) : Math.round(qty);
         const hasPrice = typeof info.priceB2B === "number";
-        items.push({ label: labelWithNum(info, k), qty: qty, ordered: ordered, pb: hasPrice ? info.priceB2B : null, pc: hasPrice ? info.priceB2C : null });
+        items.push({ label: labelWithNum(info, k), model: info.model || null, qty: qty, ordered: ordered, pb: hasPrice ? info.priceB2B : null, pc: hasPrice ? info.priceB2C : null });
       });
     };
     // IoT 조명 먼저, 일반(AC 220V) 조명은 견적 마지막에 — 진한 구분선
@@ -1012,8 +1012,11 @@
       const sumC = (pcVat != null && !it.unknownQty) ? it.ordered * pcVat : null;
       if (sumB != null) grandB += sumB;
       if (sumC != null) grandC += sumC;
+      const labelCell = it.model
+        ? '<div class="lt-label-main">' + esc(it.model) + '</div><div class="lt-label-sub">' + esc(it.label) + '</div>'
+        : esc(it.label);
       return '<tr' + (it.isNormalStart ? ' class="lt-row-normal-start"' : '') + '>' +
-        '<td>' + esc(it.label) + '</td>' +
+        '<td>' + labelCell + '</td>' +
         '<td class="num">' + qtyTxt + '</td>' +
         '<td class="num">' + orderedTxt + '</td>' +
         '<td class="num lt-price">' + (pbVat != null ? fmt(pbVat) : '<span class="lt-mut">—</span>') + '</td>' +
