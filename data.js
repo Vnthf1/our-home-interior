@@ -2242,7 +2242,7 @@ const KITCHEN = {
  *   color: 도면 마커 색 + 표 색점 색
  *   model: 모델 정보(사용자가 차차 채움) — 표 헤더 3번째 줄 */
 const LIGHTING_KINDS = {
-  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "소프트 호른 COB 다운라이트 2인치 (#41) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 9600,  priceB2C: 16364 },
+  cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "슬림딥콘 2인치 COB 다운라이트 DC24V TW 7W (#17) · 타공 55파이 · 높이 55mm · CRI>90 · 확산각 55도", watt: 7, volt: "DC 24V", priceB2B: 12600,  priceB2C: 13860 },
   cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
   diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 8580,  priceB2C: 16364 },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
@@ -2300,27 +2300,27 @@ const LIGHTING_EXTRAS = [
 const LIGHTING_SWITCHES = {
   // 거실 (3구) — 주방 2구와 같은 위치에 5구로 함께 설치
   "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { lights: { multi10: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 40 } },
-  "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
+  "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
   "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 2 }, watt: 366, note: "필립스 CertaFlux RGBWW 5M × 3롤 · 최대 24.4 W/m × 15m = 366W (RGB 14.4 + W 10) · SMPS 200W ×2 (총 400W) · 아카라 스트립 DR(#140) RGBWW & CCT 둘 다 호환 — 12A 옵션 ×2면 576W까지 받음 · RGB와 W 동시 풀출력 거의 없어 실사용은 200W 내외, 마진 위해 200W 2개" } },
   // 주방 (2구) — 거실 스위치 옆
   "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
-  "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
+  "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
   // 복도 (2구)
   "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "아트월",
-            spec: { lights: { cob2: 1, strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 39,
-                    note: "COB IoT 1개(8W) + 스트립 CCT 10M(#60) 0.44롤(220+220=440cm) · 4.4m × 7W = 30.8W · 합 38.8W (100W SMPS 충분)" } },
+            spec: { lights: { cob2: 1, strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 38,
+                    note: "COB IoT 1개(7W) + 스트립 CCT 10M(#60) 0.44롤(220+220=440cm) · 4.4m × 7W = 30.8W · 합 37.8W (100W SMPS 충분)" } },
   "HW-2": { zone: "복도", switch: "복도 2구 #2", desc: "복도",
-            spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32,
-                    note: "COB IoT 4개 × 8W = 32W · Aqara DR 1 + 100W SMPS 1 (충분, 68W 여유)" } },
+            spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
+                    note: "COB IoT(#17) 4개 × 7W = 28W · Aqara DR 1 + 100W SMPS 1 (충분, 72W 여유)" } },
   // 현관 (2구)
   "EN-1": { zone: "현관", switch: "현관 2구 #1", desc: "현관등 + 간접등",
             spec: { lights: { cob2: 2, strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 34,
-                    note: "COB IoT 2개(14W) + 스트립 CCT 0.28롤(100+180=280cm) · 2.8m × 7W = 19.6W · 합 33.6W ≈ 34W (100W SMPS 충분)" } },
+                    note: "COB IoT(#17) 2개 × 7W = 14W + 스트립 CCT 0.28롤(100+180=280cm) · 2.8m × 7W = 19.6W · 합 33.6W ≈ 34W (100W SMPS 충분)" } },
   "EN-2": { zone: "현관", switch: "현관 2구 #2", desc: "일괄소등" },
   // 안방 (3구)
   "MR-1": { zone: "안방", switch: "안방 3구 #1", desc: "COB 4개",
-            spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32,
-                    note: "COB IoT(#41) 4 × 8W = 32W · Aqara DR 1 + 100W SMPS 1 (68W 여유)" } },
+            spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
+                    note: "COB IoT(#17) 4 × 7W = 28W · Aqara DR 1 + 100W SMPS 1 (72W 여유)" } },
   "MR-2": { zone: "안방", switch: "안방 3구 #2", desc: "확산",
             spec: { lights: { diff2: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 8,
                     note: "확산 IoT(#42) 1 × 8W = 8W · Aqara DR 1 + 100W SMPS 1 (92W 여유 — 향후 추가 등 여지)" } },
@@ -2329,11 +2329,11 @@ const LIGHTING_SWITCHES = {
                     note: "SR 8mm CCT 10M(#60) 1.77롤(발주 2롤) · 우물천장 1000 + 침대프레임 400 + 천장 370 = 1770cm · 17.7m × 7W = 124W · 옵션 C 적용: DR 2 + SMPS 100W ×2로 분리 (DR1: 우물천장 70W, DR2: 침대·천장 54W · 각 100W SMPS 별도 — 장애 격리)" } },
   // 안방복도 (3구, 신설)
   "MRH-1": { zone: "안방복도", switch: "안방복도 3구 #1", desc: "COB 2개",
-             spec: { lights: { cob2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 16,
-                     note: "COB IoT(#41) 2 × 8W = 16W · Aqara DR 1 + 100W SMPS 1 (충분)" } },
+             spec: { lights: { cob2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,
+                     note: "COB IoT(#17) 2 × 7W = 14W · Aqara DR 1 + 100W SMPS 1 (충분)" } },
   "MRH-2": { zone: "안방복도", switch: "안방복도 3구 #2", desc: "COB 1개 + 간접",
-             spec: { lights: { cob2: 1, strip_cct: 0.2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 22,
-                     note: "COB IoT(#41) 1 × 8W = 8W + 스트립 CCT 0.2롤(200cm × 7W = 14W) = 22W · 100W SMPS 충분" } },
+             spec: { lights: { cob2: 1, strip_cct: 0.2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 21,
+                     note: "COB IoT(#17) 1 × 7W = 7W + 스트립 CCT 0.2롤(200cm × 7W = 14W) = 21W · 100W SMPS 충분" } },
   "MRH-3": { zone: "안방복도", switch: "안방복도 3구 #3", desc: "(미사용)" },
   // 거실화장실 (3구)
   "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트" },
