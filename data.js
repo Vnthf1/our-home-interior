@@ -2257,7 +2257,7 @@ const LIGHTING_KINDS = {
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
  *   회로별 spec.drivers / spec.smps 가 여기 키를 참조. 수량은 spec에서. */
 const LIGHTING_DRIVERS = {
-  aqara: { label: "Aqara 스트립 DR", short: "Aqara DR", color: "#8b5cf6", model: "Aqara LED 스트립 드라이버 DC24V (#140)", priceB2B: 48620, priceB2C: 68000 },
+  aqara: { label: "Aqara 스트립 DR", short: "Aqara DR", color: "#8b5cf6", model: "Aqara 스마트 LED 스트립 드라이버 DC12-24V 6A(or 12A) RGBWW & CCT ZigBee (#140)", priceB2B: 48620, priceB2C: 53482 },
 };
 const LIGHTING_SMPS = {
   u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2L (#120) — PF>0.6 가성비", priceB2B: 16692, priceB2C: 21818 },
@@ -2301,7 +2301,7 @@ const LIGHTING_SWITCHES = {
   // 거실 (3구) — 주방 2구와 같은 위치에 5구로 함께 설치
   "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { lights: { multi10: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 40 } },
   "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
-  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 2 }, watt: 366, note: "필립스 CertaFlux RGBWW 5M × 3롤 · 최대 24.4 W/m × 15m = 366W (RGB 14.4 + W 10) · SMPS 200W ×2 (총 400W) · RGB와 W 동시 풀출력 거의 없어 실사용은 200W 내외, 마진 위해 200W 2개 · RGBWW 컨트롤러 별도 필요(아카라 DR은 CCT용이라 호환 X — Philips RGBW Bridge Box 또는 호환 4채널 RGBW IoT 컨트롤러 확인 요망)" } },
+  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 2 }, watt: 366, note: "필립스 CertaFlux RGBWW 5M × 3롤 · 최대 24.4 W/m × 15m = 366W (RGB 14.4 + W 10) · SMPS 200W ×2 (총 400W) · 아카라 스트립 DR(#140) RGBWW & CCT 둘 다 호환 — 12A 옵션 ×2면 576W까지 받음 · RGB와 W 동시 풀출력 거의 없어 실사용은 200W 내외, 마진 위해 200W 2개" } },
   // 주방 (2구) — 거실 스위치 옆
   "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
   "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
