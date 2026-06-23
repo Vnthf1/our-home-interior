@@ -2247,7 +2247,7 @@ const LIGHTING_KINDS = {
   diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 8580,  priceB2C: 16364 },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
-  strip:        { label: "스트립 RGBTW",      icon: "▬", short: "스트립RGBTW", color: "#ef4444", model: "SR 12mm 6선식 RGBTW COB LED 스트립 5M (#61)",   watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 46000, priceB2C: 60000 }, // 5M 한 롤당 약 35W
+  strip:        { label: "스트립 RGBWW",      icon: "▬", short: "스트립RGBWW", color: "#ef4444", model: "필립스 CertaFlux LEDFlex 5m 1000lm/m RGBWW C10 G1 (5선식·12NC 9290028 64480)",   watt: 50.5, volt: "DC 24V", rollCm: 500,  priceB2B: 137500, priceB2C: 137500 }, // 10.1 W/m × 5m = 50.5W · 5선식 (24V+ · R · G · B · W)
   strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000, priceB2B: 44400, priceB2C: 80000 }, // 10M 한 롤당 약 70W (7W/m)
   strip_aqara_wp: { label: "스트립 방수",       icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 76050, priceB2C: 90000 }, // 5M, IP65 추정 35W (욕실용)
   strip_normal:   { label: "스트립 (일반)",      icon: "▭", short: "일반스트립",   color: "#fbbf24", model: "일반 스트립 조명 or T5 (미정)",                    watt: 0,  volt: "AC 220V" }, // 작은방·드레스룸 간접등용
@@ -2301,7 +2301,7 @@ const LIGHTING_SWITCHES = {
   // 거실 (3구) — 주방 2구와 같은 위치에 5구로 함께 설치
   "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { lights: { multi10: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 40 } },
   "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
-  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 1 }, watt: 105, note: "스트립 5M × 3롤 · SMPS 200W는 우물천장 공용 · 15m × 5W=75W (실 부하). 105W는 3롤 발주 기준 최대치." } },
+  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 1 }, watt: 152, note: "필립스 CertaFlux LEDFlex RGBWW 5M × 3롤 · 10.1 W/m × 15m = 151.5W ≈ 152W · SMPS 200W로 충분 · RGBWW 컨트롤러 별도 필요(아카라 DR은 CCT용이라 호환 X — Philips RGBW Bridge Box 또는 호환 4채널 RGBW IoT 컨트롤러 확인 요망)" } },
   // 주방 (2구) — 거실 스위치 옆
   "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
   "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 32 } },
