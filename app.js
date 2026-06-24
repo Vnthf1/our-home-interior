@@ -2783,9 +2783,11 @@
       if (!fp) return `<div class="pg-doc"><h1 class="pg-h">가구 계획도</h1></div>`;
       const mk = (fp.items || []).filter((it) => it.layer === "furniture" && it.type === "box")
         .map((it) => `<div class="wo-mk" style="left:${it.x}%;top:${it.y}%;width:${it.w}%;height:${it.h}%"><span>${esc(it.label || "")}${it.dim ? `<br><b>${esc(it.dim)}</b>` : ""}</span></div>`).join("");
+      const dims = (fp.dims || [])
+        .map((d) => `<div class="wo-dim" style="left:${d.x}%;top:${d.y}%;width:${d.w}%"><span>${esc(d.label)}</span></div>`).join("");
       return `<div class="pg-doc">
         <h1 class="pg-h">🛋 가구 계획도</h1>
-        <div class="wo-plan big"><img src="images/${esc(fp.image)}" alt="평면도">${mk}</div></div>`;
+        <div class="wo-plan big"><img src="images/${esc(fp.image)}" alt="평면도">${mk}${dims}</div></div>`;
     };
     const noteHtml = (n) => esc(n || "").replace(/\n/g, "<br>");
     const unit = (() => { try { return localStorage.getItem("kz-print-unit"); } catch (e) { return null; } })() || "B동 804호";

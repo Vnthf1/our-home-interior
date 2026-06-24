@@ -1560,6 +1560,10 @@ const REFERENCES = [
  * ------------------------------------------------------------ */
 const FLOORPLAN = {
   image: "평면도.jpg",
+  // 가구 계획도(인쇄) 전용 거리 치수선 (가로 dim). x,y,w = 이미지 대비 %, label = 거리(mm)
+  dims: [
+    { x: 41, y: 24, w: 5, label: "900" }, // 냉장고장 ↔ 아일랜드
+  ],
   layers: [
     { id: "furniture", label: "가구",   color: "#3b82f6", icon: "🛋️" },
     { id: "light",     label: "조명",   color: "#f59e0b", icon: "💡" },
