@@ -2754,8 +2754,7 @@
         <h1 class="pg-h">🔨 철거 작업지시서</h1>
         ${groupsHtml}
         <h2 class="pg-sub2 wo-keep">⛔ 존치 (철거 금지)</h2>
-        <ul class="wo-list keep"><li>안방 우물천장 (기존 유지)</li><li>문틀 (★철거 안 함)</li><li>베란다 샷시</li><li>실외기실 문</li>
-          <li class="wo-note">그 외 존치 항목은 현장에서 <b>철거 ✕ 스티커</b>로 표시</li></ul></div>`;
+        <ul class="wo-list keep"><li>보일러</li><li>안방 우물천장 (기존 유지)</li><li>문틀 (★철거 안 함)</li><li>베란다 샷시</li><li>실외기실 문</li></ul></div>`;
     };
     const noteHtml = (n) => esc(n || "").replace(/\n/g, "<br>");
     const unit = (() => { try { return localStorage.getItem("kz-print-unit"); } catch (e) { return null; } })() || "B동 804호";
