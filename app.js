@@ -2745,22 +2745,16 @@
     const demolitionSheet = () => {
       const ph = (typeof PHASES !== "undefined") ? PHASES.find((p) => p.id === "demolition") : null;
       if (!ph) return `<div class="pg-doc"><h1 class="pg-h">철거 작업지시서</h1></div>`;
-      const scope = ["보양 (공사 시작 전)", "가구 · 주방 철거", "마감재 철거", "구조 · 설비 철거"];
-      const txt = (it) => typeof it === "string" ? esc(it) : esc(it.text || "");
-      const groupsHtml = (ph.groups || []).filter((g) => scope.includes(g.title))
-        .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-list">${g.items.map((it) => `<li>${txt(it)}</li>`).join("")}</ul></div>`).join("");
-      const demoTask = SCHEDULE.tasks.find((t) => t.name === "철거");
-      const sched = demoTask ? taskRange(demoTask) : "";
+      const scope = ["구조 · 설비 철거", "가구 · 주방 철거", "마감재 철거"]; // 보양 제외
+      const txt = (it) => (typeof it === "string" ? it : (it.text || "")).replace(/\s*\([^)]*포함\)/g, ""); // 작업지시서는 '(…포함)' 상세 생략
+      const blanks = (n) => Array.from({ length: n }, () => `<li class="wo-blank"></li>`).join("");
+      const groupsHtml = scope.map((s) => (ph.groups || []).find((g) => g.title === s)).filter(Boolean)
+        .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-list">${g.items.map((it) => `<li>${esc(txt(it))}</li>`).join("")}${blanks(2)}</ul></div>`).join("");
       return `<div class="pg-doc wo">
         <h1 class="pg-h">🔨 철거 작업지시서</h1>
-        <table class="pg-notice-t wo-meta"><tbody>
-          <tr><td class="r">세대</td><td>${esc(unit)}</td><td class="r">담당</td><td>벨류연구소</td></tr>
-          <tr><td class="r">일정</td><td>${esc(sched)}</td><td class="r">연락처</td><td>010-4028-0925</td></tr>
-        </tbody></table>
-        <h2 class="pg-sub2">■ 철거 범위</h2>
         ${groupsHtml}
         <h2 class="pg-sub2 wo-keep">⛔ 존치 (철거 금지)</h2>
-        <ul class="wo-list keep"><li>베란다 샷시</li><li>실외기실 문</li><li>거실·안방 우물천장 (기존 유지)</li>
+        <ul class="wo-list keep"><li>안방 우물천장 (기존 유지)</li><li>문틀 (★철거 안 함)</li><li>베란다 샷시</li><li>실외기실 문</li>
           <li class="wo-note">그 외 존치 항목은 현장에서 <b>철거 ✕ 스티커</b>로 표시</li></ul></div>`;
     };
     const noteHtml = (n) => esc(n || "").replace(/\n/g, "<br>");
