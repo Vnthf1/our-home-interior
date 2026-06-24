@@ -2767,7 +2767,7 @@
       const blanks = (n) => Array.from({ length: n }, () => `<li class="wo-blank"></li>`).join("");
       const groupsHtml = scope.map((s) => (ph.groups || []).find((g) => g.title === s)).filter(Boolean)
         .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-list one">${g.items.map((it) => `<li>${esc(typeof it === "string" ? it : (it.text || ""))}</li>`).join("")}${blanks(1)}</ul></div>`).join("");
-      const posRows = ["싱크볼 수전·배수", "로봇청소기장 급·배수", "분배기", "안방욕실 수전", "조적벽"]
+      const posRows = ["싱크볼 수전·배수", "로봇청소기장 급·배수", "분배기", "안방욕실 매립 수전", "조적 다이 (가로·세로·깊이)"]
         .map((l) => `<li class="wo-pos"><span class="pl">${esc(l)}</span><span class="wo-fill"></span></li>`).join("");
       return `<div class="pg-doc wo">
         <h1 class="pg-h">🚿 설비 작업지시서</h1>
