@@ -2489,7 +2489,8 @@ const SIGNAGE = [
     sub: "양생 중", note: "양생·시공 중입니다. 관계자 외 출입을 금합니다. 바닥·보양재를 밟거나 훼손하지 마세요." },
   { id: "protect", type: "poster", copies: 2, icon: "⚠️", title: "시공 주의 · 보양 유지",
     sub: "보양재 훼손 주의", note: "보양재를 임의로 제거하지 마세요. 마감면·자재 위 적재·타격을 피하고, 작업 후 원상 보양해 주세요." },
-  /* --- 작업지시서 --- */
+  /* --- 작업지시서 / 계획도 --- */
+  { id: "plan-furniture", type: "floorplan", copies: 1, title: "가구 계획도" },
   { id: "wo-demo", type: "workorder-demo", copies: 1, title: "철거 작업지시서" },
   { id: "wo-plumbing", type: "workorder-plumbing", copies: 1, title: "설비 작업지시서" },
 ];
