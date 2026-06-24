@@ -2692,7 +2692,7 @@
       const s = flat[0], e = flat[flat.length - 1];
       return s === e ? md(s) : md(s) + "~" + md(e);
     };
-    const period = "2026.06.30 ~ 08.13";
+    const period = "2026.07.01 ~ 08.13";
     // 공정만(실측·가스배관 철거 제외, 일정 있는 것)
     const schedTasks = SCHEDULE.tasks.filter((t) => (t.spans || []).flat().length && !/실측/.test(t.name) && t.name !== "가스배관 철거");
     const contactsSheet = () => {
@@ -2741,7 +2741,7 @@
         <table class="pg-cal"><thead><tr>${head}</tr></thead><tbody>${rowsHtml.join("")}</tbody></table></div>`;
     };
     const noteHtml = (n) => esc(n || "").replace(/\n/g, "<br>");
-    const unit = (() => { try { return localStorage.getItem("kz-print-unit") || ""; } catch (e) { return ""; } })();
+    const unit = (() => { try { return localStorage.getItem("kz-print-unit"); } catch (e) { return null; } })() || "B동 804호";
     const blankLine = (label) => `<div class="pg-blank"><span class="bl-l">${esc(label)}</span><span class="bl-fill"></span></div>`;
     const entranceSheet = (it) => `<div class="pg-poster">
         <div class="pg-icon">${it.icon}</div><div class="pg-title">${esc(it.title)}</div>
