@@ -2725,6 +2725,7 @@
         <div class="pg-lsub">${esc(it.sub || "")}</div></div>`;
     const posterSheet = (it) => `<div class="pg-poster">
         <div class="pg-icon">${it.icon || ""}</div><div class="pg-title">${esc(it.title)}</div>
+        ${it.en ? `<div class="pg-en">${esc(it.en)}</div>` : ""}
         ${it.sub ? `<div class="pg-sub">${esc(it.sub)}</div>` : ""}
         ${it.note ? `<div class="pg-note">${esc(it.note)}</div>` : ""}
         ${it.foot ? `<div class="pg-foot">${esc(it.foot)}</div>` : ""}</div>`;
@@ -2734,12 +2735,9 @@
       : it.type === "label" ? labelSheet(it) : posterSheet(it);
 
     root.innerHTML = SIGNAGE.map((it) => {
-      const n = it.copies || 1; let html = "";
-      for (let i = 1; i <= n; i++) {
-        const mark = `<div class="sheet-mark no-print">${esc(it.title || it.big)}${n > 1 ? ` · ${i}/${n}` : ""}</div>`;
-        html += `<div class="sheet sheet-${it.type}" data-doc="${esc(it.id)}">${mark}${inner(it)}</div>`;
-      }
-      return html;
+      const rec = (it.copies || 1) > 1 ? ` · 권장 ${it.copies}장` : "";
+      const mark = `<div class="sheet-mark no-print">${esc(it.title || it.big)}${rec}</div>`;
+      return `<div class="sheet sheet-${it.type}" data-doc="${esc(it.id)}">${mark}${inner(it)}</div>`;
     }).join("");
 
     if (bar) {
@@ -2748,7 +2746,7 @@
           <button id="pt-all" class="pt-mini" type="button">전체 선택</button>
           <button id="pt-none" class="pt-mini" type="button">전체 해제</button></div>` +
         `<div class="pt-list">${SIGNAGE.map((it) =>
-          `<label class="pt-chk"><input type="checkbox" data-doc="${esc(it.id)}" checked> ${esc(it.title || it.big)} <span class="pt-n">×${it.copies || 1}</span></label>`).join("")}</div>` +
+          `<label class="pt-chk"><input type="checkbox" data-doc="${esc(it.id)}" checked> ${esc(it.title || it.big)}${(it.copies || 1) > 1 ? ` <span class="pt-n">권장 ${it.copies}장</span>` : ""}</label>`).join("")}</div>` +
         `<p class="pt-tip">※ 인쇄 대화상자에서 <b>여백: 없음</b> · <b>머리글/바닥글: 끄기</b> · <b>배경 그래픽: 켜기</b>로 설정하세요.</p>`;
       const apply = (id, on) => root.querySelectorAll(`.sheet[data-doc="${id}"]`).forEach((s) => s.classList.toggle("doc-off", !on));
       bar.addEventListener("change", (e) => { const cb = e.target.closest("input[type=checkbox]"); if (cb) apply(cb.dataset.doc, cb.checked); });

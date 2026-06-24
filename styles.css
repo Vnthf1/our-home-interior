@@ -921,6 +921,7 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
   text-align:center; border:5px solid #000; border-radius:8px; padding:14mm 10mm; gap:7mm; }
 .pg-icon{ font-size:48mm; line-height:1; }
 .pg-title{ font-size:22mm; font-weight:900; line-height:1.1; letter-spacing:-.5px; word-break:keep-all; }
+.pg-en{ font-size:16mm; font-weight:900; letter-spacing:2px; text-transform:uppercase; line-height:1; }
 .pg-sub{ font-size:11mm; font-weight:800; background:#000; color:#fff; padding:3mm 7mm; border-radius:6px; }
 .pg-note{ font-size:6.5mm; font-weight:600; line-height:1.55; max-width:165mm; color:#111; }
 .pg-foot{ font-size:5mm; color:#555; margin-top:6mm; }

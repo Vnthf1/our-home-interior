@@ -2468,8 +2468,8 @@ const LIGHTING_SWITCHES = {
 /* ===== 현장 인쇄물 — 안내문/지시서 (print.html) · A4 1장 = 1문서 ===== */
 /* type: poster(아이콘+큰글씨) · label(초대형 글씨) · contacts(연락처+공정표) · entrance(현관문+비번 빈칸) · elevator(입주민 안내문) */
 const SIGNAGE = [
-  { id: "nosmoke", type: "poster", copies: 4, icon: "🚭", title: "실내 절대 금연",
-    sub: "공사 전 구역 금연", note: "실내·복도·발코니를 포함한 전 구역에서 흡연을 금합니다. 적발 시 작업 중단 및 퇴실 조치될 수 있습니다." },
+  { id: "nosmoke", type: "poster", copies: 4, icon: "🚭", title: "실내 절대 금연", en: "NO SMOKING",
+    note: "실내·복도·발코니를 포함한 전 구역에서 흡연을 금합니다." },
   { id: "contacts", type: "contacts", copies: 1, title: "비상 연락처 · 공정표" },
   { id: "loading", type: "poster", copies: 2, icon: "📦", title: "자재 · 폐기물 적재 구역",
     sub: "이 구역에만 적재", note: "자재와 폐기물은 지정된 이 구역에만 적재해 주세요. 통로·현관·엘리베이터 앞을 막지 마세요.", foot: "※ 설비 공정 이후 부착" },
