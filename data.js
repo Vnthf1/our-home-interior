@@ -1562,7 +1562,7 @@ const FLOORPLAN = {
   image: "평면도.jpg",
   // 가구 계획도(인쇄) 전용 거리 치수선 (가로 dim). x,y,w = 이미지 대비 %, label = 거리(mm)
   dims: [
-    { x: 41, y: 24, w: 5, label: "900" }, // 냉장고장 ↔ 아일랜드
+    { x: 41, y: 24, w: 3.65, label: "900" }, // 냉장고장 ↔ 아일랜드 (총 7.7% 안에서 통로:아일랜드 = 9:10)
   ],
   layers: [
     { id: "furniture", label: "가구",   color: "#3b82f6", icon: "🛋️" },
@@ -1575,7 +1575,7 @@ const FLOORPLAN = {
   items: [
     { layer: "furniture", type: "box", x: 38, y: 19.5, w: 3, h: 17.1, label: "냉장고장" },
     { layer: "furniture", type: "box", x: 41.5, y: 17, w: 7.4, h: 2.7, label: "싱크대" },
-    { layer: "furniture", type: "box", x: 46, y: 19.9, w: 5.56, h: 10, label: "아일랜드", dim: "1000×2400" },
+    { layer: "furniture", type: "box", x: 44.65, y: 19.9, w: 4.05, h: 10, label: "아일랜드", dim: "1000×2400" },
     { layer: "furniture", type: "box", x: 49.2, y: 16.9, w: 12.1, h: 2.9, label: "수납장" },
     { layer: "furniture", type: "box", x: 51.6, y: 21.4, w: 13.1, h: 5, label: "소파" },
     { layer: "furniture", type: "box", x: 47.8, y: 37.5, w: 12.5, h: 6.6, label: "침대 (침실2)" },
