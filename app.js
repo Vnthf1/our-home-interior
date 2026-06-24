@@ -2692,32 +2692,70 @@
       const s = flat[0], e = flat[flat.length - 1];
       return s === e ? md(s) : md(s) + "~" + md(e);
     };
-    const period = (typeof PROJECT !== "undefined" && PROJECT.info && PROJECT.info["공사 기간"]) || "";
+    const period = "2026.06.30 ~ 08.13";
+    // 공정만(실측·가스배관 철거 제외, 일정 있는 것)
+    const schedTasks = SCHEDULE.tasks.filter((t) => (t.spans || []).flat().length && !/실측/.test(t.name) && t.name !== "가스배관 철거");
     const contactsSheet = () => {
-      const rows = CONTACTS.filter((c) => c.decided).map((c) =>
-        `<tr><td class="r">${esc(c.role)}</td><td>${esc(c.name)}</td><td class="ph">${esc(c.phone || "—")}</td></tr>`).join("");
-      const sch = SCHEDULE.tasks.filter((t) => (t.spans || []).flat().length)
-        .map((t) => `<li><span class="t">${esc(t.name)}</span><span class="d">${taskRange(t)}</span></li>`).join("");
+      const sch = schedTasks.map((t) => `<li><span class="t">${esc(t.name)}</span><span class="d">${taskRange(t)}</span></li>`).join("");
       return `<div class="pg-doc">
         <h1 class="pg-h">📞 비상 연락처 · 공정표</h1>
-        ${period ? `<div class="pg-period">공사 기간 · ${esc(period)}</div>` : ""}
-        <table class="pg-contacts"><tbody>${rows}</tbody></table>
-        <h2 class="pg-sub2">📅 공정 일정</h2>
+        <div class="pg-period">공사 기간 · ${esc(period)}</div>
+        <table class="pg-contacts"><tbody>
+          <tr><td class="r">현장 담당자</td><td class="ph">010-4028-0925</td></tr>
+        </tbody></table>
+        <h2 class="pg-sub2">📅 공정 일정 (실측 제외)</h2>
         <ul class="pg-sched">${sch}</ul></div>`;
     };
+    // 공정표 캘린더 (월~토 주 단위 그리드, 각 날짜칸에 그날 공정 표시)
+    const schedCalSheet = () => {
+      const parse = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+      const key = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      const holidays = new Set(SCHEDULE.holidays || []);
+      const dayTasks = {}; let minD = null, maxD = null;
+      schedTasks.forEach((t) => (t.spans || []).forEach(([a, b]) => {
+        const da = parse(a), db = parse(b);
+        if (!minD || da < minD) minD = da; if (!maxD || db > maxD) maxD = db;
+        for (let d = new Date(da); d <= db; d.setDate(d.getDate() + 1)) (dayTasks[key(d)] = dayTasks[key(d)] || []).push(t.name);
+      }));
+      if (!minD) return `<div class="pg-doc"><h1 class="pg-h">📅 공정표 (캘린더)</h1></div>`;
+      const monday = (d) => { const r = new Date(d); r.setDate(r.getDate() - ((r.getDay() + 6) % 7)); return r; };
+      const cur = monday(minD); const cells = [];
+      while (cur <= maxD) {
+        for (let i = 0; i < 6; i++) { // 월~토
+          const d = new Date(cur); d.setDate(d.getDate() + i); cells.push(new Date(d));
+        }
+        cur.setDate(cur.getDate() + 7);
+      }
+      const head = ["월", "화", "수", "목", "금", "토"].map((w) => `<th>${w}</th>`).join("");
+      const rowsHtml = [];
+      for (let i = 0; i < cells.length; i += 6) {
+        rowsHtml.push("<tr>" + cells.slice(i, i + 6).map((d) => {
+          const k = key(d), off = holidays.has(k) || d.getDay() === 6;
+          const ts = (dayTasks[k] || []);
+          return `<td class="${off ? "off" : ""}"><div class="dn">${d.getMonth() + 1}/${d.getDate()}</div>${ts.map((n) => `<div class="cal-t">${esc(n)}</div>`).join("")}</td>`;
+        }).join("") + "</tr>");
+      }
+      return `<div class="pg-doc">
+        <h1 class="pg-h">📅 공정표 (캘린더)</h1>
+        <div class="pg-period">공사 기간 · ${esc(period)} · 실측 제외</div>
+        <table class="pg-cal"><thead><tr>${head}</tr></thead><tbody>${rowsHtml.join("")}</tbody></table></div>`;
+    };
+    const noteHtml = (n) => esc(n || "").replace(/\n/g, "<br>");
+    const unit = (() => { try { return localStorage.getItem("kz-print-unit") || ""; } catch (e) { return ""; } })();
     const blankLine = (label) => `<div class="pg-blank"><span class="bl-l">${esc(label)}</span><span class="bl-fill"></span></div>`;
     const entranceSheet = (it) => `<div class="pg-poster">
         <div class="pg-icon">${it.icon}</div><div class="pg-title">${esc(it.title)}</div>
-        <div class="pg-sub">${esc(it.sub || "")}</div><div class="pg-note">${esc(it.note || "")}</div>
+        ${it.sub ? `<div class="pg-sub">${esc(it.sub)}</div>` : ""}<div class="pg-note">${noteHtml(it.note)}</div>
         <div class="pg-blanks">${(it.blanks || []).map(blankLine).join("")}</div></div>`;
     const elevatorSheet = () => `<div class="pg-doc pg-notice">
         <h1 class="pg-h">📢 공사 안내문</h1>
         <p class="pg-lead">안녕하세요. 아래와 같이 세대 내부 인테리어 공사를 진행합니다. 입주민 여러분께 소음·분진 등 불편을 드리는 점 양해 부탁드립니다.</p>
         <table class="pg-notice-t"><tbody>
-          <tr><td class="r">공사 세대</td><td><span class="bl-fill sm"></span> 동 <span class="bl-fill sm"></span> 호</td></tr>
-          <tr><td class="r">공사 기간</td><td>${esc(period || "____.__.__ ~ ____.__.__")}</td></tr>
-          <tr><td class="r">작업 시간</td><td>평일 <span class="bl-fill sm"></span> ~ <span class="bl-fill sm"></span> (주말·공휴일 협의)</td></tr>
-          <tr><td class="r">현장 연락처</td><td><span class="bl-fill"></span></td></tr>
+          <tr><td class="r">공사 세대</td><td><span class="pg-unit bl-fill">${esc(unit)}</span></td></tr>
+          <tr><td class="r">공사 기간</td><td>${esc(period)}</td></tr>
+          <tr><td class="r">작업 시간</td><td>평일 09:00 ~ 17:00 (주말·공휴일 미시공)</td></tr>
+          <tr><td class="r">소음 집중일</td><td>철거 7/1~3 · 목공 7/13~15 · 타일 7/21~23</td></tr>
+          <tr><td class="r">현장 연락처</td><td>010-4028-0925</td></tr>
         </tbody></table>
         <p class="pg-foot2">엘리베이터·복도 사용에 양해 부탁드리며, 최대한 빠르고 깨끗하게 마치겠습니다. 감사합니다.</p></div>`;
     const labelSheet = (it) => `<div class="pg-label">
@@ -2727,9 +2765,10 @@
         <div class="pg-icon">${it.icon || ""}</div><div class="pg-title">${esc(it.title)}</div>
         ${it.en ? `<div class="pg-en">${esc(it.en)}</div>` : ""}
         ${it.sub ? `<div class="pg-sub">${esc(it.sub)}</div>` : ""}
-        ${it.note ? `<div class="pg-note">${esc(it.note)}</div>` : ""}
+        ${it.note ? `<div class="pg-note">${noteHtml(it.note)}</div>` : ""}
         ${it.foot ? `<div class="pg-foot">${esc(it.foot)}</div>` : ""}</div>`;
     const inner = (it) => it.type === "contacts" ? contactsSheet()
+      : it.type === "schedule-cal" ? schedCalSheet()
       : it.type === "elevator" ? elevatorSheet()
       : it.type === "entrance" ? entranceSheet(it)
       : it.type === "label" ? labelSheet(it) : posterSheet(it);
@@ -2747,9 +2786,15 @@
           <button id="pt-none" class="pt-mini" type="button">전체 해제</button></div>` +
         `<div class="pt-list">${SIGNAGE.map((it) =>
           `<label class="pt-chk"><input type="checkbox" data-doc="${esc(it.id)}" checked> ${esc(it.title || it.big)}${(it.copies || 1) > 1 ? ` <span class="pt-n">권장 ${it.copies}장</span>` : ""}</label>`).join("")}</div>` +
+        `<div class="pt-private"><label>공사 세대 <input id="pt-unit" type="text" placeholder="예: ○동 ○○호" value="${esc(unit)}"></label><span class="pt-priv-note">🔒 이 기기에만 저장 — 코드/서버에 안 올라감(공개 repo 보호)</span></div>` +
         `<p class="pt-tip">※ 인쇄 대화상자에서 <b>여백: 없음</b> · <b>머리글/바닥글: 끄기</b> · <b>배경 그래픽: 켜기</b>로 설정하세요.</p>`;
       const apply = (id, on) => root.querySelectorAll(`.sheet[data-doc="${id}"]`).forEach((s) => s.classList.toggle("doc-off", !on));
       bar.addEventListener("change", (e) => { const cb = e.target.closest("input[type=checkbox]"); if (cb) apply(cb.dataset.doc, cb.checked); });
+      const unitInput = bar.querySelector("#pt-unit");
+      if (unitInput) unitInput.addEventListener("input", () => {
+        try { localStorage.setItem("kz-print-unit", unitInput.value); } catch (e) {}
+        root.querySelectorAll(".pg-unit").forEach((el) => { el.textContent = unitInput.value; });
+      });
       bar.addEventListener("click", (e) => {
         if (e.target.id === "pt-print") window.print();
         if (e.target.id === "pt-all" || e.target.id === "pt-none") {
