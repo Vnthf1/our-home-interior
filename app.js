@@ -993,6 +993,7 @@
           pc: ex.priceB2C,
           isExtra: true,
           unknownQty: !ex.qty,
+          quoteCut: !!ex.quoteCut,
         });
       });
     }
@@ -1003,19 +1004,27 @@
     if (items[normalStart]) items[normalStart].isNormalStart = true;
     const VAT = 1.1; // VAT 포함 = 단가표 × 1.1
     let grandB = 0, grandC = 0;
+    let pastCut = false;
     const rows = items.map((it) => {
+      const dividerRow = it.quoteCut
+        ? '<tr class="lt-row-quote-divider"><td colspan="6">── 견적 제외 (참고용) ──</td></tr>'
+        : '';
+      if (it.quoteCut) pastCut = true;
       const qtyTxt = it.unknownQty ? '<span class="lt-mut">?</span>' : ((it.qty % 1 === 0) ? it.qty : (Math.round(it.qty * 100) / 100));
       const orderedTxt = it.unknownQty ? '<span class="lt-mut">?</span>' : it.ordered;
       const pbVat = it.pb != null ? Math.round(it.pb * VAT) : null;
       const pcVat = it.pc != null ? Math.round(it.pc * VAT) : null;
       const sumB = (pbVat != null && !it.unknownQty) ? it.ordered * pbVat : null;
       const sumC = (pcVat != null && !it.unknownQty) ? it.ordered * pcVat : null;
-      if (sumB != null) grandB += sumB;
-      if (sumC != null) grandC += sumC;
+      if (!pastCut) {
+        if (sumB != null) grandB += sumB;
+        if (sumC != null) grandC += sumC;
+      }
       const labelCell = it.model
         ? '<div class="lt-label-main">' + esc(it.model) + '</div><div class="lt-label-sub">' + esc(it.label) + '</div>'
         : esc(it.label);
-      return '<tr' + (it.isNormalStart ? ' class="lt-row-normal-start"' : '') + '>' +
+      const trCls = [it.isNormalStart && 'lt-row-normal-start', pastCut && 'lt-row-excluded'].filter(Boolean).join(' ');
+      return dividerRow + '<tr' + (trCls ? ' class="' + trCls + '"' : '') + '>' +
         '<td>' + labelCell + '</td>' +
         '<td class="num">' + qtyTxt + '</td>' +
         '<td class="num">' + orderedTxt + '</td>' +
@@ -1034,7 +1043,7 @@
           '<th class="num lt-price">B2C 합계<br><span class="lt-mut" style="font-size:11px;font-weight:500">(VAT 포함)</span></th>' +
         '</tr></thead>' +
         '<tbody>' + rows + '</tbody>' +
-        '<tfoot><tr><th colspan="3">합계</th>' +
+        '<tfoot><tr><th colspan="3">' + (items.some(function(it){return it.quoteCut;}) ? '견적 합계 <span class="lt-mut" style="font-size:11px;font-weight:500">(참고 항목 제외)</span>' : '합계') + '</th>' +
           '<td class="num lt-price">—</td>' +
           '<td class="num lt-price">' + fmt(grandB) + '원</td>' +
           '<td class="num lt-price">' + fmt(grandC) + '원</td>' +
