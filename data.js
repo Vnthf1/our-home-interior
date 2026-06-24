@@ -1571,7 +1571,7 @@ const FLOORPLAN = {
   items: [
     { layer: "furniture", type: "box", x: 38, y: 19.5, w: 3, h: 17.1, label: "냉장고장" },
     { layer: "furniture", type: "box", x: 41.5, y: 17, w: 7.4, h: 2.7, label: "싱크대" },
-    { layer: "furniture", type: "box", x: 46, y: 19.9, w: 2.7, h: 10, label: "아일랜드" },
+    { layer: "furniture", type: "box", x: 46, y: 19.9, w: 2.7, h: 10, label: "아일랜드", dim: "1000×2400" },
     { layer: "furniture", type: "box", x: 49.2, y: 16.9, w: 12.1, h: 2.9, label: "수납장" },
     { layer: "furniture", type: "box", x: 51.6, y: 21.4, w: 13.1, h: 5, label: "소파" },
     { layer: "furniture", type: "box", x: 47.8, y: 37.5, w: 12.5, h: 6.6, label: "침대 (침실2)" },

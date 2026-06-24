@@ -2748,15 +2748,16 @@
       const scope = ["구조 · 설비 철거", "가구 · 주방 철거", "마감재 철거"]; // 보양 제외
       const txt = (it) => (typeof it === "string" ? it : (it.text || "")).replace(/\s*\([^)]*포함\)/g, ""); // 작업지시서는 '(…포함)' 상세 생략
       const blanks = (n) => Array.from({ length: n }, () => `<li class="wo-blank"></li>`).join("");
-      const itemLi = (it) => {
-        const c = (typeof it === "object" && it.caution) ? `<li class="wo-note">★ ${esc(Array.isArray(it.caution) ? it.caution.join(" / ") : it.caution)}</li>` : "";
-        return `<li>${esc(txt(it))}</li>${c}`;
-      };
-      const groupsHtml = scope.map((s) => (ph.groups || []).find((g) => g.title === s)).filter(Boolean)
-        .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-list">${g.items.map(itemLi).join("")}${blanks(2)}</ul></div>`).join("");
+      const groups = scope.map((s) => (ph.groups || []).find((g) => g.title === s)).filter(Boolean);
+      const cautions = [];
+      groups.forEach((g) => g.items.forEach((it) => { if (typeof it === "object" && it.caution) (Array.isArray(it.caution) ? it.caution : [it.caution]).forEach((c) => cautions.push(c)); }));
+      const groupsHtml = groups
+        .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-list">${g.items.map((it) => `<li>${esc(txt(it))}</li>`).join("")}${blanks(2)}</ul></div>`).join("");
+      const cautionHtml = cautions.length ? `<ul class="wo-list cautions">${cautions.map((c) => `<li class="wo-note">★ ${esc(c)}</li>`).join("")}</ul>` : "";
       return `<div class="pg-doc wo">
         <h1 class="pg-h">🔨 철거 작업지시서</h1>
         ${groupsHtml}
+        ${cautionHtml}
         <h2 class="pg-sub2 wo-keep">⛔ 존치 (철거 금지)</h2>
         <ul class="wo-list keep"><li>보일러</li><li>안방 우물천장 (기존 유지)</li><li>문틀 (★철거 안 함)</li><li>베란다 샷시</li><li>실외기실 문</li></ul></div>`;
     };
@@ -2781,7 +2782,7 @@
       const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
       if (!fp) return `<div class="pg-doc"><h1 class="pg-h">가구 계획도</h1></div>`;
       const mk = (fp.items || []).filter((it) => it.layer === "furniture" && it.type === "box")
-        .map((it) => `<div class="wo-mk" style="left:${it.x}%;top:${it.y}%;width:${it.w}%;height:${it.h}%"><span>${esc(it.label || "")}</span></div>`).join("");
+        .map((it) => `<div class="wo-mk" style="left:${it.x}%;top:${it.y}%;width:${it.w}%;height:${it.h}%"><span>${esc(it.label || "")}${it.dim ? `<br><b>${esc(it.dim)}</b>` : ""}</span></div>`).join("");
       return `<div class="pg-doc">
         <h1 class="pg-h">🛋 가구 계획도</h1>
         <div class="wo-plan big"><img src="images/${esc(fp.image)}" alt="평면도">${mk}</div></div>`;
