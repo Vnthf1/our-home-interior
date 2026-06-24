@@ -2347,7 +2347,7 @@ const KITCHEN = {
 const LIGHTING_KINDS = {
   cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "슬림딥콘 2인치 COB 다운라이트 DC24V TW 7W (#17) · 타공 55파이 · 높이 55mm · CRI>90 · 확산각 55도", watt: 7, volt: "DC 24V", priceB2B: 12600,  priceB2C: 13860 },
   cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
-  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 8580,  priceB2C: 16364 },
+  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "안도 2인치 확산형 다운라이트 8W (#16) · DC24V CCT 3선 모듈 · 3000~6500K · 타공 55파이 · Ø66×H45mm", watt: 8, volt: "DC 24V", priceB2B: 9000,  priceB2C: 11455 },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
   strip:        { label: "스트립 RGBWW",      icon: "▬", short: "스트립RGBWW", color: "#ef4444", model: "필립스 CertaFlux LED 스트립 RGBWW 5M (이지엉클 #57·5선식)",   watt: 122, volt: "DC 24V", rollCm: 500,  priceB2B: 73600, priceB2C: 80960 }, // RGB 14.4 W/m + W(2700K) 10 W/m → 최대 24.4 W/m × 5m = 122W · 5선식 (24V+ · R · G · B · W) · 폭 12mm
@@ -2382,7 +2382,7 @@ const LIGHTING_EXTRAS = [
   { id: "k100",        label: "아카라 스마트 도어락 K100 (#238)",              qty: 1, priceB2B: 330000, priceB2C: 494000 },
   { id: "s1plus",      label: "아카라 매직패드 S1 Plus (#233)",                qty: 1, priceB2B: 459420, priceB2C: 589000 },
   { id: "wago",        label: "와고 커넥터 221-2411 (#211)",                   qty: 0, priceB2B: 403,    priceB2C: 436 },
-  { id: "h1box",       label: "H1 86 스위치 박스 (#223)",                      qty: 0, priceB2B: 2000,   priceB2C: 4000 },
+  { id: "h1box",       label: "H1 86 스위치 박스 (#223)",                      qty: 11, priceB2B: 2000,   priceB2C: 4000 },
   { id: "plate2",      label: "아카라 벽 스위치 플레이트 (행프레임) 2구 (#227)", qty: 0, priceB2B: 13860,  priceB2C: 14000 },
   { id: "door_t1",     label: "아카라 열림 감지 센서 T1 (#170)",                qty: 2, priceB2B: 17160,  priceB2C: 22000 },
   { id: "hub_m3",      label: "아카라 스마트 허브 M3 (#151)",                   qty: 1, priceB2B: 122590, priceB2C: 164000 },
