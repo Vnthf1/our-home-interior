@@ -70,6 +70,7 @@
     { href: "total-quote.html", label: "총 견적", key: "totalquote" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
     { href: "work.html", label: "작업 안내", key: "work" },
+    { href: "print.html", label: "🖨 인쇄물", key: "print" },
   ];
   function mountNav() {
     const el = $("nav");
@@ -2679,6 +2680,88 @@
     root.appendChild(memo);
   }
 
+  /* ---------- 현장 인쇄물 (print.html) — A4 1장 = 1문서 ---------- */
+  function renderPrint() {
+    const root = $("print-app");
+    if (!root || typeof SIGNAGE === "undefined") return;
+    const bar = $("print-toolbar");
+    const md = (s) => { const p = s.split("-"); return +p[1] + "/" + +p[2]; };
+    const taskRange = (t) => {
+      const flat = (t.spans || []).flat().slice().sort();
+      if (!flat.length) return "";
+      const s = flat[0], e = flat[flat.length - 1];
+      return s === e ? md(s) : md(s) + "~" + md(e);
+    };
+    const period = (typeof PROJECT !== "undefined" && PROJECT.info && PROJECT.info["공사 기간"]) || "";
+    const contactsSheet = () => {
+      const rows = CONTACTS.filter((c) => c.decided).map((c) =>
+        `<tr><td class="r">${esc(c.role)}</td><td>${esc(c.name)}</td><td class="ph">${esc(c.phone || "—")}</td></tr>`).join("");
+      const sch = SCHEDULE.tasks.filter((t) => (t.spans || []).flat().length)
+        .map((t) => `<li><span class="t">${esc(t.name)}</span><span class="d">${taskRange(t)}</span></li>`).join("");
+      return `<div class="pg-doc">
+        <h1 class="pg-h">📞 비상 연락처 · 공정표</h1>
+        ${period ? `<div class="pg-period">공사 기간 · ${esc(period)}</div>` : ""}
+        <table class="pg-contacts"><tbody>${rows}</tbody></table>
+        <h2 class="pg-sub2">📅 공정 일정</h2>
+        <ul class="pg-sched">${sch}</ul></div>`;
+    };
+    const blankLine = (label) => `<div class="pg-blank"><span class="bl-l">${esc(label)}</span><span class="bl-fill"></span></div>`;
+    const entranceSheet = (it) => `<div class="pg-poster">
+        <div class="pg-icon">${it.icon}</div><div class="pg-title">${esc(it.title)}</div>
+        <div class="pg-sub">${esc(it.sub || "")}</div><div class="pg-note">${esc(it.note || "")}</div>
+        <div class="pg-blanks">${(it.blanks || []).map(blankLine).join("")}</div></div>`;
+    const elevatorSheet = () => `<div class="pg-doc pg-notice">
+        <h1 class="pg-h">📢 공사 안내문</h1>
+        <p class="pg-lead">안녕하세요. 아래와 같이 세대 내부 인테리어 공사를 진행합니다. 입주민 여러분께 소음·분진 등 불편을 드리는 점 양해 부탁드립니다.</p>
+        <table class="pg-notice-t"><tbody>
+          <tr><td class="r">공사 세대</td><td><span class="bl-fill sm"></span> 동 <span class="bl-fill sm"></span> 호</td></tr>
+          <tr><td class="r">공사 기간</td><td>${esc(period || "____.__.__ ~ ____.__.__")}</td></tr>
+          <tr><td class="r">작업 시간</td><td>평일 <span class="bl-fill sm"></span> ~ <span class="bl-fill sm"></span> (주말·공휴일 협의)</td></tr>
+          <tr><td class="r">현장 연락처</td><td><span class="bl-fill"></span></td></tr>
+        </tbody></table>
+        <p class="pg-foot2">엘리베이터·복도 사용에 양해 부탁드리며, 최대한 빠르고 깨끗하게 마치겠습니다. 감사합니다.</p></div>`;
+    const labelSheet = (it) => `<div class="pg-label">
+        <div class="pg-mark">${esc(it.mark || "")}</div><div class="pg-big">${esc(it.big)}</div>
+        <div class="pg-lsub">${esc(it.sub || "")}</div></div>`;
+    const posterSheet = (it) => `<div class="pg-poster">
+        <div class="pg-icon">${it.icon || ""}</div><div class="pg-title">${esc(it.title)}</div>
+        ${it.sub ? `<div class="pg-sub">${esc(it.sub)}</div>` : ""}
+        ${it.note ? `<div class="pg-note">${esc(it.note)}</div>` : ""}
+        ${it.foot ? `<div class="pg-foot">${esc(it.foot)}</div>` : ""}</div>`;
+    const inner = (it) => it.type === "contacts" ? contactsSheet()
+      : it.type === "elevator" ? elevatorSheet()
+      : it.type === "entrance" ? entranceSheet(it)
+      : it.type === "label" ? labelSheet(it) : posterSheet(it);
+
+    root.innerHTML = SIGNAGE.map((it) => {
+      const n = it.copies || 1; let html = "";
+      for (let i = 1; i <= n; i++) {
+        const mark = `<div class="sheet-mark no-print">${esc(it.title || it.big)}${n > 1 ? ` · ${i}/${n}` : ""}</div>`;
+        html += `<div class="sheet sheet-${it.type}" data-doc="${esc(it.id)}">${mark}${inner(it)}</div>`;
+      }
+      return html;
+    }).join("");
+
+    if (bar) {
+      bar.innerHTML =
+        `<div class="pt-actions"><button id="pt-print" class="pt-btn" type="button">🖨 선택 문서 인쇄</button>
+          <button id="pt-all" class="pt-mini" type="button">전체 선택</button>
+          <button id="pt-none" class="pt-mini" type="button">전체 해제</button></div>` +
+        `<div class="pt-list">${SIGNAGE.map((it) =>
+          `<label class="pt-chk"><input type="checkbox" data-doc="${esc(it.id)}" checked> ${esc(it.title || it.big)} <span class="pt-n">×${it.copies || 1}</span></label>`).join("")}</div>` +
+        `<p class="pt-tip">※ 인쇄 대화상자에서 <b>여백: 없음</b> · <b>머리글/바닥글: 끄기</b> · <b>배경 그래픽: 켜기</b>로 설정하세요.</p>`;
+      const apply = (id, on) => root.querySelectorAll(`.sheet[data-doc="${id}"]`).forEach((s) => s.classList.toggle("doc-off", !on));
+      bar.addEventListener("change", (e) => { const cb = e.target.closest("input[type=checkbox]"); if (cb) apply(cb.dataset.doc, cb.checked); });
+      bar.addEventListener("click", (e) => {
+        if (e.target.id === "pt-print") window.print();
+        if (e.target.id === "pt-all" || e.target.id === "pt-none") {
+          const on = e.target.id === "pt-all";
+          bar.querySelectorAll("input[type=checkbox]").forEach((cb) => { cb.checked = on; apply(cb.dataset.doc, on); });
+        }
+      });
+    }
+  }
+
   /* ---------- 부팅 ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     if (isAdmin()) document.body.classList.add("is-admin");  // 관리자 전용 요소 노출(.admin-only)
@@ -2699,6 +2782,7 @@
     renderContacts();
     renderFloorplan();
     renderLighting();
+    renderPrint();
     renderFurnitureQuote();
     renderApplianceQuote();
     renderTotalQuote();

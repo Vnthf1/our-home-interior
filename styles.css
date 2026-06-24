@@ -901,3 +901,78 @@ body:not(.is-admin) .tq-grand-sec{display:none}
 .lt-quote-tbl tbody tr.tq-row-est td{color:#a59c8a;font-style:italic;background:#fbfaf6}
 .lt-quote-tbl tbody tr.tq-row-est td.num{color:#8a7c63}
 body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-wrap{display:none}
+
+/* ===================== 현장 인쇄물 (print.html) ===================== */
+@page { size: A4; margin: 0; }
+#print-app{ --ink:#000; }
+.sheet{
+  position:relative; width:210mm; height:297mm; box-sizing:border-box;
+  padding:14mm; background:#fff; color:#000; overflow:hidden;
+  display:flex; flex-direction:column;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  page-break-after:always; break-after:page;
+}
+.sheet:last-child{ page-break-after:auto; break-after:auto; }
+.doc-off{ display:none !important; }
+.sheet-mark{ position:absolute; top:4mm; right:6mm; font-size:9px; color:#bbb; letter-spacing:.5px; }
+
+/* 포스터형 (아이콘 + 큰 글씨) */
+.pg-poster{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; border:5px solid #000; border-radius:8px; padding:14mm 10mm; gap:7mm; }
+.pg-icon{ font-size:48mm; line-height:1; }
+.pg-title{ font-size:22mm; font-weight:900; line-height:1.1; letter-spacing:-.5px; word-break:keep-all; }
+.pg-sub{ font-size:11mm; font-weight:800; background:#000; color:#fff; padding:3mm 7mm; border-radius:6px; }
+.pg-note{ font-size:6.5mm; font-weight:600; line-height:1.55; max-width:165mm; color:#111; }
+.pg-foot{ font-size:5mm; color:#555; margin-top:6mm; }
+.pg-blanks{ margin-top:6mm; width:100%; max-width:150mm; display:flex; flex-direction:column; gap:8mm; }
+.pg-blank{ display:flex; align-items:flex-end; gap:5mm; font-size:8mm; font-weight:800; }
+.pg-blank .bl-l{ white-space:nowrap; }
+.pg-blank .bl-fill{ flex:1; }
+.bl-fill{ display:inline-block; min-width:55mm; border-bottom:2.5px solid #000; height:1em; }
+.bl-fill.sm{ min-width:22mm; }
+
+/* 라벨형 (철거 O / 존치 ✕ — 초대형) */
+.pg-label{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; border:8px solid #000; border-radius:8px; gap:4mm; }
+.pg-mark{ font-size:95mm; font-weight:900; line-height:.85; }
+.pg-big{ font-size:48mm; font-weight:900; letter-spacing:2px; }
+.pg-lsub{ font-size:11mm; font-weight:800; background:#000; color:#fff; padding:3mm 7mm; border-radius:6px; }
+
+/* 문서형 (연락처·공정표 / 안내문) */
+.pg-doc{ flex:1; }
+.pg-h{ font-size:12mm; font-weight:900; border-bottom:3px solid #000; padding-bottom:3mm; margin:0 0 5mm; }
+.pg-period{ font-size:6mm; font-weight:700; margin-bottom:5mm; }
+.pg-contacts{ width:100%; border-collapse:collapse; font-size:6mm; }
+.pg-contacts td{ border:1.5px solid #000; padding:3mm 4mm; }
+.pg-contacts .r{ font-weight:800; width:42mm; background:#eee; }
+.pg-contacts .ph{ font-weight:800; white-space:nowrap; }
+.pg-sub2{ font-size:8mm; font-weight:800; margin:7mm 0 3mm; }
+.pg-sched{ list-style:none; padding:0; margin:0; columns:2; column-gap:10mm; font-size:5mm; }
+.pg-sched li{ display:flex; justify-content:space-between; gap:4mm; padding:1.5mm 0; border-bottom:1px dotted #aaa; break-inside:avoid; }
+.pg-sched .d{ font-weight:800; white-space:nowrap; }
+.pg-notice .pg-lead{ font-size:6mm; line-height:1.7; margin:0 0 6mm; }
+.pg-notice-t{ width:100%; border-collapse:collapse; font-size:6.5mm; }
+.pg-notice-t td{ border:1.5px solid #000; padding:4mm; }
+.pg-notice-t .r{ font-weight:800; width:36mm; background:#eee; white-space:nowrap; }
+.pg-foot2{ font-size:6mm; line-height:1.7; margin-top:7mm; }
+
+/* 툴바 (화면 전용) */
+.print-toolbar{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+.pt-actions{ display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.pt-btn{ background:var(--accent); color:#fff; border:0; border-radius:8px; padding:9px 16px; font-size:14px; font-weight:700; cursor:pointer; }
+.pt-mini{ background:var(--accent-soft); color:var(--accent); border:0; border-radius:8px; padding:9px 12px; font-size:13px; cursor:pointer; }
+.pt-list{ display:flex; flex-wrap:wrap; gap:7px 16px; }
+.pt-chk{ font-size:13.5px; display:flex; align-items:center; gap:5px; }
+.pt-n{ color:var(--muted); font-size:12px; }
+.pt-tip{ margin:12px 0 0; font-size:12.5px; color:var(--muted); }
+
+@media screen{
+  #print-app{ display:flex; flex-direction:column; align-items:center; gap:16px; padding:18px 0 40px; background:#e9e7e2; }
+  .sheet{ box-shadow:0 3px 16px rgba(0,0,0,.25); }
+}
+@media print{
+  nav, footer, .no-print, section.no-print{ display:none !important; }
+  body{ background:#fff; margin:0; }
+  #print-app{ display:block; padding:0; background:#fff; gap:0; }
+  .sheet{ box-shadow:none; margin:0; }
+}

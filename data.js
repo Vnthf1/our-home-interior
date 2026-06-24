@@ -2464,3 +2464,29 @@ const LIGHTING_SWITCHES = {
   "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "직부등 #1" },
   "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "직부등 #2" },
 };
+
+/* ===== 현장 인쇄물 — 안내문/지시서 (print.html) · A4 1장 = 1문서 ===== */
+/* type: poster(아이콘+큰글씨) · label(초대형 글씨) · contacts(연락처+공정표) · entrance(현관문+비번 빈칸) · elevator(입주민 안내문) */
+const SIGNAGE = [
+  { id: "nosmoke", type: "poster", copies: 4, icon: "🚭", title: "실내 절대 금연",
+    sub: "공사 전 구역 금연", note: "실내·복도·발코니를 포함한 전 구역에서 흡연을 금합니다. 적발 시 작업 중단 및 퇴실 조치될 수 있습니다." },
+  { id: "contacts", type: "contacts", copies: 1, title: "비상 연락처 · 공정표" },
+  { id: "loading", type: "poster", copies: 2, icon: "📦", title: "자재 · 폐기물 적재 구역",
+    sub: "이 구역에만 적재", note: "자재와 폐기물은 지정된 이 구역에만 적재해 주세요. 통로·현관·엘리베이터 앞을 막지 마세요.", foot: "※ 설비 공정 이후 부착" },
+  { id: "snack", type: "poster", copies: 2, icon: "🍪", title: "간식 · 음료",
+    sub: "자유롭게 드세요", note: "준비된 간식과 음료는 편하게 드시면 됩니다. 늘 감사합니다." },
+  { id: "toilet", type: "poster", copies: 2, icon: "🚻", title: "화장실 안내",
+    sub: "상가 화장실 이용", note: "세대 내 화장실은 공사·양생 중입니다. 상가 화장실을 이용해 주세요." },
+  { id: "restaurant", type: "poster", copies: 2, icon: "🍱", title: "식당 안내",
+    sub: "상가 지하 2층", note: "상가 지하 2층에 한식·중식 부페가 있습니다. 식사 시 이용하세요." },
+  { id: "entrance", type: "entrance", copies: 2, icon: "🚪", title: "현관문 꼭 닫아주세요",
+    sub: "보안 · 냉난방 유지", note: "드나들 때 현관문을 꼭 닫아주세요.",
+    blanks: ["세대 현관 비밀번호", "공용 현관 비밀번호"] },
+  { id: "elevator", type: "elevator", copies: 1, title: "공사 안내문" },
+  { id: "demoY", type: "label", copies: 10, big: "철거", mark: "○", sub: "이 부분 철거해 주세요" },
+  { id: "demoN", type: "label", copies: 10, big: "존치", mark: "✕", sub: "철거 금지 — 그대로 두세요" },
+  { id: "nopass", type: "poster", copies: 4, icon: "⛔", title: "출입 금지",
+    sub: "양생 중", note: "양생·시공 중입니다. 관계자 외 출입을 금합니다. 바닥·보양재를 밟거나 훼손하지 마세요." },
+  { id: "protect", type: "poster", copies: 2, icon: "⚠️", title: "시공 주의 · 보양 유지",
+    sub: "보양재 훼손 주의", note: "보양재를 임의로 제거하지 마세요. 마감면·자재 위 적재·타격을 피하고, 작업 후 원상 보양해 주세요." },
+];
