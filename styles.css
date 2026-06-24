@@ -973,6 +973,11 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
 .wo-list .wo-note::before{ content:""; }
 .wo-list .wo-blank{ min-height:5.5mm; }
 .wo-list.one{ columns:1; }
+.wo-list.pos{ columns:1; list-style:none; padding:0; margin:2mm 0 4mm; }
+.wo-list.pos li{ padding:1.5mm 0; }
+.wo-list.pos li::before{ content:""; }
+.wo-list.pos .pl{ display:inline-block; min-width:42mm; font-weight:700; }
+.wo-list.pos .wo-fill{ display:inline-block; min-width:80mm; border-bottom:1.5px solid #000; height:1em; vertical-align:bottom; }
 .wo-plan{ position:relative; width:100%; border:1.5px solid #000; margin:2mm 0 4mm; }
 .wo-plan img{ width:100%; display:block; }
 .wo-mk{ position:absolute; border:1.5px solid #c0392b; background:rgba(192,57,77,.06); display:flex; align-items:center; justify-content:center; }

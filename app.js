@@ -2763,7 +2763,7 @@
     const plumbingSheet = () => {
       const ph = (typeof PHASES !== "undefined") ? PHASES.find((p) => p.id === "demolition") : null;
       if (!ph) return `<div class="pg-doc"><h1 class="pg-h">설비 작업지시서</h1></div>`;
-      const scope = ["급배수 · 수전 이전", "분배기", "배관 매립 (홈파기 + 미장)", "난방 배관 연장", "방수"];
+      const scope = ["아일랜드(싱크볼) 신설", "로봇청소기장", "욕실 설비", "난방 배관 연장"];
       const blanks = (n) => Array.from({ length: n }, () => `<li class="wo-blank"></li>`).join("");
       const groupsHtml = scope.map((s) => (ph.groups || []).find((g) => g.title === s)).filter(Boolean)
         .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-list one">${g.items.map((it) => `<li>${esc(typeof it === "string" ? it : (it.text || ""))}</li>`).join("")}${blanks(1)}</ul></div>`).join("");
@@ -2774,11 +2774,15 @@
           .map((it) => `<div class="wo-mk" style="left:${it.x}%;top:${it.y}%;width:${it.w}%;height:${it.h}%"><span>${esc(it.label || "")}</span></div>`).join("");
         plan = `<div class="wo-plan"><img src="images/${esc(fp.image)}" alt="평면도">${mk}</div>`;
       }
+      const posRows = ["싱크볼 수전·배수", "로봇청소기장 급·배수", "분배기", "안방욕실 수전", "조적벽"]
+        .map((l) => `<li class="wo-pos"><span class="pl">${esc(l)}</span><span class="wo-fill"></span></li>`).join("");
       return `<div class="pg-doc wo">
         <h1 class="pg-h">🚿 설비 작업지시서</h1>
         ${plan}
+        <h2 class="pg-sub2">📐 이동·신설 위치 (실측 기입, 기준벽에서 cm)</h2>
+        <ul class="wo-list pos">${posRows}</ul>
         ${groupsHtml}
-        <p class="wo-foot">※ 정확한 급수·배수·수전 위치는 평면도 표시 또는 현장 협의</p></div>`;
+        <p class="wo-foot">※ 위치는 위 평면도 + 실측 치수 기준. 정확한 점은 현장 협의.</p></div>`;
     };
     const noteHtml = (n) => esc(n || "").replace(/\n/g, "<br>");
     const unit = (() => { try { return localStorage.getItem("kz-print-unit"); } catch (e) { return null; } })() || "B동 804호";
