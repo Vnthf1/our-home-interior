@@ -957,6 +957,20 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
 .pg-cal td.off{ background:#f0f0f0; }
 .pg-cal .dn{ font-size:5mm; font-weight:800; margin-bottom:1mm; }
 .pg-cal .cal-t{ font-size:3.6mm; font-weight:600; line-height:1.3; border-left:2px solid #000; padding-left:1.5mm; margin:0.8mm 0; }
+/* 작업지시서 */
+.wo .wo-meta{ font-size:5mm; margin-bottom:4mm; }
+.wo .wo-meta td{ padding:2.5mm 3mm; }
+.wo .wo-meta .r{ width:24mm; }
+.wo .pg-sub2{ font-size:7mm; border-bottom:2px solid #000; padding-bottom:1.5mm; }
+.wo .wo-keep{ border-bottom:2px solid #000; }
+.wo-g{ margin:2mm 0 4mm; break-inside:avoid; }
+.wo-g h3{ font-size:5.5mm; font-weight:800; margin:3mm 0 1.5mm; }
+.wo-list{ list-style:none; padding:0; margin:0; columns:2; column-gap:8mm; }
+.wo-list li{ font-size:4.6mm; line-height:1.5; padding:0.6mm 0 0.6mm 6mm; position:relative; break-inside:avoid; }
+.wo-list li::before{ content:"☐"; position:absolute; left:0; font-weight:700; }
+.wo-list.keep li::before{ content:"●"; font-size:3mm; top:1mm; }
+.wo-list .wo-note{ color:#555; font-size:4mm; }
+.wo-list .wo-note::before{ content:""; }
 .pg-notice .pg-lead{ font-size:6mm; line-height:1.7; margin:0 0 6mm; }
 .pg-notice-t{ width:100%; border-collapse:collapse; font-size:6.5mm; }
 .pg-notice-t td{ border:1.5px solid #000; padding:4mm; }

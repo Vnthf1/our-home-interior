@@ -2694,7 +2694,8 @@
     };
     const period = "2026.07.01 ~ 08.13";
     // 공정만(실측·가스배관 철거 제외, 일정 있는 것)
-    const schedTasks = SCHEDULE.tasks.filter((t) => (t.spans || []).flat().length && !/실측/.test(t.name) && t.name !== "가스배관 철거");
+    const schedExclude = ["가스배관 철거", "필름", "실리콘", "중문"]; // 미확정·제외 공정
+    const schedTasks = SCHEDULE.tasks.filter((t) => (t.spans || []).flat().length && !/실측/.test(t.name) && !schedExclude.includes(t.name));
     const contactsSheet = () => {
       const sch = schedTasks.map((t) => `<li><span class="t">${esc(t.name)}</span><span class="d">${taskRange(t)}</span></li>`).join("");
       return `<div class="pg-doc">
@@ -2740,6 +2741,28 @@
         <div class="pg-period">공사 기간 · ${esc(period)} · 실측 제외</div>
         <table class="pg-cal"><thead><tr>${head}</tr></thead><tbody>${rowsHtml.join("")}</tbody></table></div>`;
     };
+    // 철거 작업지시서 — PHASES 철거 데이터에서 철거 범위 그룹만
+    const demolitionSheet = () => {
+      const ph = (typeof PHASES !== "undefined") ? PHASES.find((p) => p.id === "demolition") : null;
+      if (!ph) return `<div class="pg-doc"><h1 class="pg-h">철거 작업지시서</h1></div>`;
+      const scope = ["보양 (공사 시작 전)", "가구 · 주방 철거", "마감재 철거", "구조 · 설비 철거"];
+      const txt = (it) => typeof it === "string" ? esc(it) : esc(it.text || "");
+      const groupsHtml = (ph.groups || []).filter((g) => scope.includes(g.title))
+        .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-list">${g.items.map((it) => `<li>${txt(it)}</li>`).join("")}</ul></div>`).join("");
+      const demoTask = SCHEDULE.tasks.find((t) => t.name === "철거");
+      const sched = demoTask ? taskRange(demoTask) : "";
+      return `<div class="pg-doc wo">
+        <h1 class="pg-h">🔨 철거 작업지시서</h1>
+        <table class="pg-notice-t wo-meta"><tbody>
+          <tr><td class="r">세대</td><td>${esc(unit)}</td><td class="r">담당</td><td>벨류연구소</td></tr>
+          <tr><td class="r">일정</td><td>${esc(sched)}</td><td class="r">연락처</td><td>010-4028-0925</td></tr>
+        </tbody></table>
+        <h2 class="pg-sub2">■ 철거 범위</h2>
+        ${groupsHtml}
+        <h2 class="pg-sub2 wo-keep">⛔ 존치 (철거 금지)</h2>
+        <ul class="wo-list keep"><li>베란다 샷시</li><li>실외기실 문</li><li>거실·안방 우물천장 (기존 유지)</li>
+          <li class="wo-note">그 외 존치 항목은 현장에서 <b>철거 ✕ 스티커</b>로 표시</li></ul></div>`;
+    };
     const noteHtml = (n) => esc(n || "").replace(/\n/g, "<br>");
     const unit = (() => { try { return localStorage.getItem("kz-print-unit"); } catch (e) { return null; } })() || "B동 804호";
     const blankLine = (label) => `<div class="pg-blank"><span class="bl-l">${esc(label)}</span><span class="bl-fill"></span></div>`;
@@ -2769,6 +2792,7 @@
         ${it.foot ? `<div class="pg-foot">${esc(it.foot)}</div>` : ""}</div>`;
     const inner = (it) => it.type === "contacts" ? contactsSheet()
       : it.type === "schedule-cal" ? schedCalSheet()
+      : it.type === "workorder-demo" ? demolitionSheet()
       : it.type === "elevator" ? elevatorSheet()
       : it.type === "entrance" ? entranceSheet(it)
       : it.type === "label" ? labelSheet(it) : posterSheet(it);
