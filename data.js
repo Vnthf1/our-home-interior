@@ -1461,6 +1461,60 @@ const KEY_NOTES = [
 ];
 
 /* ------------------------------------------------------------
+ *  직접 구매 자재 (PURCHASES — 도기·수전·부속·악세사리 등 확정 제품)
+ *  ※ 기존 MATERIALS (1281줄) = '후보 찾는 중' 카테고리형 위시리스트
+ *     PURCHASES = 구매 결정된 구체적 제품(브랜드/모델/단가/수량) 평탄 목록
+ *
+ *  - area     : "주방" / "공용욕실"(원문 '거실') / "안방욕실" / "공용·안방욕실" / "욕실 악세사리"
+ *  - category : "싱크볼" / "주방수전" / "세면대" / "세면수전(매립)" / "샤워수전(매립)" / "양변기" / "환풍기" / "유가" 등
+ *  - name     : 제품명 (브랜드/모델 포함)
+ *  - price    : 단가(원). qty 비우면 1로 간주.
+ *  - qty      : 수량(개). null = 수량 미정.
+ *  - note     : 특이사항(예: "확인 필요").
+ *  - link     : 구매처 링크.
+ *  - price_uncertain: 가격에 '?' 가 붙어있던 항목.
+ *
+ *  합계는 price × qty 로 자동 계산. 영역/카테고리별 집계는 렌더링 시 처리.
+ * ------------------------------------------------------------ */
+const PURCHASES = [
+  // ===== 주방 =====
+  { area: "주방", category: "싱크볼", name: "백조싱크 깜뽀르테860 (Calmforte) 사각 싱크볼 — 올스텐배수구", price: 416000, qty: 1 },
+  { area: "주방", category: "주방수전", name: "라우체 피오 TM0030N 니켈", price: 371700, qty: 1 },
+
+  // ===== 공용욕실 (원문 '거실' 표기) =====
+  { area: "공용욕실", category: "세면대", name: "필로토 이시스벽걸이 1023D (600×420×140) 화이트 무광 · 홀없음 벽걸이형", price: 172500, qty: 1 },
+  { area: "공용욕실", category: "세면대 부속", name: "[81] SP 보틀트랩 — 사틴실버(니켈)", price: 38200, qty: 2 },
+  { area: "공용욕실", category: "세면대 부속", name: "[36] LAUCHE 오버 자동팝업 마개(대) D034 40Ø — 니켈", price: 29200, qty: 2 },
+  { area: "공용욕실", category: "세면수전(매립)", name: "라우체 코인 2375N 무광 니켈 매립세면수전", price: 167100, qty: 2 },
+  { area: "공용욕실", category: "샤워수전(매립)", name: "LAUCHE 코인 니켈 7075N / 1방향", price: 182400, qty: 1 },
+
+  // ===== 안방욕실 =====
+  { area: "안방욕실", category: "샤워수전(매립)", name: "씨트리 ST-1088NB 사틴 무광 니켈 폭포형 매립샤워수전", price: 519900, qty: 1 },
+  { area: "안방욕실", category: "샤워 부속", name: "샤워기 행거 헤드 걸이 각도조절 거치대 니켈 J88", price: 110000, qty: 1, note: "가격 확인 필요", price_uncertain: true },
+  { area: "안방욕실", category: "샤워 부속", name: "각도조절 샤워기 홀더 헤드 걸이 거치대 J99", price: 88000, qty: 1, note: "가격 확인 필요", price_uncertain: true },
+  { area: "안방욕실", category: "청소건", name: "폰타나 자석 청소건세트 (3M 코일호스 + 분배밸브 포함) 7401.GM 건메탈블랙", price: 35100, qty: 2 },
+  { area: "안방욕실", category: "욕조수전(매립)", name: "씨트리 욕실 벽매립 선반형 세면수전 ST-1508 니켈", price: 288600, qty: 1 },
+  { area: "안방욕실", category: "욕조", name: "욕조 (smartstore dbath 5860283505)", price: 440000, qty: 1, link: "https://smartstore.naver.com/dbath/products/5860283505" },
+
+  // ===== 양변기 (공용·안방 각 1) =====
+  { area: "공용·안방욕실", category: "양변기", name: "아메리칸 스탠다드 8310 / 플랫 아쿠아 / 비데일체형 / 아쿠아세라믹 (PLAT AQUA)", price: 1035200, qty: 2 },
+
+  // ===== 환풍기 =====
+  { area: "공용·안방욕실", category: "환풍기", name: "힘펠 제로크 프라임", price: 192700, qty: 2 },
+
+  // ===== 유가 =====
+  { area: "공용·안방욕실", category: "유가", name: "라인 트렌치유가 (라우체 HJK036F 65Ø)", price: 44000, qty: 2 },
+  { area: "공용·안방욕실", category: "유가", name: "도무스 라인 유가 S 200각 65Ø 스텐 (역류방지·냄새차단)", price: 46000, qty: null, note: "수량 미정" },
+  { area: "공용·안방욕실", category: "유가", name: "도무스 트렌치 유가 1500 센터형", price: 110000, qty: 1 },
+
+  // ===== 악세사리 (옷걸이·수건걸이·수건선반) =====
+  { area: "욕실 악세사리", category: "옷걸이", name: "LAUCHE 미스틱 블랙니켈 31BN", price: 17400, qty: 2 },
+  { area: "욕실 악세사리", category: "수건걸이", name: "LAUCHE 미스틱 블랙니켈 11BN [600mm]", price: 46600, qty: 1 },
+  { area: "욕실 악세사리", category: "수건걸이", name: "비반트 DOT N02A(MS) 니켈", price: 18500, qty: 2 },
+  { area: "욕실 악세사리", category: "수건선반", name: "LAUCHE 써클 블랙니켈 02-550BN", price: 91500, qty: 1 },
+];
+
+/* ------------------------------------------------------------
  *  작업 안내 개요 (work.html 첫 화면) — "집이 어떻게 바뀌나"
  *  - intro   : 한 단락 소개
  *  - changes : 큰 틀의 변경 요약 카드 [{ icon, title, desc }]
@@ -1635,14 +1689,14 @@ const FLOORPLAN = {
     { layer: "thermostat", type: "pin", x: 41.1, y: 66.1, label: "온도조절기 (복도/욕실)" },
     { layer: "thermostat", type: "pin", x: 35.6, y: 58.8, label: "온도조절기 (안방)" },
     { layer: "thermostat", type: "pin", x: 48.8, y: 41.8, label: "온도조절기 (침실1)" },
-    { layer: "light", type: "box", x: 66.6, y: 19.2, w: 0.1, h: 16.5, label: "간접조명", kind: "strip" , circuit: "LR-3", zone: "거실", name: "거실 우측 커튼박스 스트립" },
+    { layer: "light", type: "box", x: 66.6, y: 19.2, w: 0.1, h: 16.5, label: "간접조명", kind: "strip_cct" , circuit: "LR-3b", zone: "거실", name: "거실 우측 커튼박스 스트립", length: 400 },
     { layer: "light", type: "box", x: 66.8, y: 40.3, w: 0.1, h: 9.7, label: "간접조명", kind: "strip_normal" , circuit: "BR-3", zone: "작은방", name: "작은방 간접" },
-    { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명", kind: "strip_cct" , circuit: "MR-3", zone: "안방", name: "안방 간접 #3", length: 400 },
+    { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명", kind: "strip_cct" , circuit: "MR-3b", zone: "안방", name: "안방 침대프레임 간접", length: 400 },
     { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명", kind: "strip_normal" , circuit: "DR-3", zone: "드레스룸", name: "드레스룸 간접" },
     { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #1", length: 180 },
     { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip_aqara_wp" , circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #2", length: 80 },
-    { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip" , circuit: "LR-3", zone: "거실", name: "거실 우물천장 스트립" },
-    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip_cct" , circuit: "MR-3", zone: "안방", name: "안방 간접 #2", length: 1000 },
+    { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip_cct" , circuit: "LR-3a", zone: "거실", name: "거실 우물천장 스트립", length: 1000 },
+    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip_cct" , circuit: "MR-3a", zone: "안방", name: "안방 우물천장 스트립", length: 1000 },
     { layer: "light", type: "box", x: 49.2, y: 35.3, w: 2.5, h: 0, label: "멀티매입등", kind: "multi10" , circuit: "LR-1", zone: "거실", name: "거실 좌측 10구 멀티" },
     { layer: "light", type: "box", x: 63, y: 35.5, w: 2.6, h: 0, label: "멀티매입등", kind: "multi10" , circuit: "LR-1", zone: "거실", name: "거실 우측 10구 멀티" },
     { layer: "light", type: "pin", x: 65.2, y: 20.2, label: "COB조명", kind: "cob2" , circuit: "LR-2", zone: "거실", name: "거실 우측상단 COB-A" },
@@ -1698,7 +1752,7 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 35, y: 43.5, w: 0, h: 1.5, label: "간접조명", kind: "strip_cct", circuit: "EN-1", zone: "현관", name: "현관 간접 #2", length: 180 },
     { layer: "light", type: "box", x: 46.6, y: 37.5, w: 0, h: 1.3, label: "간접조명", kind: "strip_cct" , circuit: "HW-1", zone: "복도", name: "복도 간접 #1", length: 220 },
     { layer: "light", type: "box", x: 46.5, y: 42.5, w: 0, h: 1.3, label: "간접조명", kind: "strip_cct" , circuit: "HW-1", zone: "복도", name: "복도 간접 #2", length: 220 },
-    { layer: "light", type: "box", x: 35.1, y: 69.6, w: 0.4, h: 15.6, label: "간접조명", kind: "strip_cct" , circuit: "MR-3", zone: "안방", name: "안방 간접 #1", length: 370 },
+    { layer: "light", type: "box", x: 35.1, y: 69.6, w: 0.4, h: 15.6, label: "간접조명", kind: "strip_cct" , circuit: "MR-3b", zone: "안방", name: "안방 천장 간접", length: 370 },
     { layer: "light", type: "box", x: 32, y: 56, w: 0, h: 1.5, label: "간접조명", kind: "strip_cct", circuit: "MRH-2", zone: "안방복도", name: "안방복도 MRH-2 간접", length: 200 },
     { layer: "light", type: "pin", x: 39, y: 49.4, label: "COB조명", kind: "cob2n" , circuit: "LB-1", zone: "거실화장실", name: "거실화장실 다운라이트 추가" },
     { layer: "light", type: "pin", x: 34.5, y: 40.4, label: "COB조명", kind: "cob2" , circuit: "EN-1", zone: "현관", name: "현관 COB #2" },
@@ -2356,10 +2410,10 @@ const KITCHEN = {
 const LIGHTING_KINDS = {
   cob2:    { label: "2인치 COB (IoT)",    icon: "●", short: "COB·IoT",  color: "#3b82f6", model: "슬림딥콘 2인치 COB 다운라이트 DC24V TW 7W (#17) · 타공 55파이 · 높이 55mm · CRI>90 · 확산각 55도", watt: 7, volt: "DC 24V", priceB2B: 12600,  priceB2C: 13860 },
   cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
-  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "안도 2인치 확산형 다운라이트 8W (#16) · DC24V CCT 3선 모듈 · 3000~6500K · 타공 55파이 · Ø66×H45mm", watt: 8, volt: "DC 24V", priceB2B: 9000,  priceB2C: 11455 },
+  diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 8580,  priceB2C: 16364 },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
-  strip:        { label: "스트립 RGBWW",      icon: "▬", short: "스트립RGBWW", color: "#ef4444", model: "필립스 CertaFlux LED 스트립 RGBWW 5M (이지엉클 #57·5선식)",   watt: 122, volt: "DC 24V", rollCm: 500,  priceB2B: 73600, priceB2C: 80960 }, // RGB 14.4 W/m + W(2700K) 10 W/m → 최대 24.4 W/m × 5m = 122W · 5선식 (24V+ · R · G · B · W) · 폭 12mm
+  // strip (RGBWW)은 거실 우물천장·커튼박스를 CCT로 변경하면서 전 회로에서 미사용 → 제거. 필요시 git history에서 복구.
   strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000, priceB2B: 44400, priceB2C: 80000 }, // 10M 한 롤당 약 70W (7W/m)
   strip_aqara_wp: { label: "스트립 방수",       icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 76050, priceB2C: 90000 }, // 5M, IP65 추정 35W (욕실용)
   strip_normal:   { label: "스트립 (일반)",      icon: "▭", short: "일반스트립",   color: "#fbbf24", model: "일반 스트립 조명 or T5 (미정)",                    watt: 0,  volt: "AC 220V" }, // 작은방·드레스룸 간접등용
@@ -2414,7 +2468,13 @@ const LIGHTING_SWITCHES = {
   // 거실 (3구) — 주방 2구와 같은 위치에 5구로 함께 설치
   "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { lights: { multi10: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 40 } },
   "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
-  "LR-3": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 + 커튼박스", spec: { lights: { strip: 3 }, drivers: { aqara: 2 }, smps: { u200: 2 }, watt: 366, note: "필립스 CertaFlux RGBWW 5M × 3롤 · 최대 24.4 W/m × 15m = 366W (RGB 14.4 + W 10) · SMPS 200W ×2 (총 400W) · 아카라 스트립 DR(#140) RGBWW & CCT 둘 다 호환 — 12A 옵션 ×2면 576W까지 받음 · RGB와 W 동시 풀출력 거의 없어 실사용은 200W 내외, 마진 위해 200W 2개" } },
+  // 거실 3구 #3 — 우물천장 / 커튼박스 각각 독립 회로(앱 디밍 분리). 같은 물리 버튼 공유.
+  "LR-3a": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 (10m·70W)",
+             spec: { lights: { strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 70,
+                     note: "SR 8mm CCT 10M(#60) 1롤 · 10m × 7W = 70W. ⚠️ 5m 초과 전압강하 방지 위해 **양단 급전** (롤 양 끝에 +/− 와고 분기). DR 1 + SMPS 200W ×1 (35% 부하, 2롤로 늘 때도 대응)." } },
+  "LR-3b": { zone: "거실", switch: "거실 3구 #3", desc: "커튼박스 (4m·28W)",
+             spec: { lights: { strip_cct: 0.4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
+                     note: "SR 8mm CCT 10M(#60) 0.4롤 · 4m × 7W = 28W. 단일 급전. DR 1 + SMPS 100W ×1 (28% 부하). 5m 미만이라 전압강하 미미." } },
   // 주방 (2구) — 거실 스위치 옆
   "KT-1": { zone: "주방", switch: "주방 2구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
   "KT-2": { zone: "주방", switch: "주방 2구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
@@ -2437,9 +2497,13 @@ const LIGHTING_SWITCHES = {
   "MR-2": { zone: "안방", switch: "안방 3구 #2", desc: "확산",
             spec: { lights: { diff2: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 8,
                     note: "확산 IoT(#42) 1 × 8W = 8W · Aqara DR 1 + 100W SMPS 1 (92W 여유 — 향후 추가 등 여지)" } },
-  "MR-3": { zone: "안방", switch: "안방 3구 #3", desc: "간접 3개 (CCT)",
-            spec: { lights: { strip_cct: 1.77 }, drivers: { aqara: 2 }, smps: { u100: 2 }, watt: 124,
-                    note: "SR 8mm CCT 10M(#60) 1.77롤(발주 2롤) · 우물천장 1000 + 침대프레임 400 + 천장 370 = 1770cm · 17.7m × 7W = 124W · 옵션 C 적용: DR 2 + SMPS 100W ×2로 분리 (DR1: 우물천장 70W, DR2: 침대·천장 54W · 각 100W SMPS 별도 — 장애 격리)" } },
+  // 안방 3구 #3 — 우물천장 / (침대프레임+천장 통합) 2개 셀. 같은 물리 버튼·DR 공유.
+  "MR-3a": { zone: "안방", switch: "안방 3구 #3", desc: "우물천장 (10m·70W)",
+             spec: { lights: { strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 70,
+                     note: "SR 8mm CCT 10M(#60) 1롤 · 10m × 7W = 70W. ⚠️ 5m 초과 전압강하 방지 위해 **양단 급전** (롤 양 끝에 +/− 와고 분기). DR 1 + SMPS 200W ×1 (35% 부하)." } },
+  "MR-3b": { zone: "안방", switch: "안방 3구 #3", desc: "침대프레임 + 천장 (7.7m·54W)",
+             spec: { lights: { strip_cct: 0.77 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 54,
+                     note: "SR 8mm CCT 10M(#60) 0.77롤 · 침대프레임 4m + 천장 3.7m = 7.7m × 7W = 54W. 침대 4m / 천장 3.7m 모두 5m 미만 — 단일 급전 OK. DR 1로 묶어 같이 디밍 (개별 제어 필요 없으면 1 DR 충분). SMPS 100W ×1 (54% 부하)." } },
   // 안방복도 (3구, 신설)
   "MRH-1": { zone: "안방복도", switch: "안방복도 3구 #1", desc: "COB 2개",
              spec: { lights: { cob2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,
