@@ -1223,7 +1223,7 @@
       // spec.lights[k]가 있으면 자재 수량으로 오버라이드 (예: 스트립 마커 2개 ≠ 5M 롤 3개)
       const lightQty = (k) => (spec.lights && spec.lights[k] != null) ? spec.lights[k] : countByKind[k];
       // 스트립 종류 — 회로 안 마커들의 length 합산 (있으면 셀에 cm 표시)
-      const stripKinds = { strip: 1, strip_cct: 1, strip_aqara_wp: 1 };
+      const stripKinds = { strip: 1, strip_cct: 1, strip_ultra: 1, strip_aqara_wp: 1 };
       const lenByKind = {};
       arr.forEach(({ it }) => {
         if (stripKinds[it.kind] && typeof it.length === "number" && it.length > 0) {
@@ -1836,7 +1836,7 @@
     const totalsByDriver = {}; driverKeys.forEach((k) => { totalsByDriver[k] = 0; });
     const totalsBySmps = {}; smpsKeys.forEach((k) => { totalsBySmps[k] = 0; });
     // 회로별 light 마커 그룹화 (renderLighting과 동일한 로직 — spec.lights 미명시 종류도 마커 카운트로 포함)
-    const stripKindSetTQ = { strip: 1, strip_cct: 1, strip_aqara_wp: 1, strip_normal: 1 };
+    const stripKindSetTQ = { strip: 1, strip_cct: 1, strip_ultra: 1, strip_aqara_wp: 1, strip_normal: 1 };
     const lightsByCircuit = {};
     const fpItems = (typeof FLOORPLAN !== "undefined") ? (FLOORPLAN.items || []) : [];
     fpItems.forEach((it) => {

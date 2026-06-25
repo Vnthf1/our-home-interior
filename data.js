@@ -1854,8 +1854,8 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명", kind: "strip_normal" , circuit: "DR-3", zone: "드레스룸", name: "드레스룸 간접" },
     { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip_aqara_wp" , circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #1", length: 180 },
     { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip_aqara_wp" , circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #2", length: 80 },
-    { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip_cct" , circuit: "LR-3a", zone: "거실", name: "거실 우물천장 스트립", length: 1000 },
-    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip_cct" , circuit: "MR-3a", zone: "안방", name: "안방 우물천장 스트립", length: 1000 },
+    { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip_ultra" , circuit: "LR-3a", zone: "거실", name: "거실 우물천장 스트립", length: 1000 },
+    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip_ultra" , circuit: "MR-3a", zone: "안방", name: "안방 우물천장 스트립", length: 1000 },
     { layer: "light", type: "box", x: 49.2, y: 35.3, w: 2.5, h: 0, label: "멀티매입등", kind: "multi10" , circuit: "LR-1", zone: "거실", name: "거실 좌측 10구 멀티" },
     { layer: "light", type: "box", x: 63, y: 35.5, w: 2.6, h: 0, label: "멀티매입등", kind: "multi10" , circuit: "LR-1", zone: "거실", name: "거실 우측 10구 멀티" },
     { layer: "light", type: "pin", x: 65.2, y: 20.2, label: "COB조명", kind: "cob2" , circuit: "LR-2", zone: "거실", name: "거실 우측상단 COB-A" },
@@ -2575,6 +2575,7 @@ const LIGHTING_KINDS = {
   multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
   // strip (RGBWW)은 거실 우물천장·커튼박스를 CCT로 변경하면서 전 회로에서 미사용 → 제거. 필요시 git history에서 복구.
   strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000, priceB2B: 44400, priceB2C: 80000 }, // 10M 한 롤당 약 70W (7W/m)
+  strip_ultra:  { label: "스트립 울트라루멘",  icon: "▮", short: "울트라루멘",  color: "#dc2626", model: "아카라 울트라 루멘 플렉스 SMD 라이트 스트립 5M (#166) · DC24V TW · >90Ra · 일시적 특가", watt: 100, volt: "DC 24V", rollCm: 500, priceB2B: 97500, priceB2C: 150000 }, // 5M 한 롤당 100W (20W/m) · SR CCT 대비 약 3배 광량
   strip_aqara_wp: { label: "스트립 방수",       icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 76050, priceB2C: 90000 }, // 5M, IP65 추정 35W (욕실용)
   strip_normal:   { label: "스트립 (일반)",      icon: "▭", short: "일반스트립",   color: "#fbbf24", model: "일반 스트립 조명 or T5 (미정)",                    watt: 0,  volt: "AC 220V" }, // 작은방·드레스룸 간접등용
   surface_n:      { label: "직부등 (일반)",      icon: "◈", short: "직부등",      color: "#a3e635", model: "일반 직부등 (미정)",                                watt: 0,  volt: "AC 220V" }, // 발코니 등 표면 설치형
@@ -2588,6 +2589,7 @@ const LIGHTING_DRIVERS = {
 const LIGHTING_SMPS = {
   u100: { label: "유니온 100W SMPS", short: "100W", color: "#6b7280", model: "유니온 UP100S24W2L (#120) — PF>0.6 가성비", priceB2B: 16692, priceB2C: 21818 },
   u200: { label: "유니온 200W SMPS", short: "200W", color: "#374151", model: "유니온 UP200S24W2L (#122)",                priceB2B: 25488, priceB2C: 33182 },
+  u300: { label: "유니온 300W SMPS", short: "300W", color: "#1f2937", model: "유니온 UP300S24W2L (#123) — 가성비, 1갈래 출력", priceB2B: 28440, priceB2C: 37273 },
 };
 
 /* 스위치 단가 — 회로별 switch 필드의 "X구"를 카운트하여 발주량 자동 산정 */
@@ -2629,9 +2631,9 @@ const LIGHTING_SWITCHES = {
   "LR-1": { zone: "거실", switch: "거실 3구 #1", desc: "TV 옆 양쪽", spec: { lights: { multi10: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 40 } },
   "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
   // 거실 3구 #3 — 우물천장 / 커튼박스 각각 독립 회로(앱 디밍 분리). 같은 물리 버튼 공유.
-  "LR-3a": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 (10m·70W)",
-             spec: { lights: { strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 70,
-                     note: "SR 8mm CCT 10M(#60) 1롤 · 10m × 7W = 70W. ⚠️ 5m 초과 전압강하 방지 위해 **양단 급전** (롤 양 끝에 +/− 와고 분기). DR 1 + SMPS 200W ×1 (35% 부하, 2롤로 늘 때도 대응)." } },
+  "LR-3a": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 (10m·200W · 울트라 루멘)",
+             spec: { lights: { strip_ultra: 2 }, drivers: { aqara: 1 }, smps: { u300: 1 }, watt: 200,
+                     note: "아카라 울트라 루멘 SMD 5M(#166) × 2롤 직렬 연결(총 10m·20W/m=200W · CCT TW · >90Ra · SR CCT 대비 약 3배 광량). DR ×1(12A 옵션, 288W 커버) + SMPS u300 ×1 (200W on 300W=67% 부하). 시공: 두 롤 접합부에서 +/− 추가 결선(중간점 급전)으로 각 5m 끝단까지 전압강하 방지. ⚠️ #140 Aqara DR 12A 옵션 + #123 300W SMPS 별도 발주, 박진욱님 6/30 실측 시 재확인." } },
   "LR-3b": { zone: "거실", switch: "거실 3구 #3", desc: "커튼박스 (4m·28W)",
              spec: { lights: { strip_cct: 0.4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
                      note: "SR 8mm CCT 10M(#60) 0.4롤 · 4m × 7W = 28W. 단일 급전. DR 1 + SMPS 100W ×1 (28% 부하). 5m 미만이라 전압강하 미미." } },
@@ -2658,9 +2660,9 @@ const LIGHTING_SWITCHES = {
             spec: { lights: { diff2: 1 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 8,
                     note: "확산 IoT(#42) 1 × 8W = 8W · Aqara DR 1 + 100W SMPS 1 (92W 여유 — 향후 추가 등 여지)" } },
   // 안방 3구 #3 — 우물천장 / (침대프레임+천장 통합) 2개 셀. 같은 물리 버튼·DR 공유.
-  "MR-3a": { zone: "안방", switch: "안방 3구 #3", desc: "우물천장 (10m·70W)",
-             spec: { lights: { strip_cct: 1 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 70,
-                     note: "SR 8mm CCT 10M(#60) 1롤 · 10m × 7W = 70W. ⚠️ 5m 초과 전압강하 방지 위해 **양단 급전** (롤 양 끝에 +/− 와고 분기). DR 1 + SMPS 200W ×1 (35% 부하)." } },
+  "MR-3a": { zone: "안방", switch: "안방 3구 #3", desc: "우물천장 (10m·200W · 울트라 루멘)",
+             spec: { lights: { strip_ultra: 2 }, drivers: { aqara: 1 }, smps: { u300: 1 }, watt: 200,
+                     note: "아카라 울트라 루멘 SMD 5M(#166) × 2롤 직렬 연결(총 10m·20W/m=200W · CCT TW · >90Ra). DR ×1(12A 옵션, 288W 커버) + SMPS u300 ×1 (200W on 300W=67% 부하). 시공: 두 롤 접합부에서 +/− 추가 결선(중간점 급전)으로 전압강하 방지. ⚠️ #140 Aqara DR 12A 옵션 + #123 300W SMPS 별도 발주." } },
   "MR-3b": { zone: "안방", switch: "안방 3구 #3", desc: "침대프레임 + 천장 (7.7m·54W)",
              spec: { lights: { strip_cct: 0.77 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 54,
                      note: "SR 8mm CCT 10M(#60) 0.77롤 · 침대프레임 4m + 천장 3.7m = 7.7m × 7W = 54W. 침대 4m / 천장 3.7m 모두 5m 미만 — 단일 급전 OK. DR 1로 묶어 같이 디밍 (개별 제어 필요 없으면 1 DR 충분). SMPS 100W ×1 (54% 부하)." } },
