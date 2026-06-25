@@ -1564,6 +1564,10 @@ const FLOORPLAN = {
   dims: [
     { x: 41, y: 24, w: 3.65, label: "900" }, // 냉장고장 ↔ 아일랜드 (총 7.7% 안에서 통로:아일랜드 = 9:10)
   ],
+  // 빨간 벽 하이라이트 (철거할 벽 등). 위치는 floorplan ✏️편집으로 보정 가능
+  walls: [
+    { x: 46.5, y: 68.5, w: 0.8, h: 19, label: "철거할 벽" }, // 안방 옆방 붙박이 오른쪽 (위치 추정)
+  ],
   layers: [
     { id: "furniture", label: "가구",   color: "#3b82f6", icon: "🛋️" },
     { id: "light",     label: "조명",   color: "#f59e0b", icon: "💡" },

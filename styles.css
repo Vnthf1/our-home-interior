@@ -985,6 +985,8 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
 .wo-dim::before,.wo-dim::after{ content:""; position:absolute; top:-3px; width:1.5px; height:7px; background:#c0392b; }
 .wo-dim::before{ left:0; } .wo-dim::after{ right:0; }
 .wo-dim span{ position:absolute; left:50%; top:-5mm; transform:translateX(-50%); font-size:3.4mm; font-weight:800; color:#c0392b; background:rgba(255,255,255,.85); padding:0 1mm; white-space:nowrap; }
+.wo-wall{ position:absolute; background:#e3342f; border:1px solid #a01b18; box-shadow:0 0 0 1px rgba(227,52,47,.4); }
+.wo-wall span{ position:absolute; left:100%; top:50%; transform:translateY(-50%); margin-left:1.5mm; font-size:3.2mm; font-weight:800; color:#c0392b; white-space:nowrap; }
 .wo-mk{ position:absolute; border:1.5px solid #c0392b; background:rgba(192,57,77,.06); display:flex; align-items:center; justify-content:center; }
 .wo-mk span{ font-size:3mm; font-weight:700; color:#c0392b; background:rgba(255,255,255,.75); padding:0 1px; line-height:1.1; text-align:center; }
 .wo-foot{ font-size:4.2mm; color:#444; margin-top:4mm; }
