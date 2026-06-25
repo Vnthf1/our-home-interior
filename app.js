@@ -2097,7 +2097,12 @@
     };
     const fmt = (n) => Number(n || 0).toLocaleString("ko-KR");
     const decidedCand = (it) => (it.decided && (it.candidates||[]).find(c => c.name === it.decided)) || null;
-    const totalPurchased = (p) => p ? (p.total || (p.unitPrice||0)*(p.qty||1) || 0) : 0;
+    const totalPurchased = (p) => {
+      if (!p) return 0;
+      if (p.total != null) return p.total; // 명시된 total(0 포함) 우선
+      if (p.qty == null) return 0;          // 수량 미정 → 합계 미정
+      return (p.unitPrice || 0) * p.qty;
+    };
     const minOfferAll = (it) => {
       let min = null, n = 0;
       (it.candidates||[]).forEach(c => (c.offers||[]).forEach(o => {
@@ -2143,13 +2148,17 @@
 
     // 데이터 평탄화 + 요약 카운트
     const rows = [];
-    let boughtSum = 0, orderedSum = 0, decidedN = 0, lookingN = 0, pendingN = 0;
+    let boughtSum = 0, orderedSum = 0, decidedSum = 0;
+    let decidedN = 0, lookingN = 0, pendingN = 0;
+    const groupTotals = {}; // 그룹별 합계 (status 무관, purchased.total 기준)
     MATERIALS.forEach((g, gi) => (g.items || []).forEach((it, idx) => {
-      if (it.status === "bought") boughtSum += totalPurchased(it.purchased);
-      if (it.status === "ordered") orderedSum += totalPurchased(it.purchased);
-      if (it.status === "decided") decidedN++;
+      const purT = totalPurchased(it.purchased);
+      if (it.status === "bought") boughtSum += purT;
+      if (it.status === "ordered") orderedSum += purT;
+      if (it.status === "decided") { decidedN++; decidedSum += purT; }
       if (it.status === "looking") lookingN++;
       if (it.status === "pending") pendingN++;
+      if (purT) groupTotals[g.group] = (groupTotals[g.group] || 0) + purT;
 
       const dc = decidedCand(it);
       const photo = (dc && dc.photo) || ((it.candidates||[])[0] && it.candidates[0].photo) || "";
@@ -2235,13 +2244,21 @@
       });
     }));
 
-    // 요약 1줄
-    if (sumEl) sumEl.innerHTML = `
-      <span class="ms-pill ms-bought">🛒 구매완료 <b>₩${fmt(boughtSum)}</b></span>
-      <span class="ms-pill ms-ordered">📦 발주 <b>₩${fmt(orderedSum)}</b></span>
-      <span class="ms-pill">✅ 확정 <b>${decidedN}</b></span>
-      <span class="ms-pill">🔍 검토중 <b>${lookingN}</b></span>
-      <span class="ms-pill">⊝ 미정 <b>${pendingN}</b></span>`;
+    // 요약 1줄 — 총합(구매완료 + 발주 + 확정-가격포함) 우선 표시
+    const grandTotal = boughtSum + orderedSum + decidedSum;
+    if (sumEl) {
+      const groupPills = Object.entries(groupTotals)
+        .map(([k, v]) => `<span class="ms-pill ms-group">${esc(k)} <b>₩${fmt(v)}</b></span>`)
+        .join("");
+      sumEl.innerHTML = `
+        <span class="ms-pill ms-grand">💰 자재 총합 <b>₩${fmt(grandTotal)}</b></span>
+        ${groupPills}
+        <span class="ms-pill ms-bought">🛒 구매완료 <b>₩${fmt(boughtSum)}</b></span>
+        <span class="ms-pill ms-ordered">📦 발주 <b>₩${fmt(orderedSum)}</b></span>
+        <span class="ms-pill ms-decided">✅ 확정 <b>${decidedN}건 · ₩${fmt(decidedSum)}</b></span>
+        <span class="ms-pill">🔍 검토중 <b>${lookingN}</b></span>
+        <span class="ms-pill">⊝ 미정 <b>${pendingN}</b></span>`;
+    }
 
     // 상태 칩 바
     let currentStatus = "all";
