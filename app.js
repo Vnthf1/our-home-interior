@@ -741,7 +741,7 @@
           return;
         } else if (it.type === "box") {
           el.className = "fp-marker fp-box" + (isCove ? " cove" : "") + (isLine ? " line" : "") + (isBar ? " bar" : "");
-          el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, isCove ? .07 : (isLine || isBar ? .5 : .12))}`;
+          el.style.cssText = `left:${it.x}%;top:${it.y}%;width:${it.w || 0}%;height:${it.h || 0}%;border-color:${L.color};background:${hexA(L.color, isCove || isLine || isBar ? .5 : .12)}`;
           if (it.label) { const lb = document.createElement("span"); lb.className = "lb"; lb.style.background = L.color; lb.textContent = it.label; el.appendChild(lb); }
         } else if (it.type === "text") {
           el.className = "fp-marker fp-text";
@@ -1175,6 +1175,15 @@
       else { zoneSpanAt[lastZS]++; }
     });
 
+    // 사전계산: 스위치 라벨(예: "거실 3구 #3") 연속 동일 → rowspan 셀병합
+    const rowSwitch = cids.map((cid) => (SWITCHES[cid] || {}).switch || "");
+    const switchSpanAt = {};
+    let lastSS = -1;
+    rowSwitch.forEach((s, i) => {
+      if (i === 0 || !s || s !== rowSwitch[i - 1]) { switchSpanAt[i] = 1; lastSS = i; }
+      else { switchSpanAt[lastSS]++; }
+    });
+
     // 본문 행 (회로 1개 = 1행, 같은 zone 연속이면 zone 셀 rowspan으로 병합)
     let bodyHTML = '';
     cids.forEach((cid, ri) => {
@@ -1248,10 +1257,14 @@
         return qtyCell(lightQty(k), sepBefore);
       };
 
+      const isSwitchStart = (ri in switchSpanAt);
+      const switchTd = isSwitchStart
+        ? '<td class="lt-sw"' + (switchSpanAt[ri] > 1 ? ' rowspan="' + switchSpanAt[ri] + '"' : '') + '>' + switchLabel + '</td>'
+        : '';
       bodyHTML += '<tr data-cid="' + esc(cid) + '" data-idxs="' + esc(idxList) + '"' +
         (isZoneStart ? ' class="lt-zone-start"' : '') + '>' +
         zoneTd +
-        '<td class="lt-sw">' + switchLabel + '</td>' +
+        switchTd +
         '<td class="lt-name">' + circuitCell + '</td>' +
         iotKinds.map((k) => stripKinds[k] ? stripCell(k, false) : qtyCell(lightQty(k), false)).join("") +
         driverKeys.map((k, i) => qtyCell(drQty(k), i === 0)).join("") +

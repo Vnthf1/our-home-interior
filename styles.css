@@ -443,7 +443,7 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .fp-legend .hr{height:1px;background:var(--line);margin:3px 0}
 .fp-legend .sw{width:18px;height:18px;flex:none;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:800;line-height:1;border-radius:50%;position:relative}
 .fp-legend .sw.line{width:20px;height:5px;border-radius:99px;background:rgba(245,158,11,.5);border:1.5px solid #f59e0b}
-.fp-legend .sw.cove{width:18px;height:13px;border-radius:3px;border:2px dashed #f59e0b;background:rgba(245,158,11,.07)}
+.fp-legend .sw.cove{width:18px;height:13px;border-radius:3px;border:2px dashed #f59e0b;background:rgba(245,158,11,.5)}
 .fp-legend .sw.bar{width:20px;height:5px;border-radius:2px;background:rgba(245,158,11,.5);border:1.5px solid #f59e0b}
 .fp-legend .sw.cob,.fp-legend .sw.diff{background:#f59e0b;width:15px;height:15px;font-size:9px}
 .fp-legend .sw.outlet{background:#ef4444;width:18px;height:18px}
