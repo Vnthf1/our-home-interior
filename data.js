@@ -99,7 +99,6 @@ const SCHEDULE = {
     { name: "목공 (방음)", spans: [["2026-07-10", "2026-07-10"], ["2026-07-13", "2026-07-15"]] },
     { name: "타일", spans: [["2026-07-21", "2026-07-23"]] },
     { name: "도기", spans: [["2026-07-30", "2026-07-30"]] },
-    { name: "필름", spans: [["2026-07-20", "2026-07-20"]] },
     { name: "욕실천장", spans: [["2026-07-24", "2026-07-24"]] },
     { name: "전기 (타공)", spans: [["2026-07-16", "2026-07-16"]] },
     { name: "장판", spans: [["2026-08-07", "2026-08-07"]] },
@@ -1282,22 +1281,159 @@ const QUOTES = [
  */
 const MATERIALS = [
   {
+    group: "주방용품",
+    items: [
+      {
+        category: "싱크볼", qty: 1, status: "decided", purpose: "주방 아일랜드",
+        candidates: [
+          { name: "백조싱크 깜뽀르테860 (Calmforte) 사각 싱크볼 — 올스텐배수구",
+            offers: [{ vendor: "", price: 416000 }] },
+        ],
+        decided: "백조싱크 깜뽀르테860 (Calmforte) 사각 싱크볼 — 올스텐배수구",
+        purchased: { vendor: "", unitPrice: 416000, qty: 1, total: 416000 },
+        note: "",
+      },
+      {
+        category: "주방수전", qty: 1, status: "decided", purpose: "주방 아일랜드",
+        candidates: [
+          { name: "라우체 피오 TM0030N 니켈",
+            offers: [{ vendor: "", price: 371700 }] },
+        ],
+        decided: "라우체 피오 TM0030N 니켈",
+        purchased: { vendor: "", unitPrice: 371700, qty: 1, total: 371700 },
+        note: "",
+      },
+    ],
+  },
+  {
     group: "욕실용품",
     items: [
       {
-        category: "양변기", qty: 2, status: "looking", purpose: "안방·공용",
+        category: "양변기", qty: 2, status: "decided", purpose: "안방·공용",
         candidates: [
-          { name: "아메리칸 스탠다드 플랫라운드 비데일체형", photo: "mat_양변기.jpg",
+          { name: "아메리칸 스탠다드 8310 / 플랫 아쿠아 / 비데일체형 / 아쿠아세라믹 (PLAT AQUA)",
+            photo: "mat_양변기.jpg",
+            offers: [{ vendor: "", price: 1035200 }] },
+          { name: "아메리칸 스탠다드 플랫라운드 비데일체형 (이전 후보)",
             offers: [{ vendor: "용타일", price: 1100000 }] },
         ],
-        decided: null, purchased: null, note: "",
+        decided: "아메리칸 스탠다드 8310 / 플랫 아쿠아 / 비데일체형 (PLAT AQUA)",
+        purchased: { vendor: "", unitPrice: 1035200, qty: 2, total: 2070400 },
+        note: "",
       },
-      { category: "세면대",          qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "수전",            qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "거울",            qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       {
-        category: "환풍기", qty: 2, status: "looking", purpose: "안방·공용 욕실",
+        category: "세면대", qty: 2, status: "decided", purpose: "공용욕실 1개 확정 · 안방욕실 별도",
         candidates: [
+          { name: "필로토 이시스벽걸이 1023D (600×420×140) 화이트 무광 · 홀없음 벽걸이형",
+            offers: [{ vendor: "", price: 172500 }] },
+        ],
+        decided: "필로토 이시스벽걸이 1023D (공용욕실)",
+        purchased: { vendor: "", unitPrice: 172500, qty: 1, total: 172500 },
+        note: "공용욕실 1개 확정. 안방욕실 별도 — 미정",
+      },
+      {
+        category: "세면대 부속 — 보틀트랩", qty: 2, status: "decided", purpose: "공용욕실",
+        candidates: [
+          { name: "[81] SP 보틀트랩 - 사틴실버(니켈)",
+            offers: [{ vendor: "", price: 38200 }] },
+        ],
+        decided: "[81] SP 보틀트랩 - 사틴실버(니켈)",
+        purchased: { vendor: "", unitPrice: 38200, qty: 2, total: 76400 },
+        note: "",
+      },
+      {
+        category: "세면대 부속 — 자동팝업 마개", qty: 2, status: "decided", purpose: "공용욕실",
+        candidates: [
+          { name: "[36] LAUCHE 오버 자동팝업 마개(대) D034 40Ø - 니켈",
+            offers: [{ vendor: "", price: 29200 }] },
+        ],
+        decided: "[36] LAUCHE 오버 자동팝업 마개(대) D034 40Ø - 니켈",
+        purchased: { vendor: "", unitPrice: 29200, qty: 2, total: 58400 },
+        note: "",
+      },
+      {
+        category: "세면수전(매립)", qty: 2, status: "decided", purpose: "공용욕실",
+        candidates: [
+          { name: "라우체 코인 2375N 무광 니켈 매립세면수전",
+            offers: [{ vendor: "", price: 167100 }] },
+        ],
+        decided: "라우체 코인 2375N 무광 니켈 매립세면수전",
+        purchased: { vendor: "", unitPrice: 167100, qty: 2, total: 334200 },
+        note: "",
+      },
+      {
+        category: "샤워수전(매립)", qty: 2, status: "decided", purpose: "공용 1 + 안방 1 (다른 모델)",
+        candidates: [
+          { name: "공용: LAUCHE 코인 니켈 7075N / 1방향",
+            offers: [{ vendor: "", price: 182400, note: "공용 ×1" }] },
+          { name: "안방: 씨트리 ST-1088NB 사틴 무광 니켈 폭포형",
+            offers: [{ vendor: "", price: 519900, note: "안방 ×1" }] },
+        ],
+        decided: "공용=LAUCHE 7075N · 안방=씨트리 ST-1088NB",
+        purchased: { vendor: "", unitPrice: 351150, qty: 2, total: 702300,
+          note: "공용 182,400 + 안방 519,900 = 702,300원" },
+        note: "공용·안방 서로 다른 모델",
+      },
+      {
+        category: "샤워 부속 — 행거 J88", qty: 1, status: "decided", purpose: "안방욕실",
+        candidates: [
+          { name: "샤워기 행거 헤드 걸이 각도조절 거치대 니켈 J88",
+            offers: [{ vendor: "", price: 110000, note: "⚠️ 가격 확인 필요" }] },
+        ],
+        decided: "샤워기 행거 J88",
+        purchased: { vendor: "", unitPrice: 110000, qty: 1, total: 110000,
+          note: "⚠️ 가격 확인 필요" },
+        note: "",
+      },
+      {
+        category: "샤워 부속 — 홀더 J99", qty: 1, status: "decided", purpose: "안방욕실",
+        candidates: [
+          { name: "각도조절 샤워기 홀더 헤드 걸이 거치대 J99",
+            offers: [{ vendor: "", price: 88000, note: "⚠️ 가격 확인 필요" }] },
+        ],
+        decided: "각도조절 샤워기 홀더 J99",
+        purchased: { vendor: "", unitPrice: 88000, qty: 1, total: 88000,
+          note: "⚠️ 가격 확인 필요" },
+        note: "",
+      },
+      {
+        category: "샤워건", qty: 2, status: "decided", purpose: "안방·공용",
+        candidates: [
+          { name: "폰타나 자석 청소건세트 (3M 코일호스 + 분배밸브 포함) 7401.GM 건메탈블랙",
+            offers: [{ vendor: "", price: 35100 }] },
+          { name: "스파플레이건 SET (이전 후보)", photo: "mat_샤워건.jpg",
+            offers: [{ vendor: "홈씨씨", price: 48000, note: "매장 진열" }] },
+        ],
+        decided: "폰타나 자석 청소건세트 7401.GM 건메탈블랙",
+        purchased: { vendor: "", unitPrice: 35100, qty: 2, total: 70200 },
+        note: "",
+      },
+      {
+        category: "욕조수전(매립)", qty: 1, status: "decided", purpose: "안방욕실",
+        candidates: [
+          { name: "씨트리 욕실 벽매립 선반형 세면수전 ST-1508 니켈",
+            offers: [{ vendor: "", price: 288600 }] },
+        ],
+        decided: "씨트리 ST-1508 니켈",
+        purchased: { vendor: "", unitPrice: 288600, qty: 1, total: 288600 },
+        note: "",
+      },
+      {
+        category: "욕조", qty: 1, status: "decided", purpose: "안방욕실",
+        candidates: [
+          { name: "스마트스토어 dbath 욕조 (5860283505)",
+            offers: [{ vendor: "dbath", price: 440000, url: "https://smartstore.naver.com/dbath/products/5860283505" }] },
+        ],
+        decided: "스마트스토어 dbath 욕조",
+        purchased: { vendor: "dbath", unitPrice: 440000, qty: 1, total: 440000,
+          note: "https://smartstore.naver.com/dbath/products/5860283505" },
+        note: "",
+      },
+      {
+        category: "환풍기", qty: 2, status: "decided", purpose: "안방·공용 욕실",
+        candidates: [
+          { name: "힘펠 제로크 프라임",
+            offers: [{ vendor: "", price: 192700 }] },
           { name: "휴젠트2", offers: [
             { vendor: "을지로 미래상사", price: 300000 },
             { vendor: "용타일 옆", price: 360000 },
@@ -1313,34 +1449,81 @@ const MATERIALS = [
             { vendor: "을지로 미래상사", price: 50000 },
           ]},
         ],
-        decided: null, purchased: null, note: "",
+        decided: "힘펠 제로크 프라임",
+        purchased: { vendor: "", unitPrice: 192700, qty: 2, total: 385400 },
+        note: "",
       },
-      { category: "휴지걸이",        qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       {
-        category: "수건걸이", qty: 2, status: "looking", purpose: "",
+        category: "유가 — 트렌치 65Ø", qty: 2, status: "decided", purpose: "",
         candidates: [
-          { name: "EN-400-DG 수건걸이 그레이", photo: "",
+          { name: "라인 트렌치유가 (라우체 HJK036F 65Ø)",
+            offers: [{ vendor: "", price: 44000 }] },
+        ],
+        decided: "라우체 HJK036F 65Ø",
+        purchased: { vendor: "", unitPrice: 44000, qty: 2, total: 88000 },
+        note: "",
+      },
+      {
+        category: "유가 — 라인 200각", qty: null, status: "decided", purpose: "수량 미정",
+        candidates: [
+          { name: "도무스 라인 유가 S 200각 65Ø 스텐 (역류방지·냄새차단)",
+            offers: [{ vendor: "", price: 46000 }] },
+        ],
+        decided: "도무스 라인 유가 S 200각",
+        purchased: { vendor: "", unitPrice: 46000, qty: null, total: 0,
+          note: "수량 미정" },
+        note: "수량 확정 후 합계 업데이트",
+      },
+      {
+        category: "유가 — 트렌치 1500", qty: 1, status: "decided", purpose: "",
+        candidates: [
+          { name: "도무스 트렌치 유가 1500 센터형",
+            offers: [{ vendor: "", price: 110000 }] },
+        ],
+        decided: "도무스 트렌치 유가 1500 센터형",
+        purchased: { vendor: "", unitPrice: 110000, qty: 1, total: 110000 },
+        note: "",
+      },
+      {
+        category: "수건걸이", qty: 3, status: "decided", purpose: "공용 1 + 안방 2 (또는 분배)",
+        candidates: [
+          { name: "LAUCHE 미스틱 블랙니켈 11BN [600mm]",
+            offers: [{ vendor: "", price: 46600, note: "1개" }] },
+          { name: "비반트 DOT N02A(MS) 니켈",
+            offers: [{ vendor: "", price: 18500, note: "2개" }] },
+          { name: "EN-400-DG 수건걸이 그레이 (이전 후보)",
             offers: [{ vendor: "용타일", price: 15000 }] },
         ],
-        decided: null, purchased: null, note: "",
+        decided: "LAUCHE 11BN 1 + 비반트 DOT N02A 2",
+        purchased: { vendor: "", unitPrice: 0, qty: 3, total: 83600,
+          note: "46,600 + 18,500 ×2 = 83,600원" },
+        note: "",
       },
       {
-        category: "옷걸이", qty: 2, status: "looking", purpose: "욕실",
+        category: "수건선반", qty: 1, status: "decided", purpose: "",
         candidates: [
-          { name: "실바 헤어라인 옷걸이", photo: "mat_옷걸이_실바헤어라인.jpg", offers: [] },
+          { name: "LAUCHE 써클 블랙니켈 02-550BN",
+            offers: [{ vendor: "", price: 91500 }] },
         ],
-        decided: null, purchased: null, note: "젤 왼쪽 실바헤어라인",
+        decided: "LAUCHE 써클 블랙니켈 02-550BN",
+        purchased: { vendor: "", unitPrice: 91500, qty: 1, total: 91500 },
+        note: "",
       },
-      { category: "욕조",            qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "샤워헤드·매립수전", qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       {
-        category: "샤워건", qty: 2, status: "looking", purpose: "",
+        category: "옷걸이", qty: 2, status: "decided", purpose: "욕실",
         candidates: [
-          { name: "스파플레이건 SET", photo: "mat_샤워건.jpg",
-            offers: [{ vendor: "홈씨씨", price: 48000, note: "매장 진열" }] },
+          { name: "LAUCHE 미스틱 블랙니켈 31BN",
+            offers: [{ vendor: "", price: 17400 }] },
+          { name: "실바 헤어라인 옷걸이 (이전 후보)",
+            photo: "mat_옷걸이_실바헤어라인.jpg", offers: [] },
         ],
-        decided: null, purchased: null, note: "",
+        decided: "LAUCHE 미스틱 블랙니켈 31BN",
+        purchased: { vendor: "", unitPrice: 17400, qty: 2, total: 34800 },
+        note: "",
       },
+      { category: "휴지걸이", qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "거울",    qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "샤워헤드·매립수전 (구)", qty: 0, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "→ '샤워수전(매립)' 항목으로 통합됨" },
     ],
   },
   {
@@ -1460,60 +1643,6 @@ const KEY_NOTES = [
   "마감 톤: 디아망 크림 화이트 + 다크우드 필름 포인트",
   "욕실: 호텔식 2개 (1200×600 졸리컷 · 간접조명 · 매립선반)",
   "교체: 보일러·시스템에어컨·전열교환기·분배기",
-];
-
-/* ------------------------------------------------------------
- *  직접 구매 자재 (PURCHASES — 도기·수전·부속·악세사리 등 확정 제품)
- *  ※ 기존 MATERIALS (1281줄) = '후보 찾는 중' 카테고리형 위시리스트
- *     PURCHASES = 구매 결정된 구체적 제품(브랜드/모델/단가/수량) 평탄 목록
- *
- *  - area     : "주방" / "공용욕실"(원문 '거실') / "안방욕실" / "공용·안방욕실" / "욕실 악세사리"
- *  - category : "싱크볼" / "주방수전" / "세면대" / "세면수전(매립)" / "샤워수전(매립)" / "양변기" / "환풍기" / "유가" 등
- *  - name     : 제품명 (브랜드/모델 포함)
- *  - price    : 단가(원). qty 비우면 1로 간주.
- *  - qty      : 수량(개). null = 수량 미정.
- *  - note     : 특이사항(예: "확인 필요").
- *  - link     : 구매처 링크.
- *  - price_uncertain: 가격에 '?' 가 붙어있던 항목.
- *
- *  합계는 price × qty 로 자동 계산. 영역/카테고리별 집계는 렌더링 시 처리.
- * ------------------------------------------------------------ */
-const PURCHASES = [
-  // ===== 주방 =====
-  { area: "주방", category: "싱크볼", name: "백조싱크 깜뽀르테860 (Calmforte) 사각 싱크볼 — 올스텐배수구", price: 416000, qty: 1 },
-  { area: "주방", category: "주방수전", name: "라우체 피오 TM0030N 니켈", price: 371700, qty: 1 },
-
-  // ===== 공용욕실 (원문 '거실' 표기) =====
-  { area: "공용욕실", category: "세면대", name: "필로토 이시스벽걸이 1023D (600×420×140) 화이트 무광 · 홀없음 벽걸이형", price: 172500, qty: 1 },
-  { area: "공용욕실", category: "세면대 부속", name: "[81] SP 보틀트랩 — 사틴실버(니켈)", price: 38200, qty: 2 },
-  { area: "공용욕실", category: "세면대 부속", name: "[36] LAUCHE 오버 자동팝업 마개(대) D034 40Ø — 니켈", price: 29200, qty: 2 },
-  { area: "공용욕실", category: "세면수전(매립)", name: "라우체 코인 2375N 무광 니켈 매립세면수전", price: 167100, qty: 2 },
-  { area: "공용욕실", category: "샤워수전(매립)", name: "LAUCHE 코인 니켈 7075N / 1방향", price: 182400, qty: 1 },
-
-  // ===== 안방욕실 =====
-  { area: "안방욕실", category: "샤워수전(매립)", name: "씨트리 ST-1088NB 사틴 무광 니켈 폭포형 매립샤워수전", price: 519900, qty: 1 },
-  { area: "안방욕실", category: "샤워 부속", name: "샤워기 행거 헤드 걸이 각도조절 거치대 니켈 J88", price: 110000, qty: 1, note: "가격 확인 필요", price_uncertain: true },
-  { area: "안방욕실", category: "샤워 부속", name: "각도조절 샤워기 홀더 헤드 걸이 거치대 J99", price: 88000, qty: 1, note: "가격 확인 필요", price_uncertain: true },
-  { area: "안방욕실", category: "청소건", name: "폰타나 자석 청소건세트 (3M 코일호스 + 분배밸브 포함) 7401.GM 건메탈블랙", price: 35100, qty: 2 },
-  { area: "안방욕실", category: "욕조수전(매립)", name: "씨트리 욕실 벽매립 선반형 세면수전 ST-1508 니켈", price: 288600, qty: 1 },
-  { area: "안방욕실", category: "욕조", name: "욕조 (smartstore dbath 5860283505)", price: 440000, qty: 1, link: "https://smartstore.naver.com/dbath/products/5860283505" },
-
-  // ===== 양변기 (공용·안방 각 1) =====
-  { area: "공용·안방욕실", category: "양변기", name: "아메리칸 스탠다드 8310 / 플랫 아쿠아 / 비데일체형 / 아쿠아세라믹 (PLAT AQUA)", price: 1035200, qty: 2 },
-
-  // ===== 환풍기 =====
-  { area: "공용·안방욕실", category: "환풍기", name: "힘펠 제로크 프라임", price: 192700, qty: 2 },
-
-  // ===== 유가 =====
-  { area: "공용·안방욕실", category: "유가", name: "라인 트렌치유가 (라우체 HJK036F 65Ø)", price: 44000, qty: 2 },
-  { area: "공용·안방욕실", category: "유가", name: "도무스 라인 유가 S 200각 65Ø 스텐 (역류방지·냄새차단)", price: 46000, qty: null, note: "수량 미정" },
-  { area: "공용·안방욕실", category: "유가", name: "도무스 트렌치 유가 1500 센터형", price: 110000, qty: 1 },
-
-  // ===== 악세사리 (옷걸이·수건걸이·수건선반) =====
-  { area: "욕실 악세사리", category: "옷걸이", name: "LAUCHE 미스틱 블랙니켈 31BN", price: 17400, qty: 2 },
-  { area: "욕실 악세사리", category: "수건걸이", name: "LAUCHE 미스틱 블랙니켈 11BN [600mm]", price: 46600, qty: 1 },
-  { area: "욕실 악세사리", category: "수건걸이", name: "비반트 DOT N02A(MS) 니켈", price: 18500, qty: 2 },
-  { area: "욕실 악세사리", category: "수건선반", name: "LAUCHE 써클 블랙니켈 02-550BN", price: 91500, qty: 1 },
 ];
 
 /* ------------------------------------------------------------
