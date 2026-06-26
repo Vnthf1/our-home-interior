@@ -1671,9 +1671,11 @@
     const etcRows = [];
     let procTotal = 0;
     let etcTotal = 0;
+    let applianceConfirmed = 0, applianceSrc = null;
     if (typeof QUOTE_SUMMARY !== "undefined") {
       QUOTE_SUMMARY.forEach((r) => {
         const v = Number(r.final) || Number(r.price) || 0;
+        if (r.phase === "가전 (전체)") { applianceConfirmed = v; applianceSrc = r; return; } // 가전은 5번 섹션에서 한 번만 계상
         if (ETC_PHASES[r.phase]) { etcRows.push(r); etcTotal += v; }
         else { procRows.push(r); procTotal += v; }
       });
@@ -1716,9 +1718,10 @@
       return { name: f.name, qty: f.qty || 1, price: price, vendor: vendor, note: note };
     });
     const furnitureItems = pickBest((typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : []);
-    const applianceItems = pickBest((typeof APPLIANCE_QUOTE !== "undefined") ? APPLIANCE_QUOTE : []);
     let furnitureTotal = 0; furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
-    let applianceTotal = 0; applianceItems.forEach((f) => { applianceTotal += (Number(f.price) || 0) * (f.qty || 1); });
+    // 가전 — 삼성 일괄 확정·구매완료 (QUOTE_SUMMARY '가전 (전체)') 한 줄로
+    const applianceItems = applianceSrc ? [{ name: "삼성 가전 일괄 (확정·구매완료)", qty: 1, price: applianceConfirmed, vendor: applianceSrc.company || "삼성", note: applianceSrc.note || "" }] : [];
+    const applianceTotal = applianceConfirmed;
 
     // 2) 조명 자재 합계 — LIGHTING_SWITCHES의 spec 순회 + LIGHTING_SWITCH_PRICES + LIGHTING_EXTRAS
     let lightTotal = 0;
@@ -1774,6 +1777,7 @@
     if (typeof MATERIALS !== "undefined") {
       MATERIALS.forEach((g) => {
         (g.items || []).forEach((it) => {
+          if (it.status !== "decided") return; // 확정 자재만 (견적/자재 페이지와 동일)
           const cand = (it.candidates || []).find((c) => (c.offers || []).some((o) => o && o.price));
           const qty = it.qty || 1;
           if (cand) {
@@ -1920,7 +1924,7 @@
         '<div class="tq-subtotal lt-price">조명 자재 합계: <b>' + won(lightTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">3. 자재 견적 <span class="lt-quote-sub">(견적/자재 페이지에 가격이 명시된 항목만)</span></h3>' +
+        '<h3 class="lt-quote-h">3. 자재 견적 <span class="lt-quote-sub">(✅ 확정 자재만 · 견적/자재 페이지와 동일)</span></h3>' +
         materialQuoteHTML +
         '<div class="tq-subtotal lt-price">자재 합계: <b>' + won(materialTotal) + '</b></div>' +
       '</section>' +
@@ -1945,7 +1949,7 @@
         '<div class="tq-subtotal lt-price">가구 합계: <b>' + won(furnitureTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">5. 가전 견적 <span class="lt-quote-sub">(가구/가전 페이지 — 각 가전 최저가)</span></h3>' +
+        '<h3 class="lt-quote-h">5. 가전 견적 <span class="lt-quote-sub">(삼성 일괄 확정·구매완료 — 체감가)</span></h3>' +
         '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
           '<thead><tr><th>가전</th><th class="num">수량</th><th class="num lt-price">단가</th><th class="num lt-price">합계</th><th>업체·메모</th></tr></thead>' +
           '<tbody>' +
