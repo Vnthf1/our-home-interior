@@ -1777,7 +1777,6 @@
     if (typeof MATERIALS !== "undefined") {
       MATERIALS.forEach((g) => {
         (g.items || []).forEach((it) => {
-          if (it.status !== "decided") return; // 확정 자재만 (견적/자재 페이지와 동일)
           const cand = (it.candidates || []).find((c) => (c.offers || []).some((o) => o && o.price));
           const qty = it.qty || 1;
           if (cand) {
@@ -1924,7 +1923,7 @@
         '<div class="tq-subtotal lt-price">조명 자재 합계: <b>' + won(lightTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">3. 자재 견적 <span class="lt-quote-sub">(✅ 확정 자재만 · 견적/자재 페이지와 동일)</span></h3>' +
+        '<h3 class="lt-quote-h">3. 자재 견적 <span class="lt-quote-sub">(확정 + 검토중 + 가견적 추정 · 흐린 값은 가견적)</span></h3>' +
         materialQuoteHTML +
         '<div class="tq-subtotal lt-price">자재 합계: <b>' + won(materialTotal) + '</b></div>' +
       '</section>' +
