@@ -1682,7 +1682,7 @@
     }
     // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
     // 가격 미정/모호 phase는 사용자 협의 가정값
-    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1 };
+    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1 };
     const QUOTE_OVERRIDE = { ceramic: 4000000, film: 1000000 };
     const estimatedExtras = [];
     if (typeof QUOTES !== "undefined") {
