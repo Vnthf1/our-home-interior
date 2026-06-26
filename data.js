@@ -1552,7 +1552,6 @@ const MATERIALS = [
       },
       { category: "휴지걸이", qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "거울",    qty: 2, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "샤워헤드·매립수전 (구)", qty: 0, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "→ '샤워수전(매립)' 항목으로 통합됨" },
     ],
   },
   {
@@ -2632,8 +2631,8 @@ const LIGHTING_SWITCHES = {
   "LR-2": { zone: "거실", switch: "거실 3구 #2", desc: "쇼파 양쪽",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
   // 거실 3구 #3 — 우물천장 / 커튼박스 각각 독립 회로(앱 디밍 분리). 같은 물리 버튼 공유.
   "LR-3a": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 (10m·200W · 울트라 루멘)",
-             spec: { lights: { strip_ultra: 2 }, drivers: { aqara: 2 }, smps: { u300: 1 }, watt: 200,
-                     note: "아카라 울트라 루멘 SMD 5M(#166) × 2롤 (총 10m·20W/m=200W · CCT TW · >90Ra · SR CCT 대비 약 3배 광량). #140 Aqara DR 최대 144W → 200W를 한 DR로 못 받음 → DR ×2 분리 (각 5m 100W on 144W = 70% 부하). SMPS u300 ×1 통합 (200W on 300W = 67% 부하) — DC 24V bus에서 두 DR로 분기. 두 DR은 Aqara 앱에서 개별 디밍 가능(같은 스위치 버튼 공유)." } },
+             spec: { lights: { strip_ultra: 2 }, drivers: { aqara: 2 }, smps: { u200: 2 }, watt: 200,
+                     note: "아카라 울트라 루멘 SMD 5M(#166) × 2롤 (총 10m·20W/m=200W · CCT TW · >90Ra · SR CCT 대비 약 3배 광량). #140 Aqara DR 최대 144W → DR ×2 분리 (각 5m 100W on 144W = 70% 부하). 각 DR마다 전용 SMPS u200 ×1 (각 100W on 200W = 50% 부하) — 5m + DR + SMPS 한 세트가 독립 블록. 두 DR은 Aqara 앱에서 개별 디밍 가능(같은 스위치 버튼 공유)." } },
   "LR-3b": { zone: "거실", switch: "거실 3구 #3", desc: "커튼박스 (4m·28W)",
              spec: { lights: { strip_cct: 0.4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
                      note: "SR 8mm CCT 10M(#60) 0.4롤 · 4m × 7W = 28W. 단일 급전. DR 1 + SMPS 100W ×1 (28% 부하). 5m 미만이라 전압강하 미미." } },
@@ -2661,8 +2660,8 @@ const LIGHTING_SWITCHES = {
                     note: "확산 IoT(#42) 1 × 8W = 8W · Aqara DR 1 + 100W SMPS 1 (92W 여유 — 향후 추가 등 여지)" } },
   // 안방 3구 #3 — 우물천장 / (침대프레임+천장 통합) 2개 셀. 같은 물리 버튼·DR 공유.
   "MR-3a": { zone: "안방", switch: "안방 3구 #3", desc: "우물천장 (10m·200W · 울트라 루멘)",
-             spec: { lights: { strip_ultra: 2 }, drivers: { aqara: 2 }, smps: { u300: 1 }, watt: 200,
-                     note: "아카라 울트라 루멘 SMD 5M(#166) × 2롤 (총 10m·20W/m=200W · CCT TW · >90Ra). #140 Aqara DR 최대 144W → DR ×2 분리 (각 5m 100W on 144W = 70% 부하). SMPS u300 ×1 통합 (200W on 300W = 67% 부하) — DC 24V bus에서 두 DR로 분기. 두 DR은 Aqara 앱에서 개별 디밍 가능." } },
+             spec: { lights: { strip_ultra: 2 }, drivers: { aqara: 2 }, smps: { u200: 2 }, watt: 200,
+                     note: "아카라 울트라 루멘 SMD 5M(#166) × 2롤 (총 10m·20W/m=200W · CCT TW · >90Ra). #140 Aqara DR 최대 144W → DR ×2 분리 (각 5m 100W on 144W = 70% 부하). 각 DR마다 전용 SMPS u200 ×1 (각 100W on 200W = 50% 부하) — 5m + DR + SMPS 한 세트가 독립 블록. 두 DR은 Aqara 앱에서 개별 디밍 가능." } },
   "MR-3b": { zone: "안방", switch: "안방 3구 #3", desc: "침대프레임 + 천장 (7.7m·54W)",
              spec: { lights: { strip_cct: 0.77 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 54,
                      note: "SR 8mm CCT 10M(#60) 0.77롤 · 침대프레임 4m + 천장 3.7m = 7.7m × 7W = 54W. 침대 4m / 천장 3.7m 모두 5m 미만 — 단일 급전 OK. DR 1로 묶어 같이 디밍 (개별 제어 필요 없으면 1 DR 충분). SMPS 100W ×1 (54% 부하)." } },
