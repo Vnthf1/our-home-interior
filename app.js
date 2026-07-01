@@ -1717,8 +1717,18 @@
       const note = bestOffer ? (bestOffer.note || "") : "견적 미정";
       return { name: f.name, qty: f.qty || 1, price: price, vendor: vendor, note: note };
     });
-    const furnitureItems = pickBest((typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : []);
-    let furnitureTotal = 0; furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
+    // 가구 — 확정 업체(QUOTES furniture decided) 있으면 그 총액, 없으면 FURNITURE_QUOTE 최저가
+    const parseWon = (s) => { const m = String(s).match(/[0-9,]+/); return m ? parseInt(m[0].replace(/,/g, "")) : 0; };
+    const furnPhase = (typeof QUOTES !== "undefined") ? QUOTES.find((q) => q.phase === "furniture") : null;
+    const furnDecided = furnPhase ? (furnPhase.candidates || []).find((c) => c.status === "decided") : null;
+    let furnitureItems, furnitureTotal;
+    if (furnDecided) {
+      furnitureTotal = parseWon(furnDecided.price);
+      furnitureItems = [{ name: (furnDecided.name || "가구") + " (확정)", qty: 1, price: furnitureTotal, vendor: furnDecided.company || "", note: furnDecided.price || "" }];
+    } else {
+      furnitureItems = pickBest((typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : []);
+      furnitureTotal = 0; furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
+    }
     // 가전 — 삼성 일괄 확정·구매완료 (QUOTE_SUMMARY '가전 (전체)') 한 줄로
     const applianceItems = applianceSrc ? [{ name: "삼성 가전 일괄 (확정·구매완료)", qty: 1, price: applianceConfirmed, vendor: applianceSrc.company || "삼성", note: applianceSrc.note || "" }] : [];
     const applianceTotal = applianceConfirmed;
@@ -1928,7 +1938,7 @@
         '<div class="tq-subtotal lt-price">자재 합계: <b>' + won(materialTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">4. 가구 견적 <span class="lt-quote-sub">(가구 견적 요청서 9항목 · 영림 인천갤러리 매칭)</span></h3>' +
+        '<h3 class="lt-quote-h">4. 가구 견적 <span class="lt-quote-sub">' + (furnDecided ? '(✅ 확정 — ' + esc(furnDecided.name || '') + ')' : '(가구 견적 요청서 9항목 · 영림 인천갤러리 매칭)') + '</span></h3>' +
         '<div class="lt-tbl-wrap"><table class="lt-quote-tbl">' +
           '<thead><tr><th>가구</th><th class="num">수량</th><th class="num lt-price">단가</th><th class="num lt-price">합계</th><th>업체·메모</th></tr></thead>' +
           '<tbody>' +
