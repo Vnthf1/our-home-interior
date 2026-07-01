@@ -207,20 +207,19 @@ const CONTACTS = [
  *  - 맨 아래 합계는 자동 계산(숫자 칸 합).
  * ------------------------------------------------------------ */
 const QUOTE_SUMMARY = [
-  { phase: "입주민 동의", company: "셀프 진행", price: 330000, deposit: 80000, final: null, note: "동의 선물 + 엘베 사용비 25만 포함" },
-  { phase: "철거·설비·방수", company: "벨류연구소", price: 8385000, deposit: 4037500, final: null, note: "보양·설비·방수 일괄" },
+  { phase: "입주민 동의", company: "셀프 진행", price: 330000, deposit: 330000, final: 330000, note: "✅ 완납 — 동의 선물 8만 + 엘베 사용료 25만" },
+  { phase: "철거·설비·방수", company: "벨류연구소", price: 8385000, deposit: 5537500, final: null, note: "보양·설비·방수 일괄 · 선입금 553.75만 (추가 150만 입금)" },
   { phase: "전기", company: "하린 전기조명", price: 4400000, deposit: 300000, final: null, note: "VAT 포함" },
   { phase: "전열교환기", company: "클린코퍼레이션", price: 5600000, deposit: 1000000, final: null, note: "THE650-200 환기 · VAT 포함" },
   { phase: "가전 (전체)", company: "삼성 (영림 인천갤러리)", price: 15145087, deposit: 15145087, final: 15145087, note: "✅ 완료 — 인덕션·식세기·오븐·냉장고·세탁기·건조기·로봇청소기·사운드바·정수기·85인치 TV·에어컨 일괄. 체감가 15,145,087원 (결제 31,211,000 → 캐시백·상품권 차감)" },
-  { phase: "에어컨 (선작업)", company: "", price: 400000, deposit: 400000, final: 400000, note: "에어컨 설치 전 선작업비 — 완납" },
   { phase: "목공", company: "국선디자인", price: 10100000, priceText: "1,010~1,065만 (가견적)", deposit: null, final: null, note: "자재+인건비, VAT 별도" },
   { phase: "타일", company: "최반장", price: 3200000, deposit: null, final: null, note: "" },
   { phase: "도기", company: "(별도)", price: 450000, deposit: null, final: null, note: "" },
   { phase: "천장", company: "", price: 950000, deposit: null, final: null, note: "무광 SMC" },
-  { phase: "도배", company: "신한벽지", price: 3952000, deposit: null, final: null, note: "디아망 + 초배 띄움 포함" },
+  { phase: "도배", company: "신한벽지", price: 3952000, deposit: 300000, final: null, note: "디아망 + 초배 띄움 포함 · 선입금 30만" },
   { phase: "장판", company: "대동벽지", price: 3500000, deposit: 300000, final: null, note: "온누리 175만 + 계약금 30만" },
   { phase: "샷시", company: "올바른 창호", price: 4400000, deposit: 2400000, final: null, note: "VAT 포함 · 선입금 240만 · 작업 7/6" },
-  { phase: "이사", company: "로젠이사", price: 2480000, deposit: 100000, final: null, note: "이사 200만 + 보관 48만" },
+  { phase: "이사", company: "로젠이사", price: 2480000, deposit: 1380000, final: null, note: "이사 200만 + 보관 48만 · 선입금 138만" },
   { phase: "임시거주", company: "자리톡 (예약)", price: 2513500, deposit: 2513500, final: 2513500, note: "6.28~8.14 거주 · 완납 완료 (1,964,000 + 549,500)" },
   { phase: "화재/누수 보험", company: "", price: null, deposit: null, final: null, note: "가격 미정" },
   { phase: "찜질방", company: "", price: 10000000, deposit: null, final: null, note: "공사 기간 대안 거주 — 가견적" },
@@ -855,13 +854,11 @@ const QUOTES = [
       {
         name: "에어컨 (선작업)", company: "", phone: "", price: "400,000원 (완납)",
         status: "decided",
-        scope: "✅ 확정 — 에어컨 설치 전 선작업비. ※ 에어컨 본체는 삼성 가전 일괄(영림) 구매에 포함됨.",
-        summary: "✅ 확정 — 선작업 40만원 완납. (에어컨 본체는 가전 일괄에 포함)",
-        items: [
-          { label: "에어컨 선작업", amount: "400,000원" },
-        ],
+        scope: "에어컨 본체는 삼성 가전 일괄(영림) 구매에 포함됨. 별도 선작업비 미발생.",
+        summary: "선작업비 실제 지출 없음 (에어컨 본체는 가전 일괄에 포함).",
+        items: [],
         files: [],
-        note: "✅ 에어컨 선작업 완납. 본체(550만)는 삼성 가전 일괄 구매(영림 인천갤러리, 체감가 15,145,087원)에 포함되어 별도 계산하지 않음.",
+        note: "에어컨 선작업비 40만원은 실제 지출되지 않음(취소). 본체(550만)는 삼성 가전 일괄 구매에 포함되어 별도 계산 안 함.",
       },
       {
         name: "에어윈프로", company: "㈜에어윈프로", phone: "1577-7927 / 010-2657-4140",
@@ -1015,9 +1012,9 @@ const QUOTES = [
     candidates: [
       {
         name: "싱크 삼형제 — 가구", company: "", phone: "", price: "23,661,200원",
-        status: "received",
-        scope: "가구 통합 견적 (목재 18T LPM 내장재, 외장재 MDF 내지문 PET 마감). 마감재·서랍 추가·블룸서랍 별도. 철거·조명 제외. 종로구.",
-        summary: "가구 통합 견적 = 23,661,200원 (VAT 별도). 견적금액 = 공급가액. 유효기간 견적일로부터 10일.",
+        status: "decided",
+        scope: "✅ 확정 — 가구 통합 (목재 18T LPM 내장재, 외장재 MDF 내지문 PET 마감). 마감재·서랍 추가·블룸서랍 별도. 철거·조명 제외. 종로구.",
+        summary: "✅ 가구 확정 — 싱크 삼형제. 통합 견적 23,661,200원 (VAT 별도). 계약금 20만원 선입금 완료.",
         items: [
           { label: "하부장 W1900 (예림 우드)", amount: "722,000원" },
           { label: "상부장 W1900", amount: "미정" },
