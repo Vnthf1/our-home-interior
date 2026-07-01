@@ -42,10 +42,10 @@
     "입주민 동의": "consent",
     "보양": "demolition",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
-    "샷시": "window", "샷시 (실측)": "window", "설비": "demolition",
-    "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
+    "샷시": "window", "샷시 (실측)": "window", "설비": "demolition", "설비 (미정)": "demolition",
+    "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
-    "목공 (방음)": "carpentry",
+    "목공": "carpentry",
     "타일": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile",
     "타일 줄눈": "tile", "줄눈": "tile",
     "세라믹 (실측)": "ceramic", "세라믹·안방세면대 설치": "ceramic", "세라믹": "ceramic",
@@ -2835,10 +2835,10 @@
         <h1 class="pg-h">📢 공사 안내문</h1>
         <p class="pg-lead">안녕하세요. 아래와 같이 세대 내부 인테리어 공사를 진행합니다. 입주민 여러분께 소음·분진 등 불편을 드리는 점 양해 부탁드립니다.</p>
         <table class="pg-notice-t"><tbody>
-          <tr><td class="r">공사 세대</td><td><span class="pg-unit bl-fill">${esc(unit)}</span></td></tr>
+          <tr><td class="r">공사 세대</td><td><span class="pg-unit">${esc(unit)}</span></td></tr>
           <tr><td class="r">공사 기간</td><td>${esc(period)}</td></tr>
           <tr><td class="r">작업 시간</td><td>평일 09:00 ~ 17:00 (주말·공휴일 미시공)</td></tr>
-          <tr><td class="r">소음 집중일</td><td>철거 7/1~3 · 목공 7/13~15 · 타일 7/21~23</td></tr>
+          <tr><td class="r">소음 집중일</td><td>철거 7/1~6 · 전기·목공 7/7~16 · 타일 7/20~24</td></tr>
           <tr><td class="r">현장 연락처</td><td>010-4028-0925</td></tr>
         </tbody></table>
         <p class="pg-foot2">엘리베이터·복도 사용에 양해 부탁드리며, 최대한 빠르고 깨끗하게 마치겠습니다. 감사합니다.</p></div>`;
