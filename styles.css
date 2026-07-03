@@ -588,9 +588,11 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 
 /* 본문 행 — 한 줄 유지(가로스크롤), 두 줄로 안 끊김 */
 .tabulator-row{background:var(--card);border-bottom:1px solid #f1efe9;min-height:54px;height:auto!important;display:flex!important;flex-wrap:nowrap!important;transition:background .12s}
-.tabulator-row:hover{background:#f6f1ea}
+.tabulator-row:hover,
+.tabulator-row.tabulator-selectable:hover{background:#f6f1ea}
 .tabulator-row.tabulator-row-even{background:#fdfcfa}
-.tabulator-row.tabulator-row-even:hover{background:#f6f1ea}
+.tabulator-row.tabulator-row-even:hover,
+.tabulator-row.tabulator-selectable.tabulator-row-even:hover{background:#f6f1ea}
 .tabulator-row .tabulator-cell{padding:8px 10px;border-right:1px solid #f1efe9;font-size:13px;color:var(--ink);display:flex;align-items:center;background:transparent;box-sizing:border-box;flex-shrink:0;white-space:nowrap}
 .tabulator-row .tabulator-cell:last-of-type{border-right:none}
 .tabulator-row.t-expandable{cursor:pointer}

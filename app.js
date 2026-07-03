@@ -561,7 +561,7 @@
     const won = (v) => (v == null || v === "") ? "" : "₩" + Number(v).toLocaleString("ko-KR");
 
     // 공정만 (가전·임시거주·찜질방·화재/누수 보험 제외) — 상단 pill + Tabulator 표 공용
-    const EXCLUDE = { "가전 (전체)": 1, "임시거주": 1, "찜질방": 1, "화재/누수 보험": 1 };
+    const EXCLUDE = { "가전 (전체)": 1, "임시거주": 1, "찜질방": 1, "화재/누수 보험": 1, "이사": 1 };
     const procRows = QUOTE_SUMMARY.filter((r) => !EXCLUDE[r.phase]);
 
     // 상단 합산 pill (공정만) — 실제 시공비 감 잡기용
@@ -1692,7 +1692,7 @@
     const won = (v) => "₩" + Math.round(v).toLocaleString("ko-KR");
 
     // 1) 공정 견적 vs 5) 기타잡비 분리
-    const ETC_PHASES = { "입주민 동의": 1, "임시거주": 1, "화재/누수 보험": 1, "찜질방": 1 };
+    const ETC_PHASES = { "입주민 동의": 1, "임시거주": 1, "화재/누수 보험": 1, "찜질방": 1, "이사": 1 };
     const procRows = [];
     const etcRows = [];
     let procTotal = 0;
@@ -2021,7 +2021,7 @@
         '<div class="tq-subtotal lt-price">가전 합계: <b>' + won(applianceTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">6. 기타잡비 <span class="lt-quote-sub">(입주민 동의·임시거주·찜질방·화재/누수 보험)</span></h3>' +
+        '<h3 class="lt-quote-h">6. 기타잡비 <span class="lt-quote-sub">(입주민 동의·이사·임시거주·찜질방·화재/누수 보험)</span></h3>' +
         etcQuoteHTML +
         '<div class="tq-subtotal lt-price">기타잡비 합계: <b>' + won(etcTotal) + '</b></div>' +
       '</section>';
