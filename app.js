@@ -559,6 +559,32 @@
     const el = $("quote-summary"); if (!el || typeof QUOTE_SUMMARY === "undefined") return;
     if (typeof Tabulator === "undefined") { el.innerHTML = `<div class="stub">표 라이브러리 로딩 실패 — 네트워크 확인</div>`; return; }
     const won = (v) => (v == null || v === "") ? "" : "₩" + Number(v).toLocaleString("ko-KR");
+
+    // 공정만 (가전·임시거주·찜질방·화재/누수 보험 제외) — 상단 pill + Tabulator 표 공용
+    const EXCLUDE = { "가전 (전체)": 1, "임시거주": 1, "찜질방": 1, "화재/누수 보험": 1 };
+    const procRows = QUOTE_SUMMARY.filter((r) => !EXCLUDE[r.phase]);
+
+    // 상단 합산 pill (공정만) — 실제 시공비 감 잡기용
+    const topEl = $("quote-summary-top");
+    if (topEl) {
+      let quoteSum = 0, depositSum = 0, paidFinal = 0, remainSum = 0, unpaidN = 0;
+      procRows.forEach((r) => {
+        const q = Number(r.price) || 0;
+        const d = Number(r.deposit) || 0;
+        const f = Number(r.final) || 0;
+        quoteSum += q; depositSum += d;
+        if (f > 0) { paidFinal += f; }
+        else if (q > 0) { unpaidN++; remainSum += Math.max(q - d, 0); }
+      });
+      topEl.innerHTML = `
+        <div class="qs-top-grid">
+          <div class="qs-top-pill qs-top-total"><span class="lbl">총 견적</span><span class="val">${won(quoteSum)}</span><span class="sub">공정만 · 가전·임시거주·보험·찜질방 제외</span></div>
+          <div class="qs-top-pill qs-top-paid"><span class="lbl">완납 합계</span><span class="val">${won(paidFinal)}</span><span class="sub">final 확정</span></div>
+          <div class="qs-top-pill qs-top-deposit"><span class="lbl">선입금</span><span class="val">${won(depositSum)}</span><span class="sub">진행 중 공정</span></div>
+          <div class="qs-top-pill qs-top-remain"><span class="lbl">잔금 (미납)</span><span class="val">${won(remainSum)}</span><span class="sub">${unpaidN}개 공정</span></div>
+        </div>`;
+    }
+
     const moneyCol = (title, field) => ({
       title, field, hozAlign: "right", headerHozAlign: "right", headerSort: false, width: 110,
       formatter: (cell) => {
@@ -571,7 +597,7 @@
       bottomCalcFormatter: (cell) => { const v = cell.getValue(); return v ? `<b>${won(v)}</b>` : ""; },
     });
     new Tabulator("#quote-summary", {
-      data: QUOTE_SUMMARY.slice(),
+      data: procRows.slice(),
       layout: "fitColumns",
       height: "auto",
       columns: [
@@ -1978,7 +2004,7 @@
         '<div class="tq-subtotal lt-price">가전 합계: <b>' + won(applianceTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">6. 기타잡비 <span class="lt-quote-sub">(입주민 동의·임시거주·화재/누수 보험)</span></h3>' +
+        '<h3 class="lt-quote-h">6. 기타잡비 <span class="lt-quote-sub">(입주민 동의·임시거주·찜질방·화재/누수 보험)</span></h3>' +
         etcQuoteHTML +
         '<div class="tq-subtotal lt-price">기타잡비 합계: <b>' + won(etcTotal) + '</b></div>' +
       '</section>';
@@ -2194,14 +2220,17 @@
       const cs = it.candidates || [];
       const candCount = cs.length;
       const offerCount = cs.reduce((n, c) => n + (c.offers||[]).length, 0);
-      // 구매처 컬럼 — 실제 구매처/판매처(vendor)만. 용도·일반 메모는 넣지 않음
-      let note = "";
-      if (it.status === "bought" || it.status === "ordered") note = (it.purchased && it.purchased.vendor) || "";
-      else if (it.status === "decided") {
-        // 확정 후보의 첫 offer vendor
-        note = (dc && dc.offers && dc.offers[0] && dc.offers[0].vendor) || "";
+      // 구매처 컬럼 — 타일 외 전부 '콩타일'. it.store 로 개별 지정 가능. 타일은 기존 vendor 로직 유지.
+      let note = it.store || "";
+      if (!note) {
+        if (/타일/.test(it.category || "")) {
+          if (it.status === "bought" || it.status === "ordered") note = (it.purchased && it.purchased.vendor) || "";
+          else if (it.status === "decided") note = (dc && dc.offers && dc.offers[0] && dc.offers[0].vendor) || "";
+          else if (cs.length === 1 && (cs[0].offers || []).length === 1) note = cs[0].offers[0].vendor || "";
+        } else {
+          note = "콩타일";
+        }
       }
-      else if (cs.length === 1 && (cs[0].offers||[]).length === 1) note = cs[0].offers[0].vendor || "";
       // 품명(parent): 단일 후보 / 확정 / 발주·구매면 채움. 다중 후보면 비움(자식 행에서 표시)
       let prodName = "";
       if ((it.status === "decided" || it.status === "ordered" || it.status === "bought") && it.decided) prodName = it.decided;
@@ -2851,6 +2880,7 @@
           <tr><td class="r">소음 집중일</td><td>철거 7/1~6 · 전기·목공 7/7~16 · 타일 7/20~24</td></tr>
           <tr><td class="r">현장 연락처</td><td>010-4028-0925</td></tr>
         </tbody></table>
+        <p class="pg-caveat">※ 상기 공사 일정은 현장 상황·자재 수급·기상 등 사정에 따라 앞뒤로 조정될 수 있으며, 예외적인 사유(긴급 보수·검사 등)로 소음이 발생할 수 있는 점 양해 부탁드립니다. 변경 시 별도 안내드리겠습니다.</p>
         <p class="pg-foot2">엘리베이터·복도 사용에 양해 부탁드리며, 최대한 빠르고 깨끗하게 마치겠습니다. 감사합니다.</p></div>`;
     const labelSheet = (it) => `<div class="pg-label">
         <div class="pg-mark">${esc(it.mark || "")}</div><div class="pg-big">${esc(it.big)}</div>

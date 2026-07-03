@@ -179,6 +179,17 @@ ul.items li::before{content:"";position:absolute;left:6px;top:13px;width:6px;hei
 /* 확정 공정 비용 요약 표 — 옅은 회색 테두리 · 미니멀 */
 .qs-title{font-size:17px;font-weight:800;margin:4px 0 10px}
 .qs-cap{font-size:12px;color:var(--muted);margin:8px 0 22px}
+#quote-summary-top{margin:6px 0 14px}
+.qs-top-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.qs-top-pill{background:var(--card);border:1px solid #ece9e3;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;box-shadow:0 1px 3px rgba(60,50,40,.05)}
+.qs-top-pill .lbl{font-size:12px;color:var(--muted);font-weight:600}
+.qs-top-pill .val{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.qs-top-pill .sub{font-size:11px;color:var(--muted)}
+.qs-top-total{background:var(--accent-soft);border-color:var(--accent)}
+.qs-top-total .val{color:var(--accent)}
+.qs-top-paid .val{color:var(--done)}
+.qs-top-deposit .val{color:var(--info)}
+.qs-top-remain .val{color:var(--warn)}
 #quote-summary{margin-bottom:8px}
 #quote-summary .qs-sub{font-size:12px;color:var(--muted);line-height:1.35}
 #quote-summary .qs-approx{color:var(--accent);font-weight:600}
@@ -998,6 +1009,7 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
 .pg-notice-t td{ border:1.5px solid #000; padding:4mm; }
 .pg-notice-t .r{ font-weight:800; width:36mm; background:#eee; white-space:nowrap; }
 .pg-foot2{ font-size:6mm; line-height:1.7; margin-top:7mm; }
+.pg-caveat{ font-size:4.5mm; line-height:1.6; margin-top:6mm; color:#333; padding:3mm 4mm; background:#f5f5f5; border-left:1.5mm solid #666; }
 
 /* 툴바 (화면 전용) */
 .print-toolbar{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
