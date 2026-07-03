@@ -1813,8 +1813,25 @@
     if (typeof MATERIALS !== "undefined") {
       MATERIALS.forEach((g) => {
         (g.items || []).forEach((it) => {
-          const cand = (it.candidates || []).find((c) => (c.offers || []).some((o) => o && o.price));
           const qty = it.qty || 1;
+          // 발주·구매완료 → 실결제액(VAT 포함·할인 반영) 우선. 실제 나가는 돈으로 집계.
+          if ((it.status === "ordered" || it.status === "bought") && it.purchased && it.purchased.total != null) {
+            const total = it.purchased.total;
+            materialTotal += total;
+            materialItems.push({
+              group: g.group,
+              label: it.category + (it.decided ? " · " + it.decided : ""),
+              qty: qty,
+              unit: it.purchased.unitPrice || null,
+              total: total,
+              vendor: it.purchased.vendor || "",
+              note: "실결제 · VAT 포함" + (it.note ? " · " + it.note : ""),
+              isEstimated: false,
+              isPaid: true,
+            });
+            return;
+          }
+          const cand = (it.candidates || []).find((c) => (c.offers || []).some((o) => o && o.price));
           if (cand) {
             const offer = cand.offers.find((o) => o && o.price);
             const total = offer.price * qty;
