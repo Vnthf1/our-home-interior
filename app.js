@@ -2220,16 +2220,12 @@
       const cs = it.candidates || [];
       const candCount = cs.length;
       const offerCount = cs.reduce((n, c) => n + (c.offers||[]).length, 0);
-      // 구매처 컬럼 — 타일 외 전부 '콩타일'. it.store 로 개별 지정 가능. 타일은 기존 vendor 로직 유지.
+      // 구매처 컬럼 — 타일=용타일 · 하드웨어·기타=별도(콩타일 아님) · 그 외(주방·욕실)=콩타일. it.store 우선.
       let note = it.store || "";
       if (!note) {
-        if (/타일/.test(it.category || "")) {
-          if (it.status === "bought" || it.status === "ordered") note = (it.purchased && it.purchased.vendor) || "";
-          else if (it.status === "decided") note = (dc && dc.offers && dc.offers[0] && dc.offers[0].vendor) || "";
-          else if (cs.length === 1 && (cs[0].offers || []).length === 1) note = cs[0].offers[0].vendor || "";
-        } else {
-          note = "콩타일";
-        }
+        if (/타일/.test(it.category || "")) note = "용타일";
+        else if (g.group === "하드웨어·기타") note = (it.purchased && it.purchased.vendor) || "";
+        else note = "콩타일";
       }
       // 품명(parent): 단일 후보 / 확정 / 발주·구매면 채움. 다중 후보면 비움(자식 행에서 표시)
       let prodName = "";
