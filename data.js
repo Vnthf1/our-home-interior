@@ -1508,7 +1508,7 @@ const MATERIALS = [
         note: "",
       },
       {
-        category: "유가 — 트렌치 65Ø", qty: 2, status: "ordered", purpose: "", store: "대일도기사",
+        category: "유가 — 트렌치 65Ø", qty: 2, status: "bought", purpose: "", store: "대일도기사",
         candidates: [
           { name: "라우체 HJK036F 300×110mm (66Φ)",
             offers: [{ vendor: "대일도기사", price: 42900, note: "공급가" }] },
@@ -1519,7 +1519,7 @@ const MATERIALS = [
         note: "",
       },
       {
-        category: "유가 — S 800 사이드", qty: 1, status: "ordered", purpose: "", store: "대일도기사",
+        category: "유가 — S 800 사이드", qty: 1, status: "bought", purpose: "", store: "대일도기사",
         candidates: [
           { name: "도무스 S 800 사이드",
             offers: [{ vendor: "대일도기사", price: 69000, note: "공급가" }] },
@@ -1530,7 +1530,7 @@ const MATERIALS = [
         note: "",
       },
       {
-        category: "유가 — 트렌치 1500", qty: 1, status: "ordered", purpose: "", store: "대일도기사",
+        category: "유가 — 트렌치 1500", qty: 1, status: "bought", purpose: "", store: "대일도기사",
         candidates: [
           { name: "도무스 S 1500 센터",
             offers: [{ vendor: "대일도기사", price: 135000, note: "공급가" }] },
