@@ -1627,14 +1627,14 @@ const MATERIALS = [
       { category: "자동 빨래건조대",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       { category: "액자레일",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
       {
-        category: "매트리스", qty: 2, status: "looking", purpose: "안방 퀸 × 2",
+        category: "매트리스", qty: 2, status: "looking", purpose: "안방 퀸 × 2", store: "네이버",
         candidates: [
-          { name: "기본 매트리스", offers: [{ vendor: "", price: 750000, note: "1개 기준" }] },
+          { name: "기본 매트리스", offers: [{ vendor: "네이버", price: 750000, note: "1개 기준" }] },
         ],
         decided: null, purchased: null, note: "750,000원 × 2개 = 1,500,000원",
       },
       { category: "후드",            qty: 1, status: "pending", purpose: "주방", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "실링팬",          qty: 2, status: "bought", purpose: "", candidates: [{ name: "루씨에어 코타라", offers: [{ vendor: "", price: 550000, note: "구매완료 · 2개" }] }], decided: "루씨에어 코타라", purchased: { unitPrice: 550000, qty: 2, total: 1100000 }, note: "" },
+      { category: "실링팬",          qty: 2, status: "bought", purpose: "", store: "네이버", candidates: [{ name: "루씨에어 코타라", offers: [{ vendor: "네이버", price: 550000, note: "구매완료 · 2개" }] }], decided: "루씨에어 코타라", purchased: { unitPrice: 550000, qty: 2, total: 1100000, vendor: "네이버" }, note: "" },
     ],
   },
 ];
