@@ -1028,6 +1028,15 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
 .wo-check li{ font-size:4.4mm; line-height:1.6; padding:1.5mm 0 1.5mm 8mm; position:relative; border-bottom:1px dashed #d8d5cd; break-inside:avoid; }
 .wo-check li::before{ content:"☐"; position:absolute; left:0; font-size:5mm; font-weight:700; top:0.8mm; }
 .wo-check li:last-child{ border-bottom:none; }
+/* 회로도 시트 */
+.wo-diag-caption{ font-size:4mm; margin:2mm 0 3mm; padding:2mm 3mm; background:#f0eee9; border-left:2mm solid #333; }
+.wo-diag-note{ font-size:3.6mm; line-height:1.6; color:#555; margin:2mm 0 4mm; padding:2.5mm 3mm; background:#fff7d6; border:1px solid #d4a017; border-radius:1.5mm; }
+.wo-diag-wrap{ width:100%; margin:3mm 0 4mm; border:1px solid #ccc; padding:2mm; background:#fdfcf8; }
+.wo-diag-svg{ width:100%; height:auto; display:block; }
+.wo-diag-list{ list-style:none; padding:0; margin:3mm 0; }
+.wo-diag-list li{ font-size:3.8mm; line-height:1.6; padding:1.5mm 0 1.5mm 6mm; position:relative; border-bottom:1px dashed #d8d5cd; }
+.wo-diag-list li::before{ content:"→"; position:absolute; left:0; font-weight:800; color:#666; }
+.wo-diag-list li:last-child{ border-bottom:none; }
 .wo-cg-h{ font-size:5mm; font-weight:800; margin:0 0 1.5mm; color:#333; }
 .wo-cg-meta{ display:flex; gap:6mm; font-size:3.5mm; padding:1.2mm 2mm; background:#eee; border-radius:1mm; margin-bottom:1.5mm; flex-wrap:wrap; }
 .wo-cg-meta b{ font-weight:800; }
