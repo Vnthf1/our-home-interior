@@ -1040,6 +1040,10 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
 .wo-diag-note{ font-size:3.6mm; line-height:1.6; color:#555; margin:2mm 0 4mm; padding:2.5mm 3mm; background:#fff7d6; border:1px solid #d4a017; border-radius:1.5mm; }
 .wo-diag-wrap{ width:100%; margin:3mm 0 4mm; border:1px solid #ccc; padding:2mm; background:#fdfcf8; }
 .wo-diag-svg{ width:100%; height:auto; display:block; }
+/* 회로도 시트 — A4 한 장에 맞게 SVG를 남은 높이에 맞춰 축소 (viewBox meet 스케일) */
+.wo-elec{ display:flex; flex-direction:column; min-height:0; }
+.wo-elec .wo-diag-wrap{ flex:1 1 auto; min-height:0; margin-bottom:0; }
+.wo-elec .wo-diag-svg{ width:100%; height:100%; }
 .wo-diag-list{ list-style:none; padding:0; margin:3mm 0; }
 .wo-diag-list li{ font-size:3.8mm; line-height:1.6; padding:1.5mm 0 1.5mm 6mm; position:relative; border-bottom:1px dashed #d8d5cd; }
 .wo-diag-list li::before{ content:"→"; position:absolute; left:0; font-weight:800; color:#666; }
