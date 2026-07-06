@@ -3178,11 +3178,20 @@
         `<span><span class="dot" style="background:${r.color}"></span>${esc(r.cid)} · ${esc(r.desc)}${r.loadTotalW ? " (" + esc(r.loadTotalW) + ")" : ""}</span>`
       ).join("");
 
-      // 6. SVG 크기 · 행 간격
-      const ROW_H = 130, SW_X = 30, SW_W = 150;
-      const N = rowData.length;
+      // 6. 행 레이아웃 — 부하(병렬) 개수에 따라 행 높이 가변 → 세로 겹침 방지
+      const SW_X = 30, SW_W = 150;
+      const ITEM_H = 40, GAP = 8, ROW_MIN = 120, ROW_PAD = 40;
+      let cursorY = 100;
+      rowData.forEach((r) => {
+        const loadN = Math.max(1, r.loadCount);
+        const stackH = loadN * ITEM_H + (loadN - 1) * GAP;
+        r.rowTop = cursorY;
+        r.rowH = Math.max(ROW_MIN, stackH + ROW_PAD);
+        r.cy = cursorY + r.rowH / 2;
+        cursorY += r.rowH;
+      });
       const svgW = 1100;
-      const svgH = Math.max(500, 100 + N * ROW_H + 80);
+      const svgH = Math.max(500, cursorY + 80);
 
       // 7. 물리 스위치 박스 (좌측) — 각 버튼 Y는 해당 회로 row의 cy와 정확히 일치
       const swGroups = {};
@@ -3194,19 +3203,12 @@
           const b = bm ? bm[1] : "?";
           (byBtn[b] = byBtn[b] || []).push(r);
         });
-        // 각 버튼의 Y범위 = 해당 버튼이 제어하는 row(들)의 y0~y0+ROW_H 통합
+        // 각 버튼의 Y범위 = 해당 버튼이 제어하는 row(들)의 rowTop~rowTop+rowH 통합
         const buttonInfo = Object.entries(byBtn).map(([btn, rs]) => {
-          const rowIdxs = rs.map((r) => r.rowIdx);
-          const minIdx = Math.min(...rowIdxs);
-          const maxIdx = Math.max(...rowIdxs);
-          const btnTopY = 100 + minIdx * ROW_H + 15;
-          const btnBottomY = 100 + maxIdx * ROW_H + ROW_H - 15;
+          const btnTopY = Math.min(...rs.map((r) => r.rowTop)) + 15;
+          const btnBottomY = Math.max(...rs.map((r) => r.rowTop + r.rowH)) - 15;
           const btnCenterY = (btnTopY + btnBottomY) / 2;
-          rs.forEach((r) => {
-            // 각 row에 대해 그 row의 cy에 맞춘 anchor (버튼 안에서 세로로 분포)
-            const rowCY = 100 + r.rowIdx * ROW_H + 45;
-            r.btnCY = rowCY;
-          });
+          rs.forEach((r) => { r.btnCY = r.cy; });
           return { btn, rs, btnTopY, btnBottomY, btnCenterY };
         });
         const swTopY = Math.min(...buttonInfo.map((b) => b.btnTopY)) - 45;
@@ -3228,11 +3230,11 @@
 
       // 8. 회로 행 (SMPS+DR 박스, Zigbee 라인, 부하 병렬)
       const rowSvg = rowData.map((r, i) => {
-        const y0 = 100 + i * ROW_H;
-        const cy = y0 + 45;
+        const y0 = r.rowTop;
+        const cy = r.cy;
         const boxX = 340, boxW = 260;
         const loadX = 830, loadW = 220;
-        const loadN = r.loadCount;
+        const loadN = Math.max(1, r.loadCount);
         const itemH = 40, gap = 8;
         const totalH = loadN * itemH + (loadN - 1) * gap;
         const loadY0 = cy - totalH / 2;
@@ -3266,9 +3268,9 @@
         // SMPS+DR 박스 (DC일 때만)
         let midBox = "";
         if (r.isDC && r.midLabel) {
-          midBox = `<rect x="${boxX}" y="${y0+20}" width="${boxW}" height="50" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
-            <text x="${boxX+boxW/2}" y="${y0+42}" text-anchor="middle" font-weight="800" font-size="12" fill="${r.color}">${esc(r.midLabel)}</text>
-            <text x="${boxX+boxW/2}" y="${y0+58}" text-anchor="middle" font-size="10" fill="#666">${esc(r.cid)} · ${esc(r.desc)}</text>`;
+          midBox = `<rect x="${boxX}" y="${cy-25}" width="${boxW}" height="50" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
+            <text x="${boxX+boxW/2}" y="${cy-3}" text-anchor="middle" font-weight="800" font-size="12" fill="${r.color}">${esc(r.midLabel)}</text>
+            <text x="${boxX+boxW/2}" y="${cy+13}" text-anchor="middle" font-size="10" fill="#666">${esc(r.cid)} · ${esc(r.desc)}</text>`;
         }
         // Zigbee wireless (DC만) — 점선(sparse dots)로 흑백에서도 구분
         let zigLine = "";
