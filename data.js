@@ -2233,6 +2233,7 @@ const PHASES = [
         items: [
           "천장 전체 철거 후 조성",
           "거실부·안방 우물천장 + 실링팬 타공 예정",
+          "후드·실링팬 천장 보강 (설치부 하지 보강)",
           "드레스룸(지금은 안방 옆방) 슬라이딩 도어 — 영림 히든슬라이딩 도어 시공, 안방 문 안쪽으로 당기기",
           { text: "안방 화장실 슬라이딩 도어", undecided: true },
           "문은 12mm or 9mm 문선으로",
@@ -2775,5 +2776,5 @@ const SIGNAGE = [
   { id: "wo-electric-light",  type: "workorder-electric-light",  copies: 1, title: "전기 · 조명 위치 도면" },
   { id: "wo-electric-outlet", type: "workorder-electric-outlet", copies: 1, title: "전기 · 콘센트·스위치·센서 위치 도면" },
   { id: "wo-electric-cable",  type: "workorder-electric-cable",  copies: 1, title: "전기 체크리스트" },
-  { id: "wo-electric-diag-LR1", type: "workorder-electric-diag-LR1", copies: 1, title: "전기 · 회로도 (거실 1번 · TV 옆 멀티등)" },
+  { id: "wo-electric-diag-LR1", type: "workorder-electric-diag-LR1", copies: 1, title: "전기 · 회로도 (거실 전체)" },
 ];

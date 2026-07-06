@@ -3071,98 +3071,144 @@
     };
     // 회로도 — 거실 1번 (LR-1) : TV 옆 멀티매입등 × 2
     const electricDiagramLR1Sheet = () => {
+      const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
+      // 미니 평면도 마커 (거실 4개 회로만)
+      const circuitColor = { "LR-1": "#3b82f6", "LR-2": "#10b981", "LR-3a": "#dc2626", "LR-3b": "#fb923c" };
+      const miniMk = fp ? (fp.items || []).filter((it) => it.layer === "light" && circuitColor[it.circuit]).map((it) => {
+        const c = circuitColor[it.circuit];
+        if (it.type === "box") {
+          return `<div class="wo-mm-box" style="left:${it.x}%;top:${it.y}%;width:${Math.max(it.w||0, 0.3)}%;height:${Math.max(it.h||0, 0.3)}%;border-color:${c};background:${c}55"></div>`;
+        }
+        return `<div class="wo-mm-pin" style="left:${it.x}%;top:${it.y}%;background:${c}"></div>`;
+      }).join("") : "";
+
       return `<div class="pg-doc wo wo-elec">
-        <h1 class="pg-h">⚡ 회로도 — 거실 3구 #1 (LR-1)</h1>
-        <p class="wo-diag-caption"><b>구성:</b> TV 옆 양쪽 멀티매입등 10구 × 2 · SMPS 100W ×1 · Aqara LED DR ×1 · 부하 40W</p>
-        <p class="wo-diag-note">
-          ⚠️ IoT 스위치는 <b>물리적으로 조명 배선에 물리지 않음</b>. 스위치는 자체 AC 전원(L/N + 중성선)만 벽 박스로 받고,
-          조명 제어 신호는 <b>Zigbee 무선</b>으로 Aqara 드라이버에 전달. 실제 조명 배선은 <b>분전반 → SMPS → DR → 등기구</b>로 이어지며,
-          SMPS·DR은 <b>부엌 상단 붙박이장 점검구</b>에 집중 설치.
-        </p>
+        <h1 class="pg-h">⚡ 거실 회로도</h1>
+        <div class="wo-mini-map">
+          <div class="wo-mm-crop">
+            <div class="wo-mm-scale">
+              ${fp ? `<img src="images/${esc(fp.image)}" class="wo-mm-img">` : ""}
+              ${miniMk}
+            </div>
+          </div>
+          <div class="wo-mm-legend">
+            <span><span class="dot" style="background:#3b82f6"></span>LR-1 · TV 옆 (10구 멀티 ×2)</span>
+            <span><span class="dot" style="background:#10b981"></span>LR-2 · 쇼파 뒤 (COB ×4)</span>
+            <span><span class="dot" style="background:#dc2626"></span>LR-3a · 우물천장 (Ultra 5M ×2)</span>
+            <span><span class="dot" style="background:#fb923c"></span>LR-3b · 커튼박스 (CCT 4m)</span>
+          </div>
+        </div>
         <div class="wo-diag-wrap">
-          <svg viewBox="0 0 940 380" xmlns="http://www.w3.org/2000/svg" class="wo-diag-svg">
+          <svg viewBox="0 0 1100 900" xmlns="http://www.w3.org/2000/svg" class="wo-diag-svg">
             <defs>
-              <marker id="arB" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#333"/></marker>
               <marker id="arG" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#0a8f2f"/></marker>
               <marker id="arR" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#c0392b"/></marker>
               <marker id="arZ" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><polygon points="0,0 10,5 0,10" fill="#0891b2"/></marker>
             </defs>
 
-            <!-- 분전반 -->
-            <rect x="20" y="270" width="140" height="60" rx="4" fill="#2c3e50" stroke="#2c3e50"/>
-            <text x="90" y="298" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">분전반</text>
-            <text x="90" y="317" text-anchor="middle" fill="#fff" font-size="11">AC 220V</text>
-
-            <!-- AC 스위치 급전 라인 -->
-            <path d="M 90 270 V 145 H 240" fill="none" stroke="#0a8f2f" stroke-width="1.8" marker-end="url(#arG)"/>
-            <text x="105" y="200" fill="#0a8f2f" font-size="11" font-weight="600">AC L·N·중성선</text>
-            <text x="105" y="215" fill="#0a8f2f" font-size="10">(스위치 자체 전원)</text>
-
-            <!-- AC SMPS 급전 라인 -->
-            <path d="M 90 330 V 380 H 500 V 245" fill="none" stroke="#0a8f2f" stroke-width="1.8" marker-end="url(#arG)"/>
-            <text x="270" y="395" fill="#0a8f2f" font-size="11" font-weight="600">AC L·N (SMPS 전원)</text>
-
-            <!-- 스위치 박스 -->
-            <rect x="240" y="90" width="170" height="110" rx="6" fill="#fff" stroke="#333" stroke-width="1.8"/>
-            <text x="325" y="115" text-anchor="middle" font-size="13" font-weight="800">스위치 (거실 3구)</text>
-            <text x="325" y="135" text-anchor="middle" font-size="11">#1 TV 옆</text>
-            <text x="325" y="153" text-anchor="middle" font-size="10.5" fill="#0891b2">Aqara H1 Pro (Zigbee)</text>
-            <rect x="255" y="165" width="30" height="22" fill="#fef3c7" stroke="#333"/>
-            <text x="270" y="181" text-anchor="middle" font-size="10" font-weight="700">L</text>
-            <rect x="285" y="165" width="30" height="22" fill="#dbeafe" stroke="#333"/>
-            <text x="300" y="181" text-anchor="middle" font-size="10" font-weight="700">N</text>
-            <text x="360" y="181" font-size="9" fill="#666">→ 자체 전원용</text>
-
-            <!-- 점검구 배경 -->
-            <rect x="450" y="60" width="240" height="220" rx="4" fill="#f4f2ec" stroke="#999" stroke-dasharray="5,3"/>
-            <text x="570" y="55" text-anchor="middle" font-size="11" font-weight="700" fill="#666">점검구 · 부엌 상단 붙박이장</text>
-
-            <!-- SMPS -->
-            <rect x="470" y="200" width="200" height="55" rx="4" fill="#fff" stroke="#333" stroke-width="1.5"/>
-            <text x="570" y="222" text-anchor="middle" font-size="12" font-weight="800">SMPS 100W (u100)</text>
-            <text x="570" y="240" text-anchor="middle" font-size="10">유니온 UP100S24W2L · AC→DC 24V</text>
-
-            <!-- DR -->
-            <rect x="470" y="90" width="200" height="55" rx="4" fill="#fff" stroke="#333" stroke-width="1.5"/>
-            <text x="570" y="112" text-anchor="middle" font-size="12" font-weight="800">Aqara LED 드라이버</text>
-            <text x="570" y="130" text-anchor="middle" font-size="10">#140 · Zigbee 수신 · DC PWM 제어</text>
-
-            <!-- DC 24V line SMPS → DR -->
-            <line x1="570" y1="200" x2="570" y2="145" stroke="#c0392b" stroke-width="2" marker-end="url(#arR)"/>
-            <text x="580" y="175" font-size="11" fill="#c0392b" font-weight="600">DC 24V (V+/−)</text>
-
-            <!-- Zigbee wireless -->
-            <path d="M 410 145 Q 440 90 470 108" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arZ)"/>
-            <text x="405" y="80" font-size="11" fill="#0891b2" font-weight="700">📶 Zigbee 무선</text>
-
-            <!-- 등기구 -->
-            <rect x="740" y="80" width="180" height="80" rx="6" fill="#fff" stroke="#333" stroke-width="1.8"/>
-            <text x="830" y="108" text-anchor="middle" font-size="12" font-weight="800">멀티매입등 10구</text>
-            <text x="830" y="127" text-anchor="middle" font-size="11">× 2개 (TV 좌·우)</text>
-            <text x="830" y="145" text-anchor="middle" font-size="10" fill="#666">multi10 #48 · 20W ×2 = 40W</text>
-
-            <!-- DC line DR → 등기구 -->
-            <line x1="670" y1="115" x2="740" y2="115" stroke="#c0392b" stroke-width="2" marker-end="url(#arR)"/>
-            <text x="678" y="107" font-size="10" fill="#c0392b" font-weight="600">DC 24V (V+/W/C)</text>
-
             <!-- 범례 -->
-            <g transform="translate(20, 30)">
-              <line x1="0" y1="0" x2="30" y2="0" stroke="#0a8f2f" stroke-width="2"/>
-              <text x="35" y="4" font-size="11">AC 220V (분전반→기기 전원)</text>
-              <line x1="200" y1="0" x2="230" y2="0" stroke="#c0392b" stroke-width="2"/>
-              <text x="235" y="4" font-size="11">DC 24V (SMPS→DR→조명)</text>
-              <line x1="400" y1="0" x2="430" y2="0" stroke="#0891b2" stroke-width="2" stroke-dasharray="4,3"/>
-              <text x="435" y="4" font-size="11" fill="#0891b2">Zigbee 무선 (스위치→DR)</text>
+            <g transform="translate(20, 25)" font-size="12">
+              <line x1="0" y1="0" x2="24" y2="0" stroke="#0a8f2f" stroke-width="2"/><text x="30" y="4">AC 220V</text>
+              <line x1="110" y1="0" x2="134" y2="0" stroke="#c0392b" stroke-width="2"/><text x="140" y="4">DC 24V</text>
+              <line x1="220" y1="0" x2="244" y2="0" stroke="#0891b2" stroke-width="2" stroke-dasharray="4,3"/><text x="250" y="4" fill="#0891b2">📶 Zigbee 무선</text>
+
+              <text x="620" y="4" font-weight="700" fill="#666">🔀 병렬 = 여러 조명이 DR 하나에 분기 결선</text>
             </g>
+
+            <!-- 분전반 (bottom-left) -->
+            <rect x="30" y="820" width="200" height="55" rx="4" fill="#2c3e50"/>
+            <text x="130" y="845" text-anchor="middle" fill="#fff" font-weight="700" font-size="13">분전반</text>
+            <text x="130" y="863" text-anchor="middle" fill="#fff" font-size="11">AC 220V</text>
+
+            <!-- 스위치 3구 (Aqara Zigbee) -->
+            <rect x="30" y="70" width="150" height="720" rx="6" fill="#fff" stroke="#333" stroke-width="1.8"/>
+            <text x="105" y="95" text-anchor="middle" font-weight="800" font-size="13">스위치 3구</text>
+            <text x="105" y="113" text-anchor="middle" font-size="10" fill="#0891b2">Aqara Zigbee</text>
+            <!-- 버튼 #1 -->
+            <rect x="45" y="130" width="120" height="140" rx="3" fill="#3b82f611" stroke="#3b82f6" stroke-width="1.5"/>
+            <text x="105" y="175" text-anchor="middle" font-weight="800" font-size="24" fill="#3b82f6">#1</text>
+            <text x="105" y="210" text-anchor="middle" font-size="11">TV 옆</text>
+            <text x="105" y="240" text-anchor="middle" font-size="10.5" fill="#3b82f6">→ LR-1</text>
+            <!-- 버튼 #2 -->
+            <rect x="45" y="290" width="120" height="140" rx="3" fill="#10b98111" stroke="#10b981" stroke-width="1.5"/>
+            <text x="105" y="335" text-anchor="middle" font-weight="800" font-size="24" fill="#10b981">#2</text>
+            <text x="105" y="370" text-anchor="middle" font-size="11">쇼파 뒤</text>
+            <text x="105" y="400" text-anchor="middle" font-size="10.5" fill="#10b981">→ LR-2</text>
+            <!-- 버튼 #3 (LR-3a + LR-3b 공유) -->
+            <rect x="45" y="450" width="120" height="330" rx="3" fill="#dc262611" stroke="#dc2626" stroke-width="1.5"/>
+            <text x="105" y="500" text-anchor="middle" font-weight="800" font-size="24" fill="#dc2626">#3</text>
+            <text x="105" y="530" text-anchor="middle" font-size="11">우물천장 + 커튼박스</text>
+            <text x="105" y="560" text-anchor="middle" font-size="10.5" fill="#dc2626">→ LR-3a · LR-3b</text>
+            <text x="105" y="585" text-anchor="middle" font-size="9" fill="#666">(4 DR 동시 제어)</text>
+
+            <!-- 스위치 자체 AC 급전 (분전반 → 스위치) -->
+            <path d="M 130 820 V 800 M 20 800 H 130 M 20 800 V 65 H 105 V 70" fill="none" stroke="#0a8f2f" stroke-width="1.8"/>
+            <text x="15" y="440" font-size="10" fill="#0a8f2f" transform="rotate(-90, 15, 440)">AC 220V (스위치 자체 전원)</text>
+
+            <!-- 점검구 (부엌 상단 붙박이장) 큰 배경 -->
+            <rect x="300" y="60" width="480" height="740" rx="6" fill="#f4f2ec" stroke="#999" stroke-dasharray="5,3"/>
+            <text x="540" y="52" text-anchor="middle" font-weight="800" font-size="12" fill="#555">📦 점검구 · 부엌 상단 붙박이장</text>
+
+            <!-- 점검구 AC 급전 (분전반 → 점검구 좌하) -->
+            <path d="M 230 850 H 320 V 90 H 340 V 70" fill="none" stroke="#0a8f2f" stroke-width="1.8"/>
+            <text x="270" y="875" font-size="10" fill="#0a8f2f">AC 220V (점검구 전원)</text>
+
+            ${
+              /* 회로 5행 정의 */
+              [
+                { y: 100, w: 100, label: "SMPS 100W + DR", model: "u100 · Aqara DR", color: "#3b82f6", zigY: 200, btnBtm: 270,
+                  loadX: 850, loadTitle: "멀티 10구", loadSub: "20W", loadCount: 2, loadTotalW: "40W" },
+                { y: 260, w: 100, label: "SMPS 100W + DR", model: "u100 · Aqara DR", color: "#10b981", zigY: 360, btnBtm: 430,
+                  loadX: 850, loadTitle: "COB 2인치", loadSub: "7W", loadCount: 4, loadTotalW: "28W" },
+                { y: 420, w: 200, label: "SMPS 200W + DR #1", model: "u200 · Aqara DR", color: "#dc2626", zigY: 520, btnBtm: 780,
+                  loadX: 850, loadTitle: "울트라 5M #1", loadSub: "100W", loadCount: 1, loadTotalW: "100W" },
+                { y: 560, w: 200, label: "SMPS 200W + DR #2", model: "u200 · Aqara DR", color: "#dc2626", zigY: 660, btnBtm: 780,
+                  loadX: 850, loadTitle: "울트라 5M #2", loadSub: "100W", loadCount: 1, loadTotalW: "100W" },
+                { y: 700, w: 100, label: "SMPS 100W + DR", model: "u100 · Aqara DR", color: "#fb923c", zigY: 800, btnBtm: 780,
+                  loadX: 850, loadTitle: "커튼박스 CCT", loadSub: "4m 28W", loadCount: 1, loadTotalW: "28W" },
+              ].map((r, i) => {
+                const cy = r.y + 30;
+                const boxX = 340, boxY = r.y, boxW = 260, boxH = 60;
+                // parallel branches
+                const loadN = r.loadCount;
+                const loadY0 = r.y - (loadN * 55 - 60) / 2;
+                let loadsSvg = "";
+                for (let k = 0; k < loadN; k++) {
+                  const ly = loadY0 + k * 55;
+                  loadsSvg += `<rect x="${r.loadX}" y="${ly}" width="150" height="42" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
+                    <text x="${r.loadX + 75}" y="${ly + 18}" text-anchor="middle" font-weight="700" font-size="11">${r.loadTitle}</text>
+                    <text x="${r.loadX + 75}" y="${ly + 34}" text-anchor="middle" font-size="10" fill="#666">${r.loadSub}${loadN > 1 ? " · #" + (k+1) : ""}</text>`;
+                }
+                // 분기 wires from DR to loads
+                let branchWires = "";
+                if (loadN === 1) {
+                  const ly = loadY0 + 21;
+                  branchWires = `<line x1="${boxX + boxW}" y1="${cy}" x2="${r.loadX}" y2="${ly}" stroke="#c0392b" stroke-width="1.8" marker-end="url(#arR)"/>`;
+                } else {
+                  // 첫 분기점
+                  const junctionX = 660;
+                  branchWires = `<line x1="${boxX + boxW}" y1="${cy}" x2="${junctionX}" y2="${cy}" stroke="#c0392b" stroke-width="1.8"/>
+                    <circle cx="${junctionX}" cy="${cy}" r="3.5" fill="#c0392b"/>
+                    <text x="${junctionX + 6}" y="${cy - 8}" font-size="9" fill="#c0392b" font-weight="700">🔀 병렬</text>`;
+                  for (let k = 0; k < loadN; k++) {
+                    const ly = loadY0 + k * 55 + 21;
+                    branchWires += `<path d="M ${junctionX} ${cy} V ${ly} H ${r.loadX}" fill="none" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arR)"/>`;
+                  }
+                }
+                return `
+                <!-- 회로 ${i+1} -->
+                <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
+                <text x="${boxX + boxW/2}" y="${boxY + 24}" text-anchor="middle" font-weight="800" font-size="12" fill="${r.color}">${esc(r.label)}</text>
+                <text x="${boxX + boxW/2}" y="${boxY + 42}" text-anchor="middle" font-size="10" fill="#666">${esc(r.model)} · 부하 ${esc(r.loadTotalW)}</text>
+                <!-- Zigbee (스위치 버튼 → DR) -->
+                <path d="M 165 ${r.zigY} Q 245 ${(r.zigY + cy)/2}, ${boxX} ${cy}" fill="none" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arZ)"/>
+                ${branchWires}
+                ${loadsSvg}
+                `;
+              }).join("")
+            }
           </svg>
         </div>
-        <ul class="wo-diag-list">
-          <li><b>스위치 배선</b>: 벽 스위치 박스에 AC 220V L·N + 중성선. 스위치 자체 전원용 (조명 부하 안 걸림).</li>
-          <li><b>SMPS 배선</b>: 분전반에서 부엌 붙박이장 점검구까지 AC 220V L·N 별도 급전.</li>
-          <li><b>DC 배선</b>: SMPS DC 24V → Aqara DR → 등기구. 3선(V+/W/C) 스트립 커넥터 or 단자대 결선.</li>
-          <li><b>무선 페어링</b>: 스위치와 DR은 Aqara 앱에서 Zigbee 페어링. 스위치 눌러 씬 발동 → DR 수신 → 조명 제어.</li>
-          <li><b>부하율</b>: 40W on SMPS 100W = 40% (넉넉), 40W on DR 144W(6A@24V) = 28% (넉넉).</li>
-        </ul>
       </div>`;
     };
     // 가구 계획도 — 평면도 + 가구 마커 (1장)
