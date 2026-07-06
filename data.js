@@ -2778,4 +2778,8 @@ const SIGNAGE = [
   { id: "wo-electric-outlet", type: "workorder-electric-outlet", copies: 1, title: "전기 · 콘센트·스위치·센서 위치 도면" },
   { id: "wo-electric-cable",  type: "workorder-electric-cable",  copies: 1, title: "전기 체크리스트" },
   { id: "wo-electric-diag-LR1", type: "workorder-electric-diag-LR1", copies: 1, title: "전기 · 회로도 (거실 전체)" },
+  { id: "wo-electric-diag-KHE", type: "workorder-electric-diag-KHE", copies: 1, title: "전기 · 회로도 (주방·현관·복도)" },
+  { id: "wo-electric-diag-MR",  type: "workorder-electric-diag-MR",  copies: 1, title: "전기 · 회로도 (안방·안방복도)" },
+  { id: "wo-electric-diag-BATH",type: "workorder-electric-diag-BATH",copies: 1, title: "전기 · 회로도 (화장실)" },
+  { id: "wo-electric-diag-AC",  type: "workorder-electric-diag-AC",  copies: 1, title: "전기 · 회로도 (작은방·드레스룸·발코니 · AC 220V)" },
 ];

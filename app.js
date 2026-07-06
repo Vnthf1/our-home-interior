@@ -3070,147 +3070,252 @@
       </div>`;
     };
     // 회로도 — 거실 1번 (LR-1) : TV 옆 멀티매입등 × 2
-    const electricDiagramLR1Sheet = () => {
+    // 전기 회로도 공통 렌더러 — zones 배열을 받아 그 구역의 모든 회로를 도해
+    const electricDiagramSheet = (title, zones, opts) => {
+      opts = opts || {};
       const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
-      // 미니 평면도 마커 (거실 4개 회로만)
-      const circuitColor = { "LR-1": "#3b82f6", "LR-2": "#10b981", "LR-3a": "#dc2626", "LR-3b": "#fb923c" };
-      const miniMk = fp ? (fp.items || []).filter((it) => it.layer === "light" && circuitColor[it.circuit]).map((it) => {
-        const c = circuitColor[it.circuit];
+      const SW = (typeof LIGHTING_SWITCHES !== "undefined") ? LIGHTING_SWITCHES : {};
+      const KINDS = (typeof LIGHTING_KINDS !== "undefined") ? LIGHTING_KINDS : {};
+      const SMPSES = (typeof LIGHTING_SMPS !== "undefined") ? LIGHTING_SMPS : {};
+      const PALETTE = ["#3b82f6","#10b981","#dc2626","#fb923c","#a855f7","#0ea5e9","#f59e0b","#ec4899","#22c55e","#6366f1"];
+
+      // 1. 회로 필터링 (조명 없는 스위치 스킵)
+      const circuits = [];
+      Object.entries(SW).forEach(([cid, sw]) => {
+        if (!sw) return;
+        if (!zones.includes(sw.zone)) return;
+        if (/(일괄소등|미사용)/.test(sw.desc || "")) return;
+        const spec = sw.spec || {};
+        // spec.lights가 있거나, FLOORPLAN에 마커라도 있으면 포함
+        const hasSpecLights = spec.lights && Object.keys(spec.lights).length > 0;
+        const hasMarkers = fp && fp.items.some((it) => it.layer === "light" && it.circuit === cid);
+        if (!hasSpecLights && !hasMarkers) return;
+        circuits.push({ cid, sw });
+      });
+      if (!circuits.length) return `<div class="pg-doc wo wo-elec"><h1 class="pg-h">${esc(title)}</h1><p>회로 없음</p></div>`;
+
+      // 2. 색상 배정 — 물리 스위치별로 grouping 후 색상 부여
+      const switchOf = (sw) => (sw.switch || "").replace(/\s*#\d+\s*$/, "").trim();
+      const switchPositions = [];
+      const switchColorMap = {};
+      circuits.forEach((c) => {
+        const p = switchOf(c.sw);
+        if (!(p in switchColorMap)) {
+          switchColorMap[p] = PALETTE[switchPositions.length % PALETTE.length];
+          switchPositions.push(p);
+        }
+      });
+      // 회로별 색 = 소속 스위치 색 (같은 스위치의 서로 다른 버튼도 색 살짝 변주)
+      const circuitColor = {};
+      circuits.forEach((c) => {
+        const btnMatch = /#(\d+)$/.exec(c.sw.switch || "");
+        const btnNum = btnMatch ? parseInt(btnMatch[1]) : 1;
+        // 스위치 안에서도 버튼별로 다른 색 → PALETTE에서 idx offset
+        const swIdx = switchPositions.indexOf(switchOf(c.sw));
+        const idx = (swIdx * 3 + (btnNum - 1)) % PALETTE.length;
+        circuitColor[c.cid] = PALETTE[idx];
+      });
+      // 3. 크롭 계산
+      const zoneMarkers = fp ? fp.items.filter((it) => it.layer === "light" && zones.includes(it.zone)) : [];
+      let minX = 100, maxX = 0, minY = 100, maxY = 0;
+      zoneMarkers.forEach((it) => {
+        minX = Math.min(minX, it.x); maxX = Math.max(maxX, it.x + (it.w || 0.5));
+        minY = Math.min(minY, it.y); maxY = Math.max(maxY, it.y + (it.h || 0.5));
+      });
+      const pad = 3;
+      const padTop = opts.padTop || 0; // 위쪽(천장/복도)까지 더 보이게
+      minX = Math.max(0, minX - pad); maxX = Math.min(100, maxX + pad);
+      minY = Math.max(0, minY - pad - padTop); maxY = Math.min(100, maxY + pad);
+      const size = Math.max(maxX - minX, maxY - minY);
+      const cx = (minX + maxX) / 2, cy0 = (minY + maxY) / 2;
+      const cropX = Math.max(0, Math.min(100 - size, cx - size / 2));
+      const cropY = Math.max(0, Math.min(100 - size, cy0 - size / 2));
+      const scale = 100 / size;
+      const cropCSS = `left:${(-cropX*scale).toFixed(1)}%; top:${(-cropY*scale).toFixed(1)}%; width:${(100*scale).toFixed(1)}%;`;
+      const miniMk = zoneMarkers.map((it) => {
+        const c = circuitColor[it.circuit] || "#888";
         if (it.type === "box") {
           return `<div class="wo-mm-box" style="left:${it.x}%;top:${it.y}%;width:${Math.max(it.w||0, 0.3)}%;height:${Math.max(it.h||0, 0.3)}%;border-color:${c};background:${c}55"></div>`;
         }
         return `<div class="wo-mm-pin" style="left:${it.x}%;top:${it.y}%;background:${c}"></div>`;
-      }).join("") : "";
+      }).join("");
 
+      // 4. 각 회로 정보 확장 (부하 종류·DC/AC 판정·SMPS 라벨)
+      const rowData = circuits.map((c) => {
+        const spec = c.sw.spec || {};
+        const lights = spec.lights || {};
+        const kindEntries = Object.entries(lights);
+        let loadTitle, isDC = false, loadCount = 0;
+        if (kindEntries.length) {
+          loadTitle = kindEntries.map(([k, v]) => `${esc((KINDS[k]||{}).short || k)} ${v}`).join(" · ");
+          // 스트립은 도면 마커 개수만큼 병렬 표시 (예: 안방화장실 4개 · 거실화장실 2개)
+          const stripMk = fp ? fp.items.filter((it) => it.layer === "light" && it.circuit === c.cid && /^strip/.test(it.kind || "")).length : 0;
+          loadCount = kindEntries.reduce((n, [k, v]) => n + (/^strip/.test(k) ? Math.max(1, stripMk) : Math.max(1, Math.round(v))), 0);
+          isDC = kindEntries.some(([k]) => (KINDS[k]||{}).volt === "DC 24V");
+        } else {
+          const mks = fp ? fp.items.filter((it) => it.layer === "light" && it.circuit === c.cid) : [];
+          const cbk = {};
+          mks.forEach((it) => { if (it.kind) cbk[it.kind] = (cbk[it.kind]||0) + 1; });
+          loadTitle = Object.entries(cbk).map(([k,v]) => `${esc((KINDS[k]||{}).short || k)} ${v}`).join(" · ") || "조명";
+          loadCount = Math.min(Object.values(cbk).reduce((a,b)=>a+b,0) || 1, 6);
+          isDC = Object.keys(cbk).some((k) => (KINDS[k]||{}).volt === "DC 24V");
+        }
+        if (spec.smps && Object.values(spec.smps).some((v) => v > 0)) isDC = true;
+        const smpsParts = Object.entries(spec.smps || {}).map(([k, v]) => `${(SMPSES[k]||{}).short || k}${v>1?"×"+v:""}`);
+        const drCount = Object.values(spec.drivers || {}).reduce((a,b)=>a+b,0);
+        const midLabel = isDC ? (smpsParts.join("+") || "SMPS") + (drCount > 0 ? " + DR" + (drCount>1 ? "×"+drCount : "") : "") : "";
+        return {
+          cid: c.cid, color: circuitColor[c.cid], desc: c.sw.desc || "",
+          switchLabel: c.sw.switch || "", switchPos: switchOf(c.sw),
+          isDC, midLabel, loadTitle,
+          loadCount: Math.max(1, loadCount),
+          loadTotalW: spec.watt ? spec.watt + "W" : "",
+        };
+      });
+
+      // 5. Legend
+      const legend = rowData.map((r) =>
+        `<span><span class="dot" style="background:${r.color}"></span>${esc(r.cid)} · ${esc(r.desc)}${r.loadTotalW ? " (" + esc(r.loadTotalW) + ")" : ""}</span>`
+      ).join("");
+
+      // 6. SVG 크기 · 행 간격
+      const ROW_H = 130, SW_X = 30, SW_W = 150;
+      const N = rowData.length;
+      const svgW = 1100;
+      const svgH = Math.max(500, 100 + N * ROW_H + 80);
+
+      // 7. 물리 스위치 박스 (좌측) — 각 버튼 Y는 해당 회로 row의 cy와 정확히 일치
+      const swGroups = {};
+      rowData.forEach((r, i) => { (swGroups[r.switchPos] = swGroups[r.switchPos] || []).push({ ...r, rowIdx: i }); });
+      const swBoxes = Object.entries(swGroups).map(([pos, rows]) => {
+        const byBtn = {};
+        rows.forEach((r) => {
+          const bm = /#(\d+)$/.exec(r.switchLabel);
+          const b = bm ? bm[1] : "?";
+          (byBtn[b] = byBtn[b] || []).push(r);
+        });
+        // 각 버튼의 Y범위 = 해당 버튼이 제어하는 row(들)의 y0~y0+ROW_H 통합
+        const buttonInfo = Object.entries(byBtn).map(([btn, rs]) => {
+          const rowIdxs = rs.map((r) => r.rowIdx);
+          const minIdx = Math.min(...rowIdxs);
+          const maxIdx = Math.max(...rowIdxs);
+          const btnTopY = 100 + minIdx * ROW_H + 15;
+          const btnBottomY = 100 + maxIdx * ROW_H + ROW_H - 15;
+          const btnCenterY = (btnTopY + btnBottomY) / 2;
+          rs.forEach((r) => {
+            // 각 row에 대해 그 row의 cy에 맞춘 anchor (버튼 안에서 세로로 분포)
+            const rowCY = 100 + r.rowIdx * ROW_H + 45;
+            r.btnCY = rowCY;
+          });
+          return { btn, rs, btnTopY, btnBottomY, btnCenterY };
+        });
+        const swTopY = Math.min(...buttonInfo.map((b) => b.btnTopY)) - 45;
+        const swBottomY = Math.max(...buttonInfo.map((b) => b.btnBottomY)) + 10;
+        const btnBoxes = buttonInfo.map(({ btn, rs, btnTopY, btnBottomY, btnCenterY }) => {
+          const c = rs[0].color;
+          const btnH = btnBottomY - btnTopY;
+          return `<rect x="${SW_X+12}" y="${btnTopY}" width="${SW_W-24}" height="${btnH}" rx="3" fill="${c}11" stroke="${c}" stroke-width="1.5"/>
+            <text x="${SW_X+SW_W/2}" y="${btnTopY+24}" text-anchor="middle" font-weight="800" font-size="17" fill="${c}">#${btn}</text>
+            <text x="${SW_X+SW_W/2}" y="${btnCenterY-3}" text-anchor="middle" font-size="9" fill="${c}">${esc(rs.map((r) => r.cid).join(" · "))}</text>
+            <text x="${SW_X+SW_W/2}" y="${btnCenterY+11}" text-anchor="middle" font-size="8" fill="#666">${esc((rs[0].desc || "").slice(0, 18))}</text>`;
+        }).join("");
+        const swH = swBottomY - swTopY;
+        return `<rect x="${SW_X}" y="${swTopY}" width="${SW_W}" height="${swH}" rx="6" fill="#fff" stroke="#333" stroke-width="1.8"/>
+          <text x="${SW_X+SW_W/2}" y="${swTopY+20}" text-anchor="middle" font-weight="800" font-size="12">${esc(pos)}</text>
+          <text x="${SW_X+SW_W/2}" y="${swTopY+34}" text-anchor="middle" font-size="9" fill="#0891b2">Aqara Zigbee</text>
+          ${btnBoxes}`;
+      }).join("");
+
+      // 8. 회로 행 (SMPS+DR 박스, Zigbee 라인, 부하 병렬)
+      const rowSvg = rowData.map((r, i) => {
+        const y0 = 100 + i * ROW_H;
+        const cy = y0 + 45;
+        const boxX = 340, boxW = 260;
+        const loadX = 830, loadW = 220;
+        const loadN = r.loadCount;
+        const itemH = 40, gap = 8;
+        const totalH = loadN * itemH + (loadN - 1) * gap;
+        const loadY0 = cy - totalH / 2;
+        let loadsHtml = "";
+        for (let k = 0; k < loadN; k++) {
+          const ly = loadY0 + k * (itemH + gap);
+          loadsHtml += `<rect x="${loadX}" y="${ly}" width="${loadW}" height="${itemH}" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
+            <text x="${loadX+loadW/2}" y="${ly+17}" text-anchor="middle" font-weight="700" font-size="11">${esc(r.loadTitle)}${loadN>1?" #"+(k+1):""}</text>
+            ${r.loadTotalW ? `<text x="${loadX+loadW/2}" y="${ly+31}" text-anchor="middle" font-size="9.5" fill="#666">${esc(r.loadTotalW)}</text>` : ""}`;
+        }
+        // 분기 배선 — B&W 대응: AC는 실선, DC는 대시, Zigbee는 점선
+        const stroke = r.isDC ? "#c0392b" : "#0a8f2f";
+        const arr = r.isDC ? "arR" : "arG";
+        const dashAttr = r.isDC ? 'stroke-dasharray="10,4"' : '';
+        const startX = r.isDC ? boxX + boxW : SW_X + SW_W;
+        const startY = r.isDC ? cy : (r.btnCY != null ? r.btnCY : cy);
+        let branchHtml = "";
+        if (loadN === 1) {
+          const ly = loadY0 + itemH / 2;
+          branchHtml = `<line x1="${startX}" y1="${startY}" x2="${loadX}" y2="${ly}" stroke="${stroke}" stroke-width="2" ${dashAttr} marker-end="url(#${arr})"/>`;
+        } else {
+          const jx = loadX - 40;
+          branchHtml = `<line x1="${startX}" y1="${startY}" x2="${jx}" y2="${cy}" stroke="${stroke}" stroke-width="2" ${dashAttr}/>
+            <circle cx="${jx}" cy="${cy}" r="3.5" fill="${stroke}"/>
+            <text x="${jx+5}" y="${cy-6}" font-size="9" font-weight="700" fill="${stroke}">🔀 병렬</text>`;
+          for (let k = 0; k < loadN; k++) {
+            const ly = loadY0 + k * (itemH + gap) + itemH / 2;
+            branchHtml += `<path d="M ${jx} ${cy} V ${ly} H ${loadX}" fill="none" stroke="${stroke}" stroke-width="1.8" ${dashAttr} marker-end="url(#${arr})"/>`;
+          }
+        }
+        // SMPS+DR 박스 (DC일 때만)
+        let midBox = "";
+        if (r.isDC && r.midLabel) {
+          midBox = `<rect x="${boxX}" y="${y0+20}" width="${boxW}" height="50" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
+            <text x="${boxX+boxW/2}" y="${y0+42}" text-anchor="middle" font-weight="800" font-size="12" fill="${r.color}">${esc(r.midLabel)}</text>
+            <text x="${boxX+boxW/2}" y="${y0+58}" text-anchor="middle" font-size="10" fill="#666">${esc(r.cid)} · ${esc(r.desc)}</text>`;
+        }
+        // Zigbee wireless (DC만) — 점선(sparse dots)로 흑백에서도 구분
+        let zigLine = "";
+        if (r.isDC && r.btnCY != null) {
+          zigLine = `<path d="M ${SW_X+SW_W} ${r.btnCY} Q ${(SW_X+SW_W+boxX)/2} ${(r.btnCY+cy)/2}, ${boxX} ${cy}" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="2,4" marker-end="url(#arZ)"/>`;
+        }
+        return midBox + zigLine + branchHtml + loadsHtml;
+      }).join("");
+
+      const showPanel = rowData.some((r) => r.isDC);
       return `<div class="pg-doc wo wo-elec">
-        <h1 class="pg-h">⚡ 거실 회로도</h1>
+        <h1 class="pg-h">⚡ ${esc(title)}</h1>
         <div class="wo-mini-map">
           <div class="wo-mm-crop">
-            <div class="wo-mm-scale">
+            <div class="wo-mm-scale" style="${cropCSS}">
               ${fp ? `<img src="images/${esc(fp.image)}" class="wo-mm-img">` : ""}
               ${miniMk}
             </div>
           </div>
-          <div class="wo-mm-legend">
-            <span><span class="dot" style="background:#3b82f6"></span>LR-1 · TV 옆 (10구 멀티 ×2)</span>
-            <span><span class="dot" style="background:#10b981"></span>LR-2 · 쇼파 뒤 (COB ×4)</span>
-            <span><span class="dot" style="background:#dc2626"></span>LR-3a · 우물천장 (Ultra 5M ×2)</span>
-            <span><span class="dot" style="background:#fb923c"></span>LR-3b · 커튼박스 (CCT 4m)</span>
-          </div>
+          <div class="wo-mm-legend">${legend}</div>
         </div>
         <div class="wo-diag-wrap">
-          <svg viewBox="0 0 1100 900" xmlns="http://www.w3.org/2000/svg" class="wo-diag-svg">
+          <svg viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg" class="wo-diag-svg">
             <defs>
               <marker id="arG" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#0a8f2f"/></marker>
               <marker id="arR" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#c0392b"/></marker>
               <marker id="arZ" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><polygon points="0,0 10,5 0,10" fill="#0891b2"/></marker>
             </defs>
-
-            <!-- 범례 -->
             <g transform="translate(20, 25)" font-size="12">
-              <line x1="0" y1="0" x2="24" y2="0" stroke="#0a8f2f" stroke-width="2"/><text x="30" y="4">AC 220V</text>
-              <line x1="110" y1="0" x2="134" y2="0" stroke="#c0392b" stroke-width="2"/><text x="140" y="4">DC 24V</text>
-              <line x1="220" y1="0" x2="244" y2="0" stroke="#0891b2" stroke-width="2" stroke-dasharray="4,3"/><text x="250" y="4" fill="#0891b2">📶 Zigbee 무선</text>
-
-              <text x="620" y="4" font-weight="700" fill="#666">🔀 병렬 = 여러 조명이 DR 하나에 분기 결선</text>
+              <line x1="0" y1="0" x2="30" y2="0" stroke="#0a8f2f" stroke-width="2.5"/><text x="36" y="4">AC 220V (실선)</text>
+              <line x1="140" y1="0" x2="170" y2="0" stroke="#c0392b" stroke-width="2" stroke-dasharray="10,4"/><text x="176" y="4">DC 24V (긴 대시)</text>
+              <line x1="290" y1="0" x2="320" y2="0" stroke="#0891b2" stroke-width="2" stroke-dasharray="2,4"/><text x="326" y="4" fill="#0891b2">📶 Zigbee 무선 (점선)</text>
+              <text x="620" y="4" font-weight="700" fill="#666">🔀 병렬 = 여러 조명이 하나에 분기</text>
             </g>
-
-            <!-- 분전반 (bottom-left) -->
-            <rect x="30" y="820" width="200" height="55" rx="4" fill="#2c3e50"/>
-            <text x="130" y="845" text-anchor="middle" fill="#fff" font-weight="700" font-size="13">분전반</text>
-            <text x="130" y="863" text-anchor="middle" fill="#fff" font-size="11">AC 220V</text>
-
-            <!-- 스위치 3구 (Aqara Zigbee) -->
-            <rect x="30" y="70" width="150" height="720" rx="6" fill="#fff" stroke="#333" stroke-width="1.8"/>
-            <text x="105" y="95" text-anchor="middle" font-weight="800" font-size="13">스위치 3구</text>
-            <text x="105" y="113" text-anchor="middle" font-size="10" fill="#0891b2">Aqara Zigbee</text>
-            <!-- 버튼 #1 -->
-            <rect x="45" y="130" width="120" height="140" rx="3" fill="#3b82f611" stroke="#3b82f6" stroke-width="1.5"/>
-            <text x="105" y="175" text-anchor="middle" font-weight="800" font-size="24" fill="#3b82f6">#1</text>
-            <text x="105" y="210" text-anchor="middle" font-size="11">TV 옆</text>
-            <text x="105" y="240" text-anchor="middle" font-size="10.5" fill="#3b82f6">→ LR-1</text>
-            <!-- 버튼 #2 -->
-            <rect x="45" y="290" width="120" height="140" rx="3" fill="#10b98111" stroke="#10b981" stroke-width="1.5"/>
-            <text x="105" y="335" text-anchor="middle" font-weight="800" font-size="24" fill="#10b981">#2</text>
-            <text x="105" y="370" text-anchor="middle" font-size="11">쇼파 뒤</text>
-            <text x="105" y="400" text-anchor="middle" font-size="10.5" fill="#10b981">→ LR-2</text>
-            <!-- 버튼 #3 (LR-3a + LR-3b 공유) -->
-            <rect x="45" y="450" width="120" height="330" rx="3" fill="#dc262611" stroke="#dc2626" stroke-width="1.5"/>
-            <text x="105" y="500" text-anchor="middle" font-weight="800" font-size="24" fill="#dc2626">#3</text>
-            <text x="105" y="530" text-anchor="middle" font-size="11">우물천장 + 커튼박스</text>
-            <text x="105" y="560" text-anchor="middle" font-size="10.5" fill="#dc2626">→ LR-3a · LR-3b</text>
-            <text x="105" y="585" text-anchor="middle" font-size="9" fill="#666">(4 DR 동시 제어)</text>
-
-            <!-- 스위치 자체 AC 급전 (분전반 → 스위치) -->
-            <path d="M 130 820 V 800 M 20 800 H 130 M 20 800 V 65 H 105 V 70" fill="none" stroke="#0a8f2f" stroke-width="1.8"/>
-            <text x="15" y="440" font-size="10" fill="#0a8f2f" transform="rotate(-90, 15, 440)">AC 220V (스위치 자체 전원)</text>
-
-            <!-- 점검구 (부엌 상단 붙박이장) 큰 배경 -->
-            <rect x="300" y="60" width="480" height="740" rx="6" fill="#f4f2ec" stroke="#999" stroke-dasharray="5,3"/>
-            <text x="540" y="52" text-anchor="middle" font-weight="800" font-size="12" fill="#555">📦 점검구 · 부엌 상단 붙박이장</text>
-
-            <!-- 점검구 AC 급전 (분전반 → 점검구 좌하) -->
-            <path d="M 230 850 H 320 V 90 H 340 V 70" fill="none" stroke="#0a8f2f" stroke-width="1.8"/>
-            <text x="270" y="875" font-size="10" fill="#0a8f2f">AC 220V (점검구 전원)</text>
-
-            ${
-              /* 회로 5행 정의 */
-              [
-                { y: 100, w: 100, label: "SMPS 100W + DR", model: "u100 · Aqara DR", color: "#3b82f6", zigY: 200, btnBtm: 270,
-                  loadX: 850, loadTitle: "멀티 10구", loadSub: "20W", loadCount: 2, loadTotalW: "40W" },
-                { y: 260, w: 100, label: "SMPS 100W + DR", model: "u100 · Aqara DR", color: "#10b981", zigY: 360, btnBtm: 430,
-                  loadX: 850, loadTitle: "COB 2인치", loadSub: "7W", loadCount: 4, loadTotalW: "28W" },
-                { y: 420, w: 200, label: "SMPS 200W + DR #1", model: "u200 · Aqara DR", color: "#dc2626", zigY: 520, btnBtm: 780,
-                  loadX: 850, loadTitle: "울트라 5M #1", loadSub: "100W", loadCount: 1, loadTotalW: "100W" },
-                { y: 560, w: 200, label: "SMPS 200W + DR #2", model: "u200 · Aqara DR", color: "#dc2626", zigY: 660, btnBtm: 780,
-                  loadX: 850, loadTitle: "울트라 5M #2", loadSub: "100W", loadCount: 1, loadTotalW: "100W" },
-                { y: 700, w: 100, label: "SMPS 100W + DR", model: "u100 · Aqara DR", color: "#fb923c", zigY: 800, btnBtm: 780,
-                  loadX: 850, loadTitle: "커튼박스 CCT", loadSub: "4m 28W", loadCount: 1, loadTotalW: "28W" },
-              ].map((r, i) => {
-                const cy = r.y + 30;
-                const boxX = 340, boxY = r.y, boxW = 260, boxH = 60;
-                // parallel branches
-                const loadN = r.loadCount;
-                const loadY0 = r.y - (loadN * 55 - 60) / 2;
-                let loadsSvg = "";
-                for (let k = 0; k < loadN; k++) {
-                  const ly = loadY0 + k * 55;
-                  loadsSvg += `<rect x="${r.loadX}" y="${ly}" width="150" height="42" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
-                    <text x="${r.loadX + 75}" y="${ly + 18}" text-anchor="middle" font-weight="700" font-size="11">${r.loadTitle}</text>
-                    <text x="${r.loadX + 75}" y="${ly + 34}" text-anchor="middle" font-size="10" fill="#666">${r.loadSub}${loadN > 1 ? " · #" + (k+1) : ""}</text>`;
-                }
-                // 분기 wires from DR to loads
-                let branchWires = "";
-                if (loadN === 1) {
-                  const ly = loadY0 + 21;
-                  branchWires = `<line x1="${boxX + boxW}" y1="${cy}" x2="${r.loadX}" y2="${ly}" stroke="#c0392b" stroke-width="1.8" marker-end="url(#arR)"/>`;
-                } else {
-                  // 첫 분기점
-                  const junctionX = 660;
-                  branchWires = `<line x1="${boxX + boxW}" y1="${cy}" x2="${junctionX}" y2="${cy}" stroke="#c0392b" stroke-width="1.8"/>
-                    <circle cx="${junctionX}" cy="${cy}" r="3.5" fill="#c0392b"/>
-                    <text x="${junctionX + 6}" y="${cy - 8}" font-size="9" fill="#c0392b" font-weight="700">🔀 병렬</text>`;
-                  for (let k = 0; k < loadN; k++) {
-                    const ly = loadY0 + k * 55 + 21;
-                    branchWires += `<path d="M ${junctionX} ${cy} V ${ly} H ${r.loadX}" fill="none" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arR)"/>`;
-                  }
-                }
-                return `
-                <!-- 회로 ${i+1} -->
-                <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="4" fill="#fff" stroke="${r.color}" stroke-width="1.5"/>
-                <text x="${boxX + boxW/2}" y="${boxY + 24}" text-anchor="middle" font-weight="800" font-size="12" fill="${r.color}">${esc(r.label)}</text>
-                <text x="${boxX + boxW/2}" y="${boxY + 42}" text-anchor="middle" font-size="10" fill="#666">${esc(r.model)} · 부하 ${esc(r.loadTotalW)}</text>
-                <!-- Zigbee (스위치 버튼 → DR) -->
-                <path d="M 165 ${r.zigY} Q 245 ${(r.zigY + cy)/2}, ${boxX} ${cy}" fill="none" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arZ)"/>
-                ${branchWires}
-                ${loadsSvg}
-                `;
-              }).join("")
-            }
+            ${showPanel ? `<rect x="300" y="80" width="480" height="${svgH-120}" rx="6" fill="#f4f2ec" stroke="#999" stroke-dasharray="5,3"/>
+              <text x="540" y="72" text-anchor="middle" font-weight="800" font-size="11" fill="#555">📦 점검구 · 부엌 상단 붙박이장 (거실 그룹) or 안방 (안방 그룹) or 각 화장실 천장</text>` : ""}
+            ${swBoxes}
+            ${rowSvg}
           </svg>
         </div>
       </div>`;
     };
+    const electricDiagramLR1Sheet = () => electricDiagramSheet("거실 회로도", ["거실"]);
+    const electricDiagramKHESheet = () => electricDiagramSheet("주방·현관·복도 회로도", ["주방","현관","복도"]);
+    const electricDiagramMRSheet = () => electricDiagramSheet("안방·안방복도 회로도", ["안방","안방복도"], { padTop: 14 });
+    const electricDiagramBATHSheet = () => electricDiagramSheet("화장실 회로도", ["거실화장실","안방화장실"], { padTop: 10 });
+    const electricDiagramACSheet = () => electricDiagramSheet("작은방·드레스룸·발코니 회로도 (AC 220V)", ["작은방","드레스룸","발코니"]);
     // 가구 계획도 — 평면도 + 가구 마커 (1장)
     const floorplanSheet = () => {
       const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
@@ -3266,6 +3371,10 @@
       : it.type === "workorder-electric-outlet" ? electricOutletSheet()
       : it.type === "workorder-electric-cable" ? electricCableSheet()
       : it.type === "workorder-electric-diag-LR1" ? electricDiagramLR1Sheet()
+      : it.type === "workorder-electric-diag-KHE" ? electricDiagramKHESheet()
+      : it.type === "workorder-electric-diag-MR" ? electricDiagramMRSheet()
+      : it.type === "workorder-electric-diag-BATH" ? electricDiagramBATHSheet()
+      : it.type === "workorder-electric-diag-AC" ? electricDiagramACSheet()
       : it.type === "floorplan" ? floorplanSheet()
       : it.type === "elevator" ? elevatorSheet()
       : it.type === "entrance" ? entranceSheet(it)
