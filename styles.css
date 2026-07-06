@@ -1028,6 +1028,13 @@ body:not(.is-admin) #furniture-quote-wrap,body:not(.is-admin) #appliance-quote-w
 .wo-check li{ font-size:4.4mm; line-height:1.6; padding:1.5mm 0 1.5mm 8mm; position:relative; border-bottom:1px dashed #d8d5cd; break-inside:avoid; }
 .wo-check li::before{ content:"☐"; position:absolute; left:0; font-size:5mm; font-weight:700; top:0.8mm; }
 .wo-check li:last-child{ border-bottom:none; }
+/* 컴팩트 — 항목 많은 지시서(목공 등)를 A4 한 장에 맞춤 */
+.wo-compact .pg-h{ font-size:9mm; padding-bottom:2mm; margin:0 0 3mm; border-bottom-width:2px; }
+.wo-compact .wo-g{ margin:1mm 0 2mm; }
+.wo-compact .wo-g h3{ font-size:4.4mm; margin:1.5mm 0 0.5mm; }
+.wo-compact .wo-check{ margin:1mm 0; }
+.wo-compact .wo-check li{ font-size:3.7mm; line-height:1.3; padding:0.9mm 0 0.9mm 6mm; }
+.wo-compact .wo-check li::before{ font-size:4mm; top:0.5mm; }
 /* 회로도 시트 */
 .wo-diag-caption{ font-size:4mm; margin:2mm 0 3mm; padding:2mm 3mm; background:#f0eee9; border-left:2mm solid #333; }
 .wo-diag-note{ font-size:3.6mm; line-height:1.6; color:#555; margin:2mm 0 4mm; padding:2.5mm 3mm; background:#fff7d6; border:1px solid #d4a017; border-radius:1.5mm; }

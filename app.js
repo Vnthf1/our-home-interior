@@ -2871,7 +2871,7 @@
       };
       const groupsHtml = (ph.groups || [])
         .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-check">${g.items.map((it) => `<li>${esc(txt(it))}</li>`).join("")}</ul></div>`).join("");
-      return `<div class="pg-doc wo">
+      return `<div class="pg-doc wo wo-compact">
         <h1 class="pg-h">🪵 목공 작업지시서</h1>
         ${groupsHtml}</div>`;
     };
