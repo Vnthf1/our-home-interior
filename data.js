@@ -1265,6 +1265,36 @@ const QUOTES = [
       },
     ],
   },
+  /* ===== 미확정 IoT 설치 공정 — 총 비용의 estimatedExtras로 자동 반영 ===== */
+  {
+    phase: "intercom", name: "인터폰 설치", icon: "📞",
+    candidates: [
+      {
+        name: "인터폰 설치 (예상)", company: "", price: "약 50만원 (예상)",
+        status: "candidate",
+        scope: "월패드·인터폰 교체 및 설치 (매직패드 S1 Plus 연동 등).",
+        summary: "인터폰 설치 견적 예상 약 50만원. 최종 견적 대기.",
+        items: [], files: [],
+        note: "예상 견적 · 정식 견적 수령 필요.",
+      },
+    ],
+  },
+  {
+    phase: "nest-install", name: "구글 네스트 설치", icon: "🌡️",
+    candidates: [
+      {
+        name: "구글 네스트 설치 (예상)", company: "", price: "약 120만원 (예상)",
+        status: "candidate",
+        scope: "구글 네스트 온도조절기 설치 인건비 (본체는 LIGHTING_EXTRAS에 별도 등록).",
+        summary: "네스트 4세대 1개 + 3.5세대 2개 설치 예상 약 120만원. 본체 별도.",
+        items: [
+          { label: "구글 네스트 4세대 설치", amount: "포함" },
+          { label: "구글 네스트 3.5세대 × 2 설치", amount: "포함" },
+        ], files: [],
+        note: "본체(4세대 1 + 3.5세대 2)는 LIGHTING_EXTRAS에 있음. 이 견적은 설치 인건비만.",
+      },
+    ],
+  },
 ];
 
 /* ------------------------------------------------------------
@@ -2152,35 +2182,20 @@ const PHASES = [
       { value: "전체", label: "스마트 스위치 교체", note: "전 스위치 중성선 추가 포함" },
       { value: "약 20구+", label: "콘센트 신설·추가", note: "신설의 경우 해당 위치 표시 · 실측 후 변동 가능" },
       { value: "3종", label: "단독배선", note: "인덕션 · 에어컨 · 실내사우나(2,450W)" },
-      { value: "실링팬 외", label: "전기배선", note: "실링팬 2개(거실·안방, 천장 하중 보강 협의) · 발코니 빨래건조대" },
+      { value: "실링팬 외", label: "전기배선", note: "실링팬 2개(거실·안방) · 발코니 빨래건조대" },
       { value: "방마다", label: "온도조절기", note: "구글 네스트로 결정" },
       { value: "2개", label: "재실센서(FP2)", note: "안방·거실 천장 — 5V 전원 필요" },
     ],
     groups: [
       {
-        title: "스위치 · 스마트홈 · 네트워크",
-        items: [
-          "스위치: 전 스위치 중성선 추가 + 스마트 스위치 교체 / 현관에 1개 추가 / 옆방(→ 드레스룸) 온도조절기·스위치만 이동(나머지 방은 그대로)",
-          "스마트홈: 공용부+안방 IoT 조명(전체 희망) / 방마다 보일러 온도조절기(구글 네스트) / 거실·안방 천장 FP2 재실센서(5V)",
-          { text: "네트워크: 단자함 기가비트 스위칭 허브 + 콘센트 2구 / 각 방 전화선 → 인터넷선 / SMPS함 단자함 근처(미정)",
-            ask: "서버/통신 단자함 위치 확보 가능한가요?" },
-        ],
-      },
-      {
-        title: "콘센트 (신설 위치 표시 · 실측 후 변동)",
-        items: [
-          "주방·아일랜드: 냉장고·정수기·로봇청소기·인덕션·광파오븐·식세기 / 아일랜드 2구 / 싱크볼 아래 2구(정수기)",
-          "침실·작은방: 침대 헤드 양옆 / 작은방 책상(컴퓨터 2대 + 전자기기)",
-          "욕실: 비데 + 상·하부장 예비",
-          { text: "전동커튼: 거실 + 각 방 3 (1~2구)", caution: "거실·안방은 이중 자동레일로 진행 예정" },
-        ],
-      },
-      {
-        title: "배선 (조명 제외)",
+        title: "배선 · 스마트홈",
         items: [
           "단독배선: 인덕션 / 에어컨 / 실내사우나(2,450W · AC 220V · 60Hz)",
-          "기타: 거실·안방 실링팬 / 발코니 자동 건조대 / 에어컨 분전함 전용 차단기 (현재 거실·안방만 시스템에어컨)",
-          { text: "월패드·도어폰", ask: "월패드/도어폰 설치도 이야기해야 할까요?" },
+          "스위치: 전 스위치 중성선 추가 (총 11개 · 2구 4 + 3구 7)",
+          "전용선 220V: 실링팬 2개(거실·안방), 발코니 자동건조대, 천장 매립형 전용콘센트 2개",
+          "콘센트 추가 (시공하면서 협의): 각 방 커튼박스쪽 2구씩, 컴퓨터책상쪽 4구, 비데 근처 2구, TV 매립박스 4구, 워시타워 4구, 인덕션/사우나 1구, 싱크대쪽 4구",
+          "온도조절기 UTP선: 각 방마다 분배기로 1:1 배선",
+          "네트워크: 단자함 기가비트 스위칭 허브 + 콘센트 2구 / 각 방 전화선 → 인터넷선",
         ],
       },
       {
@@ -2194,21 +2209,10 @@ const PHASES = [
           "화장실: 천장 끝·젠다이·상부장 간접 / 거울 간접 / 샤워 COB / 변기 앞 조명",
         ],
       },
-      {
-        title: "타공 · 인터폰",
-        items: [
-          "타공 시 전열교환기 타공 위치 확인",
-          "인터폰·관리사무실 스피커: 벽에 함 만들어 숨기고 싶음",
-        ],
-      },
     ],
-    asks: [
-      "간접조명은 T5여야 하나요? 아니면 COB LED 스트립도 가능한가요?",
-    ],
+    asks: [],
     decisions: [],
-    checks: [
-      "욕실 비데용 콘센트 위치·구수 확인 (안방·공용 둘 다)",
-    ],
+    checks: [],
     images: [
       { file: "조명계획표.jpg", label: "조명 계획" },
       { file: "콘센트계획.jpg", label: "콘센트 계획" },
@@ -2760,4 +2764,13 @@ const SIGNAGE = [
   { id: "plan-furniture", type: "floorplan", copies: 1, title: "가구 계획도" },
   { id: "wo-demo", type: "workorder-demo", copies: 1, title: "철거 작업지시서" },
   { id: "wo-plumbing", type: "workorder-plumbing", copies: 1, title: "설비 작업지시서" },
+  { id: "wo-carpentry", type: "workorder-carpentry", copies: 1, title: "목공 작업지시서" },
+  /* --- 전기 작업지시서 (그룹별 회로표 4시트 + 도면 2시트 + 배선 1시트) --- */
+  { id: "wo-electric-c-A", type: "workorder-electric-c-A", copies: 1, title: "전기 회로표 ① 거실·주방·현관·복도" },
+  { id: "wo-electric-c-B", type: "workorder-electric-c-B", copies: 1, title: "전기 회로표 ② 안방·안방복도" },
+  { id: "wo-electric-c-C", type: "workorder-electric-c-C", copies: 1, title: "전기 회로표 ③ 작은방·드레스룸·발코니" },
+  { id: "wo-electric-c-D", type: "workorder-electric-c-D", copies: 1, title: "전기 회로표 ④ 화장실" },
+  { id: "wo-electric-light",  type: "workorder-electric-light",  copies: 1, title: "전기 · 조명 위치 도면" },
+  { id: "wo-electric-outlet", type: "workorder-electric-outlet", copies: 1, title: "전기 · 콘센트·스위치·센서 위치 도면" },
+  { id: "wo-electric-cable",  type: "workorder-electric-cable",  copies: 1, title: "전기 체크리스트" },
 ];

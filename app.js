@@ -67,7 +67,7 @@
     { href: "furniture.html", label: "가구/가전", key: "furniture" },
     { href: "quotes.html", label: "견적/공정", key: "quotes" },
     { href: "materials.html", label: "견적/자재", key: "materials" },
-    { href: "total-quote.html", label: "총 견적", key: "totalquote" },
+    { href: "total-quote.html", label: "총 비용", key: "totalquote" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "print.html", label: "🖨 인쇄물", key: "print" },
@@ -561,7 +561,7 @@
     const won = (v) => (v == null || v === "") ? "" : "₩" + Number(v).toLocaleString("ko-KR");
 
     // 공정만 (가전·임시거주·찜질방·화재/누수 보험 제외) — 상단 pill + Tabulator 표 공용
-    const EXCLUDE = { "가전 (전체)": 1, "임시거주": 1, "찜질방": 1, "화재/누수 보험": 1, "이사": 1 };
+    const EXCLUDE = { "가전 (전체)": 1, "임시거주": 1, "찜질방": 1, "화재/누수 보험": 1, "이사": 1, "입주민 동의": 1 };
     const procRows = QUOTE_SUMMARY.filter((r) => !EXCLUDE[r.phase]);
 
     // 상단 합산 pill (공정만) — 실제 시공비 감 잡기용
@@ -578,7 +578,7 @@
       });
       topEl.innerHTML = `
         <div class="qs-top-grid">
-          <div class="qs-top-pill qs-top-total"><span class="lbl">총 견적</span><span class="val">${won(quoteSum)}</span><span class="sub">공정만 · 가전·임시거주·보험·찜질방 제외</span></div>
+          <div class="qs-top-pill qs-top-total"><span class="lbl">총 비용</span><span class="val">${won(quoteSum)}</span><span class="sub">공정만 · 기타잡비·가전 제외</span></div>
           <div class="qs-top-pill qs-top-paid"><span class="lbl">완납 합계</span><span class="val">${won(paidFinal)}</span><span class="sub">final 확정</span></div>
           <div class="qs-top-pill qs-top-deposit"><span class="lbl">선입금</span><span class="val">${won(depositSum)}</span><span class="sub">진행 중 공정</span></div>
           <div class="qs-top-pill qs-top-remain"><span class="lbl">잔금 (미납)</span><span class="val">${won(remainSum)}</span><span class="sub">${unpaidN}개 공정</span></div>
@@ -1709,7 +1709,7 @@
     // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
     // 가격 미정/모호 phase는 사용자 협의 가정값
     const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1 };
-    const QUOTE_OVERRIDE = { ceramic: 4000000, film: 1000000 };
+    const QUOTE_OVERRIDE = { ceramic: 5000000, film: 800000, "middle-door": 3000000 };
     const estimatedExtras = [];
     if (typeof QUOTES !== "undefined") {
       const parsePrice = (s) => {
@@ -2862,6 +2862,210 @@
         ${groupsHtml}
         <p class="wo-foot">※ 위치는 [가구 계획도] 참조 + 실측 치수 기준. 정확한 점은 현장 협의.</p></div>`;
     };
+    const carpentrySheet = () => {
+      const ph = (typeof PHASES !== "undefined") ? PHASES.find((p) => p.id === "carpentry") : null;
+      if (!ph) return `<div class="pg-doc"><h1 class="pg-h">목공 작업지시서</h1></div>`;
+      const txt = (it) => (typeof it === "string" ? it : (it.text || ""));
+      const groupsHtml = (ph.groups || [])
+        .map((g) => `<div class="wo-g"><h3>${esc(g.title)}</h3><ul class="wo-check">${g.items.map((it) => `<li>${esc(txt(it))}</li>`).join("")}</ul></div>`).join("");
+      return `<div class="pg-doc wo">
+        <h1 class="pg-h">🪵 목공 작업지시서</h1>
+        ${groupsHtml}</div>`;
+    };
+    // ---- 전기 작업지시서: 회로표 그룹 4시트 + 도면 2시트 + 배선 1시트 ----
+    const ELEC_GROUPS = [
+      { id: "A", num: "①", title: "거실·주방·현관·복도 (IoT · DC 24V)",
+        zones: ["거실","주방","현관","복도"],
+        smpsLoc: "부엌 상단 붙박이장",
+        line: "DC 24V (SMPS·DR 경유)",
+        note: "이 4구역 SMPS·DR을 부엌 상단 붙박이장 한 지점에 모아 설치. 각 회로로 DC 24V 배선 분기." },
+      { id: "B", num: "②", title: "안방·안방복도 (IoT · DC 24V)",
+        zones: ["안방","안방복도"],
+        smpsLoc: "안방 (위치 협의)",
+        line: "DC 24V (SMPS·DR 경유)",
+        note: "안방·안방복도 SMPS·DR도 한 지점에 모음. 정확한 위치는 목공 마감 전 결정 필요." },
+      { id: "C", num: "③", title: "작은방·드레스룸·발코니 (일반 · AC 220V)",
+        zones: ["작은방","드레스룸","발코니"],
+        smpsLoc: "(SMPS 없음)",
+        line: "AC 220V (스위치 직결)",
+        note: "이 3구역은 일반 조명(AC 220V)이라 스위치가 직접 등기구에 물림. SMPS·DR 불필요." },
+      { id: "D", num: "④", title: "화장실 (혼합)",
+        zones: ["거실화장실","안방화장실"],
+        smpsLoc: "간접등만 SMPS — 각 화장실 천장 위",
+        line: "간접등 DC 24V (SMPS 천장 위) / 나머지 AC 220V (스위치 직결)",
+        note: "화장실 간접조명은 스마트(방수 CCT 스트립)라 천장 위 SMPS 필요. 다운라이트·환풍기는 AC 220V 스위치 직결." },
+    ];
+    // spec.lights가 비어있으면 FLOORPLAN 마커 카운트로 폴백
+    const buildCircuitToMarkers = () => {
+      const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
+      const m = {};
+      if (!fp) return m;
+      (fp.items || []).forEach((it) => {
+        if (it.layer !== "light" || !it.circuit) return;
+        (m[it.circuit] = m[it.circuit] || []).push(it);
+      });
+      return m;
+    };
+    const electricGroupSheet = (groupId) => {
+      const g = ELEC_GROUPS.find((x) => x.id === groupId);
+      if (!g) return `<div class="pg-doc"><h1 class="pg-h">알 수 없는 그룹</h1></div>`;
+      const SW = (typeof LIGHTING_SWITCHES !== "undefined") ? LIGHTING_SWITCHES : {};
+      const KINDS = (typeof LIGHTING_KINDS !== "undefined") ? LIGHTING_KINDS : {};
+      const SMPSES = (typeof LIGHTING_SMPS !== "undefined") ? LIGHTING_SMPS : {};
+      const DRIVERS = (typeof LIGHTING_DRIVERS !== "undefined") ? LIGHTING_DRIVERS : {};
+      const circToMk = buildCircuitToMarkers();
+      const SKIP_DESC = /(일괄소등|미사용)/;
+      // 이 그룹 소속 zone 순서대로 회로 뽑기
+      const byZone = {};
+      g.zones.forEach((z) => (byZone[z] = []));
+      Object.entries(SW).forEach(([cid, sw]) => {
+        if (!sw) return;
+        if (SKIP_DESC.test(sw.desc || "")) return; // 일괄소등·미사용 제외
+        const z = sw.zone || "";
+        if (byZone[z] == null) return; // 이 그룹 아님
+        byZone[z].push({ cid, sw });
+      });
+      const wireLabel = (spec, cid) => {
+        // spec.smps 있으면 24V. 없으면 마커 kind로 판단 (DC 24V vs AC 220V)
+        const s = spec.smps || {};
+        const hasSmps = Object.values(s).some((v) => v > 0);
+        if (hasSmps) return `<span class="wo-wire wo-wire-dc">24V</span>`;
+        const mks = circToMk[cid] || [];
+        const hasDCkind = mks.some((it) => {
+          const info = KINDS[it.kind] || {};
+          return info.volt === "DC 24V";
+        });
+        return hasDCkind
+          ? `<span class="wo-wire wo-wire-dc">24V</span>`
+          : `<span class="wo-wire wo-wire-ac">220V</span>`;
+      };
+      const rows = [];
+      g.zones.forEach((zone) => {
+        const arr = byZone[zone];
+        if (!arr.length) return;
+        arr.forEach(({ cid, sw }, i) => {
+          const spec = sw.spec || {};
+          const lights = spec.lights || {};
+          // lights 없으면 마커 카운트로 폴백
+          let lightSum;
+          if (Object.keys(lights).length) {
+            lightSum = Object.entries(lights).map(([k, v]) => {
+              const info = KINDS[k] || {};
+              return `${esc(info.short || info.label || k)} ${v}`;
+            }).join(" · ");
+          } else {
+            const mks = circToMk[cid] || [];
+            const cbk = {};
+            mks.forEach((it) => { if (it.kind) cbk[it.kind] = (cbk[it.kind] || 0) + 1; });
+            lightSum = Object.entries(cbk).map(([k, v]) => {
+              const info = KINDS[k] || {};
+              return `${esc(info.short || info.label || k)} ${v}`;
+            }).join(" · ") || "—";
+          }
+          const drivers = spec.drivers || {};
+          const drSum = Object.entries(drivers).map(([k, v]) => {
+            const info = DRIVERS[k] || {};
+            return `${esc(info.short || k)}×${v}`;
+          }).join(" ") || "—";
+          const smps = spec.smps || {};
+          const smpsSum = Object.entries(smps).map(([k, v]) => {
+            const info = SMPSES[k] || {};
+            return `${esc(info.short || k)}×${v}`;
+          }).join(" ") || "—";
+          const watt = spec.watt ? `${spec.watt}W` : "";
+          const zoneCell = i === 0
+            ? `<td class="wo-zc" rowspan="${arr.length}">${esc(zone)}</td>`
+            : "";
+          rows.push(`<tr>${zoneCell}<td class="c">${wireLabel(spec, cid)}</td><td>${esc(sw.switch || "")}</td><td><b>${esc(cid)}</b> <small>${esc(sw.desc || "")}</small></td><td>${lightSum}</td><td>${drSum}</td><td>${smpsSum}</td><td class="num">${esc(watt)}</td></tr>`);
+        });
+      });
+      return `<div class="pg-doc wo wo-elec">
+        <h1 class="pg-h">⚡ 전기 회로표 ${esc(g.num)} ${esc(g.title)}</h1>
+        <div class="wo-cg-meta big"><span><b>배선:</b> ${esc(g.line)}</span><span><b>SMPS 위치:</b> ${esc(g.smpsLoc)}</span></div>
+        <p class="wo-cg-note">${esc(g.note)}</p>
+        <p class="wo-cg-legend">
+          <span class="wo-wire wo-wire-dc">24V</span> = DC 24V (SMPS·DR 경유) ·
+          <span class="wo-wire wo-wire-ac">220V</span> = AC 220V (스위치 직결)
+          &nbsp;&nbsp;※ 일괄소등·미사용 스위치는 앱 씬 처리라 미표기.
+        </p>
+        <table class="wo-circuit-t">
+          <thead><tr><th>구역</th><th>선</th><th>스위치</th><th>회로 (설명)</th><th>조명 종류·수량</th><th>드라이버</th><th>SMPS</th><th class="num">와트</th></tr></thead>
+          <tbody>${rows.join("") || `<tr><td colspan="8" class="wo-cg-empty">해당 그룹 회로 없음</td></tr>`}</tbody>
+        </table>
+      </div>`;
+    };
+    const electricLightSheet = () => {
+      const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
+      if (!fp) return `<div class="pg-doc"><h1 class="pg-h">조명 위치 도면</h1></div>`;
+      const KINDS = (typeof LIGHTING_KINDS !== "undefined") ? LIGHTING_KINDS : {};
+      const hexA = (hex, a) => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ""); if (!m) return hex; const n = parseInt(m[1], 16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
+      const mk = (fp.items || []).filter((it) => it.layer === "light").map((it) => {
+        const info = KINDS[it.kind] || { color: "#888", icon: "●", short: it.kind || "" };
+        const label = it.circuit ? `${it.circuit}` : "";
+        if (it.type === "box") {
+          return `<div class="wo-mk-lbox" style="left:${it.x}%;top:${it.y}%;width:${it.w||0}%;height:${it.h||0}%;border-color:${info.color};background:${hexA(info.color, .35)}" title="${esc(it.name||it.label||"")}">${label ? `<span class="lbl">${esc(label)}</span>` : ""}</div>`;
+        }
+        return `<div class="wo-mk-lpin" style="left:${it.x}%;top:${it.y}%;background:${info.color}" title="${esc(it.name||it.label||"")}">${esc(info.icon||"●")}${label ? `<span class="lbl">${esc(label)}</span>` : ""}</div>`;
+      }).join("");
+      const legend = Object.entries(KINDS).map(([k, info]) => {
+        return `<span class="wo-lgd-i"><span class="dot" style="background:${info.color}">${esc(info.icon||"●")}</span>${esc(info.short||info.label||k)}</span>`;
+      }).join("");
+      return `<div class="pg-doc">
+        <h1 class="pg-h">💡 전기 · 조명 위치 도면</h1>
+        <div class="wo-legend">${legend}</div>
+        <div class="wo-plan big"><img src="images/${esc(fp.image)}" alt="평면도">${mk}</div>
+        <p class="wo-foot">※ 마커 안의 텍스트는 회로 ID (예: LR-3a = 거실 3구 3번 스위치 - 우물천장). 상세는 회로표 시트 참조.</p></div>`;
+    };
+    const electricOutletSheet = () => {
+      const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
+      if (!fp) return `<div class="pg-doc"><h1 class="pg-h">콘센트·스위치 위치 도면</h1></div>`;
+      const layerColor = { outlet: "#ef4444", switch: "#10b981", thermostat: "#14b8a6" };
+      const layerIcon = { outlet: "🔌", switch: "🔘", thermostat: "🌡" };
+      const targetLayers = { outlet: 1, switch: 1, thermostat: 1 };
+      const items = (fp.items || []).filter((it) => targetLayers[it.layer]);
+      const mk = items.map((it) => {
+        const color = layerColor[it.layer] || "#888";
+        const isNew = /신규/.test(it.label || "");
+        const gu = /(\d+)\s*구/.exec(it.label || "");
+        const label = gu ? gu[1] : layerIcon[it.layer] || "•";
+        return `<div class="wo-mk-oc ${isNew ? "is-new" : ""}" style="left:${it.x}%;top:${it.y}%;background:${color}" title="${esc(it.label||"")}">${esc(label)}</div>`;
+      }).join("");
+      const legend = `
+        <span class="wo-lgd-i"><span class="dot" style="background:${layerColor.outlet}">2</span>콘센트 (숫자=구수)</span>
+        <span class="wo-lgd-i"><span class="dot is-new" style="background:${layerColor.outlet}">2</span>신설 (노란 테두리)</span>
+        <span class="wo-lgd-i"><span class="dot" style="background:${layerColor.switch}">3</span>스위치</span>
+        <span class="wo-lgd-i"><span class="dot" style="background:${layerColor.thermostat}">🌡</span>온도조절기</span>`;
+      return `<div class="pg-doc">
+        <h1 class="pg-h">🔌 전기 · 콘센트·스위치·센서 위치 도면</h1>
+        <div class="wo-legend">${legend}</div>
+        <div class="wo-plan big"><img src="images/${esc(fp.image)}" alt="평면도">${mk}</div>
+        <p class="wo-foot">※ 노란 테두리 마커 = <b>신설</b>. 정확한 위치는 실측 시 현장 협의. 벽 콘센트 취부 높이·아일랜드 콘센트 등은 별도 지시.</p></div>`;
+    };
+    const electricCableSheet = () => {
+      const ph = (typeof PHASES !== "undefined") ? PHASES.find((p) => p.id === "electric") : null;
+      const txt = (it) => typeof it === "string" ? it : (it.text || "");
+      const items = [];
+      // PHASES.electric.groups 순회 (조명은 회로표 시트에서 다룸 → 제외)
+      if (ph) {
+        (ph.groups || []).forEach((g) => {
+          if (g.title === "조명") return; // 조명 세부는 별도
+          (g.items || []).forEach((it) => {
+            items.push(txt(it));
+            if (typeof it === "object") {
+              if (it.caution) (Array.isArray(it.caution) ? it.caution : [it.caution]).forEach((c) => items.push("⚠️ " + c));
+              if (it.ask) (Array.isArray(it.ask) ? it.ask : [it.ask]).forEach((a) => items.push("💬 " + a));
+            }
+          });
+        });
+        (ph.checks || []).forEach((c) => items.push("✓ " + c));
+        (ph.asks || []).forEach((a) => items.push("💬 " + a));
+      }
+      const listHtml = items.map((t) => `<li>${esc(t)}</li>`).join("");
+      return `<div class="pg-doc wo wo-elec">
+        <h1 class="pg-h">✅ 전기 체크리스트</h1>
+        <ul class="wo-check">${listHtml}</ul>
+      </div>`;
+    };
     // 가구 계획도 — 평면도 + 가구 마커 (1장)
     const floorplanSheet = () => {
       const fp = (typeof FLOORPLAN !== "undefined") ? FLOORPLAN : null;
@@ -2908,6 +3112,14 @@
       : it.type === "schedule-cal" ? schedCalSheet()
       : it.type === "workorder-demo" ? demolitionSheet()
       : it.type === "workorder-plumbing" ? plumbingSheet()
+      : it.type === "workorder-carpentry" ? carpentrySheet()
+      : it.type === "workorder-electric-c-A" ? electricGroupSheet("A")
+      : it.type === "workorder-electric-c-B" ? electricGroupSheet("B")
+      : it.type === "workorder-electric-c-C" ? electricGroupSheet("C")
+      : it.type === "workorder-electric-c-D" ? electricGroupSheet("D")
+      : it.type === "workorder-electric-light" ? electricLightSheet()
+      : it.type === "workorder-electric-outlet" ? electricOutletSheet()
+      : it.type === "workorder-electric-cable" ? electricCableSheet()
       : it.type === "floorplan" ? floorplanSheet()
       : it.type === "elevator" ? elevatorSheet()
       : it.type === "entrance" ? entranceSheet(it)
