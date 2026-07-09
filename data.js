@@ -1674,6 +1674,23 @@ const MATERIALS = [
           note: "프라이머·방수제·테이프 (VAT 포함 424,050) + 배송비 55,000 − 매장할인 56,430 → 실결제 422,620" },
         note: "",
       },
+      {
+        category: "포미스톤 (스톤 마감재)", qty: 1, status: "ordered", purpose: "스톤 마감(아트월/침대벽)", store: "㈜투피플(포미스톤)",
+        candidates: [
+          { name: "Oman liner stone - Andes White 1200×2700 ×2 (6.48㎡)", offers: [{ vendor: "㈜투피플", price: 680400, note: "자재 공급가 · 단가 105,000/㎡" }] },
+        ],
+        decided: "Oman liner stone - Andes White",
+        purchased: { vendor: "㈜투피플(포미스톤)", qty: 1, total: 880000,
+          note: "자재 680,400 + 운송 120,000 + VAT − 절사 440 = 880,000 (VAT 포함) · 견적일 2026-07-08 · 담당 백성현 010-5029-1385" },
+        note: "",
+      },
+      {
+        category: "차음재 (방음)", qty: 1, status: "bought", purpose: "안방 우측벽·거실 좌측벽 방음",
+        candidates: [],
+        decided: "차음재",
+        purchased: { qty: 1, total: 570000, note: "차음재 450,000 + 양중비 120,000 = 570,000" },
+        note: "",
+      },
     ],
   },
   {
@@ -1960,9 +1977,9 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 41.1, y: 80.9, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #3" },
     { layer: "light", type: "pin", x: 41.1, y: 76.2, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #2" },
     { layer: "light", type: "pin", x: 41.1, y: 71.6, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #1" },
-    { layer: "light", type: "pin", x: 41.2, y: 66.4, label: "COB조명", kind: "cob2n" , circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB 추가" },
-    { layer: "light", type: "pin", x: 50.6, y: 57.4, label: "확산조명", kind: "surface_n" , circuit: "BC-1", zone: "발코니", name: "발코니 확산 #1" },
-    { layer: "light", type: "pin", x: 50.7, y: 65.5, label: "확산조명", kind: "surface_n" , circuit: "BC-2", zone: "발코니", name: "발코니 확산 #2" },
+    { layer: "light", type: "pin", x: 41.2, y: 66.4, label: "확산조명", kind: "diff2n" , circuit: "DR-2", zone: "드레스룸", name: "드레스룸 확산 #3" },
+    { layer: "light", type: "pin", x: 50.6, y: 57.4, label: "확산조명", kind: "diff2n" , circuit: "BC-1", zone: "발코니", name: "발코니 확산 #1" },
+    { layer: "light", type: "pin", x: 50.7, y: 65.5, label: "확산조명", kind: "diff2n" , circuit: "BC-2", zone: "발코니", name: "발코니 확산 #2" },
     { layer: "light", type: "pin", x: 28, y: 58.6, label: "COB조명", kind: "cob2"  , circuit: "MRH-1", zone: "안방복도", name: "안방복도 COB #2" },
     { layer: "note", type: "legend", x: 5, y: 2.5, label: "" },
     { layer: "furniture", type: "pin", x: 41.7, y: 51.5, label: "" },
@@ -2630,7 +2647,7 @@ const LIGHTING_KINDS = {
   strip_ultra:  { label: "스트립 울트라루멘",  icon: "▮", short: "울트라루멘",  color: "#dc2626", model: "아카라 울트라 루멘 플렉스 SMD 라이트 스트립 5M (#166) · DC24V TW · >90Ra · 일시적 특가", watt: 100, volt: "DC 24V", rollCm: 500, priceB2B: 97500, priceB2C: 150000 }, // 5M 한 롤당 100W (20W/m) · SR CCT 대비 약 3배 광량
   strip_aqara_wp: { label: "스트립 방수",       icon: "▬", short: "방수스트립",   color: "#14b8a6", model: "아카라 방수 CCT SMD 라이트 스트립 H2 5m (#167)", watt: 35, volt: "DC 24V", rollCm: 500,  priceB2B: 76050, priceB2C: 90000 }, // 5M, IP65 추정 35W (욕실용)
   strip_normal:   { label: "스트립 (일반)",      icon: "▭", short: "일반스트립",   color: "#fbbf24", model: "일반 스트립 조명 or T5 (미정)",                    watt: 0,  volt: "AC 220V" }, // 작은방·드레스룸 간접등용
-  surface_n:      { label: "직부등 (일반)",      icon: "◈", short: "직부등",      color: "#a3e635", model: "일반 직부등 (미정)",                                watt: 0,  volt: "AC 220V" }, // 발코니 등 표면 설치형
+  // surface_n (직부등 일반)은 발코니를 확산등으로 변경하며 전 회로에서 미사용 → 제거.
 };
 
 /* 드라이버·SMPS — 표에서 조명 컬럼 옆에 같은 매트릭스로 들어감.
@@ -2742,13 +2759,18 @@ const LIGHTING_SWITCHES = {
   "BR-1": { zone: "작은방", switch: "작은방 3구 #1", desc: "COB 4개" },
   "BR-2": { zone: "작은방", switch: "작은방 3구 #2", desc: "확산" },
   "BR-3": { zone: "작은방", switch: "작은방 3구 #3", desc: "간접등" },
-  // 드레스룸 (3구)
-  "DR-1": { zone: "드레스룸", switch: "드레스룸 3구 #1", desc: "COB" },
-  "DR-2": { zone: "드레스룸", switch: "드레스룸 3구 #2", desc: "확산" },
-  "DR-3": { zone: "드레스룸", switch: "드레스룸 3구 #3", desc: "간접" },
-  // 발코니 (2구)
-  "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "직부등 #1" },
-  "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "직부등 #2" },
+  // 드레스룸 (3구) — 일반조명 (AC 220V 직결, IoT 아님)
+  "DR-1": { zone: "드레스룸", switch: "드레스룸 3구 #1", desc: "COB 3개",
+           spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · 드-3·5·7 · AC220V 직결 — SMPS·DR 불필요" } },
+  "DR-2": { zone: "드레스룸", switch: "드레스룸 3구 #2", desc: "확산 3개",
+           spec: { lights: { diff2n: 3 }, note: "일반 확산(솔레아 257) 3개 · 드-2·4·6 · AC220V 직결" } },
+  "DR-3": { zone: "드레스룸", switch: "드레스룸 3구 #3", desc: "간접등",
+           spec: { lights: { strip_normal: 1 }, note: "일반 스트립 조명 or T5(미정) · AC220V 직결" } },
+  // 발코니 (2구) — 일반 확산등 (AC 220V 직결)
+  "BC-1": { zone: "발코니", switch: "발코니 2구 #1", desc: "확산등 #1",
+           spec: { lights: { diff2n: 1 }, note: "일반 확산(솔레아 257) 1개 · 발-1 · AC220V 직결" } },
+  "BC-2": { zone: "발코니", switch: "발코니 2구 #2", desc: "확산등 #2",
+           spec: { lights: { diff2n: 1 }, note: "일반 확산(솔레아 257) 1개 · 발-2 · AC220V 직결" } },
 };
 
 /* ===== 현장 인쇄물 — 안내문/지시서 (print.html) · A4 1장 = 1문서 ===== */
