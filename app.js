@@ -46,7 +46,7 @@
     "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공": "carpentry",
-    "타일": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile",
+    "타일": "tile", "타일 (양중)": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile", "사우나 설치": "furniture",
     "타일 줄눈": "tile", "줄눈": "tile",
     "세라믹 (실측)": "ceramic", "세라믹·안방세면대 설치": "ceramic", "세라믹": "ceramic",
     "필름": "film", "도배": "wallpaper", "장판": "floor",
@@ -237,7 +237,7 @@
         const left = (s.start / 6) * 100;
         const width = ((s.end - s.start + 1) / 6) * 100;
         const top = 32 + s.lane * 22;
-        const isMeasure = /실측/.test(s.name);
+        const isMeasure = /실측|양중/.test(s.name);
         const styleColor = isMeasure
           ? `background:#fff;color:${s.color};border:1.5px solid ${s.color}`
           : `background:${s.color}`;
