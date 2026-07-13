@@ -2743,11 +2743,11 @@ const LIGHTING_SWITCHES = {
   "MR-3b": { zone: "안방", switch: "안방 3구 #3", desc: "침대 하부 간접(7.2m) + 커튼박스(4.0m) · 78W",
              spec: { lights: { strip_cct: 1.12 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 78,
                      note: "① 침대 하부 간접 = SR 8mm CCT 10M(#60) · 퀸 프레임 2개 붙인 둘레 200+320+200 = 7.2m × 7W = 50W. ② 안방 커튼박스 = 4.0m × 7W = 28W. CCT 합 11.2m = 1.12롤 · 78W. Aqara DR 1 (78W on 144W = 54% 부하) + SMPS u100 ×1 (78% 부하)." } },
-  // 안방복도 (3구, 신설)
-  "MRH-1": { zone: "안방복도", switch: "안방복도 3구 #1", desc: "COB 2개 (안복1·안복2)",
+  // 안방복도 (2구, 신설) — 3구였다가 주방과 맞교환 (안복2 삭제로 버튼 2개면 충분)
+  "MRH-1": { zone: "안방복도", switch: "안방복도 2구 #1", desc: "COB 2개 (안복1·안복2)",
              spec: { lights: { cob2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,
                      note: "COB IoT(#17) 2 × 7W = 14W · Aqara DR 1 + 100W SMPS 1 (86W 여유)" } },
-  "MRH-2": { zone: "안방복도", switch: "안방복도 3구 #2", desc: "확산 2개 (안복3·안복4)",
+  "MRH-2": { zone: "안방복도", switch: "안방복도 2구 #2", desc: "확산 2개 (안복3·안복4)",
              spec: { lights: { diff2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 16,
                      note: "확산 IoT(#42) 2 × 8W = 16W · Aqara DR 1 + 100W SMPS 1 (84W 여유). 기존 3구 #3 → #2로 이동." } },
   // 거실화장실 (3구)
