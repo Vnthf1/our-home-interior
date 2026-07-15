@@ -43,7 +43,7 @@
     "보양": "demolition",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "샷시 (실측)": "window", "설비": "demolition", "설비 (미정)": "demolition",
-    "보일러": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
+    "보일러": "hvac", "보일러 설비": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공": "carpentry",
     "타일": "tile", "타일 (양중)": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile", "사우나 설치": "furniture",
@@ -1344,8 +1344,61 @@
       return `<span class="lt-leg-item"><span class="lt-leg-dot" style="background:${ki.color || "#888"}">${esc(ki.icon || "●")}</span>${esc(ki.label || k)}</span>`;
     }).join("");
 
+    // ── Aqara 드라이버 중심 회로표 (LIGHTING_DRIVER_PLAN 정본) ──
+    const DRVPLAN = (typeof LIGHTING_DRIVER_PLAN !== "undefined") ? LIGHTING_DRIVER_PLAN : [];
+    const circuitLights = (cid) => {
+      const byKind = {};
+      (groups[cid] || []).forEach(({ it }) => {
+        const k = it.kind || "?";
+        (byKind[k] = byKind[k] || { n: 0, len: 0 });
+        byKind[k].n++; byKind[k].len += (it.length || 0);
+      });
+      return Object.entries(byKind).map(([k, v]) => {
+        const nm = (KINDS[k] || {}).short || k;
+        return /^strip/.test(k) ? `${esc(nm)} <b>${v.len}cm</b>` : `${esc(nm)} ${v.n}개`;
+      }).join(" + ") || "—";
+    };
+    let drvRowsHTML = "";
+    DRVPLAN.forEach((d) => {
+      const circuits = d.circuits || [];
+      const ndr = d.drivers || 1;
+      const nrow = Math.max(1, circuits.length);
+      const watt = circuits.reduce((s, c) => s + (((SWITCHES[c] || {}).spec || {}).watt || 0), 0);
+      const smpsTot = circuits.reduce((s, c) => {
+        const sm = ((SWITCHES[c] || {}).spec || {}).smps || {};
+        return s + Object.entries(sm).reduce((a, [k, n]) => a + ((SMPSES[k] || {}).watt || 0) * n, 0);
+      }, 0);
+      const switches = [...new Set(circuits.map((c) => (SWITCHES[c] || {}).switch).filter(Boolean))].join(" · ");
+      circuits.forEach((c, i) => {
+        const sw = SWITCHES[c] || {};
+        const first = i === 0;
+        drvRowsHTML += '<tr>' +
+          (first ? `<td class="drv-no" rowspan="${nrow}">DR ${esc(d.no || "")}${ndr > 1 ? '<span class="drv-multi">·' + ndr + '개</span>' : ''}</td>` : "") +
+          `<td class="drv-cid">${esc(c)}</td>` +
+          `<td class="drv-desc">${esc(sw.desc || "")}</td>` +
+          `<td class="drv-light">${circuitLights(c)}</td>` +
+          (first ? `<td class="drv-sw" rowspan="${nrow}">${esc(switches)}</td>` : "") +
+          (first ? `<td class="drv-w num" rowspan="${nrow}">${watt}W</td>` : "") +
+          (first ? `<td class="drv-smps num" rowspan="${nrow}">${smpsTot}W</td>` : "") +
+          '</tr>';
+      });
+    });
+    const drvCount = DRVPLAN.reduce((s, d) => s + (d.drivers || 1), 0);
+    const drvUsed = new Set(DRVPLAN.flatMap((d) => d.circuits || []));
+    const dcAll = Object.keys(SWITCHES).filter((c) => { const sp = (SWITCHES[c] || {}).spec || {}; return sp.drivers && sp.drivers.aqara; });
+    const drvMissing = dcAll.filter((c) => !drvUsed.has(c));
+    const driverTableHTML = DRVPLAN.length ? (
+      '<div class="lt-drv-wrap">' +
+      `<h3 class="lt-drv-h">🔌 Aqara 드라이버 회로표 <span>드라이버 ${drvCount}개 · DC24V 회로 ${dcAll.length}개</span></h3>` +
+      (drvMissing.length ? `<p class="lt-drv-warn">⚠ 드라이버 미배정 회로: ${esc(drvMissing.join(", "))}</p>` : "") +
+      '<div class="lt-drv-scroll"><table class="lt-drv">' +
+      '<thead><tr><th>드라이버</th><th>회로</th><th>위치</th><th>조명 <span class="drv-th-sub">(스트립=길이)</span></th><th>연결 스위치</th><th>와트</th><th>SMPS 총W</th></tr></thead>' +
+      '<tbody>' + drvRowsHTML + '</tbody></table></div></div>'
+    ) : "";
+
     root.innerHTML =
       draftBanner +
+      driverTableHTML +
       '<div class="lt-grid">' +
         '<div class="lt-floor">' +
           '<div class="lt-zoom-bar">' +

@@ -782,6 +782,29 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 
 /* 매트릭스 표 — 엑셀 사례 포맷, 견적/공정 톤 차용 */
 .lt-tbl-wrap{border:1px solid #ece9e3;border-radius:14px;overflow:auto;background:var(--card);box-shadow:0 1px 3px rgba(60,50,40,.05)}
+/* Aqara 드라이버 회로표 */
+.lt-drv-wrap{margin:0 0 22px}
+.lt-drv-h{font-size:16px;font-weight:800;margin:0 0 8px;color:var(--ink)}
+.lt-drv-h span{font-size:12px;font-weight:600;color:var(--muted);margin-left:6px}
+.lt-drv-warn{font-size:12px;color:#b45309;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:5px 9px;margin:0 0 8px}
+.lt-drv-scroll{overflow-x:auto;border:1px solid #e2dccf;border-radius:8px}
+.lt-drv{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card)}
+.lt-drv th{background:#f3ede2;color:#5a4a35;font-weight:800;text-align:left;padding:8px 10px;border-bottom:2px solid #e2dccf;white-space:nowrap}
+.lt-drv th .drv-th-sub{font-weight:500;color:var(--muted);font-size:11px}
+.lt-drv td{padding:7px 10px;border-bottom:1px solid #efe9dd;border-right:1px solid #efe9dd;vertical-align:middle}
+.lt-drv td:last-child{border-right:none}
+.lt-drv .num{text-align:right;font-variant-numeric:tabular-nums}
+.lt-drv .drv-no{background:#efe7d7;font-weight:800;text-align:center;white-space:nowrap;color:#6b5636;border-right:2px solid #e2dccf}
+.lt-drv .drv-multi{display:block;font-size:10px;font-weight:600;color:#b45309}
+.lt-drv .drv-cid{font-weight:700;color:var(--accent);white-space:nowrap}
+.lt-drv .drv-desc{color:#5a4a35;min-width:120px}
+.lt-drv .drv-light{color:#3a2f22}
+.lt-drv .drv-light b{color:#c2410c;font-weight:800}
+.lt-drv .drv-sw{white-space:nowrap;color:#4b3b28;background:#faf6ee;border-right:2px solid #e2dccf;border-left:2px solid #e2dccf}
+.lt-drv .drv-w{font-weight:700;color:#7a6a55}
+.lt-drv .drv-smps{font-weight:800;color:#374151;background:#f5f3ee}
+.lt-drv tbody tr:hover td{background:#faf6ee}
+.lt-drv tbody tr:hover .drv-no,.lt-drv tbody tr:hover .drv-smps{background:#ece3d4}
 .lt-matrix{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;table-layout:auto}
 
 /* 헤더 3줄 */
