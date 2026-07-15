@@ -99,6 +99,16 @@ table.cal th,table.cal td{border:1px solid #ece5da}
 .flow .step .n{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;display:grid;place-items:center;font-weight:700}
 .flow .arrow{color:var(--muted);align-self:center}
 
+/* 미확정(미계약) 공정 — 공정표 제목 옆 */
+.sched-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sched-head .sec-head{margin:0}
+.sched-head .unconf{flex:1 1 340px}
+.unconf{background:var(--card);border:1px solid var(--line);border-left:4px solid #d9a13a;border-radius:12px;padding:10px 14px}
+.unconf-h{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.unconf-sub{font-size:12px;font-weight:500;color:var(--muted)}
+.unconf-chips{display:flex;flex-wrap:wrap;gap:8px}
+.unconf-chip{font-size:13px;color:#8a6d1f;background:#fdf6e3;border:1px solid #f0dcb8;border-radius:99px;padding:5px 12px;font-weight:600}
+
 /* decisions / checks lists */
 .dec-list{display:grid;gap:10px}
 .dec-item{background:var(--card);border:1px solid #f0dcb8;border-left:4px solid var(--warn);border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}

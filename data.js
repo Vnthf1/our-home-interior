@@ -101,9 +101,12 @@ const SCHEDULE = {
     { name: "전기 (실측)", spans: [["2026-07-06", "2026-07-06"]] },
     { name: "에어컨 (실측)", spans: [["2026-07-02", "2026-07-02"]] },
     { name: "목공 (실측)", spans: [["2026-07-06", "2026-07-06"]] },
+    { name: "필름 (실측)", spans: [["2026-07-15", "2026-07-15"]] },
     { name: "가구 (실측)", spans: [["2026-07-08", "2026-07-08"]] },
+    { name: "가구 (실측)", spans: [["2026-07-18", "2026-07-18"]] },
     { name: "전기", spans: [["2026-07-08", "2026-07-09"]] },
     { name: "목공", spans: [["2026-07-10", "2026-07-10"], ["2026-07-13", "2026-07-16"]] },
+    { name: "도기 (양중)", spans: [["2026-07-16", "2026-07-16"]] },
     { name: "타일 (양중)", spans: [["2026-07-17", "2026-07-17"]] },
     { name: "타일", spans: [["2026-07-20", "2026-07-23"]] },
     { name: "도기", spans: [["2026-07-30", "2026-07-30"]] },
@@ -124,6 +127,14 @@ const SCHEDULE = {
     { name: "이사",                 color: "#444444", spans: [["2026-08-14", "2026-08-14"]] },
   ],
 };
+
+/* ------------------------------------------------------------
+ *  아직 확정(업체 계약) 안 된 공정 — 공정표 페이지 하단에 표시.
+ * ------------------------------------------------------------ */
+const UNCONFIRMED = [
+  "세라믹", "입주청소", "실리콘", "줄눈", "탄성코트",
+  "온도조절기", "커튼", "인터폰", "필름", "도어락", "드레스룸 슬라이딩 문",
+];
 
 /* ------------------------------------------------------------
  *  실측(현장 방문) 일정 — 공정표 페이지 하단에 표시.
@@ -1974,9 +1985,9 @@ const FLOORPLAN = {
     { layer: "thermostat", type: "pin", x: 41.1, y: 66.1, label: "온도조절기 (복도/욕실)" },
     { layer: "thermostat", type: "pin", x: 35.6, y: 58.8, label: "온도조절기 (안방)" },
     { layer: "thermostat", type: "pin", x: 48.8, y: 41.8, label: "온도조절기 (침실1)" },
-    { layer: "light", type: "box", x: 66.6, y: 19.2, w: 0.1, h: 16.5, label: "간접조명", kind: "strip_cct", circuit: "KT-3", zone: "거실", name: "거실 우측 커튼박스 스트립 (주방 3구 #3)", length: 400 },
+    { layer: "light", type: "box", x: 66.6, y: 19.2, w: 0.1, h: 16.5, label: "간접조명", kind: "strip_cct", circuit: "KT-3a", zone: "거실", name: "거실 커튼박스 스트립", length: 400 },
     { layer: "light", type: "box", x: 66.8, y: 40.3, w: 0.1, h: 9.7, label: "간접조명", kind: "strip_normal", circuit: "BR-3", zone: "작은방", name: "작은방 간접" },
-    { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명", kind: "strip_cct", circuit: "MR-3b", zone: "안방", name: "안방 커튼박스 간접", length: 400 },
+    { layer: "light", type: "box", x: 21.4, y: 87.2, w: 13.4, h: 0.2, label: "간접조명", kind: "strip_cct", circuit: "MR-3b2", zone: "안방", name: "안방 커튼박스 간접", length: 400 },
     { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명", kind: "strip_normal", circuit: "DR-3", zone: "드레스룸", name: "드레스룸 간접" },
     { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #1", length: 180 },
     { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #2", length: 80 },
@@ -2035,8 +2046,8 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 39, y: 49.4, label: "COB조명", kind: "cob2n", circuit: "LB-1", zone: "거실화장실", name: "거실화장실 다운라이트 추가" },
     { layer: "light", type: "pin", x: 34.5, y: 40.4, label: "COB조명", kind: "cob2", circuit: "EN-1", zone: "현관", name: "현관 COB #2" },
     { layer: "light", type: "pin", x: 44.9, y: 61.6, label: "COB조명", kind: "cob2", circuit: "HW-2", zone: "복도", name: "복7" },
-    { layer: "light", type: "box", x: 48.3, y: 36, w: 17.1, h: 0.3, label: "간접조명", kind: "strip_cct", circuit: "KT-3", zone: "거실", name: "거실 TV 하부 간접 (신설)", length: 400 },
-    { layer: "light", type: "box", x: 24.9, y: 69.6, w: 9.7, h: 16.1, label: "간접조명", kind: "strip_cct", circuit: "MR-3b", zone: "안방", name: "안방 침대 하부 간접 (SR)", length: 720 },
+    { layer: "light", type: "box", x: 48.3, y: 36, w: 17.1, h: 0.3, label: "간접조명", kind: "strip_cct", circuit: "KT-3b", zone: "거실", name: "거실 TV 하부 간접", length: 400 },
+    { layer: "light", type: "box", x: 24.9, y: 69.6, w: 9.7, h: 16.1, label: "간접조명", kind: "strip_cct", circuit: "MR-3b1", zone: "안방", name: "안방 침대 하부 간접 (SR)", length: 720 },
     { layer: "light", type: "pin", x: 42, y: 44.5, label: "COB조명", kind: "cob2", circuit: "HW-2", zone: "복도", name: "복8" },
     { layer: "light", type: "pin", x: 26.1, y: 58.8, label: "확산조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복1" },
     { layer: "light", type: "pin", x: 28.4, y: 58.8, label: "확산조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복2" },
@@ -2709,29 +2720,30 @@ const LIGHTING_SMPS = {
 const LIGHTING_DRIVER_PLAN = [
   { no: "1",   circuits: ["LR-1"] },
   { no: "2",   circuits: ["LR-2"] },
-  // 거실 우물천장 = 4면 · 드라이버 2개(각 2면). 한 드라이버 = 우물 2면(2회로) 급전.
+  // 거실 우물천장 4면 = 드라이버 2개(각 2면·5m). 면 분리표시 없이 드라이버당 한 줄(500cm).
   { no: "3", switch: "거실 3구 #3", watt: 100, smpsW: 200, covers: ["LR-3a"], rows: [
-      { cid: "LR-3a·1면", desc: "거실 우물천장 1면", light: "울트라루멘 <b>250cm</b>" },
-      { cid: "LR-3a·2면", desc: "거실 우물천장 2면", light: "울트라루멘 <b>250cm</b>" } ] },
+      { desc: "거실 우물천장 (2면)", light: "울트라루멘 <b>500cm</b>" } ] },
   { no: "4", switch: "거실 3구 #3", watt: 100, smpsW: 200, covers: ["LR-3a"], rows: [
-      { cid: "LR-3a·3면", desc: "거실 우물천장 3면", light: "울트라루멘 <b>250cm</b>" },
-      { cid: "LR-3a·4면", desc: "거실 우물천장 4면", light: "울트라루멘 <b>250cm</b>" } ] },
+      { desc: "거실 우물천장 (2면)", light: "울트라루멘 <b>500cm</b>" } ] },
   { no: "5",   circuits: ["KT-1"] },
   { no: "6",   circuits: ["KT-2"] },
-  { no: "7",   circuits: ["KT-3"] },
+  // KT-3a·b = 거실 TV하부 + 커튼박스, 한 드라이버(2채널). 조명 셀은 합쳐서 표시.
+  { no: "7", switch: "주방 3구 #3", watt: 56, smpsW: 100, covers: ["KT-3a", "KT-3b"], rows: [
+      { desc: "거실 TV 하부 간접 + 커튼박스", light: "스트립CCT <b>400+400=800cm</b>" } ] },
   { no: "8",   circuits: ["HW-1"] },
   { no: "9",   circuits: ["HW-2"] },
   { no: "10",  circuits: ["EN-1"] },
   { no: "11",  circuits: ["MR-1"] },
-  // 안방 우물천장 = 2면뿐 · 드라이버 1개(2면·2회로).
+  // 안방 우물천장 = 2면 · 드라이버 1개.
   { no: "12", switch: "안방 3구 #2", watt: 100, smpsW: 200, covers: ["MR-2a"], rows: [
-      { cid: "MR-2a·1면", desc: "안방 우물천장 1면", light: "울트라루멘 <b>250cm</b>" },
-      { cid: "MR-2a·2면", desc: "안방 우물천장 2면", light: "울트라루멘 <b>250cm</b>" } ] },
+      { desc: "안방 우물천장 (2면)", light: "울트라루멘 <b>500cm</b>" } ] },
   { no: "13",  circuits: ["MR-2b"] },
-  { no: "14",  circuits: ["MR-3b"] },
-  { no: "15",  circuits: ["MRH-1", "MRH-2"] },       // 안방복도 COB+확산 = 한 드라이버 공유(페어링 예시)
-  { no: "16",  circuits: ["LB-2"] },
-  { no: "17",  circuits: ["MB-2"] },
+  // MR-3b1·2 = 침대 하부 + 커튼박스, 한 드라이버(2채널). 분리 표시(14-1 / 14-2).
+  { no: "14",  circuits: ["MR-3b1", "MR-3b2"] },
+  { no: "15",  circuits: ["MRH-1"] },   // 안방복도 COB — 별도 드라이버
+  { no: "16",  circuits: ["MRH-2"] },   // 안방복도 확산 — 별도 드라이버
+  { no: "17",  circuits: ["LB-2"] },
+  { no: "18",  circuits: ["MB-2"] },
 ];
 
 /* 스위치 단가 — 회로별 switch 필드의 "X구"를 카운트하여 발주량 자동 산정 */
@@ -2779,9 +2791,13 @@ const LIGHTING_SWITCHES = {
   // 주방 (3구) — 거실 스위치 옆. #3은 커튼박스(거실 기존 + 신설) 통합 제어.
   "KT-1": { zone: "주방", switch: "주방 3구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
   "KT-2": { zone: "주방", switch: "주방 3구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
-  "KT-3": { zone: "주방", switch: "주방 3구 #3", desc: "TV 하부 간접(4m) + 커튼박스 간접(4m) · 56W",
-            spec: { lights: { strip_cct: 0.8 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 56,
-                    note: "주방 3구 #3 = 거실 TV 하부 간접(신설 4m) + 거실 커튼박스 간접(4m). 둘 다 SR 8mm CCT 10M(#60). 합 8m = 0.8롤 × 7W/m = 56W. Aqara DR 1 (56W on 144W = 39% 부하) + SMPS u100 ×1 (56% 부하)." } },
+  // 주방 3구 #3 = 거실 TV 하부 + 거실 커튼박스, 2회로 분할. 한 Aqara DR(2채널)·SMPS 100W 공유(DR7). DR/SMPS는 KT-3a에 계상.
+  "KT-3a": { zone: "주방", switch: "주방 3구 #3", desc: "거실 커튼박스 간접 (4m)",
+             spec: { lights: { strip_cct: 0.4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
+                     note: "거실 커튼박스 간접 = SR 8mm CCT 10M(#60) 4m × 7W = 28W. 거실 TV 하부(KT-3b)와 한 Aqara DR(2채널)·SMPS 100W 공유." } },
+  "KT-3b": { zone: "주방", switch: "주방 3구 #3", desc: "거실 TV 하부 간접 (4m)",
+             spec: { lights: { strip_cct: 0.4 }, watt: 28,
+                     note: "거실 TV 하부 간접 = SR 8mm CCT 10M(#60) 4m × 7W = 28W. KT-3a와 한 Aqara DR·SMPS 공유(DR/SMPS는 KT-3a 계상)." } },
   // 복도 (2구)
   "HW-1": { zone: "복도", switch: "복도 2구 #1", desc: "아트월 (복1) + 간접 복5·복6",
             spec: { lights: { cob2: 1, strip_cct: 0.44 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 38,
@@ -2805,10 +2821,13 @@ const LIGHTING_SWITCHES = {
   "MR-2b": { zone: "안방", switch: "안방 3구 #2", desc: "침대 상부 간접 (울트라 4.8m·96W)",
              spec: { lights: { strip_ultra: 0.96 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 96,
                      note: "침대 헤드(상부) 간접 = 아카라 울트라 루멘 SMD 5M(#166) 0.96롤 (4.8m × 20W/m = 96W). 울트라만 사용(천장 아님). Aqara DR(#140) 1 (96W on 144W = 67% 부하) + 전용 SMPS u200 ×1 (48% 부하). 우물천장(MR-2a)과 같은 버튼이지만 DR 분리 → 앱에서 개별 디밍." } },
-  // 안방 3구 #3 — 침대 하부 간접 + 커튼박스 (둘 다 SR CCT, 단일 회로)
-  "MR-3b": { zone: "안방", switch: "안방 3구 #3", desc: "침대 하부 간접(7.2m) + 커튼박스(4.0m) · 78W",
-             spec: { lights: { strip_cct: 1.12 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 78,
-                     note: "① 침대 하부 간접 = SR 8mm CCT 10M(#60) · 퀸 프레임 2개 붙인 둘레 200+320+200 = 7.2m × 7W = 50W. ② 안방 커튼박스 = 4.0m × 7W = 28W. CCT 합 11.2m = 1.12롤 · 78W. Aqara DR 1 (78W on 144W = 54% 부하) + SMPS u100 ×1 (78% 부하)." } },
+  // 안방 3구 #3 = 침대 하부 간접 + 커튼박스, 2회로 분리. 한 Aqara DR(2채널)·SMPS 100W 공유(DR14). DR/SMPS는 MR-3b1에 계상.
+  "MR-3b1": { zone: "안방", switch: "안방 3구 #3", desc: "침대 하부 간접 (7.2m)",
+              spec: { lights: { strip_cct: 0.72 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 50,
+                      note: "침대 하부 간접 = SR 8mm CCT 10M(#60) · 퀸 프레임 2개 붙인 둘레 200+320+200 = 7.2m × 7W = 50W. 안방 커튼박스(MR-3b2)와 한 Aqara DR(2채널)·SMPS 100W 공유." } },
+  "MR-3b2": { zone: "안방", switch: "안방 3구 #3", desc: "커튼박스 간접 (4m)",
+              spec: { lights: { strip_cct: 0.4 }, watt: 28,
+                      note: "안방 커튼박스 = SR 8mm CCT 10M(#60) 4m × 7W = 28W. MR-3b1과 한 Aqara DR·SMPS 공유(DR/SMPS는 MR-3b1 계상)." } },
   // 안방복도 (2구, 신설) — 3구였다가 주방과 맞교환 (안복2 삭제로 버튼 2개면 충분)
   "MRH-1": { zone: "안방복도", switch: "안방복도 2구 #1", desc: "COB 2개 (안복1·안복2)",
              spec: { lights: { cob2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,

@@ -46,7 +46,7 @@
     "보일러": "hvac", "보일러 설비": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공": "carpentry",
-    "타일": "tile", "타일 (양중)": "tile", "타일 (도기)": "tile", "도기": "tile", "욕실천장": "tile", "사우나 설치": "furniture",
+    "타일": "tile", "타일 (양중)": "tile", "타일 (도기)": "tile", "도기": "tile", "도기 (양중)": "tile", "욕실천장": "tile", "사우나 설치": "furniture",
     "타일 줄눈": "tile", "줄눈": "tile",
     "세라믹 (실측)": "ceramic", "세라믹·안방세면대 설치": "ceramic", "세라믹": "ceramic",
     "필름": "film", "도배": "wallpaper", "장판": "floor",
@@ -196,13 +196,15 @@
       // 이벤트 세그먼트 수집
       const segs = [];
       SCHEDULE.tasks.forEach((t) => {
+        // 실측·양중·미팅은 방문/납품 마커 → 주말·휴일에도 표시(막대 제외 규칙 예외)
+        const measure = /실측|양중|미팅/.test(t.name);
         (t.spans||[]).forEach(([a,b]) => {
           const sa = parse(a), sb = parse(b);
           let runStart = -1;
           for (let i = 0; i < 6; i++) {
             const d = week[i];
             const inSpan = d >= sa && d <= sb;
-            const ok = inSpan && !isOff(d);
+            const ok = inSpan && (measure || !isOff(d));
             if (ok) { if (runStart < 0) runStart = i; }
             else if (runStart >= 0) {
               segs.push({ start: runStart, end: i-1, name: t.name, color: colorFor(t.name, t.color), pid: NAME2PHASE[t.name] });
@@ -237,7 +239,7 @@
         const left = (s.start / 6) * 100;
         const width = ((s.end - s.start + 1) / 6) * 100;
         const top = 32 + s.lane * 22;
-        const isMeasure = /실측|양중/.test(s.name);
+        const isMeasure = /실측|양중|미팅/.test(s.name);
         const styleColor = isMeasure
           ? `background:#fff;color:${s.color};border:1.5px solid ${s.color}`
           : `background:${s.color}`;
@@ -1387,9 +1389,11 @@
         : [...new Set((d.circuits || []).map((c) => (SWITCHES[c] || {}).switch).filter(Boolean))].join(" · ");
       subRows.forEach((r, i) => {
         const first = i === 0;
+        // 회로명: 다른 드라이버=번호 / 같은 드라이버서 나뉜 회로=번호-1,-2
+        const cLabel = r.label || (nrow > 1 ? `${d.no}-${i + 1}` : `${d.no}`);
         drvRowsHTML += '<tr>' +
           (first ? `<td class="drv-no" rowspan="${nrow}">DR ${esc(d.no || "")}${ndr > 1 ? '<span class="drv-multi">·' + ndr + '개</span>' : ''}</td>` : "") +
-          `<td class="drv-cid">${esc(r.cid)}</td>` +
+          `<td class="drv-cid">${esc(cLabel)}</td>` +
           `<td class="drv-desc">${esc(r.desc)}</td>` +
           `<td class="drv-light">${r.light}</td>` +
           (first ? `<td class="drv-sw" rowspan="${nrow}">${esc(switches)}</td>` : "") +
@@ -2176,6 +2180,17 @@
     showTab(fromHash());
     tabsEl.addEventListener("click", (e) => { const b = e.target.closest(".wtab"); if (b) location.hash = b.dataset.tab; });
     window.addEventListener("hashchange", () => { showTab(fromHash()); window.scrollTo({ top: 0 }); });
+  }
+
+  /* ---------- 미확정(미계약) 공정 — 공정표 하단 ---------- */
+  function renderUnconfirmed() {
+    const el = $("unconfirmed");
+    if (!el || typeof UNCONFIRMED === "undefined" || !UNCONFIRMED.length) return;
+    el.innerHTML =
+      `<div class="unconf">
+        <div class="unconf-h">🚧 아직 확정 안 된 공정 <span class="unconf-sub">(업체 미계약 · 일정 조율 중)</span></div>
+        <div class="unconf-chips">${UNCONFIRMED.map((n) => `<span class="unconf-chip">${esc(n)}</span>`).join("")}</div>
+      </div>`;
   }
 
   /* ---------- 실측 일정 (공정표 페이지 하단) ---------- */
@@ -3490,6 +3505,7 @@
     renderHome();
     renderConcept();
     renderCalendar();
+    renderUnconfirmed();
     renderSurvey();
     renderMaterials();
     renderDecisions();
