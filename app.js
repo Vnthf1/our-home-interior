@@ -1346,37 +1346,52 @@
 
     // ── Aqara 드라이버 중심 회로표 (LIGHTING_DRIVER_PLAN 정본) ──
     const DRVPLAN = (typeof LIGHTING_DRIVER_PLAN !== "undefined") ? LIGHTING_DRIVER_PLAN : [];
+    // 조명 요약 — 개수 / 스트립은 마커별 길이 분해 (예: 180+80=260cm)
     const circuitLights = (cid) => {
       const byKind = {};
       (groups[cid] || []).forEach(({ it }) => {
         const k = it.kind || "?";
-        (byKind[k] = byKind[k] || { n: 0, len: 0 });
-        byKind[k].n++; byKind[k].len += (it.length || 0);
+        (byKind[k] = byKind[k] || { n: 0, lens: [] });
+        byKind[k].n++; if (it.length) byKind[k].lens.push(it.length);
       });
       return Object.entries(byKind).map(([k, v]) => {
         const nm = (KINDS[k] || {}).short || k;
-        return /^strip/.test(k) ? `${esc(nm)} <b>${v.len}cm</b>` : `${esc(nm)} ${v.n}개`;
+        if (/^strip/.test(k)) {
+          const sum = v.lens.reduce((a, b) => a + b, 0);
+          const bd = v.lens.length > 1 ? v.lens.join("+") + "=" : "";
+          return `${esc(nm)} <b>${bd}${sum}cm</b>`;
+        }
+        return `${esc(nm)} ${v.n}개`;
       }).join(" + ") || "—";
     };
     let drvRowsHTML = "";
     DRVPLAN.forEach((d) => {
-      const circuits = d.circuits || [];
       const ndr = d.drivers || 1;
-      const nrow = Math.max(1, circuits.length);
-      const watt = circuits.reduce((s, c) => s + (((SWITCHES[c] || {}).spec || {}).watt || 0), 0);
-      const smpsTot = circuits.reduce((s, c) => {
-        const sm = ((SWITCHES[c] || {}).spec || {}).smps || {};
-        return s + Object.entries(sm).reduce((a, [k, n]) => a + ((SMPSES[k] || {}).watt || 0) * n, 0);
-      }, 0);
-      const switches = [...new Set(circuits.map((c) => (SWITCHES[c] || {}).switch).filter(Boolean))].join(" · ");
-      circuits.forEach((c, i) => {
-        const sw = SWITCHES[c] || {};
+      // 서브행: 명시 rows 우선, 없으면 circuits (위치 = 구역 + 설명)
+      const subRows = d.rows
+        ? d.rows.map((r) => ({ cid: r.cid, desc: r.desc, light: r.light }))
+        : (d.circuits || []).map((c) => {
+            const sw = SWITCHES[c] || {};
+            return { cid: c, desc: ((sw.zone ? sw.zone + " " : "") + (sw.desc || "")).trim(), light: circuitLights(c) };
+          });
+      const nrow = Math.max(1, subRows.length);
+      const watt = (d.watt != null) ? d.watt
+        : (d.circuits || []).reduce((s, c) => s + (((SWITCHES[c] || {}).spec || {}).watt || 0), 0);
+      const smpsTot = (d.smpsW != null) ? d.smpsW
+        : (d.circuits || []).reduce((s, c) => {
+            const sm = ((SWITCHES[c] || {}).spec || {}).smps || {};
+            return s + Object.entries(sm).reduce((a, [k, n]) => a + ((SMPSES[k] || {}).watt || 0) * n, 0);
+          }, 0);
+      const switches = d.switch
+        ? d.switch
+        : [...new Set((d.circuits || []).map((c) => (SWITCHES[c] || {}).switch).filter(Boolean))].join(" · ");
+      subRows.forEach((r, i) => {
         const first = i === 0;
         drvRowsHTML += '<tr>' +
           (first ? `<td class="drv-no" rowspan="${nrow}">DR ${esc(d.no || "")}${ndr > 1 ? '<span class="drv-multi">·' + ndr + '개</span>' : ''}</td>` : "") +
-          `<td class="drv-cid">${esc(c)}</td>` +
-          `<td class="drv-desc">${esc(sw.desc || "")}</td>` +
-          `<td class="drv-light">${circuitLights(c)}</td>` +
+          `<td class="drv-cid">${esc(r.cid)}</td>` +
+          `<td class="drv-desc">${esc(r.desc)}</td>` +
+          `<td class="drv-light">${r.light}</td>` +
           (first ? `<td class="drv-sw" rowspan="${nrow}">${esc(switches)}</td>` : "") +
           (first ? `<td class="drv-w num" rowspan="${nrow}">${watt}W</td>` : "") +
           (first ? `<td class="drv-smps num" rowspan="${nrow}">${smpsTot}W</td>` : "") +
@@ -1384,7 +1399,7 @@
       });
     });
     const drvCount = DRVPLAN.reduce((s, d) => s + (d.drivers || 1), 0);
-    const drvUsed = new Set(DRVPLAN.flatMap((d) => d.circuits || []));
+    const drvUsed = new Set(DRVPLAN.flatMap((d) => (d.circuits || []).concat(d.covers || [])));
     const dcAll = Object.keys(SWITCHES).filter((c) => { const sp = (SWITCHES[c] || {}).spec || {}; return sp.drivers && sp.drivers.aqara; });
     const drvMissing = dcAll.filter((c) => !drvUsed.has(c));
     const driverTableHTML = DRVPLAN.length ? (

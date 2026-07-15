@@ -2709,7 +2709,13 @@ const LIGHTING_SMPS = {
 const LIGHTING_DRIVER_PLAN = [
   { no: "1",   circuits: ["LR-1"] },
   { no: "2",   circuits: ["LR-2"] },
-  { no: "3·4", drivers: 2, circuits: ["LR-3a"] },   // 10m 울트라 = 드라이버 2개(회로 1개)
+  // 거실 우물천장 = 4면 · 드라이버 2개(각 2면). 한 드라이버 = 우물 2면(2회로) 급전.
+  { no: "3", switch: "거실 3구 #3", watt: 100, smpsW: 200, covers: ["LR-3a"], rows: [
+      { cid: "LR-3a·1면", desc: "거실 우물천장 1면", light: "울트라루멘 <b>250cm</b>" },
+      { cid: "LR-3a·2면", desc: "거실 우물천장 2면", light: "울트라루멘 <b>250cm</b>" } ] },
+  { no: "4", switch: "거실 3구 #3", watt: 100, smpsW: 200, covers: ["LR-3a"], rows: [
+      { cid: "LR-3a·3면", desc: "거실 우물천장 3면", light: "울트라루멘 <b>250cm</b>" },
+      { cid: "LR-3a·4면", desc: "거실 우물천장 4면", light: "울트라루멘 <b>250cm</b>" } ] },
   { no: "5",   circuits: ["KT-1"] },
   { no: "6",   circuits: ["KT-2"] },
   { no: "7",   circuits: ["KT-3"] },
@@ -2717,7 +2723,10 @@ const LIGHTING_DRIVER_PLAN = [
   { no: "9",   circuits: ["HW-2"] },
   { no: "10",  circuits: ["EN-1"] },
   { no: "11",  circuits: ["MR-1"] },
-  { no: "12",  circuits: ["MR-2a"] },
+  // 안방 우물천장 = 2면뿐 · 드라이버 1개(2면·2회로).
+  { no: "12", switch: "안방 3구 #2", watt: 100, smpsW: 200, covers: ["MR-2a"], rows: [
+      { cid: "MR-2a·1면", desc: "안방 우물천장 1면", light: "울트라루멘 <b>250cm</b>" },
+      { cid: "MR-2a·2면", desc: "안방 우물천장 2면", light: "울트라루멘 <b>250cm</b>" } ] },
   { no: "13",  circuits: ["MR-2b"] },
   { no: "14",  circuits: ["MR-3b"] },
   { no: "15",  circuits: ["MRH-1", "MRH-2"] },       // 안방복도 COB+확산 = 한 드라이버 공유(페어링 예시)
