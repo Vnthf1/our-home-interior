@@ -24,8 +24,10 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  // 관리자(소유자) 여부 — references 페이지에서 GitHub 토큰을 검증하면 localStorage.gh_admin='1'
-  const isAdmin = () => { try { return localStorage.getItem("gh_admin") === "1"; } catch (e) { return false; } };
+  // 관리자(소유자) 여부 — references 페이지에서 GitHub 토큰을 검증하면 localStorage.gh_admin='1'.
+  // 로컬(localhost·127.0.0.1·file://)에선 자동 관리자 → 견적·가격·전화 모두 노출.
+  const isLocal = () => { try { const h = location.hostname; return h === "localhost" || h === "127.0.0.1" || h === "" || location.protocol === "file:"; } catch (e) { return false; } };
+  const isAdmin = () => { try { return isLocal() || localStorage.getItem("gh_admin") === "1"; } catch (e) { return false; } };
   // 휴대폰 마스킹 — 사이트가 public 이라 비관리자에겐 ****-**** 로만 노출. 관리자는 실제 번호.
   const maskPhone = (p) => {
     if (!p) return "";
