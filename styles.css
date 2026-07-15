@@ -806,6 +806,10 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .lt-drv .num{text-align:right;font-variant-numeric:tabular-nums}
 .lt-drv .drv-no{background:#efe7d7;font-weight:800;text-align:center;white-space:nowrap;color:#6b5636;border-right:2px solid #e2dccf}
 .lt-drv .drv-multi{display:block;font-size:10px;font-weight:600;color:#b45309}
+.lt-drv .drv-box{display:block;font-size:9.5px;font-weight:700;margin-top:2px}
+.lt-drv-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:#5a4a35;margin:0 0 8px}
+.lt-drv-legend span{display:inline-flex;align-items:center;gap:5px}
+.lt-drv-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
 .lt-drv .drv-cid{font-weight:700;color:var(--accent);white-space:nowrap}
 .lt-drv .drv-desc{color:#5a4a35;min-width:120px}
 .lt-drv .drv-light{color:#3a2f22}

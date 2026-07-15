@@ -1366,9 +1366,19 @@
         return `${esc(nm)} ${v.n}개`;
       }).join(" + ") || "—";
     };
+    // 드라이버 함(설치 위치) — 구역 → 함, 함 → 색
+    const BOX_OF = { "거실": "거실함", "주방": "거실함", "복도": "거실함", "현관": "거실함",
+      "안방": "안방함", "안방복도": "안방함",
+      "거실화장실": "거실화장실 천장", "안방화장실": "안방화장실 천장" };
+    const BOX_COLOR = { "거실함": "#3b82f6", "안방함": "#8b5cf6", "거실화장실 천장": "#14b8a6", "안방화장실 천장": "#f59e0b" };
+    const boxSeen = [];
     let drvRowsHTML = "";
     DRVPLAN.forEach((d) => {
       const ndr = d.drivers || 1;
+      const drvZone = ((SWITCHES[(d.circuits || [])[0]] || SWITCHES[(d.covers || [])[0]] || {}).zone) || "";
+      const drvBox = BOX_OF[drvZone] || "";
+      const boxColor = BOX_COLOR[drvBox] || "#cbb994";
+      if (drvBox && !boxSeen.includes(drvBox)) boxSeen.push(drvBox);
       // 서브행: 명시 rows 우선, 없으면 circuits (위치 = 구역 + 설명)
       const subRows = d.rows
         ? d.rows.map((r) => ({ cid: r.cid, desc: r.desc, light: r.light }))
@@ -1392,7 +1402,7 @@
         // 회로명: 다른 드라이버=번호 / 같은 드라이버서 나뉜 회로=번호-1,-2
         const cLabel = r.label || (nrow > 1 ? `${d.no}-${i + 1}` : `${d.no}`);
         drvRowsHTML += '<tr>' +
-          (first ? `<td class="drv-no" rowspan="${nrow}">DR ${esc(d.no || "")}${ndr > 1 ? '<span class="drv-multi">·' + ndr + '개</span>' : ''}</td>` : "") +
+          (first ? `<td class="drv-no" rowspan="${nrow}" style="border-left:6px solid ${boxColor}">DR ${esc(d.no || "")}${ndr > 1 ? '<span class="drv-multi">·' + ndr + '개</span>' : ''}${drvBox ? `<span class="drv-box" style="color:${boxColor}">${esc(drvBox)}</span>` : ''}</td>` : "") +
           `<td class="drv-cid">${esc(cLabel)}</td>` +
           `<td class="drv-desc">${esc(r.desc)}</td>` +
           `<td class="drv-light">${r.light}</td>` +
@@ -1409,6 +1419,7 @@
     const driverTableHTML = DRVPLAN.length ? (
       '<div class="lt-drv-wrap">' +
       `<h3 class="lt-drv-h">🔌 Aqara 드라이버 회로표 <span>드라이버 ${drvCount}개 · DC24V 회로 ${dcAll.length}개</span></h3>` +
+      (boxSeen.length ? '<div class="lt-drv-legend">함 위치: ' + boxSeen.map((b) => `<span><i style="background:${BOX_COLOR[b] || "#cbb994"}"></i>${esc(b)}</span>`).join("") + '</div>' : "") +
       (drvMissing.length ? `<p class="lt-drv-warn">⚠ 드라이버 미배정 회로: ${esc(drvMissing.join(", "))}</p>` : "") +
       '<div class="lt-drv-scroll"><table class="lt-drv">' +
       '<thead><tr><th>드라이버</th><th>회로</th><th>위치</th><th>조명 <span class="drv-th-sub">(스트립=길이)</span></th><th>연결 스위치</th><th>와트</th><th>SMPS 총W</th></tr></thead>' +
