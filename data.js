@@ -2854,14 +2854,14 @@ const LIGHTING_SWITCHES = {
   // 거실화장실 (3구)
   "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트 2개",
            spec: { lights: { cob2n: 2 }, note: "일반 COB 2개 · AC 220V 스위치 직결 (DR/SMPS 불필요)" } },
-  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "간접등",
+  "LB-2": { zone: "거실화장실", switch: "거실화장실 3구 #2", desc: "거울 조명(위·아래)+간접",
             spec: { lights: { strip_aqara_wp: 0.9 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 45,
                     note: "거울 조명(위·아래) — 아카라 방수 H2 5M(#167) 0.9롤 = 450cm (거울 165×2 + 간접 120) · 4.5m × 10W = 45W · 100W SMPS 충분(55W 여유)" } },
   "LB-3": { zone: "거실화장실", switch: "거실화장실 3구 #3", desc: "환풍기" },
   // 안방화장실 (3구)
   "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
             spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
-  "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "간접등",
+  "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "거울 조명(위·아래)+간접",
             spec: { lights: { strip_aqara_wp: 1.588 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 79,
                     note: "거울 조명(위·아래) — 아카라 방수 H2 5M(#167) 1.588롤 = 794cm (90 + 거울 162×2 + 160 + 220) · 7.94m × 10W = 79W · 100W SMPS 충분(21W 여유)" } },
   "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
