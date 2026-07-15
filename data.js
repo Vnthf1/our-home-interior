@@ -2693,7 +2693,7 @@ const LIGHTING_KINDS = {
   cob2n:   { label: "2인치 COB (일반)",   icon: "●", short: "COB·일반", color: "#93c5fd", model: "뤼네브 257 COB 다운라이트 2인치 (일반조명)",            watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
   diff2:   { label: "2인치 확산형 (IoT)", icon: "○", short: "확산·IoT", color: "#10b981", model: "소프트 호른 확산형 다운라이트 2인치 (#42) · TW 3000~6500K · CRI>90", watt: 8, volt: "DC 24V", priceB2B: 8580,  priceB2C: 16364 },
   diff2n:  { label: "2인치 확산형 (일반)",icon: "○", short: "확산·일반",color: "#6ee7b7", model: "솔레아 257 확산형 다운라이트 2인치 (일반조명)",          watt: 0,  volt: "AC 220V", priceB2B: 8900, priceB2C: 8900 },
-  multi10: { label: "10구 멀티매입등",     icon: "◉", short: "10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
+  multi10: { label: "10구 멀티매입등",     icon: "◉", short: "멀티매입등 10구",     color: "#f59e0b", model: "CCT 멀티 도트 사각 다운라이트 10구 (보급형·정전압) (#48)", watt: 20, volt: "DC 24V", priceB2B: 27600, priceB2C: 36364 },
   // strip (RGBWW)은 거실 우물천장·커튼박스를 CCT로 변경하면서 전 회로에서 미사용 → 제거. 필요시 git history에서 복구.
   strip_cct:    { label: "스트립 CCT",        icon: "▭", short: "스트립CCT",   color: "#fb923c", model: "SR 8mm 슬림폭 CCT COB LED 스트립 10M (#60)",     watt: 70, volt: "DC 24V", rollCm: 1000, priceB2B: 44400, priceB2C: 80000 }, // 10M 한 롤당 약 70W (7W/m)
   strip_ultra:  { label: "스트립 울트라루멘",  icon: "▮", short: "울트라루멘",  color: "#dc2626", model: "아카라 울트라 루멘 플렉스 SMD 라이트 스트립 5M (#166) · DC24V TW · >90Ra · 일시적 특가", watt: 100, volt: "DC 24V", rollCm: 500, priceB2B: 97500, priceB2C: 150000 }, // 5M 한 롤당 100W (20W/m) · SR CCT 대비 약 3배 광량
