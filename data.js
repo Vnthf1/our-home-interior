@@ -88,7 +88,7 @@ const SCHEDULE = {
     { name: "설비", spans: [["2026-07-06", "2026-07-07"]] },
     { name: "설비", spans: [["2026-07-08", "2026-07-09"]] },
     { name: "욕실 설비 (조적·방수·배관)", spans: [["2026-07-13", "2026-07-13"], ["2026-07-16", "2026-07-16"]] },
-    { name: "보일러 설비", spans: [["2026-07-15", "2026-07-15"]] },
+    { name: "보일러 설비", spans: [["2026-07-15", "2026-07-15"], ["2026-07-16", "2026-07-16"]] },
     { name: "폐기물 처리", spans: [] },
     { name: "전열교환기 (실측)",  color: "#5b8a7e", spans: [["2026-06-30", "2026-06-30"]] },
     { name: "전열교환기 (배관)",  color: "#5b8a7e", spans: [["2026-07-06", "2026-07-06"]] },
@@ -108,9 +108,11 @@ const SCHEDULE = {
     { name: "목공", spans: [["2026-07-10", "2026-07-10"], ["2026-07-13", "2026-07-16"]] },
     { name: "도기 (양중)", spans: [["2026-07-16", "2026-07-16"]] },
     { name: "타일 (양중)", spans: [["2026-07-17", "2026-07-17"]] },
+    { name: "바닥샌딩", spans: [["2026-07-20", "2026-07-20"]] },
     { name: "타일", spans: [["2026-07-20", "2026-07-23"]] },
     { name: "도기", spans: [["2026-07-30", "2026-07-30"]] },
     { name: "욕실천장", spans: [["2026-07-24", "2026-07-24"]] },
+    { name: "필름", spans: [["2026-07-24", "2026-07-24"]] },
     { name: "욕실 설비", spans: [["2026-08-09", "2026-08-09"]] },
     { name: "전기 (타공)", spans: [["2026-07-21", "2026-07-21"]] },
     { name: "장판", spans: [["2026-08-07", "2026-08-07"]] },
@@ -990,7 +992,18 @@ const QUOTES = [
       },
     ],
   },
-  { phase: "film", candidates: [] },         // 필름
+  { phase: "film", candidates: [
+    {
+      name: "호박인테리어필름", company: "", phone: "010-7216-7206",
+      price: "76만원",
+      status: "received",
+      scope: "다크우드·월넛 필름 — 문·문틀·걸레받이 등 포인트 (시공 범위 확정 필요)",
+      summary: "견적 76만원",
+      items: [],
+      files: [],
+      note: "견적 76만원 (미계약).",
+    },
+  ] },   // 필름
   {
     phase: "wallpaper", // 도배
     candidates: [
@@ -2030,8 +2043,8 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 47.1, y: 23.7, label: "확산조명", kind: "diff2", circuit: "KT-1", zone: "주방", name: "주방 아일랜드 확산-2" },
     { layer: "light", type: "pin", x: 47.1, y: 29.1, label: "확산조명", kind: "diff2", circuit: "KT-1", zone: "주방", name: "주방 아일랜드 확산-3" },
     { layer: "light", type: "pin", x: 39.7, y: 83.9, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #2" },
-    { layer: "light", type: "pin", x: 33, y: 57.5, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복3" },
-    { layer: "light", type: "pin", x: 33, y: 61.9, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복4" },
+    { layer: "light", type: "pin", x: 26.1, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복3" },
+    { layer: "light", type: "pin", x: 28.4, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복4" },
     { layer: "light", type: "box", x: 22.4, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #2", length: 100 },
     { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 간접 #1", length: 180 },
     { layer: "light", type: "box", x: 22, y: 50.6, w: 0.1, h: 3.6, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 간접 #3", length: 200 },
@@ -2049,8 +2062,8 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 48.3, y: 36, w: 17.1, h: 0.3, label: "간접조명", kind: "strip_cct", circuit: "KT-3b", zone: "거실", name: "거실 TV 하부 간접", length: 400 },
     { layer: "light", type: "box", x: 24.9, y: 69.6, w: 9.7, h: 16.1, label: "간접조명", kind: "strip_cct", circuit: "MR-3b1", zone: "안방", name: "안방 침대 하부 간접 (SR)", length: 720 },
     { layer: "light", type: "pin", x: 42, y: 44.5, label: "COB조명", kind: "cob2", circuit: "HW-2", zone: "복도", name: "복8" },
-    { layer: "light", type: "pin", x: 26.1, y: 58.8, label: "확산조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복1" },
-    { layer: "light", type: "pin", x: 28.4, y: 58.8, label: "확산조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복2" },
+    { layer: "light", type: "pin", x: 33, y: 57.5, label: "확산조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복1" },
+    { layer: "light", type: "pin", x: 33, y: 61.9, label: "확산조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복2" },
     { layer: "light", type: "pin", x: 28.5, y: 65.7, label: "COB조명", kind: "cob2", circuit: "MR-1", zone: "안방", name: "안방 COB #2" },
     { layer: "light", type: "pin", x: 39.8, y: 70.8, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #3" },
     { layer: "light", type: "pin", x: 39.7, y: 79.8, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #4" },
@@ -2771,8 +2784,8 @@ const LIGHTING_EXTRAS = [
   { id: "rail_4_5m",   label: "[주문제작] 무소음 레일 4.0m~5.0m (#163)",         qty: 4, priceB2B: 210600, priceB2C: 270000 },
   { id: "rail_3_4m",   label: "[주문제작] 무소음 레일 3.0m~4.0m (#162)",         qty: 2, priceB2B: 170182, priceB2C: 218182 },
   // 구글 네스트(이지엉클 외) — 최저가 입력 → 표시 ×1.1 = VAT 포함 가격이 되도록 ÷1.1 후 저장
-  { id: "nest_4",      label: "구글 네스트 4세대",                              qty: 1, priceB2B: 326364, priceB2C: 326364 }, // 최저가 359,000원 (VAT포함) 기준
-  { id: "nest_35",     label: "구글 네스트 3.5세대",                            qty: 2, priceB2B: 125455, priceB2C: 125455 }, // 최저가 138,000원 (VAT포함) 기준
+  { id: "nest_4",      label: "구글 네스트 4세대",                              qty: 1, priceB2B: 381818, priceB2C: 420000 }, // ✅ 실구매 42만원(VAT포함) · priceB2B = 420,000/1.1
+  { id: "nest_35",     label: "구글 네스트 3.5세대",                            qty: 3, priceB2B: 118182, priceB2C: 130000 }, // ✅ 실구매 3개 총 39만원(VAT포함, 개당 13만원) · priceB2B = 130,000/1.1
 ];
 
 /* 스위치 회로 메타.
