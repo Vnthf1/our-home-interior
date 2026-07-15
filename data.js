@@ -2738,12 +2738,13 @@ const LIGHTING_DRIVER_PLAN = [
   { no: "12", switch: "안방 3구 #2", watt: 100, smpsW: 200, covers: ["MR-2a"], rows: [
       { desc: "안방 우물천장 (2면)", light: "울트라루멘 <b>500cm</b>" } ] },
   { no: "13",  circuits: ["MR-2b"] },
-  // MR-3b1·2 = 침대 하부 + 커튼박스, 한 드라이버(2채널). 분리 표시(14-1 / 14-2).
-  { no: "14",  circuits: ["MR-3b1", "MR-3b2"] },
-  { no: "15",  circuits: ["MRH-1"] },   // 안방복도 COB — 별도 드라이버
-  { no: "16",  circuits: ["MRH-2"] },   // 안방복도 확산 — 별도 드라이버
-  { no: "17",  circuits: ["LB-2"] },
-  { no: "18",  circuits: ["MB-2"] },
+  // 안방 침대 하부 / 커튼박스 = 각각 별도 드라이버 (다른 회로).
+  { no: "14",  circuits: ["MR-3b1"] },  // 안방 침대 하부 간접
+  { no: "15",  circuits: ["MR-3b2"] },  // 안방 커튼박스
+  { no: "16",  circuits: ["MRH-1"] },   // 안방복도 COB
+  { no: "17",  circuits: ["MRH-2"] },   // 안방복도 확산
+  { no: "18",  circuits: ["LB-2"] },
+  { no: "19",  circuits: ["MB-2"] },
 ];
 
 /* 스위치 단가 — 회로별 switch 필드의 "X구"를 카운트하여 발주량 자동 산정 */
@@ -2826,8 +2827,8 @@ const LIGHTING_SWITCHES = {
               spec: { lights: { strip_cct: 0.72 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 50,
                       note: "침대 하부 간접 = SR 8mm CCT 10M(#60) · 퀸 프레임 2개 붙인 둘레 200+320+200 = 7.2m × 7W = 50W. 안방 커튼박스(MR-3b2)와 한 Aqara DR(2채널)·SMPS 100W 공유." } },
   "MR-3b2": { zone: "안방", switch: "안방 3구 #3", desc: "커튼박스 간접 (4m)",
-              spec: { lights: { strip_cct: 0.4 }, watt: 28,
-                      note: "안방 커튼박스 = SR 8mm CCT 10M(#60) 4m × 7W = 28W. MR-3b1과 한 Aqara DR·SMPS 공유(DR/SMPS는 MR-3b1 계상)." } },
+              spec: { lights: { strip_cct: 0.4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
+                      note: "안방 커튼박스 = SR 8mm CCT 10M(#60) 4m × 7W = 28W. 침대 하부(MR-3b1)와 별도 드라이버·SMPS (다른 회로)." } },
   // 안방복도 (2구, 신설) — 3구였다가 주방과 맞교환 (안복2 삭제로 버튼 2개면 충분)
   "MRH-1": { zone: "안방복도", switch: "안방복도 2구 #1", desc: "COB 2개 (안복1·안복2)",
              spec: { lights: { cob2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,
