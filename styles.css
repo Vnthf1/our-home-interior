@@ -712,6 +712,13 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px;border
 .kz-card svg{width:100%;height:auto;display:block;margin-top:4px}
 .kz-h{margin:0 0 6px;font-size:16px;color:var(--accent);font-weight:700}
 .kz-h span{font-size:13px;color:var(--muted);font-weight:500;margin-left:6px}
+/* 로봇청소기 설치 공간 참고 이미지 */
+.rv-imgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:10px}
+.rv-img-card{display:block;background:#faf8f4;border:1px solid var(--line);border-radius:10px;padding:10px;text-decoration:none;color:inherit;transition:.15s;overflow:hidden}
+.rv-img-card:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(90,58,34,.08)}
+.rv-img-card img{width:100%;height:auto;display:block;border-radius:6px;background:#fff}
+.rv-cap{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.5;font-weight:500}
+.rv-note{margin-top:14px;padding:10px 14px;background:#fff7d6;border-left:3px solid #d4a017;border-radius:6px;font-size:13px;line-height:1.65;color:#5a4a20}
 .kz-notes ul{margin:6px 0 0;padding-left:18px}
 .kz-notes li{margin:4px 0;font-size:14px}
 .kz-notes code{background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:6px;font-size:13px;font-weight:700}

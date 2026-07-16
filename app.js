@@ -45,7 +45,7 @@
     "보양": "demolition",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "샷시 (실측)": "window", "설비": "demolition", "설비 (미정)": "demolition", "바닥샌딩": "demolition",
-    "보일러": "hvac", "보일러 설비": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
+    "보일러": "hvac", "보일러 설비": "hvac", "수평몰탈": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공": "carpentry",
     "타일": "tile", "타일 (양중)": "tile", "타일 (도기)": "tile", "도기": "tile", "도기 (양중)": "tile", "욕실천장": "tile", "사우나 설치": "furniture",
@@ -198,8 +198,8 @@
       // 이벤트 세그먼트 수집
       const segs = [];
       SCHEDULE.tasks.forEach((t) => {
-        // 실측·양중·미팅은 방문/납품 마커 → 주말·휴일에도 표시(막대 제외 규칙 예외)
-        const measure = /실측|양중|미팅/.test(t.name);
+        // 실측·양중·미팅 마커, 셀프시공(휴일에 함) → 주말·휴일에도 표시(막대 제외 규칙 예외)
+        const measure = /실측|양중|미팅|셀프시공/.test(t.name);
         (t.spans||[]).forEach(([a,b]) => {
           const sa = parse(a), sb = parse(b);
           let runStart = -1;
@@ -1794,7 +1794,7 @@
     // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
     // 가격 미정/모호 phase는 사용자 협의 가정값
     const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1 };
-    const QUOTE_OVERRIDE = { ceramic: 5000000, film: 760000, "middle-door": 3000000 };
+    const QUOTE_OVERRIDE = { ceramic: 5000000, film: 1400000, "middle-door": 3000000 };
     const estimatedExtras = [];
     if (typeof QUOTES !== "undefined") {
       const parsePrice = (s) => {
