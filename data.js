@@ -233,11 +233,12 @@ const CONTACTS = [
 const QUOTE_SUMMARY = [
   { phase: "입주민 동의", company: "셀프 진행", price: 330000, deposit: 330000, final: 330000, note: "✅ 완납 — 동의 선물 8만 + 엘베 사용료 25만" },
   { phase: "철거·설비", company: "벨류연구소", price: 9500000, priceText: "950만 (최종 완납)", deposit: 5537500, final: 9500000, note: "✅ 완납 완료 — 최종 합의 950만(재견적 1,080.5만에서 협의 조정). 선입금 553.75만 + 잔금 396.25만 완납." },
-  { phase: "설비 (매립수전·파티션)", company: "에프원 하우스", price: 2700000, priceText: "약 270만", deposit: null, final: null, note: "✅ 확정 — 매립수전 5개 설치 + 파티션 시공. 벨류연구소와 별도. 두 업체 합쳐 설비 총 약 1,220만" },
+  { phase: "설비 (매립수전·파티션)", company: "에프원 하우스", price: 2700000, priceText: "270만 (완납)", deposit: 2700000, final: 2700000, note: "✅ 완납 완료 — 매립수전 5개 설치 + 파티션 시공. 벨류연구소와 별도. 두 업체 합쳐 설비 총 약 1,220만" },
   { phase: "전기", company: "하린 전기조명", price: 7000000, deposit: 300000, final: null, note: "VAT 포함 · 700만" },
   { phase: "전열교환기", company: "클린코퍼레이션", price: 4900000, deposit: 1000000, final: null, note: "THE650-200 환기 · 견적 490만 확정(VAT 포함) · 선입금 100만 · 벽타공·전기통신·천장은 인테리어분 별도" },
   { phase: "가전 (전체)", company: "삼성 (영림 인천갤러리)", price: 15145087, deposit: 15145087, final: 15145087, note: "✅ 완료 — 인덕션·식세기·오븐·냉장고·세탁기·건조기·로봇청소기·사운드바·정수기·85인치 TV·에어컨 일괄. 체감가 15,145,087원 (결제 31,211,000 → 캐시백·상품권 차감)" },
   { phase: "에어컨 (선배관·설치비)", company: "", price: 600000, deposit: 600000, final: 600000, note: "✅ 완납 60만 — 에어컨 선배관·설치비 (본체는 가전 일괄에 포함) · 배관 7/6·설치 7/31" },
+  { phase: "인터폰 설치", company: "", price: 600000, deposit: 600000, final: 600000, note: "✅ 완납 60만 (예상 50만보다 +10만)" },
   { phase: "목공", company: "국선디자인", price: 14041500, priceText: "1,404.15만 (최종 완납)", deposit: 400000, final: 14041500, note: "✅ 완납 완료 — 인건비 806만 + 자재/부자재 598.15만 = 총 1,404.15만. 선납금 40만 + 잔금 완납." },
   { phase: "타일", company: "최반장", price: 3700000, deposit: null, final: null, note: "천장 포함 최종 약 370만 (기존 시공 320만 + 천장)" },
   { phase: "필름", company: "호박인테리어필름", price: 1400000, deposit: null, final: null, note: "✅ 확정 약 140만 · 문·문틀·걸레받이 등 다크우드 필름 · 010-7216-7206" },
@@ -508,7 +509,7 @@ const QUOTES = [
         note: "재발송 견적 총 10,805,000원 (VAT 별도 여부 확인 필요). 이전 대비: 천장철거 74→85만(안방·거실·복도·파우더룸), 현관 7→12만, 욕실 액체방수 140만 이번 견적에 포함, 스위치·콘센트·인터폰 철거 항목 빠짐. 추가요청 387만(소방대피 난방확장·후드 코아천공·썩은 가벽 철거·스터드 녹제거·방청·세탁실/욕실 배수 신규·추가 폐기물). ⚠️ '공과잡비 45만'과 '회사이윤 50만'이 별도 항목으로 각각 잡힘 — 항목별 단가에 이미 마진이 포함되는 게 일반적이라 이 둘은 협의 여지 있음. 선입금 553.75만.",
       },
       {
-        name: "에프원 하우스", company: "", phone: "", price: "약 270만원",
+        name: "에프원 하우스", company: "", phone: "", price: "270만원 (완납)",
         status: "decided",
         scope: "✅ 확정 — 매립수전 5개 설치 + 파티션 시공 (벨류연구소와 별도 · 부분 설비).",
         summary: "✅ 확정 — 매립수전 5개(공용·안방 샤워부스 + 세면 등) + 파티션 시공. 약 270만원 → 벨류연구소 최종 950만과 합쳐 설비 총 약 1,220만원.",
@@ -1312,12 +1313,12 @@ const QUOTES = [
     phase: "intercom", name: "인터폰 설치", icon: "📞",
     candidates: [
       {
-        name: "인터폰 설치 (예상)", company: "", price: "약 50만원 (예상)",
-        status: "candidate",
-        scope: "월패드·인터폰 교체 및 설치 (매직패드 S1 Plus 연동 등).",
-        summary: "인터폰 설치 견적 예상 약 50만원. 최종 견적 대기.",
+        name: "인터폰 설치", company: "", price: "600,000원 (완납)",
+        status: "decided",
+        scope: "월패드·인터폰 교체 및 설치.",
+        summary: "✅ 완납 완료 — 60만원 (예상 50만보다 +10만).",
         items: [], files: [],
-        note: "예상 견적 · 정식 견적 수령 필요.",
+        note: "✅ 완납 완료 · 60만원.",
       },
     ],
   },
@@ -1986,9 +1987,10 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 51.8, y: 20.4, label: "COB조명", kind: "cob2", circuit: "LR-2", zone: "거실", name: "거실 좌측상단 COB-A" },
     { layer: "light", type: "pin", x: 50.5, y: 20.4, label: "COB조명", kind: "cob2", circuit: "LR-2", zone: "거실", name: "거실 좌측상단 COB-B" },
     { layer: "light", type: "pin", x: 42.1, y: 23.5, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-1" },
-    { layer: "light", type: "pin", x: 42.2, y: 27.1, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-2" },
-    { layer: "light", type: "pin", x: 42.1, y: 30.6, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-3" },
-    { layer: "light", type: "pin", x: 42, y: 34.2, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-4" },
+    { layer: "light", type: "pin", x: 42.1, y: 26.2, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-2" },
+    { layer: "light", type: "pin", x: 42.1, y: 28.9, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-3" },
+    { layer: "light", type: "pin", x: 42.1, y: 31.6, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-4" },
+    { layer: "light", type: "pin", x: 42.1, y: 34.2, label: "COB조명", kind: "cob2", circuit: "KT-2", zone: "주방", name: "주방 냉장고앞 COB-5" },
     { layer: "light", type: "pin", x: 45.2, y: 40.6, label: "COB조명", kind: "cob2", circuit: "HW-1", zone: "복도", name: "복1" },
     { layer: "light", type: "pin", x: 45.2, y: 50.8, label: "COB조명", kind: "cob2", circuit: "HW-2", zone: "복도", name: "복2" },
     { layer: "light", type: "pin", x: 42, y: 56.2, label: "COB조명", kind: "cob2", circuit: "HW-2", zone: "복도", name: "복3" },
@@ -2635,6 +2637,34 @@ const PHASES = [
   },
 ];
 
+/* ------------------------------------------------------------
+ *  공정별 별점 (사후 평가) — 여러 vendor가 한 phase에 참여할 수 있음
+ * ------------------------------------------------------------ */
+const RATINGS = {
+  demolition: [
+    {
+      vendor: "벨류연구소", stars: 1,
+      comment: "열심히는 하심. 하지만 엉망임. 설비가 너무 불안해서 다른 설비를 2개나 다시 찾게 되었음. 분배기쪽 다 까부수고 누수에 난리가 났음. 엘베도 고장났었음. 미장 수평 엉망, 철거 기둥 다 까짐. 많은 설비를 취소했음에도 과도한 추가비 요구. 시작부터 잘못되서 정말 공사가 망할 위기.",
+    },
+    {
+      vendor: "에프원 하우스", stars: 1,
+      comment: "급하게 구한 업체. 매립수전을 대충 시공하고 계속 핑계대면서 다른 공정탓으로 돌림. 덕분에 매립수전이 완전 망했음. 집이 시멘트가 아니였음에도 석고벽인데도 까는것 조차 귀찮아서 폼세라믹으로 요구. 그 폼세라믹도 이상한 위치에 시공해서 타일을 몇겹씩 덧대야함.",
+    },
+  ],
+  window: [
+    {
+      vendor: "올바른 창호", stars: 5,
+      comment: "시공이 다들 어렵다 했는데 시공도 너무 깔끔히 잘해주고 가격도 정말 싸게 잘했음.",
+    },
+  ],
+  carpentry: [
+    {
+      vendor: "국선디자인", stars: 3,
+      comment: "뭔가 딱딱 맞게 잘 한 느낌. 그래도 요청사항들 잘 정리해서 해줬음. 마감이 딱 좋지는 않음. 사장님은 이틀만 나오고 삼일은 밑에 직원. 밑에직원은 말만하면 다른공정에서 해준다고 시전, 귀찮아 하는게 너무 보임. 그래도 시작전에 와 있고 공정은 어떻게든 잘 끝냄.",
+    },
+  ],
+};
+
 /* ===== 가구도면 — 주방 (키큰장 + ㄱ자 아일랜드) · 단위 mm ===== */
 const KITCHEN = {
   tall: {
@@ -2780,7 +2810,7 @@ const LIGHTING_SWITCHES = {
                      note: "아카라 울트라 루멘 SMD 5M(#166) × 2롤 (총 10m·20W/m=200W · CCT TW · >90Ra · SR CCT 대비 약 3배 광량). #140 Aqara DR 최대 144W → DR ×2 분리 (각 5m 100W on 144W = 70% 부하). 각 DR마다 전용 SMPS u200 ×1 (각 100W on 200W = 50% 부하) — 5m + DR + SMPS 한 세트가 독립 블록. 두 DR은 Aqara 앱에서 개별 디밍 가능(같은 스위치 버튼 공유)." } },
   // 주방 (3구) — 거실 스위치 옆. #3은 커튼박스(거실 기존 + 신설) 통합 제어.
   "KT-1": { zone: "주방", switch: "주방 3구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
-  "KT-2": { zone: "주방", switch: "주방 3구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
+  "KT-2": { zone: "주방", switch: "주방 3구 #2", desc: "냉장고 앞 (키큰장 월워시)", spec: { lights: { cob2: 5 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 35, note: "COB IoT(#17) 5개 × 7W = 35W · 키큰장 문짝면 월워시 · 벽에서 20~30cm 앞 등간격 · Aqara DR 1 + 100W SMPS 1" } },
   // 주방 3구 #3 = 거실 TV 하부 + 거실 커튼박스, 2회로 분할. 한 Aqara DR(2채널)·SMPS 100W 공유(DR7). DR/SMPS는 KT-3a에 계상.
   "KT-3a": { zone: "거실", switch: "주방 3구 #3", desc: "커튼박스 간접 (4m)",
              spec: { lights: { strip_cct: 0.4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,

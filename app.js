@@ -382,6 +382,15 @@
           : `<div class="phase-refs"><div class="rt">🖼️ 관련 레퍼런스</div>
       <div class="ref-thumbs">${refs.map(refThumb).join("")}</div></div>`) : "";
     const team = opts.hideTeam ? "" : `<div class="phase-team">👷 ${esc(p.team)}</div>`;
+    const phaseRatings = (typeof RATINGS !== "undefined" && RATINGS[p.id]) || [];
+    const ratingsHtml = phaseRatings.length
+      ? `<div class="phase-ratings"><div class="pr-title">⭐ 사후 평가</div>${phaseRatings.map((r) => {
+          const filled = "★".repeat(r.stars);
+          const empty = "☆".repeat(Math.max(0, 5 - r.stars));
+          const grade = r.stars >= 4 ? "pr-good" : (r.stars >= 3 ? "pr-mid" : "pr-bad");
+          return `<div class="phase-rating ${grade}"><div class="pr-head"><span class="pr-vendor">${esc(r.vendor)}</span><span class="pr-stars">${filled}${empty} <b>${r.stars}점</b></span></div><div class="pr-comment">${esc(r.comment)}</div></div>`;
+        }).join("")}</div>`
+      : "";
     return `<div class="phase"${opts.noId ? "" : ` id="${p.id}"`}>
       <div class="phase-head"><span class="num">${i + 1}</span><span class="icon">${esc(p.icon)}</span><h3>${esc(p.name)}</h3></div>
       ${team}
@@ -390,6 +399,7 @@
       ${phaseAsks}
       ${imgs}${refBlock}
       <div class="cols${opts.inline ? " cols-stack" : ""}">${groups}</div>
+      ${ratingsHtml}
     </div>`;
   }
   function renderPhases() {
@@ -1793,7 +1803,7 @@
     }
     // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
     // 가격 미정/모호 phase는 사용자 협의 가정값
-    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1 };
+    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1, intercom:1 };
     const QUOTE_OVERRIDE = { ceramic: 5000000, film: 1400000, "middle-door": 3000000 };
     const estimatedExtras = [];
     if (typeof QUOTES !== "undefined") {

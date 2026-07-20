@@ -125,6 +125,19 @@ table.cal th,table.cal td{border:1px solid #ece5da}
 .phase-head .num{font-size:12px;color:var(--muted);font-weight:700;background:var(--accent-soft);padding:2px 9px;border-radius:99px}
 .phase-team{font-size:13px;color:var(--accent);font-weight:600}
 .phase-summary{color:var(--muted);font-size:14px;margin:8px 0 16px}
+/* 공정 사후 별점 */
+.phase-ratings{margin:18px 0 4px;padding:14px 16px;background:#faf8f4;border:1px solid var(--line);border-radius:12px}
+.phase-ratings .pr-title{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:10px;letter-spacing:.2px}
+.phase-rating{padding:10px 12px;margin-bottom:8px;border-radius:8px;border-left:4px solid var(--line);background:#fff}
+.phase-rating:last-child{margin-bottom:0}
+.phase-rating.pr-good{border-left-color:#4a9d5c;background:#f0f9f2}
+.phase-rating.pr-mid{border-left-color:#d4a017;background:#fff9e6}
+.phase-rating.pr-bad{border-left-color:#c0392b;background:#fdf3f1}
+.phase-rating .pr-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:5px}
+.phase-rating .pr-vendor{font-size:14px;font-weight:800;color:var(--ink)}
+.phase-rating .pr-stars{font-size:15px;color:#f59e0b;letter-spacing:1px;white-space:nowrap}
+.phase-rating .pr-stars b{margin-left:6px;font-size:12.5px;color:var(--muted);font-weight:700}
+.phase-rating .pr-comment{font-size:13px;line-height:1.65;color:var(--ink)}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 28px}
 .group{margin-bottom:14px;break-inside:avoid}
 .group .gtitle{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px;padding-bottom:4px;border-bottom:1px dashed var(--line)}
