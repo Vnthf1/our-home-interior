@@ -233,12 +233,12 @@ const CONTACTS = [
 const QUOTE_SUMMARY = [
   { phase: "입주민 동의", company: "셀프 진행", price: 330000, deposit: 330000, final: 330000, note: "✅ 완납 — 동의 선물 8만 + 엘베 사용료 25만" },
   { phase: "철거·설비", company: "벨류연구소", price: 9500000, priceText: "950만 (최종 완납)", deposit: 5537500, final: 9500000, note: "✅ 완납 완료 — 최종 합의 950만(재견적 1,080.5만에서 협의 조정). 선입금 553.75만 + 잔금 396.25만 완납." },
-  { phase: "설비 (매립수전·파티션)", company: "에프원 하우스", price: 3000000, priceText: "약 300만", deposit: null, final: null, note: "✅ 확정 — 매립수전 5개 설치 + 파티션 시공. 벨류연구소와 별도. 두 업체 합쳐 설비 총 약 1,300만" },
+  { phase: "설비 (매립수전·파티션)", company: "에프원 하우스", price: 2700000, priceText: "약 270만", deposit: null, final: null, note: "✅ 확정 — 매립수전 5개 설치 + 파티션 시공. 벨류연구소와 별도. 두 업체 합쳐 설비 총 약 1,220만" },
   { phase: "전기", company: "하린 전기조명", price: 7000000, deposit: 300000, final: null, note: "VAT 포함 · 700만" },
   { phase: "전열교환기", company: "클린코퍼레이션", price: 4900000, deposit: 1000000, final: null, note: "THE650-200 환기 · 견적 490만 확정(VAT 포함) · 선입금 100만 · 벽타공·전기통신·천장은 인테리어분 별도" },
   { phase: "가전 (전체)", company: "삼성 (영림 인천갤러리)", price: 15145087, deposit: 15145087, final: 15145087, note: "✅ 완료 — 인덕션·식세기·오븐·냉장고·세탁기·건조기·로봇청소기·사운드바·정수기·85인치 TV·에어컨 일괄. 체감가 15,145,087원 (결제 31,211,000 → 캐시백·상품권 차감)" },
   { phase: "에어컨 (선배관·설치비)", company: "", price: 600000, deposit: 600000, final: 600000, note: "✅ 완납 60만 — 에어컨 선배관·설치비 (본체는 가전 일괄에 포함) · 배관 7/6·설치 7/31" },
-  { phase: "목공", company: "국선디자인", price: 10100000, priceText: "1,010~1,065만 (가견적)", deposit: 400000, final: null, note: "자재+인건비, VAT 별도 · 선납금 40만 지급" },
+  { phase: "목공", company: "국선디자인", price: 14041500, priceText: "1,404.15만 (최종 완납)", deposit: 400000, final: 14041500, note: "✅ 완납 완료 — 인건비 806만 + 자재/부자재 598.15만 = 총 1,404.15만. 선납금 40만 + 잔금 완납." },
   { phase: "타일", company: "최반장", price: 3700000, deposit: null, final: null, note: "천장 포함 최종 약 370만 (기존 시공 320만 + 천장)" },
   { phase: "필름", company: "호박인테리어필름", price: 1400000, deposit: null, final: null, note: "✅ 확정 약 140만 · 문·문틀·걸레받이 등 다크우드 필름 · 010-7216-7206" },
   { phase: "보일러/온도조절기", company: "분배기 고수", price: 2500000, deposit: 100000, final: null, note: "보일러 설비 동일 업체 · 약 250만 · 선입금 10만 · 업체명 임시(추후 변경) · 설치 7/31" },
@@ -508,15 +508,15 @@ const QUOTES = [
         note: "재발송 견적 총 10,805,000원 (VAT 별도 여부 확인 필요). 이전 대비: 천장철거 74→85만(안방·거실·복도·파우더룸), 현관 7→12만, 욕실 액체방수 140만 이번 견적에 포함, 스위치·콘센트·인터폰 철거 항목 빠짐. 추가요청 387만(소방대피 난방확장·후드 코아천공·썩은 가벽 철거·스터드 녹제거·방청·세탁실/욕실 배수 신규·추가 폐기물). ⚠️ '공과잡비 45만'과 '회사이윤 50만'이 별도 항목으로 각각 잡힘 — 항목별 단가에 이미 마진이 포함되는 게 일반적이라 이 둘은 협의 여지 있음. 선입금 553.75만.",
       },
       {
-        name: "에프원 하우스", company: "", phone: "", price: "약 300만원",
+        name: "에프원 하우스", company: "", phone: "", price: "약 270만원",
         status: "decided",
         scope: "✅ 확정 — 매립수전 5개 설치 + 파티션 시공 (벨류연구소와 별도 · 부분 설비).",
-        summary: "✅ 확정 — 매립수전 5개(공용·안방 샤워부스 + 세면 등) + 파티션 시공. 약 300만원 → 벨류연구소 재견적(약 1,000만)과 합쳐 설비 총 약 1,300만원.",
+        summary: "✅ 확정 — 매립수전 5개(공용·안방 샤워부스 + 세면 등) + 파티션 시공. 약 270만원 → 벨류연구소 최종 950만과 합쳐 설비 총 약 1,220만원.",
         items: [
-          { label: "매립수전 5개 설치 + 파티션 시공", amount: "약 300만원" },
+          { label: "매립수전 5개 설치 + 파티션 시공", amount: "약 270만원" },
         ],
         files: [],
-        note: "✅ 확정. 벨류연구소가 못 하는 매립수전·파티션 부분만 담당. 두 업체 합쳐 설비 약 1,300만원.",
+        note: "✅ 확정. 벨류연구소가 못 하는 매립수전·파티션 부분만 담당. 두 업체 합쳐 설비 약 1,220만원.",
       },
     ],
   },
@@ -1696,12 +1696,12 @@ const MATERIALS = [
         category: "방수용품", qty: 1, status: "ordered", purpose: "욕실 바닥", store: "콩타일",
         candidates: [
           { name: "아덱스 멀티프라이머 E660 15L", offers: [{ vendor: "콩타일", price: 58400, note: "공급가" }] },
-          { name: "아덱스 방수제 WPM003 큰통 16KG ×2", offers: [{ vendor: "콩타일", price: 259600, note: "공급가 2통" }] },
+          { name: "아덱스 방수제 WPM003 큰통 16KG ×3", offers: [{ vendor: "콩타일", price: 389400, note: "공급가 3통 (1통 추가 구매)" }] },
           { name: "아덱스 SK90 방수테이프 12cm×50m", offers: [{ vendor: "콩타일", price: 67500, note: "공급가" }] },
         ],
-        decided: "아덱스 프라이머 E660 + 방수제 WPM003 ×2 + SK90 테이프",
-        purchased: { vendor: "콩타일", qty: 1, total: 422620,
-          note: "프라이머·방수제·테이프 (VAT 포함 424,050) + 배송비 55,000 − 매장할인 56,430 → 실결제 422,620" },
+        decided: "아덱스 프라이머 E660 + 방수제 WPM003 ×3 + SK90 테이프",
+        purchased: { vendor: "콩타일", qty: 1, total: 565400,
+          note: "프라이머·방수제·테이프 (VAT 포함 424,050) + 배송비 55,000 − 매장할인 56,430 → 실결제 422,620. + WPM003 1통 추가(공급 129,800·VAT포함 약 142,780) → 합계 약 565,400 (배송/할인 미반영 근사 · 실결제액 알려주면 반영)" },
         note: "",
       },
       {
@@ -1727,7 +1727,7 @@ const MATERIALS = [
     group: "하드웨어·기타",
     items: [
       { category: "자동 빨래건조대",   qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
-      { category: "액자레일",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "" },
+      { category: "액자레일",         qty: 1, status: "pending", purpose: "", candidates: [], decided: null, purchased: null, note: "없어도 될듯 (제외 검토)" },
       {
         category: "매트리스", qty: 2, status: "ordered", purpose: "안방 퀸 × 2", store: "네이버",
         candidates: [
@@ -1757,7 +1757,7 @@ const MATERIALS_ESTIMATED = {
   "방수용품":        300000,
   // 하드웨어·기타
   "자동 빨래건조대":  600000,
-  "액자레일":        150000,
+  "액자레일":        0,          // 없어도 될듯 (제외 검토)
   "후드":            500000,
   "실링팬":          400000,
 };
@@ -2715,9 +2715,8 @@ const LIGHTING_DRIVER_PLAN = [
       { desc: "거실 우물천장 (2면)", light: "울트라루멘 <b>500cm</b>" } ] },
   { no: "5",   circuits: ["KT-1"] },
   { no: "6",   circuits: ["KT-2"] },
-  // KT-3a·b = 거실 TV하부 + 커튼박스, 한 드라이버(2채널). 조명 셀은 합쳐서 표시.
-  { no: "7", switch: "주방 3구 #3", watt: 56, smpsW: 100, covers: ["KT-3a", "KT-3b"], rows: [
-      { desc: "거실 TV 하부 간접 + 커튼박스", light: "스트립CCT <b>400+400=800cm</b>" } ] },
+  // KT-3a·b = 거실 커튼박스 + TV하부, 한 드라이버(2채널) → 셀병합 2줄(7-1 / 7-2).
+  { no: "7",   circuits: ["KT-3a", "KT-3b"] },
   { no: "8",   circuits: ["HW-1"] },
   { no: "9",   circuits: ["HW-2"] },
   { no: "10",  circuits: ["EN-1"] },
@@ -2759,7 +2758,7 @@ const LIGHTING_EXTRAS = [
   { id: "rail_4_5m",   label: "[주문제작] 무소음 레일 4.0m~5.0m (#163)",         qty: 4, priceB2B: 210600, priceB2C: 270000 },
   { id: "rail_3_4m",   label: "[주문제작] 무소음 레일 3.0m~4.0m (#162)",         qty: 2, priceB2B: 170182, priceB2C: 218182 },
   // 구글 네스트(이지엉클 외) — 최저가 입력 → 표시 ×1.1 = VAT 포함 가격이 되도록 ÷1.1 후 저장
-  { id: "nest_4",      label: "구글 네스트 4세대",                              qty: 1, priceB2B: 381818, priceB2C: 420000 }, // ✅ 실구매 42만원(VAT포함) · priceB2B = 420,000/1.1
+  { id: "nest_4",      label: "구글 네스트 4세대",                              qty: 1, priceB2B: 420000, priceB2C: 462000 }, // ✅ 실구매 46.2만원(VAT포함) · 공급가 42만 · priceB2B=420,000 → 표시 ×1.1 = 462,000
   { id: "nest_35",     label: "구글 네스트 3.5세대",                            qty: 3, priceB2B: 118182, priceB2C: 130000 }, // ✅ 실구매 3개 총 39만원(VAT포함, 개당 13만원) · priceB2B = 130,000/1.1
 ];
 
@@ -2781,10 +2780,10 @@ const LIGHTING_SWITCHES = {
   "KT-1": { zone: "주방", switch: "주방 3구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
   "KT-2": { zone: "주방", switch: "주방 3구 #2", desc: "냉장고 앞",   spec: { lights: { cob2: 4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28 } },
   // 주방 3구 #3 = 거실 TV 하부 + 거실 커튼박스, 2회로 분할. 한 Aqara DR(2채널)·SMPS 100W 공유(DR7). DR/SMPS는 KT-3a에 계상.
-  "KT-3a": { zone: "주방", switch: "주방 3구 #3", desc: "거실 커튼박스 간접 (4m)",
+  "KT-3a": { zone: "거실", switch: "주방 3구 #3", desc: "커튼박스 간접 (4m)",
              spec: { lights: { strip_cct: 0.4 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
                      note: "거실 커튼박스 간접 = SR 8mm CCT 10M(#60) 4m × 7W = 28W. 거실 TV 하부(KT-3b)와 한 Aqara DR(2채널)·SMPS 100W 공유." } },
-  "KT-3b": { zone: "주방", switch: "주방 3구 #3", desc: "거실 TV 하부 간접 (4m)",
+  "KT-3b": { zone: "거실", switch: "주방 3구 #3", desc: "TV 하부 간접 (4m)",
              spec: { lights: { strip_cct: 0.4 }, watt: 28,
                      note: "거실 TV 하부 간접 = SR 8mm CCT 10M(#60) 4m × 7W = 28W. KT-3a와 한 Aqara DR·SMPS 공유(DR/SMPS는 KT-3a 계상)." } },
   // 복도 (2구)
