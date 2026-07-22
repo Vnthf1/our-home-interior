@@ -540,10 +540,18 @@
     return `<a class="qf${isImg ? " img" : ""}" href="${esc(path)}" target="_blank" rel="noopener" title="${esc(label)} 열기">
       <div class="qf-media">${preview}</div><span class="qf-name">${esc(label)} ↗</span></a>`;
   }
-  function quoteCard(c) {
+  function quoteCard(c, phaseId) {
     const stat = c.status === "decided" ? `<span class="qc-badge decided">✅ 확정</span>`
       : c.status === "received" ? `<span class="qc-badge received">📄 견적 받음</span>`
       : `<span class="qc-badge cand">후보</span>`;
+    // 별점 (RATINGS 매칭 — 카드 이름에 vendor 포함되면)
+    let rating = null;
+    if (phaseId && typeof RATINGS !== "undefined" && RATINGS[phaseId] && c.name) {
+      rating = RATINGS[phaseId].find((r) => c.name.includes(r.vendor));
+    }
+    const ratingHtml = rating
+      ? `<span class="qc-rating ${rating.stars >= 4 ? "qc-rate-good" : rating.stars >= 3 ? "qc-rate-mid" : "qc-rate-bad"}" title="${esc(rating.comment)}">${"★".repeat(rating.stars)}${"☆".repeat(Math.max(0, 5 - rating.stars))}<b>${rating.stars}</b></span>`
+      : "";
     const price = c.price
       ? `<div class="qc-price">${esc(c.price)}</div>`
       : `<div class="qc-price none">견적 대기</div>`;
@@ -556,7 +564,7 @@
       ? `<div class="qc-files">${c.files.map(quoteFile).join("")}</div>` : "";
     return `<div class="qcard${c.status === "decided" ? " is-decided" : ""}">
       <div class="qc-top">
-        <div class="qc-name">${esc(c.name)}${c.company ? ` · <span class="qc-co">${esc(c.company)}</span>` : ""}</div>
+        <div class="qc-name">${esc(c.name)}${c.company ? ` · <span class="qc-co">${esc(c.company)}</span>` : ""}${ratingHtml}</div>
         ${stat}
       </div>
       ${price}
@@ -651,7 +659,7 @@
       const sRank = { decided: 0, received: 1, candidate: 2 };
       const orderedCands = [...cands].sort((a, b) => (sRank[a.status] == null ? 3 : sRank[a.status]) - (sRank[b.status] == null ? 3 : sRank[b.status]));
       const cards = orderedCands.length
-        ? orderedCands.map(quoteCard).join("")
+        ? orderedCands.map((c) => quoteCard(c, q.phase)).join("")
         : `<div class="stub">아직 후보·견적이 없어요. 업체를 알아보면 여기에 정리할게요.</div>`;
       return `<div class="qphase" id="q-${esc(q.phase)}">
         <div class="qp-head"><span class="ic">${esc(p ? p.icon : (q.icon || "📦"))}</span><h3>${esc(p ? p.name : (q.name || q.phase))}</h3>${head}</div>

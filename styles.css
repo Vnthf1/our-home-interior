@@ -318,6 +318,12 @@ body.is-admin .admin-only{display:flex !important}
 .qc-badge.decided{color:var(--done);background:#e7f0e5}
 .qc-badge.received{color:var(--info);background:var(--info-soft)}
 .qc-badge.cand{color:var(--muted);background:var(--accent-soft)}
+/* 견적/공정 카드 별점 뱃지 (툴팁: title 속성) */
+.qc-rating{display:inline-flex;align-items:center;gap:3px;margin-left:8px;padding:2px 8px;border-radius:99px;font-size:12px;letter-spacing:1px;color:#f59e0b;cursor:help;vertical-align:middle;font-weight:700}
+.qc-rating b{margin-left:4px;font-size:11px;color:var(--ink);font-weight:800;letter-spacing:0}
+.qc-rating.qc-rate-good{background:#e7f0e5}
+.qc-rating.qc-rate-mid{background:#fff7d6}
+.qc-rating.qc-rate-bad{background:#fdf3f1}
 .qc-price{font-size:20px;font-weight:800;color:var(--accent);margin:8px 0 2px;font-variant-numeric:tabular-nums}
 .qc-price.none{font-size:13px;font-weight:600;color:var(--muted)}
 .qc-scope{display:inline-block;font-size:12px;font-weight:700;color:var(--info);background:var(--info-soft);border-radius:8px;padding:4px 10px;margin:6px 0 2px;line-height:1.4}
