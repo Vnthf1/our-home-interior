@@ -76,6 +76,7 @@
   let memos = [];
   let editingId = null;      // 편집 중인 카드 id
   let pendingRender = false;  // 편집 중 들어온 realtime 갱신 보류
+  let focusQuickAddId = null; // 렌더 후 이 카드의 빠른추가 입력에 포커스
   const AUTHOR_KEY = "memo-author";
   const getAuthor = () => { try { return localStorage.getItem(AUTHOR_KEY) || ""; } catch (e) { return ""; } };
   const setAuthor = (v) => { try { localStorage.setItem(AUTHOR_KEY, v); } catch (e) {} };
@@ -137,7 +138,11 @@
         `</div>` + foot + `</div>`;
     }
     return `<div class="memo-card" data-id="${esc(m.id)}" style="background:${esc(bg)}">` +
-      `<div class="memo-body">${renderBody(m)}</div>` + foot + `</div>`;
+      `<div class="memo-body">${renderBody(m)}</div>` +
+      `<div class="memo-quickadd">` +
+        `<input class="memo-qa-in" type="text" placeholder="＋ 체크항목 추가">` +
+        `<button class="memo-qa-btn" type="button" title="체크항목 추가">＋</button>` +
+      `</div>` + foot + `</div>`;
   }
 
   function render() {
@@ -150,6 +155,11 @@
     if (editingId != null) {
       const ta = boardEl.querySelector(`.memo-card[data-id="${cssEsc(editingId)}"] .memo-edit`);
       if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+    }
+    if (focusQuickAddId != null) {
+      const qa = boardEl.querySelector(`.memo-card[data-id="${cssEsc(focusQuickAddId)}"] .memo-qa-in`);
+      if (qa) qa.focus();
+      focusQuickAddId = null;
     }
   }
   // querySelector 용 간단 이스케이프 (uuid 라 사실상 안전하지만 방어)
@@ -192,12 +202,29 @@
 
   const endEdit = () => { editingId = null; if (pendingRender) { pendingRender = false; } render(); };
 
+  // 빠른 추가 — 카드에서 바로 체크항목 한 줄 붙이고 저장(편집모드 안 거침)
+  function quickAddCheck(id, text) {
+    const t = String(text || "").trim();
+    if (!t) return; // 빈 값이면 무시
+    const m = memos.find((x) => x.id === id); if (!m) return;
+    const line = "- [ ] " + t;
+    const prev = String(m.body || "").replace(/\n+$/, "");
+    const body = prev ? prev + "\n" + line : line;
+    focusQuickAddId = id;   // 저장 후 재렌더 시 입력창 포커스 유지 → 연속 입력
+    saveMemo(id, body);
+  }
+
   // ── 이벤트 위임 ────────────────────────────────────────────
   document.getElementById("memo-add").addEventListener("click", addMemo);
   boardEl.addEventListener("click", (e) => {
     const card = e.target.closest(".memo-card"); if (!card) return;
     const id = card.dataset.id;
     if (e.target.closest(".memo-check input")) return; // 체크박스 토글은 change 에서 처리
+    if (e.target.closest(".memo-qa-btn")) {
+      const inp = card.querySelector(".memo-qa-in");
+      quickAddCheck(id, inp ? inp.value : "");
+      return;
+    }
     if (e.target.closest(".memo-del")) { deleteMemo(id); return; }
     if (e.target.closest(".memo-cancel")) { endEdit(); return; }
     if (e.target.closest(".memo-check-add")) {
@@ -239,6 +266,13 @@
   }
   // Ctrl/Cmd+Enter 로 저장
   boardEl.addEventListener("keydown", (e) => {
+    const qa = e.target.closest(".memo-qa-in");
+    if (qa && e.key === "Enter") {
+      e.preventDefault();
+      const card = e.target.closest(".memo-card"); if (!card) return;
+      quickAddCheck(card.dataset.id, qa.value);
+      return;
+    }
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
       const card = e.target.closest(".memo-card.is-editing"); if (!card) return;
       const ta = card.querySelector(".memo-edit");
