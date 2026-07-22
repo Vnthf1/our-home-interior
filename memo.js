@@ -266,6 +266,8 @@
   }
   // Ctrl/Cmd+Enter 로 저장
   boardEl.addEventListener("keydown", (e) => {
+    // 한글 등 IME 조합 중 Enter 는 '조합 확정'용 → 추가 실행 금지(중복 등록 방지)
+    if (e.isComposing || e.keyCode === 229) return;
     const qa = e.target.closest(".memo-qa-in");
     if (qa && e.key === "Enter") {
       e.preventDefault();
