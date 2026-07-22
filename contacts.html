@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<style>html,body{margin:0;background:#f5f4f1}body::before{content:"";position:fixed;inset:0;z-index:9999;background:#f5f4f1 url("icons/icon-192.png") no-repeat center calc(50% - 34px);background-size:76px}body::after{content:"";position:fixed;top:calc(50% + 34px);left:50%;width:30px;height:30px;margin-left:-15px;border:3px solid #ece3d4;border-top-color:#5a3a22;border-radius:50%;animation:app-spin .8s linear infinite;z-index:10000}@keyframes app-spin{to{transform:rotate(360deg)}}body.app-ready::before,body.app-ready::after{opacity:0;visibility:hidden;transition:opacity .3s}</style>
+<style>html,body{margin:0;background:#f5f4f1}body::before{content:"";position:fixed;inset:0;z-index:9999;background:#f5f4f1}body::after{content:"";position:fixed;top:50%;left:50%;width:28px;height:28px;margin:-14px 0 0 -14px;border:3px solid #ece3d4;border-top-color:#5a3a22;border-radius:50%;opacity:0;animation:app-spin .8s linear infinite,app-in .01s linear .45s forwards;z-index:10000}@keyframes app-spin{to{transform:rotate(360deg)}}@keyframes app-in{to{opacity:1}}body.app-ready::before,body.app-ready::after{opacity:0;visibility:hidden;transition:opacity .2s}</style>
 <title>연락처 · 우리집 인테리어</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 <link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />

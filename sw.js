@@ -29,7 +29,7 @@ self.addEventListener("fetch", (e) => {
   e.respondWith((async () => {
     const cache = await caches.open(CACHE);
     const cached = await cache.match(req);
-    const network = fetch(req).then(async (fresh) => {
+    const network = fetch(req.url, { cache: "reload" }).then(async (fresh) => {
       if (fresh && fresh.ok) {
         // app.js/data.js/HTML 내용이 바뀌었으면 클라이언트에 알림 → 새로고침 유도
         const isCore = /\/(app|data)\.js(\?|$)/.test(req.url) || req.mode === "navigate";

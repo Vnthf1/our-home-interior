@@ -103,6 +103,24 @@
 
   const scheduleRender = () => { if (editingId != null) { pendingRender = true; return; } render(); };
 
+  // 본문 렌더 — "- [ ] 할일" / "- [x] 완료" 줄은 클릭 가능한 체크박스로, 나머지는 텍스트로.
+  const CHECK_RE = /^(\s*(?:[-*]\s+)?)\[([ xX])\](\s?)(.*)$/;
+  function renderBody(m) {
+    const raw = String(m.body || "");
+    if (!raw.trim()) return `<span class="memo-empty">(빈 메모 — 눌러서 작성)</span>`;
+    return raw.split("\n").map((ln, i) => {
+      const mt = ln.match(CHECK_RE);
+      if (mt) {
+        const checked = mt[2].toLowerCase() === "x";
+        return `<div class="memo-check${checked ? " done" : ""}">` +
+          `<input type="checkbox" data-line="${i}"${checked ? " checked" : ""}>` +
+          `<span>${esc(mt[4])}</span></div>`;
+      }
+      if (ln.trim() === "") return `<div class="memo-line-empty"></div>`;
+      return `<div class="memo-line">${esc(ln)}</div>`;
+    }).join("");
+  }
+
   function cardHTML(m) {
     const bg = m.color || pastel[0];
     const editing = m.id === editingId;
@@ -112,14 +130,14 @@
       return `<div class="memo-card is-editing" data-id="${esc(m.id)}" style="background:${esc(bg)}">` +
         `<textarea class="memo-edit" rows="5" placeholder="메모를 입력하세요...">${esc(m.body)}</textarea>` +
         `<div class="memo-actions">` +
+          `<button class="memo-check-add" type="button" title="체크항목 추가">☑ 체크</button>` +
           `<button class="memo-save" type="button">저장</button>` +
           `<button class="memo-cancel" type="button">취소</button>` +
           `<button class="memo-del" type="button" title="삭제">🗑</button>` +
         `</div>` + foot + `</div>`;
     }
-    const body = m.body ? esc(m.body) : `<span class="memo-empty">(빈 메모 — 눌러서 작성)</span>`;
     return `<div class="memo-card" data-id="${esc(m.id)}" style="background:${esc(bg)}">` +
-      `<div class="memo-body">${body}</div>` + foot + `</div>`;
+      `<div class="memo-body">${renderBody(m)}</div>` + foot + `</div>`;
   }
 
   function render() {
@@ -179,8 +197,13 @@
   boardEl.addEventListener("click", (e) => {
     const card = e.target.closest(".memo-card"); if (!card) return;
     const id = card.dataset.id;
+    if (e.target.closest(".memo-check input")) return; // 체크박스 토글은 change 에서 처리
     if (e.target.closest(".memo-del")) { deleteMemo(id); return; }
     if (e.target.closest(".memo-cancel")) { endEdit(); return; }
+    if (e.target.closest(".memo-check-add")) {
+      const ta = card.querySelector(".memo-edit"); if (ta) insertChecklistItem(ta);
+      return;
+    }
     if (e.target.closest(".memo-save")) {
       const ta = card.querySelector(".memo-edit");
       saveMemo(id, ta ? ta.value : "");
@@ -191,6 +214,29 @@
       editingId = id; pendingRender = false; render();
     }
   });
+
+  // 체크박스 토글 (읽기 모드) → 해당 줄의 마커를 뒤집고 저장
+  boardEl.addEventListener("change", (e) => {
+    const cb = e.target.closest(".memo-check input[type=checkbox]"); if (!cb) return;
+    const card = e.target.closest(".memo-card"); if (!card) return;
+    const id = card.dataset.id;
+    const m = memos.find((x) => x.id === id); if (!m) return;
+    const lines = String(m.body || "").split("\n");
+    const i = Number(cb.dataset.line);
+    if (lines[i] == null) return;
+    lines[i] = lines[i].replace(/\[([ xX])\]/, (_, c) => (c.toLowerCase() === "x" ? "[ ]" : "[x]"));
+    saveMemo(id, lines.join("\n"));
+  });
+
+  // 편집 textarea 커서 위치에 "- [ ] " 삽입 (줄 시작이 아니면 줄바꿈부터)
+  function insertChecklistItem(ta) {
+    const s = ta.selectionStart, eSel = ta.selectionEnd, v = ta.value;
+    const atLineStart = s === 0 || v[s - 1] === "\n";
+    const ins = (atLineStart ? "" : "\n") + "- [ ] ";
+    ta.value = v.slice(0, s) + ins + v.slice(eSel);
+    const pos = s + ins.length;
+    ta.focus(); ta.setSelectionRange(pos, pos);
+  }
   // Ctrl/Cmd+Enter 로 저장
   boardEl.addEventListener("keydown", (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {

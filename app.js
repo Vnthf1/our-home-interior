@@ -18,7 +18,11 @@
       add("link", { rel: "icon", type: "image/png", href: "icons/favicon-64.png" });
     } catch (e) { /* head 없음 등 — 무시 */ }
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js", { updateViaCache: "none" })
+          .then((reg) => { try { reg.update(); } catch (e) {} })
+          .catch(() => {});
+      });
     }
     // 로딩 스플래시 안전망 — 렌더 중 오류가 나도 load 시 스피너 제거
     window.addEventListener("load", () => { try { document.body.classList.add("app-ready"); } catch (e) {} });
