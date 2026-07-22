@@ -1944,7 +1944,8 @@ const FLOORPLAN = {
     { layer: "furniture", type: "box", x: 42.9, y: 68.5, w: 3.8, h: 19, label: "붙박이장 " },
     { layer: "furniture", type: "box", x: 21.8, y: 55.6, w: 4.3, h: 5.8, label: "실내사우나기" },
     { layer: "furniture", type: "box", x: 31.2, y: 54, w: 3.7, h: 2, label: "화장대" },
-    { layer: "light", type: "box", x: 31.5, y: 54.4, w: 3.2, h: 0.1, label: "간접조명", kind: "strip_cct", circuit: "VN-1", zone: "안방", name: "화장대 간접", length: 200 },
+    { layer: "light", type: "box", x: 31.6, y: 54.5, w: 2.9, h: 0.1, label: "간접조명", kind: "strip_cct", circuit: "VN-1", zone: "안방", name: "화장대 간접 #1", length: 60 },
+    { layer: "light", type: "box", x: 31.6, y: 55.4, w: 2.9, h: 0.1, label: "간접조명", kind: "strip_cct", circuit: "VN-1", zone: "안방", name: "화장대 간접 #2", length: 60 },
     { layer: "furniture", type: "box", x: 33.1, y: 42.7, w: 7.2, h: 1.8, label: "신발장" },
     { layer: "furniture", type: "box", x: 48.3, y: 65.7, w: 4.6, h: 2.8, label: "실외기실" },
     { layer: "outlet", type: "pin", x: 65.7, y: 17.7, label: "콘센트 2구 (신규)" },
@@ -2877,8 +2878,8 @@ const LIGHTING_SWITCHES = {
                      note: "확산 IoT(#42) 1 × 8W = 8W. 2개→1개 축소. MRH-1과 한 Aqara DR(DR16)·SMPS 공유(계상은 MRH-1)." } },
   // 화장대 간접 (신설 · DR17) — 스트립 CCT 2m
   "VN-1": { zone: "안방", switch: "화장대 (별도)", desc: "화장대 간접",
-           spec: { lights: { strip_cct: 0.2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,
-                   note: "화장대 안쪽 간접 = SR 8mm CCT 10M(#60) 2m × 7W = 14W. 화장대 안에 매입. ⚠️ 제어 스위치 별도 확정 필요." } },
+           spec: { lights: { strip_cct: 0.12 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 9,
+                   note: "화장대 안 간접 = SR 8mm CCT 10M(#60) 600+600 = 120cm × 7W = 8.4W(≈9W). 화장대 내부 매입. ⚠️ 제어 스위치 별도 확정 필요." } },
   // 거실화장실 (3구)
   "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트 2개",
            spec: { lights: { cob2n: 2 }, note: "일반 COB 2개 · AC 220V 스위치 직결 (DR/SMPS 불필요)" } },
