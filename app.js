@@ -84,6 +84,7 @@
   const NAV = [
     { href: "index.html", label: "홈", key: "home" },
     { href: "schedule.html", label: "공정표", key: "schedule" },
+    { href: "memo.html", label: "📝 메모", key: "memo" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "plans.html", label: "작업계획서", key: "plans" },
     { href: "floorplan.html", label: "도면", key: "floorplan" },
@@ -93,7 +94,6 @@
     { href: "materials.html", label: "견적/자재", key: "materials" },
     { href: "total-quote.html", label: "총 비용", key: "totalquote" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
-    { href: "memo.html", label: "📝 메모", key: "memo" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "print.html", label: "🖨 인쇄물", key: "print" },
   ];
