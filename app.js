@@ -45,7 +45,7 @@
     "보양": "demolition",
     "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "샷시 (실측)": "window", "설비": "demolition", "설비 (미정)": "demolition", "바닥샌딩": "demolition",
-    "보일러": "hvac", "보일러 설비": "hvac", "수평몰탈": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
+    "보일러": "hvac", "보일러 설비": "hvac", "보일러 설비 (수평몰탈)": "hvac", "보일러 설비 (온도조절기)": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공": "carpentry",
     "타일": "tile", "타일 (양중)": "tile", "타일 (도기)": "tile", "도기": "tile", "도기 (양중)": "tile", "욕실천장": "tile", "사우나 설치": "furniture",
