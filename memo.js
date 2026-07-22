@@ -14,8 +14,8 @@
   "use strict";
 
   // ── 설정 (여기 두 값만 채우면 동작) ──────────────────────────
-  const SUPABASE_URL = "";       // 예: https://abcdefgh.supabase.co
-  const SUPABASE_ANON_KEY = "";  // 예: eyJhbGciOiJIUzI1NiIsInR5cCI6...
+  const SUPABASE_URL = "https://cvdbgzrzgwyovzyalduk.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_iAtJMPKm-fXCCz3vo4lxSA_zbx2wkYN";
   // ────────────────────────────────────────────────────────────
 
   const root = document.getElementById("memo-app");
