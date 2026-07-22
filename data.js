@@ -1924,6 +1924,7 @@ const FLOORPLAN = {
     { layer: "furniture", type: "box", x: 42.9, y: 68.5, w: 3.8, h: 19, label: "붙박이장 " },
     { layer: "furniture", type: "box", x: 21.8, y: 55.6, w: 4.3, h: 5.8, label: "실내사우나기" },
     { layer: "furniture", type: "box", x: 31.2, y: 54, w: 3.7, h: 2, label: "화장대" },
+    { layer: "light", type: "box", x: 31.5, y: 54.4, w: 3.2, h: 0.1, label: "간접조명", kind: "strip_cct", circuit: "VN-1", zone: "안방", name: "화장대 간접", length: 200 },
     { layer: "furniture", type: "box", x: 33.1, y: 42.7, w: 7.2, h: 1.8, label: "신발장" },
     { layer: "furniture", type: "box", x: 48.3, y: 65.7, w: 4.6, h: 2.8, label: "실외기실" },
     { layer: "outlet", type: "pin", x: 65.7, y: 17.7, label: "콘센트 2구 (신규)" },
@@ -2018,8 +2019,7 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 47.1, y: 23.7, label: "확산조명", kind: "diff2", circuit: "KT-1", zone: "주방", name: "주방 아일랜드 확산-2" },
     { layer: "light", type: "pin", x: 47.1, y: 29.1, label: "확산조명", kind: "diff2", circuit: "KT-1", zone: "주방", name: "주방 아일랜드 확산-3" },
     { layer: "light", type: "pin", x: 39.7, y: 83.9, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #2" },
-    { layer: "light", type: "pin", x: 26.1, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복3" },
-    { layer: "light", type: "pin", x: 28.4, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복4" },
+    { layer: "light", type: "pin", x: 26.1, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복4" },
     { layer: "light", type: "box", x: 22.4, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 위", length: 162 },
     { layer: "light", type: "box", x: 23, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 아래", length: 162 },
     { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 거울 위", length: 165 },
@@ -2048,8 +2048,9 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 41.8, y: 84, label: "확산조명", kind: "diff2n", circuit: "DR-2", zone: "드레스룸", name: "드레스룸 확산 #4" },
     { layer: "light", type: "pin", x: 39.7, y: 67.7, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #5" },
     { layer: "light", type: "pin", x: 46.2, y: 67.8, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #6" },
-    { layer: "light", type: "pin", x: 31.9, y: 62.8, label: "COB조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복2" },
-    { layer: "light", type: "pin", x: 33.1, y: 55.7, label: "COB조명", kind: "cob2", circuit: "MRH-1", zone: "안방복도", name: "안복1" },
+    { layer: "light", type: "pin", x: 31.9, y: 62.8, label: "확산조명", kind: "diff2", circuit: "MRH-1", zone: "안방복도", name: "안복2" },
+    { layer: "light", type: "pin", x: 33.1, y: 55.7, label: "확산조명", kind: "diff2", circuit: "MRH-1", zone: "안방복도", name: "안복1" },
+    { layer: "light", type: "pin", x: 30, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-1", zone: "안방복도", name: "안복3" },
   ],
 };
 
@@ -2759,8 +2760,8 @@ const LIGHTING_DRIVER_PLAN = [
   // 안방 침대 하부 / 커튼박스 = 각각 별도 드라이버 (다른 회로).
   { no: "14",  circuits: ["MR-3b1"] },  // 안방 침대 하부 간접
   { no: "15",  circuits: ["MR-3b2"] },  // 안방 커튼박스
-  { no: "16",  circuits: ["MRH-1"] },   // 안방복도 COB
-  { no: "17",  circuits: ["MRH-2"] },   // 안방복도 확산
+  { no: "16",  circuits: ["MRH-1", "MRH-2"] },  // 안방복도 확산 3+1, 한 드라이버 2회로(셀병합 16-1/16-2)
+  { no: "17",  circuits: ["VN-1"] },            // 화장대 간접 (신설)
   { no: "18",  circuits: ["LB-2"] },
   { no: "19",  circuits: ["MB-2"] },
 ];
@@ -2848,12 +2849,16 @@ const LIGHTING_SWITCHES = {
               spec: { lights: { strip_cct: 0.84 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 28,
                       note: "안방 커튼박스 = SR 8mm CCT 10M(#60) 4m 점등 × 7W = 28W. + 예비 4.4m(220×2, 미점등·여분). 스트립 발주 0.84롤. 침대 하부(MR-3b1)와 별도 드라이버·SMPS." } },
   // 안방복도 (2구, 신설) — 3구였다가 주방과 맞교환 (안복2 삭제로 버튼 2개면 충분)
-  "MRH-1": { zone: "안방복도", switch: "안방복도 2구 #1", desc: "COB 2개 (안복1·안복2)",
-             spec: { lights: { cob2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,
-                     note: "COB IoT(#17) 2 × 7W = 14W · Aqara DR 1 + 100W SMPS 1 (86W 여유)" } },
-  "MRH-2": { zone: "안방복도", switch: "안방복도 2구 #2", desc: "확산 2개 (안복3·안복4)",
-             spec: { lights: { diff2: 2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 16,
-                     note: "확산 IoT(#42) 2 × 8W = 16W · Aqara DR 1 + 100W SMPS 1 (84W 여유). 기존 3구 #3 → #2로 이동." } },
+  "MRH-1": { zone: "안방복도", switch: "안방복도 2구 #1", desc: "확산 3개 (안복1·2·3)",
+             spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24,
+                     note: "확산 IoT(#42) 3 × 8W = 24W. COB에서 확산으로 변경 + 문앞 1개 추가(2→3). MRH-2(확산 1)와 한 Aqara DR(DR16, 2채널)·SMPS 100W 공유." } },
+  "MRH-2": { zone: "안방복도", switch: "안방복도 2구 #2", desc: "확산 1개 (안복4)",
+             spec: { lights: { diff2: 1 }, watt: 8,
+                     note: "확산 IoT(#42) 1 × 8W = 8W. 2개→1개 축소. MRH-1과 한 Aqara DR(DR16)·SMPS 공유(계상은 MRH-1)." } },
+  // 화장대 간접 (신설 · DR17) — 스트립 CCT 2m
+  "VN-1": { zone: "안방", switch: "화장대 (별도)", desc: "화장대 간접",
+           spec: { lights: { strip_cct: 0.2 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 14,
+                   note: "화장대 안쪽 간접 = SR 8mm CCT 10M(#60) 2m × 7W = 14W. 화장대 안에 매입. ⚠️ 제어 스위치 별도 확정 필요." } },
   // 거실화장실 (3구)
   "LB-1": { zone: "거실화장실", switch: "거실화장실 3구 #1", desc: "다운라이트 2개",
            spec: { lights: { cob2n: 2 }, note: "일반 COB 2개 · AC 220V 스위치 직결 (DR/SMPS 불필요)" } },
