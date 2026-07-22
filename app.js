@@ -20,6 +20,34 @@
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
     }
+    // 로딩 스플래시 안전망 — 렌더 중 오류가 나도 load 시 스피너 제거
+    window.addEventListener("load", () => { try { document.body.classList.add("app-ready"); } catch (e) {} });
+    // ── PWA 업데이트 감지 — 배포되면 app.js의 ETag/Last-Modified가 바뀜 → 앱 재개 시 자동 새로고침 ──
+    (function updateWatch() {
+      let baseTag = null, banner = null;
+      const tagOf = () => fetch("app.js", { method: "HEAD", cache: "no-store" })
+        .then((r) => (r.ok ? (r.headers.get("ETag") || r.headers.get("Last-Modified")) : null))
+        .catch(() => null);
+      tagOf().then((t) => { baseTag = t; });
+      const showBanner = () => {
+        if (banner || !document.body) return;
+        banner = document.createElement("div");
+        banner.className = "oh-update";
+        banner.innerHTML = '🆕 새 버전이 있어요 <button type="button">새로고침</button>';
+        banner.querySelector("button").addEventListener("click", () => location.reload());
+        document.body.appendChild(banner);
+      };
+      const check = async (auto) => {
+        const t = await tagOf();
+        if (!t) return;
+        if (baseTag == null) { baseTag = t; return; }
+        if (t !== baseTag) { if (auto) location.reload(); else showBanner(); }
+      };
+      // 앱 재개(포그라운드 복귀) 시 → 업데이트 있으면 자동 새로고침
+      document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") check(true); });
+      // 포그라운드 유지 중 1분마다 확인 → 방해 없이 배너 버튼만
+      setInterval(() => { if (document.visibilityState === "visible") check(false); }, 60000);
+    })();
   })();
 
   const $ = (id) => document.getElementById(id);

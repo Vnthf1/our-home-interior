@@ -9,10 +9,14 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 body{margin:0;font-family:Pretendard,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
 a{color:inherit}
 /* 로딩 오버레이 — JS가 페이지를 다 그리기 전 흰 화면 대신 스피너 표시 */
-body::before{content:'';position:fixed;inset:0;background:var(--bg);z-index:9999;pointer-events:none;transition:opacity .25s ease,visibility 0s linear .25s;visibility:visible;opacity:1}
-body::after{content:'';position:fixed;top:50%;left:50%;width:36px;height:36px;margin:-18px 0 0 -18px;border:3px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:app-spin .8s linear infinite;z-index:10000;pointer-events:none;transition:opacity .25s ease,visibility 0s linear .25s;visibility:visible;opacity:1}
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-color:var(--bg);background-image:url("icons/icon-192.png");background-repeat:no-repeat;background-position:center calc(50% - 34px);background-size:76px;border-radius:0;transition:opacity .3s ease,visibility 0s linear .3s;visibility:visible;opacity:1}
+body::after{content:'';position:fixed;top:calc(50% + 34px);left:50%;width:30px;height:30px;margin-left:-15px;border:3px solid var(--accent-soft);border-top-color:var(--accent);border-radius:50%;animation:app-spin .8s linear infinite;z-index:10000;pointer-events:none;transition:opacity .3s ease,visibility 0s linear .3s;visibility:visible;opacity:1}
 body.app-ready::before,body.app-ready::after{opacity:0;visibility:hidden}
 @keyframes app-spin{to{transform:rotate(360deg)}}
+@media print{body::before,body::after{display:none!important}}
+/* PWA 업데이트 배너 */
+.oh-update{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:100000;background:var(--accent);color:#fff;padding:11px 15px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 8px 26px rgba(0,0,0,.3);display:flex;align-items:center;gap:11px;max-width:calc(100vw - 24px)}
+.oh-update button{background:#fff;color:var(--accent);border:0;border-radius:8px;padding:6px 13px;font-weight:800;cursor:pointer;white-space:nowrap}
 /* 화면 꽉 채우기 — 최대폭 제한 없음 */
 .wrap{width:96vw;margin:0 auto;padding:0 8px}
 
