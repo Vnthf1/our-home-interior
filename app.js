@@ -22,13 +22,9 @@
     }
     // 로딩 스플래시 안전망 — 렌더 중 오류가 나도 load 시 스피너 제거
     window.addEventListener("load", () => { try { document.body.classList.add("app-ready"); } catch (e) {} });
-    // ── PWA 업데이트 감지 — 배포되면 app.js의 ETag/Last-Modified가 바뀜 → 앱 재개 시 자동 새로고침 ──
+    // ── PWA 업데이트 감지 — SW가 새 app.js/data.js를 받으면 알림 → 새로고침 유도 ──
     (function updateWatch() {
-      let baseTag = null, banner = null;
-      const tagOf = () => fetch("app.js", { method: "HEAD", cache: "no-store" })
-        .then((r) => (r.ok ? (r.headers.get("ETag") || r.headers.get("Last-Modified")) : null))
-        .catch(() => null);
-      tagOf().then((t) => { baseTag = t; });
+      let updateReady = false, banner = null;
       const showBanner = () => {
         if (banner || !document.body) return;
         banner = document.createElement("div");
@@ -37,16 +33,14 @@
         banner.querySelector("button").addEventListener("click", () => location.reload());
         document.body.appendChild(banner);
       };
-      const check = async (auto) => {
-        const t = await tagOf();
-        if (!t) return;
-        if (baseTag == null) { baseTag = t; return; }
-        if (t !== baseTag) { if (auto) location.reload(); else showBanner(); }
-      };
-      // 앱 재개(포그라운드 복귀) 시 → 업데이트 있으면 자동 새로고침
-      document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") check(true); });
-      // 포그라운드 유지 중 1분마다 확인 → 방해 없이 배너 버튼만
-      setInterval(() => { if (document.visibilityState === "visible") check(false); }, 60000);
+      const onUpdate = () => { updateReady = true; if (document.visibilityState === "visible") showBanner(); };
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.addEventListener("message", (e) => { if (e.data && e.data.type === "sw-updated") onUpdate(); });
+      }
+      // 앱 재개(포그라운드 복귀) 시 대기 중 업데이트 있으면 자동 새로고침
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible" && updateReady) location.reload();
+      });
     })();
   })();
 
@@ -99,6 +93,7 @@
     { href: "materials.html", label: "견적/자재", key: "materials" },
     { href: "total-quote.html", label: "총 비용", key: "totalquote" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
+    { href: "memo.html", label: "📝 메모", key: "memo" },
     { href: "work.html", label: "작업 안내", key: "work" },
     { href: "print.html", label: "🖨 인쇄물", key: "print" },
   ];
@@ -109,7 +104,7 @@
     try { localStorage.setItem("oh-owner", "1"); } catch (e) {}
     const active = document.body.dataset.page;
     // 견적/연락처는 관리자에게만 노출
-    const adminOnly = { quotes: 1, contacts: 1, totalquote: 1, materials: 1 };
+    const adminOnly = { quotes: 1, contacts: 1, totalquote: 1, materials: 1, memo: 1 };
     const nav = NAV.filter((n) => isAdmin() || !adminOnly[n.key]);
     el.innerHTML =
       `<div class="wrap"><a class="brand" href="index.html">🏠 ${esc(PROJECT.title)}</a>` +
@@ -119,7 +114,7 @@
   // 견적·연락처 페이지 직접 접근 차단 (비관리자)
   function guardAdminPage() {
     const page = document.body.dataset.page;
-    if ((page === "quotes" || page === "contacts" || page === "totalquote" || page === "materials") && !isAdmin()) {
+    if ((page === "quotes" || page === "contacts" || page === "totalquote" || page === "materials" || page === "memo") && !isAdmin()) {
       const wrap = document.querySelector("section .wrap");
       if (wrap) wrap.innerHTML =
         `<div class="sec-title">접근 제한</div>` +

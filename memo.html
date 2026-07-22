@@ -4,26 +4,28 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>html,body{margin:0;background:#f5f4f1}body::before{content:"";position:fixed;inset:0;z-index:9999;background:#f5f4f1 url("icons/icon-192.png") no-repeat center calc(50% - 34px);background-size:76px}body::after{content:"";position:fixed;top:calc(50% + 34px);left:50%;width:30px;height:30px;margin-left:-15px;border:3px solid #ece3d4;border-top-color:#5a3a22;border-radius:50%;animation:app-spin .8s linear infinite;z-index:10000}@keyframes app-spin{to{transform:rotate(360deg)}}body.app-ready::before,body.app-ready::after{opacity:0;visibility:hidden;transition:opacity .3s}</style>
-<title>조명 계획 · 우리집 인테리어</title>
+<title>메모 · 우리집 인테리어</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-<link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<noscript><link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" /></noscript>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-page="lighting">
+<body data-page="memo">
 
 <nav id="nav"></nav>
 
 <section><div class="wrap">
-  <div class="sec-title">LIGHTING PLAN</div>
-  <h2 class="sec-head">조명 계획 — 회로별 조명 표</h2>
-  <p class="ov-lead">왼쪽 도면의 조명에 마우스를 올리면 이름이 나오고, 같은 스위치 회로에 묶인 조명은 같은 색으로 표시됩니다. 오른쪽 표는 구역·회로·조명 종류별로 정리한 명세입니다. <b>도면(평면도)과 같은 데이터를 보고</b> 있어, 어디서 편집하든 양쪽이 동기화돼요.</p>
-  <div id="lighting-app"></div>
+  <div class="sec-title">MEMO</div>
+  <h2 class="sec-head">📝 공유 메모</h2>
+  <p class="ov-lead">둘이 자유롭게 남기는 메모예요. 로그인 없이 바로 쓰고, 서로의 수정이 <b>실시간</b>으로 반영됩니다. (이 메뉴는 관리자에게만 보여요.)</p>
+  <div id="memo-app"></div>
 </div></section>
 
 <footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script src="memo.js"></script>
 </body>
 </html>
