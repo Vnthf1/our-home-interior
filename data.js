@@ -2070,7 +2070,7 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 46.2, y: 67.8, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #6" },
     { layer: "light", type: "pin", x: 31.9, y: 62.8, label: "확산조명", kind: "diff2", circuit: "MRH-1", zone: "안방복도", name: "안복2" },
     { layer: "light", type: "pin", x: 33.1, y: 55.7, label: "확산조명", kind: "diff2", circuit: "MRH-1", zone: "안방복도", name: "안복1" },
-    { layer: "light", type: "pin", x: 30, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-1", zone: "안방복도", name: "안복3" },
+    { layer: "light", type: "pin", x: 37.5, y: 56, label: "확산조명", kind: "diff2", circuit: "MRH-1", zone: "안방복도", name: "안복3" },
   ],
 };
 
