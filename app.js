@@ -26,15 +26,25 @@
     }
     // 로딩 스플래시 안전망 — 렌더 중 오류가 나도 load 시 스피너 제거
     window.addEventListener("load", () => { try { document.body.classList.add("app-ready"); } catch (e) {} });
-    // ── PWA 업데이트 감지 — SW가 새 app.js/data.js를 받으면 알림 → 새로고침 유도 ──
+    // ── PWA 업데이트 감지 — SW가 캐시를 내보낸 뒤 새 버전을 발견하면 알림 → 새로고침 유도 ──
+    // (SW는 HTML·js·css를 네트워크 우선으로 받으므로, 이 배너는 느린 망/오프라인 폴백 때만 뜬다)
     (function updateWatch() {
       let updateReady = false, banner = null;
+      // 자동 새로고침은 탭당 1회까지 — 캐시가 갱신 안 될 때 무한 새로고침 루프를 막는다
+      const ONCE = "oh_auto_reloaded";
+      const alreadyReloaded = () => { try { return sessionStorage.getItem(ONCE) === "1"; } catch (e) { return true; } };
+      const markReloaded = () => { try { sessionStorage.setItem(ONCE, "1"); } catch (e) {} };
+      // 캐시까지 싹 비우고 새로고침 — 옛 데이터가 남았을 때의 확실한 탈출구
+      const hardReload = async () => {
+        try { const ks = await caches.keys(); await Promise.all(ks.map((k) => caches.delete(k))); } catch (e) {}
+        location.reload();
+      };
       const showBanner = () => {
         if (banner || !document.body) return;
         banner = document.createElement("div");
         banner.className = "oh-update";
         banner.innerHTML = '🆕 새 버전이 있어요 <button type="button">새로고침</button>';
-        banner.querySelector("button").addEventListener("click", () => location.reload());
+        banner.querySelector("button").addEventListener("click", hardReload);
         document.body.appendChild(banner);
       };
       const onUpdate = () => { updateReady = true; if (document.visibilityState === "visible") showBanner(); };
@@ -43,7 +53,9 @@
       }
       // 앱 재개(포그라운드 복귀) 시 대기 중 업데이트 있으면 자동 새로고침
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible" && updateReady) location.reload();
+        if (document.visibilityState !== "visible" || !updateReady || alreadyReloaded()) return;
+        markReloaded();
+        location.reload();
       });
     })();
   })();

@@ -20,7 +20,10 @@ quotes/     ← 견적서 파일(이미지/PDF).
 
 ### 페이지 목록 (app.js의 NAV와 일치)
 홈(index) · 컨셉(concept) · 공정표(schedule) · 작업계획서(plans) ·
-작업안내(work) · 도면(floorplan) · 견적/후보(quotes) · 레퍼런스(references) · 연락처(contacts)
+작업안내(work) · 도면(floorplan) · 견적/후보(quotes) · 레퍼런스(references) · 연락처(contacts) ·
+가구/가전(furniture) · **세라믹(ceramic)**
+
+- **ceramic.html(세라믹 원장 계획)** = 빅슬랩(3200×1600) 발주 수량 산정. 데이터·렌더링 로직 모두 ceramic.html 안에 self-contained(inline JS + SVG). 부재/시나리오/원장 배치가 바뀌면 이 파일만 수정. 부재 컬러·치수는 `PIECES`, 슬랩 배치는 `SLAB_A`/`SLAB_B_X`/`SLAB_B_Y`/`SLAB_ART`.
 
 - **work.html(작업 안내)** = 작업자 공유용 진입점. 자체 헤더 + 탭바(공유 site nav 미사용). `PHASES`를 그대로 재사용하되 담당 업체명·견적·연락처는 숨김. 첫 탭은 개요(`OVERVIEW` + `BEFORE_AFTER`), 이후 공정별 탭. **탭마다 URL이 해시로 구분**(`work.html#electric`)되어 작업자에게 해당 공정만 공유 가능.
 - plans.html(작업계획서)와 work.html은 `phaseCardHTML()`을 공유 → 작업계획서 포맷을 바꾸면 양쪽에 동시 반영. work.html은 `{hideTeam:true}`로 호출.
@@ -77,6 +80,17 @@ quotes/     ← 견적서 파일(이미지/PDF).
   - 사이트: **https://vnthf1.github.io/our-home-interior/** (서브경로 서빙 → 자산은 **상대경로만** 사용. `/`로 시작하는 절대경로 금지).
   - (구) Netlify는 무료 사용량 초과로 막혀서 2026-05 GitHub Pages로 이전함. repo도 이때 public 전환.
 - repo가 public이라 **코드·커밋 히스토리·전화번호가 모두 공개**됨 → 새 비공개 정보(동·호 상세 등)는 코드/주석에도 넣지 말 것. 사이트 URL도 누구나 열람 가능.
+
+### PWA / 서비스워커 (sw.js)
+
+홈 화면에 추가하면 앱처럼 뜬다. 캐시 전략이 **2가지로 분리**돼 있다.
+
+- **콘텐츠(HTML·js·css·manifest·json)** = 네트워크 우선. `fetch(url, {cache:"no-cache"})`로 항상 서버에 재검증(304면 본문 재전송 없음) → **온라인이면 언제나 최신**. 3.5초 안에 응답 없으면 캐시 폴백.
+- **정적 자산(이미지·아이콘·PDF)** = 캐시 우선 + 백그라운드 갱신.
+- `CORE` = 프리캐시 목록. **새 페이지·새 js 파일을 추가하면 여기에도 넣을 것.** 파일별로 개별 `cache.put` 하므로 1개가 404여도 나머지는 캐시된다.
+- **캐시 구조·전략을 바꿀 때는 `CACHE` 이름(`home-interior-vN`)을 올린다** — `activate`에서 옛 캐시를 전부 삭제해 자동 복구된다.
+- ⚠️ `caches.addAll()`이나 기본 `fetch()`로 프리캐시하면 **HTTP 캐시(GitHub Pages `max-age=600`)의 묵은 파일이 캐시에 박혀 "업데이트 안 되는" 증상**이 난다. 프리캐시는 `cache:"reload"` 유지.
+- 업데이트 배너(`.oh-update`)는 캐시 폴백으로 옛 버전을 내보낸 뒤에만 뜬다. 버튼은 **모든 캐시 삭제 + 새로고침**(확실한 탈출구). 자동 새로고침은 탭당 1회(무한 루프 방지).
 
 ## 작업 시 주의
 
