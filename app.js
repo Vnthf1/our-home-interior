@@ -1851,8 +1851,12 @@
     }
     // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
     // 가격 미정/모호 phase는 사용자 협의 가정값
-    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1, intercom:1 };
-    const QUOTE_OVERRIDE = { ceramic: 5000000, film: 1400000, "middle-door": 3000000 };
+    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1, intercom:1, film:1, ceramic:1, grout:1 };
+    const QUOTE_OVERRIDE = { "middle-door": 3000000 };
+    // 영문 phase id → 한글 표시명 (name 필드 없는 QUOTES 항목용)
+    const PHASE_KO_NAME = { "middle-door": "중문", cleaning: "입주청소", film: "필름", grout: "줄눈", ceramic: "세라믹", elastic: "탄성코트" };
+    // 가구 예상 총액 (세라믹 ~900만 포함 · 사용자 견적)
+    const FURNITURE_TOTAL_OVERRIDE = 30000000;
     const estimatedExtras = [];
     if (typeof QUOTES !== "undefined") {
       const parsePrice = (s) => {
@@ -1871,7 +1875,7 @@
           if (cand) { amount = parsePrice(cand.price); source = "1차 후보"; }
         }
         if (amount > 0) {
-          estimatedExtras.push({ phase: q.name || q.phase, amount: amount, source: source });
+          estimatedExtras.push({ phase: q.name || PHASE_KO_NAME[q.phase] || q.phase, amount: amount, source: source });
           procTotal += amount;
         }
       });
@@ -1894,6 +1898,10 @@
     if (furnDecided) {
       furnitureTotal = parseWon(furnDecided.price);
       furnitureItems = [{ name: (furnDecided.name || "가구") + " (확정)", qty: 1, price: furnitureTotal, vendor: furnDecided.company || "", note: furnDecided.price || "" }];
+    } else if (FURNITURE_TOTAL_OVERRIDE) {
+      // 사용자 예상 총액 override (세라믹 포함)
+      furnitureTotal = FURNITURE_TOTAL_OVERRIDE;
+      furnitureItems = [{ name: "가구 예상 총액 (세라믹 ~900만 포함)", qty: 1, price: FURNITURE_TOTAL_OVERRIDE, vendor: "예상", note: "세라믹 900만 + 기타 가구 · 사용자 예상" }];
     } else {
       furnitureItems = pickBest((typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : []);
       furnitureTotal = 0; furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
@@ -2257,10 +2265,19 @@
   function renderUnconfirmed() {
     const el = $("unconfirmed");
     if (!el || typeof UNCONFIRMED === "undefined" || !UNCONFIRMED.length) return;
+    // 한글명 → QUOTES phase id 매핑 (매칭되면 견적/공정 페이지 앵커 링크)
+    const KO2PHASE = { "세라믹": "ceramic", "입주청소": "cleaning", "필름": "film",
+      "중문": "middle-door", "드레스룸 슬라이딩 문": "middle-door", "줄눈": "grout", "탄성코트": "elastic" };
+    const chip = (n) => {
+      const pid = KO2PHASE[n];
+      return pid
+        ? `<a class="unconf-chip is-link" href="quotes.html#q-${esc(pid)}">${esc(n)} <span class="arr">→</span></a>`
+        : `<span class="unconf-chip">${esc(n)}</span>`;
+    };
     el.innerHTML =
       `<div class="unconf">
-        <div class="unconf-h">🚧 아직 확정 안 된 공정 <span class="unconf-sub">(업체 미계약 · 일정 조율 중)</span></div>
-        <div class="unconf-chips">${UNCONFIRMED.map((n) => `<span class="unconf-chip">${esc(n)}</span>`).join("")}</div>
+        <div class="unconf-h">🚧 아직 확정 안 된 공정 <span class="unconf-sub">(업체 미계약 · 일정 조율 중 · 링크 → 견적/공정 페이지)</span></div>
+        <div class="unconf-chips">${UNCONFIRMED.map(chip).join("")}</div>
       </div>`;
   }
 

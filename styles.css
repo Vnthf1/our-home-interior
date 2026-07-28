@@ -113,6 +113,9 @@ table.cal th,table.cal td{border:1px solid #ece5da}
 .unconf-sub{font-size:12px;font-weight:500;color:var(--muted)}
 .unconf-chips{display:flex;flex-wrap:wrap;gap:8px}
 .unconf-chip{font-size:13px;color:#8a6d1f;background:#fdf6e3;border:1px solid #f0dcb8;border-radius:99px;padding:5px 12px;font-weight:600}
+.unconf-chip.is-link{text-decoration:none;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:4px}
+.unconf-chip.is-link:hover{background:#fbecc4;border-color:#d9b56b;color:#5a4a20}
+.unconf-chip.is-link .arr{font-weight:800;opacity:.6;font-size:11px}
 
 /* decisions / checks lists */
 .dec-list{display:grid;gap:10px}

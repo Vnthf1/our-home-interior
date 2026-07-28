@@ -125,11 +125,11 @@ const SCHEDULE = {
     { name: "가구 (신발장·부엌·붙박이장)", spans: [["2026-08-04", "2026-08-06"]] },
     { name: "사우나 설치", color: "#a0522d", spans: [["2026-08-06", "2026-08-06"]] },
     { name: "중문", spans: [["2026-08-12", "2026-08-12"]] },
-    { name: "전기 (조명)", spans: [["2026-08-05", "2026-08-06"]] },
+    { name: "전기 (조명)", spans: [["2026-08-06", "2026-08-06"], ["2026-08-12", "2026-08-12"]] },
     { name: "실리콘", spans: [["2026-08-12", "2026-08-12"]] },
     { name: "탄성코트", spans: [] },
-    { name: "세라믹 (실측)",         color: "#d97a4a", spans: [["2026-08-04", "2026-08-04"]] },
-    { name: "세라믹·안방세면대 설치", color: "#d97a4a", spans: [["2026-08-10", "2026-08-10"]] },
+    { name: "세라믹 (실측)",         color: "#d97a4a", spans: [["2026-07-30", "2026-07-30"]] },
+    { name: "세라믹·안방세면대 설치", color: "#d97a4a", spans: [["2026-08-03", "2026-08-03"]] },
     { name: "입주청소", spans: [["2026-08-13", "2026-08-13"]] },
     { name: "이사",                 color: "#444444", spans: [["2026-08-14", "2026-08-14"]] },
   ],
@@ -140,7 +140,7 @@ const SCHEDULE = {
  * ------------------------------------------------------------ */
 const UNCONFIRMED = [
   "세라믹", "입주청소", "실리콘", "탄성코트",
-  "커튼", "인터폰", "도어락", "드레스룸 슬라이딩 문",
+  "커튼", "도어락", "드레스룸 슬라이딩 문",
   "거울", "화장실 가구",
 ];
 
@@ -238,15 +238,19 @@ const QUOTE_SUMMARY = [
   { phase: "설비 (매립수전·파티션)", company: "에프원 하우스", price: 2700000, priceText: "270만 (완납)", deposit: 2700000, final: 2700000, note: "✅ 완납 완료 — 매립수전 5개 설치 + 파티션 시공. 벨류연구소와 별도. 두 업체 합쳐 설비 총 약 1,220만" },
   { phase: "폐기물 처리", company: "", price: 740000, deposit: 740000, final: 740000, note: "✅ 완납 — 2회 반출 (7/16 35만 + 7/23 39만)" },
   { phase: "전기", company: "하린 전기조명", price: 7000000, deposit: 5550000, final: null, note: "VAT 포함 · 지급 555만 (165만 + 390만) · 한 번 더 남음(잔금 대기)" },
-  { phase: "전열교환기", company: "클린코퍼레이션", price: 4900000, deposit: 1000000, final: null, note: "THE650-200 환기 · 견적 490만 확정(VAT 포함) · 선입금 100만 · 벽타공·전기통신·천장은 인테리어분 별도" },
+  { phase: "전열교환기", company: "클린코퍼레이션", price: 4900000, deposit: 3900000, final: null, note: "THE650-200 환기 · 견적 490만 확정(VAT 포함) · 390만 지급 · 잔금 100만 · 벽타공·전기통신·천장은 인테리어분 별도" },
   { phase: "가전 (전체)", company: "삼성 (영림 인천갤러리)", price: 15145087, deposit: 15145087, final: 15145087, note: "✅ 완료 — 인덕션·식세기·오븐·냉장고·세탁기·건조기·로봇청소기·사운드바·정수기·85인치 TV·에어컨 일괄. 체감가 15,145,087원 (결제 31,211,000 → 캐시백·상품권 차감)" },
   { phase: "에어컨 (선배관·설치비)", company: "", price: 600000, deposit: 600000, final: 600000, note: "✅ 완납 60만 — 에어컨 선배관·설치비 (본체는 가전 일괄에 포함) · 배관 7/6·설치 7/31" },
   { phase: "목공", company: "국선디자인", price: 14041500, priceText: "1,404.15만 (최종 완납)", deposit: 400000, final: 14041500, note: "✅ 완납 완료 — 인건비 806만 + 자재/부자재 598.15만 = 총 1,404.15만. 선납금 40만 + 잔금 완납." },
   { phase: "타일", company: "최반장", price: 4100000, priceText: "410만 (최종 완납)", deposit: 4100000, final: 4100000, note: "✅ 완납 완료 — 최종 410만원" },
+  { phase: "도기 (시공)", company: "", price: 450000, deposit: null, final: null, note: "도기 설치 시공 45만 · 도기·수전·부자재 자재는 콩타일 별도(견적/자재 참조)" },
+  { phase: "줄눈", company: "보또줄눈", price: 1600000, deposit: null, final: null, note: "✅ 확정 — 에폭시 줄눈 (욕실 2개소 + 현관) 일괄 160만 · 시공 8/8" },
   { phase: "필름", company: "호박인테리어필름", price: 1210000, priceText: "121만 (최종 완납)", deposit: 1210000, final: 1210000, note: "✅ 완납 완료 — 최종 121만원 · 문·문틀·걸레받이 등 다크우드 필름 · 010-7216-7206" },
   { phase: "보일러/온도조절기", company: "분배기 고수", price: 2500000, deposit: 100000, final: null, note: "보일러 설비 동일 업체 · 약 250만 · 선입금 10만 · 업체명 임시(추후 변경) · 설치 7/31" },
-  { phase: "욕실천장", company: "", price: 1100000, priceText: "110만 (최종 완납)", deposit: 1100000, final: 1100000, note: "✅ 완납 완료 — 최종 110만원 · 무광 SMC" },
-  { phase: "도배", company: "신한벽지", price: 3952000, deposit: 300000, final: null, note: "디아망 + 초배 띄움 포함 · 선입금 30만" },
+  { phase: "욕실천장", company: "한반장", price: 1100000, priceText: "110만 (최종 완납)", deposit: 1100000, final: 1100000, note: "✅ 완납 완료 — 최종 110만원 · 무광 SMC · 업체 한반장. ⭐평점 2/5 — 담배 피움, 점검구 너무 크고 이상함, 재료 미리 준비 안 함" },
+  { phase: "도배", company: "신한벽지", price: 4600000, priceText: "460만 (예상)", deposit: 300000, final: null, note: "디아망 + 초배 띄움 포함 · 460만 예상 · 선입금 30만" },
+  { phase: "인터폰", company: "", price: 595000, priceText: "59.5만 (완납)", deposit: 595000, final: 595000, note: "✅ 완납 완료 — 595,000원 · 월패드·인터폰 교체 및 설치 · 7/18" },
+  { phase: "커튼", company: "", price: 1800000, priceText: "180만 (예상)", deposit: null, final: null, note: "예상 180만 · 미확정 (전동커튼 포함)" },
   { phase: "장판", company: "대동벽지", price: 4095000, deposit: 300000, final: null, note: "프레스티지스톤 5T (변경) · 견적 409.5만 · 온누리 175만 + 계약금 30만" },
   { phase: "샷시", company: "올바른 창호", price: 4400000, deposit: 4400000, final: 4400000, note: "✅ 완납 440만 (VAT 포함) · 작업 7/8" },
   { phase: "이사", company: "로젠이사", price: 2480000, deposit: 1380000, final: null, note: "이사 200만 + 보관 48만 · 선입금 138만" },
@@ -1310,17 +1314,30 @@ const QUOTES = [
       },
     ],
   },
-  /* ===== 미확정 IoT 설치 공정 — 총 비용의 estimatedExtras로 자동 반영 ===== */
+  /* ===== 미확정 공정 — 총 비용의 estimatedExtras로 자동 반영 ===== */
+  {
+    phase: "elastic", name: "탄성코트", icon: "🎨",
+    candidates: [
+      {
+        name: "탄성코트 (예상)", company: "", price: "약 50만원 (예상)",
+        status: "candidate",
+        scope: "발코니(실외기실) 탄성코트 도장.",
+        summary: "예상 견적 약 50만원 · 최종 견적 대기.",
+        items: [], files: [],
+        note: "발코니 탄성코트 재시공. 정식 견적 미수령.",
+      },
+    ],
+  },
   {
     phase: "intercom", name: "인터폰 설치", icon: "📞",
     candidates: [
       {
-        name: "인터폰 설치", company: "", price: "600,000원 (완납)",
+        name: "인터폰 설치", company: "", price: "595,000원 (완납)",
         status: "decided",
         scope: "월패드·인터폰 교체 및 설치.",
-        summary: "✅ 완납 완료 — 60만원 (예상 50만보다 +10만).",
+        summary: "✅ 완납 완료 — 595,000원.",
         items: [], files: [],
-        note: "✅ 완납 완료 · 60만원.",
+        note: "✅ 완납 완료 · 595,000원.",
       },
     ],
   },
@@ -1328,15 +1345,15 @@ const QUOTES = [
     phase: "nest-install", name: "구글 네스트 설치", icon: "🌡️",
     candidates: [
       {
-        name: "구글 네스트 설치 (예상)", company: "", price: "약 120만원 (예상)",
-        status: "candidate",
-        scope: "구글 네스트 온도조절기 설치 인건비 (본체는 LIGHTING_EXTRAS에 별도 등록).",
-        summary: "네스트 4세대 1개 + 3.5세대 2개 설치 예상 약 120만원. 본체 별도.",
+        name: "구글 네스트 설치 (보일러 업체 동시시공)", company: "분배기 고수", price: "보일러/온도조절기 견적에 포함",
+        status: "decided",
+        scope: "구글 네스트 온도조절기 설치 — 보일러 설비 업체(분배기 고수)가 보일러와 함께 시공. 별도 인건비 없음(온도조절기 250만에 포함). 본체는 LIGHTING_EXTRAS에 별도 등록.",
+        summary: "✅ 네스트 4세대 1 + 3.5세대 2 설치 — 보일러 업체가 같이 시공(별도 비용 없음, 보일러/온도조절기 250만에 포함).",
         items: [
           { label: "구글 네스트 4세대 설치", amount: "포함" },
           { label: "구글 네스트 3.5세대 × 2 설치", amount: "포함" },
         ], files: [],
-        note: "본체(4세대 1 + 3.5세대 2)는 LIGHTING_EXTRAS에 있음. 이 견적은 설치 인건비만.",
+        note: "설치는 보일러/온도조절기 업체(분배기 고수)가 보일러 설비와 동시 진행 → 별도 설치비 없음. 본체(4세대 1 + 3.5세대 2)는 LIGHTING_EXTRAS. 온도조절기 견적 250만 참조.",
       },
     ],
   },
@@ -2807,9 +2824,6 @@ const LIGHTING_EXTRAS = [
   { id: "guide_2c",    label: "86 스위치 전용 목재 가이드판 2구 자석 (#226)",      qty: 1, priceB2B: 8800,   priceB2C: 18000 },
   { id: "guide_3c",    label: "86 스위치 전용 목재 가이드판 3구 (#226)",          qty: 1, priceB2B: 8800,   priceB2C: 18000 },
   { id: "knob_h1",     label: "아카라 무선 노브 스위치 H1 ZigBee (#136)",         qty: 2, priceB2B: 69420,  priceB2C: 89000 }, // 이지엉클 26.07.28 견적서에서 +1 추가
-  { id: "curtain_ctrl", label: "아카라 전동커튼 컨트롤러 (#154)",                qty: 6, priceB2B: 127075, priceB2C: 170000, quoteCut: true },
-  { id: "rail_4_5m",   label: "[주문제작] 무소음 레일 4.0m~5.0m (#163)",         qty: 4, priceB2B: 210600, priceB2C: 270000 },
-  { id: "rail_3_4m",   label: "[주문제작] 무소음 레일 3.0m~4.0m (#162)",         qty: 2, priceB2B: 170182, priceB2C: 218182 },
   // 구글 네스트(이지엉클 외) — 최저가 입력 → 표시 ×1.1 = VAT 포함 가격이 되도록 ÷1.1 후 저장
   { id: "nest_4",      label: "구글 네스트 4세대",                              qty: 1, priceB2B: 420000, priceB2C: 462000 }, // ✅ 실구매 46.2만원(VAT포함) · 공급가 42만 · priceB2B=420,000 → 표시 ×1.1 = 462,000
   { id: "nest_35",     label: "구글 네스트 3.5세대",                            qty: 3, priceB2B: 118182, priceB2C: 130000 }, // ✅ 실구매 3개 총 39만원(VAT포함, 개당 13만원) · priceB2B = 130,000/1.1
