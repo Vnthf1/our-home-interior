@@ -107,6 +107,7 @@
     { href: "floorplan.html", label: "도면", key: "floorplan" },
     { href: "lighting.html", label: "조명 계획", key: "lighting" },
     { href: "furniture.html", label: "가구/가전", key: "furniture" },
+    { href: "ceramic.html", label: "세라믹", key: "ceramic" },
     { href: "quotes.html", label: "견적/공정", key: "quotes" },
     { href: "materials.html", label: "견적/자재", key: "materials" },
     { href: "contacts.html", label: "연락처", key: "contacts" },

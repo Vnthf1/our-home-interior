@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>html,body{margin:0;background:#f5f4f1}body::before{content:"";position:fixed;inset:0;z-index:9999;background:#f5f4f1}body::after{content:"";position:fixed;top:50%;left:50%;width:28px;height:28px;margin:-14px 0 0 -14px;border:3px solid #ece3d4;border-top-color:#5a3a22;border-radius:50%;opacity:0;animation:app-spin .8s linear infinite,app-in .01s linear .45s forwards;z-index:10000}@keyframes app-spin{to{transform:rotate(360deg)}}@keyframes app-in{to{opacity:1}}body.app-ready::before,body.app-ready::after{opacity:0;visibility:hidden;transition:opacity .2s}</style>
+<title>세라믹 원장 계획 · 우리집 인테리어</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" media="print" onload="this.media='all'" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<noscript><link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" /></noscript>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .cer-intro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:12px 0 20px}
+  .cer-stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .cer-stat .k{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+  .cer-stat .v{font-size:20px;font-weight:800;color:var(--accent);margin-top:4px}
+  .cer-stat .sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+  .cer-legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:10px 0 24px}
+  .cer-chip{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+  .cer-chip .sw{width:26px;height:26px;border-radius:8px;border:1.5px solid rgba(0,0,0,.25);flex-shrink:0}
+  .cer-chip .name{font-weight:700;font-size:14px;color:var(--ink)}
+  .cer-chip .dim{font-size:12px;color:var(--muted);margin-top:1px;font-variant-numeric:tabular-nums}
+  .cer-chip .id{font-size:11px;color:var(--muted);font-weight:700}
+  .cer-chip .body{flex:1;min-width:0}
+  .cer-chip .tag{display:inline-block;margin-left:6px;font-size:10.5px;padding:1px 7px;border-radius:99px;background:#fdecec;color:#c0392b;font-weight:700}
+
+  .cer-scen{margin:32px 0 20px}
+  .cer-scen-h{margin:0 0 6px;font-size:22px;font-weight:800;color:var(--accent);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .cer-scen-badge{display:inline-block;padding:3px 10px;border-radius:99px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;letter-spacing:.5px}
+  .cer-scen-badge.b{background:#8e5a3a}
+  .cer-scen-badge.art{background:#d15588}
+  .cer-scen-sub{margin:0 0 14px;font-size:14px;color:var(--muted)}
+
+  .cer-slabs{display:grid;grid-template-columns:1fr;gap:16px}
+  @media (min-width:900px){.cer-slabs{grid-template-columns:1fr 1fr}}
+  .cer-slab{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;box-shadow:0 4px 14px rgba(90,58,34,.05)}
+  .cer-slab-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin:0 0 8px}
+  .cer-slab-title{font-size:16px;font-weight:800;color:var(--accent);margin:0}
+  .cer-slab-note{font-size:12.5px;color:var(--muted);margin:2px 0 0}
+  .cer-slab-util{flex-shrink:0;padding:4px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+  .cer-slab-util.hi{background:#e3f4e0;color:#2f7a1f}
+  .cer-slab-util.md{background:#fdf0dd;color:#8b5a1a}
+  .cer-slab-util.lo{background:#fdecec;color:#a83030}
+  .cer-svg{width:100%;height:auto;display:block;border-radius:8px;background:#efe6d2}
+
+  .cer-subsection{margin-top:16px}
+  .cer-subsection-h{margin:0 0 8px;font-size:15px;font-weight:800;color:#8b5a1a;display:flex;align-items:center;gap:8px}
+  .cer-subsection-h .stripe{display:inline-block;width:24px;height:3px;border-radius:2px;background:#d75a3c}
+  .cer-subsection-h.y .stripe{background:#6b56a0}
+
+  .cer-compare{margin:28px 0 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .cer-compare h3{margin:0 0 12px;font-size:17px;color:var(--accent);font-weight:800}
+  .cer-compare table{width:100%;border-collapse:collapse;font-size:14px}
+  .cer-compare th,.cer-compare td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+  .cer-compare th{color:var(--muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.4px}
+  .cer-compare td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+  .cer-compare tr.total td{border-top:2px solid var(--accent);border-bottom:none;font-weight:800;font-size:15px;color:var(--accent)}
+
+  .cer-rec{margin:16px 0 24px;padding:16px 18px;background:#f9f4e8;border:1px solid #e8dfc7;border-radius:14px}
+  .cer-rec h3{margin:0 0 8px;font-size:16px;color:var(--accent);font-weight:800}
+  .cer-rec ul{margin:6px 0;padding-left:20px}
+  .cer-rec li{margin:4px 0;font-size:14px;line-height:1.55}
+  .cer-rec .pick{display:inline-block;padding:2px 10px;border-radius:99px;background:#2f7a1f;color:#fff;font-weight:800;font-size:12px;margin-right:6px}
+
+  .cer-notice{margin:14px 0;padding:12px 14px;background:#fff7ed;border:1px solid #f0dcc0;border-radius:10px;color:#7a5c3a;font-size:13.5px;line-height:1.6}
+  .cer-notice b{color:#c25d1a}
+</style>
+</head>
+<body data-page="ceramic">
+
+<nav id="nav"></nav>
+
+<section><div class="wrap">
+  <div class="sec-title">CERAMIC SLAB PLANNING</div>
+  <h2 class="sec-head">세라믹 원장 계획</h2>
+  <p class="ov-lead">빅슬랩 3200 × 1600 기준. 필요 부재를 슬랩에 배치해서 발주 수량을 산정합니다. 2개 시나리오(통일 vs 분리).</p>
+
+  <!-- 원장 사양 -->
+  <div class="cer-intro-grid">
+    <div class="cer-stat"><div class="k">원장 사이즈</div><div class="v">3200 × 1600</div><div class="sub">1장 = 5.12㎡</div></div>
+    <div class="cer-stat"><div class="k">엘베 제약</div><div class="v">2400 이하</div><div class="sub">초과 부재는 조인 필요</div></div>
+    <div class="cer-stat"><div class="k">재단 간격</div><div class="v">10 ~ 20 mm</div><div class="sub">부재 사이 여유</div></div>
+    <div class="cer-stat"><div class="k">아트월(9번)</div><div class="v">별도 종류</div><div class="sub">단독 1장 (북매칭 시 2장)</div></div>
+  </div>
+
+  <!-- 부재 리스트 (색상 범례) -->
+  <h3 style="margin:16px 0 8px;font-size:15px;color:var(--muted);font-weight:700;letter-spacing:.4px;text-transform:uppercase">부재 리스트</h3>
+  <div id="cer-legend" class="cer-legend"></div>
+
+  <!-- 시나리오 A -->
+  <div id="cer-scen-a" class="cer-scen"></div>
+
+  <!-- 시나리오 B -->
+  <div id="cer-scen-b" class="cer-scen"></div>
+
+  <!-- 아트월 공통 -->
+  <div id="cer-scen-art" class="cer-scen"></div>
+
+  <!-- 비교표 -->
+  <div class="cer-compare">
+    <h3>📊 발주 수량 비교</h3>
+    <table>
+      <thead><tr><th>항목</th><th class="num">시나리오 A (통일)</th><th class="num">시나리오 B (분리)</th></tr></thead>
+      <tbody>
+        <tr><td>메인 슬랩 최소</td><td class="num">4장</td><td class="num">5장 (X 3 + Y 2)</td></tr>
+        <tr><td>여유분 (파손·재작업)</td><td class="num">+1장</td><td class="num">+1~2장</td></tr>
+        <tr><td>아트월 (단독)</td><td class="num">1장</td><td class="num">1장</td></tr>
+        <tr><td>아트월 (북매칭 시)</td><td class="num">2장</td><td class="num">2장</td></tr>
+        <tr><td>슬랩 평균 활용률</td><td class="num">약 60%</td><td class="num">약 48%</td></tr>
+        <tr class="total"><td>권장 발주 수량</td><td class="num">6장</td><td class="num">7~8장</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 추천 -->
+  <div class="cer-rec">
+    <h3>💡 추천</h3>
+    <p style="margin:0 0 10px;font-size:14px"><span class="pick">추천</span><b>시나리오 A (통일)</b> — 슬랩 1장 절약, 자투리 유동적 활용, 결·색 일관성.</p>
+    <ul>
+      <li><b>시나리오 B로 갈 경우</b>: 주방은 초고밀도·저흡수(오염·기름 저항) 라인, 나머지는 디자인 라인으로 스펙·가격 최적화 가능. 톤 대비를 의도할 때.</li>
+      <li><b>X-3 슬랩 낭비 주의</b>: 시나리오 B의 X-3(주방 상판 L자 팔) 슬랩은 활용률 24% — 남은 자투리로 X-1/X-2 파손분 커버해서 여유분 1장 줄일 수 있음.</li>
+      <li><b>아트월 북매칭</b>: 결이 뚜렷하면 2장 발주해서 좌우 대칭 패턴 (거울처럼). 결이 약하면 1장으로 충분.</li>
+    </ul>
+  </div>
+
+  <!-- 주의사항 -->
+  <div class="cer-notice">
+    ⚠ <b>결·색 방향</b>: 위 배치는 결 방향 무시 상태. 결이 뚜렷한 세라믹이면 <b>90° 회전한 부재(1a-2, 5b, 아트월)</b>는 결이 어긋나 부자연스러울 수 있음 → 결 방향 고정하면 활용률 떨어져 +1장 필요할 수 있음.
+    <br><br>
+    ⚠ <b>엘베 반입</b>: 원장을 3200 통으로 크레인/양중으로 반입 가능한지 업체 확인. 불가능하면 사전 재단 필요 → 3000×80(졸리컷)·2350×1000(주방 상판)·590×3200(책상)은 조인 처리.
+    <br><br>
+    ⚠ <b>최종 판짜기는 석재상</b>: 위 배치는 <b>발주량 산정용</b>. 실제 재단은 석재상에서 원장 결·색 실물 보고 CAD로 다시 짬.
+  </div>
+</div></section>
+
+<footer><div class="wrap">우리집 인테리어 · <span id="year"></span></div></footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+<script>
+/* ---------- 세라믹 계획 데이터 ---------- */
+(function () {
+  const PIECES = {
+    "6":   { name: "책상",             color: "#4a8a5c", w: 3200, h: 590,  tag: "조인 필요" },
+    "7":   { name: "침대 옆 상판",       color: "#8bc48a", w: 350,  h: 150 },
+    "8":   { name: "화장대",           color: "#3a9b8b", w: 800,  h: 500 },
+    "1a1": { name: "주방 상판 본체",     color: "#d75a3c", w: 2350, h: 1000 },
+    "1a2": { name: "주방 상판 L자 팔",   color: "#f0a030", w: 650,  h: 1900 },
+    "2":   { name: "졸리컷",           color: "#a03030", w: 3000, h: 80,   tag: "분할 필요" },
+    "3":   { name: "아일랜드 옆면",       color: "#b06b3a", w: 1000, h: 920 },
+    "4":   { name: "주방 벽면",         color: "#e26533", w: 1900, h: 1380 },
+    "5a":  { name: "거실 장식장 본체",    color: "#6b56a0", w: 1460, h: 1380 },
+    "5b":  { name: "거실 장식장 상부",    color: "#a394c8", w: 1460, h: 360 },
+    "9":   { name: "아트월",           color: "#d15588", w: 1300, h: 2200, tag: "별도 종류" },
+  };
+
+  const SLAB_A = [
+    { title: "슬랩 1", note: "책상 + 주방 상판 본체 + 화장대 + 침대옆", util: 93,
+      pieces: [
+        { id: "6",   x: 0,    y: 0,    w: 3200, h: 590 },
+        { id: "1a1", x: 0,    y: 610,  w: 2350, h: 1000 },
+        { id: "8",   x: 2370, y: 610,  w: 800,  h: 500 },
+        { id: "7",   x: 2370, y: 1125, w: 350,  h: 150, sub: "1/2" },
+        { id: "7",   x: 2740, y: 1125, w: 350,  h: 150, sub: "2/2" },
+      ]},
+    { title: "슬랩 2", note: "아일랜드 옆면 + 주방 상판 L자 팔 + 졸리컷 1/2", util: 47,
+      pieces: [
+        { id: "3",   x: 0,    y: 0,   w: 1000, h: 920 },
+        { id: "2",   x: 1020, y: 0,   w: 1500, h: 80,  sub: "1/2" },
+        { id: "1a2", x: 0,    y: 940, w: 1900, h: 650, rotated: true },
+      ]},
+    { title: "슬랩 3", note: "주방 벽면 + 졸리컷 2/2", util: 52,
+      pieces: [
+        { id: "4",   x: 0, y: 0,    w: 1900, h: 1380 },
+        { id: "2",   x: 0, y: 1400, w: 1500, h: 80, sub: "2/2" },
+      ]},
+    { title: "슬랩 4", note: "거실 장식장 (5a + 5b · 결 매칭)", util: 50,
+      pieces: [
+        { id: "5a", x: 0,    y: 0, w: 1460, h: 1380 },
+        { id: "5b", x: 1480, y: 0, w: 1460, h: 360 },
+      ]},
+  ];
+
+  const SLAB_B_X = [
+    { title: "슬랩 X-1", note: "주방 상판 본체 + 졸리컷 1/2", util: 51,
+      pieces: [
+        { id: "1a1", x: 0, y: 0,    w: 2350, h: 1000 },
+        { id: "2",   x: 0, y: 1020, w: 1500, h: 80, sub: "1/2" },
+      ]},
+    { title: "슬랩 X-2", note: "주방 벽면 + 아일랜드 옆면 + 졸리컷 2/2", util: 76,
+      pieces: [
+        { id: "4",   x: 0,    y: 0,    w: 1900, h: 1380 },
+        { id: "3",   x: 1920, y: 0,    w: 1000, h: 920 },
+        { id: "2",   x: 0,    y: 1400, w: 1500, h: 80, sub: "2/2" },
+      ]},
+    { title: "슬랩 X-3", note: "주방 상판 L자 팔 (단독 · 활용률 낮음)", util: 24,
+      pieces: [
+        { id: "1a2", x: 0, y: 0, w: 1900, h: 650, rotated: true },
+      ]},
+  ];
+
+  const SLAB_B_Y = [
+    { title: "슬랩 Y-1", note: "책상 + 화장대 + 침대옆", util: 47,
+      pieces: [
+        { id: "6", x: 0,    y: 0,    w: 3200, h: 590 },
+        { id: "8", x: 2370, y: 610,  w: 800,  h: 500 },
+        { id: "7", x: 2370, y: 1125, w: 350,  h: 150, sub: "1/2" },
+        { id: "7", x: 2740, y: 1125, w: 350,  h: 150, sub: "2/2" },
+      ]},
+    { title: "슬랩 Y-2", note: "거실 장식장 (5a + 5b · 결 매칭)", util: 50,
+      pieces: [
+        { id: "5a", x: 0,    y: 0, w: 1460, h: 1380 },
+        { id: "5b", x: 1480, y: 0, w: 1460, h: 360 },
+      ]},
+  ];
+
+  const SLAB_ART = { title: "슬랩 α", note: "아트월 단독 · 별도 세라믹 종류", util: 56,
+    pieces: [
+      { id: "9", x: 0, y: 0, w: 2200, h: 1300, rotated: true },
+    ]};
+
+  /* ---------- SVG 렌더링 ---------- */
+  const W = 3200, H = 1600;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+  function pieceSVG(p) {
+    const meta = PIECES[p.id]; if (!meta) return "";
+    const cx = p.x + p.w/2, cy = p.y + p.h/2;
+    const short = Math.min(p.w, p.h);
+    // 4단 분기: TINY (양쪽 다 작음) → 얇지만 김 → 중간 → 큼
+    const isTiny  = p.w < 500 && p.h < 300;
+    const isThin  = !isTiny && short < 200;
+    const isSmall = !isTiny && !isThin && short < 500;
+    let s = "";
+    // 부재 사각형
+    s += `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="${meta.color}" stroke="#2c1810" stroke-width="8" rx="14"/>`;
+    if (isTiny) {
+      // 아주 작음: ID + 이름 한 줄 (작게)
+      s += `<text x="${cx}" y="${cy - 22}" text-anchor="middle" dominant-baseline="central" font-size="48" font-weight="800" fill="#fff">${esc(p.id)}</text>`;
+      s += `<text x="${cx}" y="${cy + 26}" text-anchor="middle" dominant-baseline="central" font-size="36" font-weight="700" fill="#fff" opacity="0.9">${esc(meta.name)}</text>`;
+      if (p.sub) s += `<text x="${p.x + p.w - 10}" y="${p.y + p.h - 12}" text-anchor="end" font-size="28" font-weight="700" fill="#fff" opacity="0.8">${esc(p.sub)}</text>`;
+      return s;
+    }
+    // ID 뱃지
+    if (!isThin) {
+      s += `<circle cx="${p.x + 78}" cy="${p.y + 78}" r="52" fill="#fff" stroke="${meta.color}" stroke-width="6"/>`;
+      s += `<text x="${p.x + 78}" y="${p.y + 78}" text-anchor="middle" dominant-baseline="central" font-size="56" font-weight="800" fill="${meta.color}" font-family="system-ui,-apple-system,sans-serif">${esc(p.id)}</text>`;
+    }
+    if (isThin) {
+      // 얇은 스트립: 한 줄
+      s += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="60" font-weight="800" fill="#fff" font-family="system-ui,-apple-system,sans-serif">${esc(p.id)} · ${esc(meta.name)} · ${meta.w}×${meta.h}${p.sub ? " ("+p.sub+")" : ""}</text>`;
+    } else if (isSmall) {
+      // 중간 부재: 이름 + 치수
+      s += `<text x="${cx}" y="${cy - 20}" text-anchor="middle" dominant-baseline="central" font-size="80" font-weight="800" fill="#fff" font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
+      s += `<text x="${cx}" y="${cy + 60}" text-anchor="middle" dominant-baseline="central" font-size="56" fill="#fff" opacity="0.9" font-family="system-ui,-apple-system,sans-serif">${meta.w}×${meta.h}</text>`;
+      if (p.sub) s += `<text x="${p.x + p.w - 28}" y="${p.y + p.h - 28}" text-anchor="end" font-size="46" font-weight="700" fill="#fff" opacity="0.85">${esc(p.sub)}</text>`;
+    } else {
+      // 큰 부재: 이름 + 치수 + 회전 + 태그
+      s += `<text x="${cx}" y="${cy - 40}" text-anchor="middle" dominant-baseline="central" font-size="130" font-weight="800" fill="#fff" font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
+      const dims = `${meta.w} × ${meta.h}${p.rotated ? "  ⟳ 90°" : ""}`;
+      s += `<text x="${cx}" y="${cy + 100}" text-anchor="middle" dominant-baseline="central" font-size="90" fill="#fff" opacity="0.94" font-family="system-ui,-apple-system,sans-serif">${dims}</text>`;
+      if (p.sub) s += `<text x="${p.x + p.w - 30}" y="${p.y + p.h - 40}" text-anchor="end" font-size="62" font-weight="700" fill="#fff" opacity="0.85">${esc(p.sub)}</text>`;
+      if (meta.tag) s += `<text x="${p.x + 160}" y="${p.y + 80}" font-size="52" font-weight="700" fill="#fff" opacity="0.85">⚠ ${esc(meta.tag)}</text>`;
+    }
+    return s;
+  }
+
+  function slabSVG(slab) {
+    let s = `<svg viewBox="0 0 ${W} ${H}" class="cer-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${esc(slab.title)}">`;
+    // 정의: 자투리(여백) 표시용 사선 패턴
+    s += `<defs>
+      <pattern id="waste-${slab.title.replace(/\W/g,'')}" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+        <rect width="60" height="60" fill="#efe6d2"/>
+        <line x1="0" y1="0" x2="0" y2="60" stroke="#dcd0b5" stroke-width="6"/>
+      </pattern>
+    </defs>`;
+    // 원장 배경 (여백 패턴)
+    s += `<rect x="0" y="0" width="${W}" height="${H}" fill="url(#waste-${slab.title.replace(/\W/g,'')})"/>`;
+    // 원장 외곽선
+    s += `<rect x="10" y="10" width="${W-20}" height="${H-20}" fill="none" stroke="#5a3a22" stroke-width="20" rx="8"/>`;
+    // 부재들
+    slab.pieces.forEach(p => { s += pieceSVG(p); });
+    // 원장 크기 축 표시 (오른쪽·아래)
+    s += `<text x="${W-40}" y="${H-40}" text-anchor="end" font-size="46" fill="#5a3a22" opacity="0.55" font-weight="700">3200 × 1600 · 5.12㎡</text>`;
+    s += `</svg>`;
+    return s;
+  }
+
+  function utilClass(u) {
+    if (u >= 70) return "hi";
+    if (u >= 45) return "md";
+    return "lo";
+  }
+
+  function slabCard(slab) {
+    return `<div class="cer-slab">
+      <div class="cer-slab-h">
+        <div>
+          <h4 class="cer-slab-title">${esc(slab.title)}</h4>
+          <p class="cer-slab-note">${esc(slab.note)}</p>
+        </div>
+        <span class="cer-slab-util ${utilClass(slab.util)}">활용 ${slab.util}%</span>
+      </div>
+      ${slabSVG(slab)}
+    </div>`;
+  }
+
+  function renderLegend() {
+    const el = document.getElementById("cer-legend"); if (!el) return;
+    const order = ["6","7","8","1a1","1a2","2","3","4","5a","5b","9"];
+    el.innerHTML = order.map(id => {
+      const p = PIECES[id];
+      const tag = p.tag ? ` <span class="tag">${esc(p.tag)}</span>` : "";
+      return `<div class="cer-chip">
+        <div class="sw" style="background:${p.color}"></div>
+        <div class="body">
+          <div class="name"><span class="id">${esc(id)}</span> · ${esc(p.name)}${tag}</div>
+          <div class="dim">${p.w} × ${p.h} mm</div>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  function renderScenarioA() {
+    const el = document.getElementById("cer-scen-a"); if (!el) return;
+    el.innerHTML = `
+      <h3 class="cer-scen-h"><span class="cer-scen-badge">시나리오 A</span>통일 · 아트월 제외 전부 같은 세라믹</h3>
+      <p class="cer-scen-sub">메인 4장 + 아트월 별도 1장. 자투리 공용 활용 가능.</p>
+      <div class="cer-slabs">${SLAB_A.map(slabCard).join("")}</div>
+    `;
+  }
+
+  function renderScenarioB() {
+    const el = document.getElementById("cer-scen-b"); if (!el) return;
+    el.innerHTML = `
+      <h3 class="cer-scen-h"><span class="cer-scen-badge b">시나리오 B</span>분리 · 주방 · 거실장식장(+침실) 다른 종류</h3>
+      <p class="cer-scen-sub">주방(X) 3장 + 거실장식장·침실(Y) 2장 = 메인 5장 + 아트월 별도 1장. 같은 부재의 분할 조각은 같은 슬랩 종류로.</p>
+      <div class="cer-subsection">
+        <h4 class="cer-subsection-h"><span class="stripe"></span>Type X · 주방 세라믹 (3장)</h4>
+        <div class="cer-slabs">${SLAB_B_X.map(slabCard).join("")}</div>
+      </div>
+      <div class="cer-subsection">
+        <h4 class="cer-subsection-h y"><span class="stripe"></span>Type Y · 거실장식장 + 침실 세라믹 (2장)</h4>
+        <div class="cer-slabs">${SLAB_B_Y.map(slabCard).join("")}</div>
+      </div>
+    `;
+  }
+
+  function renderArtWall() {
+    const el = document.getElementById("cer-scen-art"); if (!el) return;
+    el.innerHTML = `
+      <h3 class="cer-scen-h"><span class="cer-scen-badge art">공통</span>아트월 · 별도 세라믹 종류</h3>
+      <p class="cer-scen-sub">시나리오 A·B 공통. 아트월은 별도 종류라 항상 슬랩 1장 (북매칭 원하면 2장).</p>
+      <div class="cer-slabs">${slabCard(SLAB_ART)}</div>
+    `;
+  }
+
+  function boot() {
+    renderLegend();
+    renderScenarioA();
+    renderScenarioB();
+    renderArtWall();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body>
+</html>
