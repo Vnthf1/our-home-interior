@@ -114,7 +114,7 @@ const SCHEDULE = {
     { name: "보일러 설비 (수평몰탈)", spans: [] },
     { name: "보일러 설비 (온도조절기)", spans: [["2026-07-31", "2026-07-31"]] },
     { name: "타일", spans: [["2026-07-20", "2026-07-23"]] },
-    { name: "도기", spans: [["2026-07-30", "2026-07-30"]] },
+    { name: "도기", spans: [["2026-07-30", "2026-07-31"]] },
     { name: "욕실천장", spans: [["2026-07-24", "2026-07-24"]] },
     { name: "필름", spans: [["2026-07-24", "2026-07-25"]] },
     { name: "욕실 설비", spans: [["2026-08-09", "2026-08-09"]] },
@@ -2813,6 +2813,16 @@ const LIGHTING_EXTRAS = [
   // 구글 네스트(이지엉클 외) — 최저가 입력 → 표시 ×1.1 = VAT 포함 가격이 되도록 ÷1.1 후 저장
   { id: "nest_4",      label: "구글 네스트 4세대",                              qty: 1, priceB2B: 420000, priceB2C: 462000 }, // ✅ 실구매 46.2만원(VAT포함) · 공급가 42만 · priceB2B=420,000 → 표시 ×1.1 = 462,000
   { id: "nest_35",     label: "구글 네스트 3.5세대",                            qty: 3, priceB2B: 118182, priceB2C: 130000 }, // ✅ 실구매 3개 총 39만원(VAT포함, 개당 13만원) · priceB2B = 130,000/1.1
+  // ▼ 이지엉클 아이오티 견적서 2026.07.28 추가 발주분 (COB 3·스트립은 회로도 자동집계에 이미 포함 → 여기 제외). priceB2B=공급가(pre-VAT), lightTotal에서 ×1.1
+  { id: "wago_413",    label: "와고 커넥터 221-413 (3Pole) ×30",                qty: 1, priceB2B: 12075,  priceB2C: 12075 },
+  { id: "wago_2411",   label: "와고 커넥터 221-2411 (2Pole 직선형) ×90",         qty: 1, priceB2B: 36225,  priceB2C: 36225 },
+  { id: "remote_h1",   label: "아카라 무선 리모트 스위치 H1 (1구)",              qty: 1, priceB2B: 32760,  priceB2C: 32760 },
+  { id: "smartplug",   label: "아카라 스마트 플러그",                            qty: 4, priceB2B: 30420,  priceB2C: 30420 },
+  { id: "conn_cob_wire", label: "슬림폭 COB 스트립 to 와이어 커넥터",            qty: 20, priceB2B: 800,   priceB2C: 800 },
+  { id: "conn_3pin_fw",  label: "3PIN SMD 스트립 커넥터 FPCB to WIRE",          qty: 15, priceB2B: 500,   priceB2C: 500 },
+  { id: "conn_3pin_ff",  label: "3PIN SMD 스트립 커넥터 FPCB to FPCB",          qty: 5,  priceB2B: 500,   priceB2C: 500 },
+  { id: "h2_bracket",  label: "아카라 H2 방수형 스트립 고정 브래킷 ×20 (증정)",   qty: 20, priceB2B: 0,     priceB2C: 0 },
+  { id: "ezuncle_ship_0728", label: "택배비 (이지엉클 26.07.28)",               qty: 1,  priceB2B: 4500,  priceB2C: 4500 },
 ];
 
 /* 스위치 회로 메타.
