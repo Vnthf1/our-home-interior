@@ -81,9 +81,9 @@
     "이사": "move",
     "입주민 동의": "consent",
     "보양": "demolition",
-    "철거": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
+    "철거": "demolition", "철거/설비": "demolition", "가스배관 철거": "demolition", "폐기물 처리": "demolition",
     "샷시": "window", "샷시 (실측)": "window", "설비": "demolition", "설비 (미정)": "demolition", "바닥샌딩": "demolition",
-    "보일러": "hvac", "보일러 설비": "hvac", "보일러 설비 (수평몰탈)": "hvac", "보일러 설비 (온도조절기)": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
+    "가전 설치": "appliances", "보일러": "hvac", "보일러 설비": "hvac", "보일러 설비 (수평몰탈)": "hvac", "보일러 설비 (온도조절기)": "hvac", "에어컨": "hvac", "전열교환기": "hvac", "전열교환기 (실측)": "hvac", "전열교환기 (벽타공)": "hvac", "전열교환기 (배관)": "hvac", "전열교환기 (타공)": "hvac", "전열교환기 (마무리)": "hvac",
     "전기": "electric", "전기 1": "electric", "전기 2 (타공)": "electric", "전기 (타공)": "electric",
     "목공": "carpentry",
     "타일": "tile", "타일 (양중)": "tile", "타일 (도기)": "tile", "도기": "tile", "도기 (양중)": "tile", "욕실천장": "tile", "사우나 설치": "furniture",
@@ -101,6 +101,7 @@
     { href: "index.html", label: "홈", key: "home" },
     { href: "schedule.html", label: "공정표", key: "schedule" },
     { href: "memo.html", label: "📝 메모", key: "memo" },
+    { href: "quotes.html", label: "견적/공정", key: "quotes" },
     { href: "total-quote.html", label: "총 비용", key: "totalquote" },
     { href: "references.html", label: "레퍼런스", key: "refs" },
     { href: "plans.html", label: "작업계획서", key: "plans" },
@@ -108,7 +109,6 @@
     { href: "lighting.html", label: "조명 계획", key: "lighting" },
     { href: "furniture.html", label: "가구/가전", key: "furniture" },
     { href: "ceramic.html", label: "세라믹", key: "ceramic" },
-    { href: "quotes.html", label: "견적/공정", key: "quotes" },
     { href: "materials.html", label: "견적/자재", key: "materials" },
     { href: "contacts.html", label: "연락처", key: "contacts" },
     { href: "work.html", label: "작업 안내", key: "work" },
@@ -1851,11 +1851,11 @@
     }
     // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
     // 가격 미정/모호 phase는 사용자 협의 가정값
-    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1, intercom:1, film:1, ceramic:1, grout:1 };
+    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1, intercom:1, film:1, grout:1 };
     const QUOTE_OVERRIDE = { "middle-door": 3000000 };
     // 영문 phase id → 한글 표시명 (name 필드 없는 QUOTES 항목용)
     const PHASE_KO_NAME = { "middle-door": "중문", cleaning: "입주청소", film: "필름", grout: "줄눈", ceramic: "세라믹", elastic: "탄성코트" };
-    // 가구 예상 총액 (세라믹 ~900만 포함 · 사용자 견적)
+    // 가구 예상 총액 (세라믹 별도 · 사용자 견적)
     const FURNITURE_TOTAL_OVERRIDE = 30000000;
     const estimatedExtras = [];
     if (typeof QUOTES !== "undefined") {
@@ -1899,9 +1899,9 @@
       furnitureTotal = parseWon(furnDecided.price);
       furnitureItems = [{ name: (furnDecided.name || "가구") + " (확정)", qty: 1, price: furnitureTotal, vendor: furnDecided.company || "", note: furnDecided.price || "" }];
     } else if (FURNITURE_TOTAL_OVERRIDE) {
-      // 사용자 예상 총액 override (세라믹 포함)
+      // 사용자 예상 총액 override (세라믹 별도)
       furnitureTotal = FURNITURE_TOTAL_OVERRIDE;
-      furnitureItems = [{ name: "가구 예상 총액 (세라믹 ~900만 포함)", qty: 1, price: FURNITURE_TOTAL_OVERRIDE, vendor: "예상", note: "세라믹 900만 + 기타 가구 · 사용자 예상" }];
+      furnitureItems = [{ name: "가구 예상 총액", qty: 1, price: FURNITURE_TOTAL_OVERRIDE, vendor: "예상", note: "가구 일괄 예상 3,000만 · 세라믹은 별도 집계" }];
     } else {
       furnitureItems = pickBest((typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : []);
       furnitureTotal = 0; furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
