@@ -263,6 +263,8 @@ const QUOTE_SUMMARY = [
   { phase: "보일러/온도조절기", company: "그린뱅크", price: 2100000, deposit: 900000, final: null, note: "보일러 설비 동일 업체 · 약 210만 · 선납 90만 · 잔금 약 120만 · 설치 8/3" },
   { phase: "욕실천장", company: "한반장", price: 1100000, priceText: "110만 (최종 완납)", deposit: 1100000, final: 1100000, note: "✅ 완납 완료 — 최종 110만원 · 무광 SMC · 업체 한반장. ⭐평점 2/5 — 담배 피움, 점검구 너무 크고 이상함, 재료 미리 준비 안 함" },
   { phase: "도배", company: "신한벽지", price: 4611200, priceText: "461.12만 (완납)", deposit: 4611200, final: 4611200, note: "✅ 완납 완료 — 4,611,200원 · 디아망 + 초배 띄움 포함" },
+  { phase: "가구", company: "싱크 삼형제", price: 21000000, deposit: 200000, final: null, note: "✅ 확정 — 가구 일괄 2,100만 (견적 2,366.12만에서 조정) · 계약금 20만 선입금 · 시공 8/4~8/6" },
+  { phase: "세라믹", company: "아트라인", price: 8800000, deposit: null, final: null, note: "✅ 확정 — 세라믹 일괄 880만 · 주방 상판·벽면 / 아트월 / 장식장 / 안방 세면대 · 설치 8/4" },
   { phase: "인터폰", company: "", price: 595000, priceText: "59.5만 (완납)", deposit: 595000, final: 595000, note: "✅ 완납 완료 — 595,000원 · 월패드·인터폰 교체 및 설치 · 7/18" },
   { phase: "도어락", company: "", price: 200000, priceText: "20만 (완납)", deposit: 200000, final: 200000, note: "✅ 완납 완료 — 20만 · 인터폰 동일 업체(010-3968-8205) · 설치 7/31" },
   { phase: "커튼", company: "마스터 커튼", price: 2100000, priceText: "210만 (계약 예정)", deposit: null, final: null, note: "✅ 계약 예정 — 210만 (전동커튼 포함) · 실측 8/4 · 시공 8/14 · 010-7148-8624" },
@@ -272,6 +274,7 @@ const QUOTE_SUMMARY = [
   { phase: "샷시", company: "올바른 창호", price: 4400000, deposit: 4400000, final: 4400000, note: "✅ 완납 440만 (VAT 포함) · 작업 7/8" },
   { phase: "이사", company: "로젠이사", price: 2480000, deposit: 1380000, final: null, note: "이사 200만 + 보관 48만 · 선입금 138만" },
   { phase: "임시거주", company: "자리톡 (예약)", price: 2513500, deposit: 2513500, final: 2513500, note: "6.28~8.14 거주 · 완납 완료 (1,964,000 + 549,500)" },
+  { phase: "거울", company: "", price: 1500000, priceText: "150만 (예상)", deposit: null, final: null, note: "예상 약 150만 · 업체 미정" },
   { phase: "화재/누수 보험", company: "", price: null, deposit: null, final: null, note: "가격 미정" },
   { phase: "찜질방", company: "", price: 10000000, deposit: null, final: null, note: "공사 기간 대안 거주 — 가견적" },
 ];

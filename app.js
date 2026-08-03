@@ -1841,45 +1841,18 @@
     let procTotal = 0;
     let etcTotal = 0;
     let applianceConfirmed = 0, applianceSrc = null;
+    let furnitureConfirmed = 0, furnitureSrc = null;
     if (typeof QUOTE_SUMMARY !== "undefined") {
       QUOTE_SUMMARY.forEach((r) => {
         const v = Number(r.final) || Number(r.price) || 0;
         if (r.phase === "가전 (전체)") { applianceConfirmed = v; applianceSrc = r; return; } // 가전은 5번 섹션에서 한 번만 계상
+        if (r.phase === "가구") { furnitureConfirmed = v; furnitureSrc = r; return; }       // 가구는 4번 섹션에서 한 번만 계상
         if (ETC_PHASES[r.phase]) { etcRows.push(r); etcTotal += v; }
         else { procRows.push(r); procTotal += v; }
       });
     }
-    // 미확정 공정 가견적 — QUOTES 중 QUOTE_SUMMARY에 없는 phase의 첫 candidate price (가구 제외)
-    // 가격 미정/모호 phase는 사용자 협의 가정값
-    const QUOTE_SKIP_PHASES = { moving:1, consent:1, demolition:1, window:1, electric:1, carpentry:1, tile:1, floor:1, hvac:1, furniture:1, wallpaper:1, appliances:1, intercom:1, film:1, grout:1 };
-    const QUOTE_OVERRIDE = { "middle-door": 3000000 };
-    // 영문 phase id → 한글 표시명 (name 필드 없는 QUOTES 항목용)
-    const PHASE_KO_NAME = { "middle-door": "중문", cleaning: "입주청소", film: "필름", grout: "줄눈", ceramic: "세라믹", elastic: "탄성코트" };
-    // 가구 예상 총액 (세라믹 별도 · 사용자 견적)
-    const FURNITURE_TOTAL_OVERRIDE = 30000000;
-    const estimatedExtras = [];
-    if (typeof QUOTES !== "undefined") {
-      const parsePrice = (s) => {
-        if (typeof s !== "string") return 0;
-        const m = s.match(/([0-9,]+)\s*만/);
-        if (m) return parseInt(m[1].replace(/,/g, '')) * 10000;
-        const n = s.match(/[0-9,]+/);
-        return n ? parseInt(n[0].replace(/,/g, '')) : 0;
-      };
-      QUOTES.forEach((q) => {
-        if (QUOTE_SKIP_PHASES[q.phase]) return;
-        let amount = QUOTE_OVERRIDE[q.phase] || 0;
-        let source = QUOTE_OVERRIDE[q.phase] ? "협의 가정값" : "";
-        if (!amount) {
-          const cand = (q.candidates || [])[0];
-          if (cand) { amount = parsePrice(cand.price); source = "1차 후보"; }
-        }
-        if (amount > 0) {
-          estimatedExtras.push({ phase: q.name || PHASE_KO_NAME[q.phase] || q.phase, amount: amount, source: source });
-          procTotal += amount;
-        }
-      });
-    }
+    // 공정 합계는 QUOTE_SUMMARY(확정 공정)만으로 계산한다.
+    // (예전엔 QUOTES의 미확정 공정 가견적을 더했으나, 확정분과 중복 계상돼 제거)
     // 4) 가구 · 5) 가전 견적 — 각 항목에서 최저가 자동 선택 (+업체명)
     const pickBest = (arr) => arr.map((f) => {
       const offers = (f.offers || []).filter((o) => o && typeof o.price === "number");
@@ -1890,18 +1863,17 @@
       const note = bestOffer ? (bestOffer.note || "") : "견적 미정";
       return { name: f.name, qty: f.qty || 1, price: price, vendor: vendor, note: note };
     });
-    // 가구 — 확정 업체(QUOTES furniture decided) 있으면 그 총액, 없으면 FURNITURE_QUOTE 최저가
+    // 가구 — QUOTE_SUMMARY '가구' 행(확정 금액) 우선, 없으면 QUOTES furniture decided, 없으면 FURNITURE_QUOTE 최저가
     const parseWon = (s) => { const m = String(s).match(/[0-9,]+/); return m ? parseInt(m[0].replace(/,/g, "")) : 0; };
     const furnPhase = (typeof QUOTES !== "undefined") ? QUOTES.find((q) => q.phase === "furniture") : null;
     const furnDecided = furnPhase ? (furnPhase.candidates || []).find((c) => c.status === "decided") : null;
     let furnitureItems, furnitureTotal;
-    if (furnDecided) {
+    if (furnitureConfirmed) {
+      furnitureTotal = furnitureConfirmed;
+      furnitureItems = [{ name: "가구 일괄 (확정)", qty: 1, price: furnitureConfirmed, vendor: furnitureSrc.company || "", note: furnitureSrc.note || "" }];
+    } else if (furnDecided) {
       furnitureTotal = parseWon(furnDecided.price);
       furnitureItems = [{ name: (furnDecided.name || "가구") + " (확정)", qty: 1, price: furnitureTotal, vendor: furnDecided.company || "", note: furnDecided.price || "" }];
-    } else if (FURNITURE_TOTAL_OVERRIDE) {
-      // 사용자 예상 총액 override (세라믹 별도)
-      furnitureTotal = FURNITURE_TOTAL_OVERRIDE;
-      furnitureItems = [{ name: "가구 예상 총액", qty: 1, price: FURNITURE_TOTAL_OVERRIDE, vendor: "예상", note: "가구 일괄 예상 3,000만 · 세라믹은 별도 집계" }];
     } else {
       furnitureItems = pickBest((typeof FURNITURE_QUOTE !== "undefined") ? FURNITURE_QUOTE : []);
       furnitureTotal = 0; furnitureItems.forEach((f) => { furnitureTotal += (Number(f.price) || 0) * (f.qty || 1); });
@@ -2108,17 +2080,8 @@
         '</div>' +
       '</section>' +
       '<section class="tq-section">' +
-        '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터 + 미확정 공정 가견적)</span></h3>' +
+        '<h3 class="lt-quote-h">1. 공정 견적 <span class="lt-quote-sub">(견적/공정 페이지와 동일 데이터)</span></h3>' +
         '<div id="total-quote-proc"></div>' +
-        (estimatedExtras.length ?
-          '<div class="tq-extra-list lt-price"><b>+ 미확정 공정 가견적 (1차 후보 또는 협의 가정값)</b>' +
-            estimatedExtras.map((e) =>
-              '<div class="tq-extra-row">· ' + esc(e.phase) +
-              (e.source ? ' <span class="lt-mut">(' + esc(e.source) + ')</span>' : '') +
-              ' <b>' + won(e.amount) + '</b></div>'
-            ).join('') +
-          '</div>'
-        : '') +
         '<div class="tq-subtotal lt-price">공정 합계: <b>' + won(procTotal) + '</b></div>' +
       '</section>' +
       '<section class="tq-section">' +
