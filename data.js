@@ -234,6 +234,7 @@ const CONTACTS = [
   { role: "탄성코트", name: "통일 인테리어", phone: "010-5156-3608", company: "", decided: true, note: "발코니(실외기실) 탄성코트 40만 · 8/1(토) 시공" },
   { role: "입주청소", name: "티끌하나", phone: "010-8478-9533", company: "", decided: true, note: "이사청소 39만 · 준공청소 시 76만 · 8/13" },
   { role: "커튼", name: "마스터 커튼", phone: "010-7148-8624", company: "", decided: true, note: "210만 (전동커튼 포함) · 실측 8/4 · 시공 8/14" },
+  { role: "중문·슬라이딩도어", name: "성원목재합판 (서동찬)", phone: "010-4028-0925", company: "영림 대리점", decided: true, note: "467.17만 (VAT 포함) · 중문 + 드레스룸 미러 히든 슬라이딩도어 + 결 아트판넬 일괄 · 실측 8/3 · 시공 8/12" },
   // 아래는 후보(미확정) — 연락처 페이지엔 안 나옴, 참고용
   { role: "타일(자재 후보)", name: "류기문 사장님", phone: "010-5320-8019", company: "용세라믹스", note: "개인사업자 / 최저가" },
   { role: "온도조절기(후보)", name: "지온서비스", phone: "", company: "", note: "네스트/아카라 후보 (미채택)" },
@@ -263,6 +264,7 @@ const QUOTE_SUMMARY = [
   { phase: "보일러/온도조절기", company: "그린뱅크", price: 2100000, deposit: 900000, final: null, note: "보일러 설비 동일 업체 · 약 210만 · 선납 90만 · 잔금 약 120만 · 설치 8/3" },
   { phase: "욕실천장", company: "한반장", price: 1100000, priceText: "110만 (최종 완납)", deposit: 1100000, final: 1100000, note: "✅ 완납 완료 — 최종 110만원 · 무광 SMC · 업체 한반장. ⭐평점 2/5 — 담배 피움, 점검구 너무 크고 이상함, 재료 미리 준비 안 함" },
   { phase: "도배", company: "신한벽지", price: 4611200, priceText: "461.12만 (완납)", deposit: 4611200, final: 4611200, note: "✅ 완납 완료 — 4,611,200원 · 디아망 + 초배 띄움 포함" },
+  { phase: "중문·슬라이딩도어", company: "성원목재합판 (영림 대리점)", price: 4671700, priceText: "467.17만 (VAT 포함)", deposit: null, final: null, note: "중문(간살 슬라이딩) + 드레스룸 미러 히든 슬라이딩도어 + 침대위 결 아트판넬 일괄 · 실측 8/3 · 시공 8/12 · 010-4028-0925 · ⚠️ 실측 후 부자재 추가금 있을 수 있음" },
   { phase: "가구", company: "싱크 삼형제", price: 21000000, deposit: 200000, final: null, note: "✅ 확정 — 가구 일괄 2,100만 (견적 2,366.12만에서 조정) · 계약금 20만 선입금 · 시공 8/4~8/6" },
   { phase: "세라믹", company: "아트라인", price: 8800000, deposit: null, final: null, note: "✅ 확정 — 세라믹 일괄 880만 · 주방 상판·벽면 / 아트월 / 장식장 / 안방 세면대 · 설치 8/4" },
   { phase: "인터폰", company: "", price: 595000, priceText: "59.5만 (완납)", deposit: 595000, final: 595000, note: "✅ 완납 완료 — 595,000원 · 월패드·인터폰 교체 및 설치 · 7/18" },
