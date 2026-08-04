@@ -2106,7 +2106,7 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 거울 위", length: 145 },
     { layer: "light", type: "box", x: 34.9, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 거울 아래", length: 145 },
     { layer: "light", type: "box", x: 22, y: 50.6, w: 0.1, h: 3.6, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 천장 간접", length: 159 },
-    { layer: "light", type: "box", x: 22.5, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 욕조 간접", length: 100 },
+    { layer: "light", type: "box", x: 22.5, y: 41.6, w: 0.1, h: 5.6, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 욕조 간접 (조적박스 상부 홈)", length: 100 },
     { layer: "light", type: "pin", x: 63.7, y: 47.4, label: "확산조명", kind: "diff2n", circuit: "BR-2", zone: "작은방", name: "작은방 확산 #2" },
     { layer: "light", type: "box", x: 34.1, y: 43.9, w: 5.2, h: 0, label: "간접조명", kind: "strip_cct", circuit: "EN-1", zone: "현관", name: "신발장 간접", length: 196 },
     { layer: "light", type: "box", x: 46.6, y: 37.5, w: 0, h: 1.3, label: "간접조명", kind: "strip_cct", circuit: "HW-1", zone: "복도", name: "아트월 간접", length: 230 },
@@ -2959,7 +2959,7 @@ const LIGHTING_SWITCHES = {
             spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
   "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "거울 둘레 + 천장·욕조·상부장 (8.04m)",
             spec: { lights: { strip_aqara_wp: 1.552 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 78,
-                    note: "📏 실측 — 거울 1400×960, 그 뒤 20mm 두께 알루미늄 판은 사방 5cm 작은 1300×860(거울이 처마처럼 덮음). 스트립은 **판 측면(20mm 면)** 둘레에 부착 → 130×2 + 86×2 = 432cm. + 천장 159 + 욕조 100 + 상부장 85 = 776cm. 아카라 방수 H2 5M(#167) 1.552롤 × 10W/m = 77.6W. ⚠️ 100W SMPS면 78% 부하 + 천장 매입(밀폐) 디레이팅 → u200 권장. Aqara DR(#140) 1 (54% 부하). 코너 3~4곳 절단·접속 → 중성 실리콘 + 접착제 내장 열수축튜브로 방수 마감. 판 측면이 20mm뿐이라 프로파일 쓰려면 외폭 20mm 이하 (스트립 폭 12.5mm). 5cm 처마가 확산 역할 → 프로파일·커버 생략 가능." } },
+                    note: "📏 실측 — 거울 1400×960, 그 뒤 20mm 두께 알루미늄 판은 사방 5cm 작은 1300×860(거울이 처마처럼 덮음). 스트립은 **판 측면(20mm 면)** 둘레에 부착 → 130×2 + 86×2 = 432cm. + 천장(SMC 위 홈) 159 + 욕조(조적박스 상부 홈) 100 + 상부장 85 = 776cm. 아카라 방수 H2 5M(#167) 1.552롤 × 10W/m = 77.6W. ✅ SMPS u200 확정(78% 부하 회피 + 천장 매입 디레이팅). Aqara DR(#140) 1 (54% 부하). 방열: 거울은 알루미늄 판이 방열판, 나머지 344cm는 알루미늄 L앵글(20×20×2) — 전용 프로파일 불필요. SMPS·드라이버는 욕실 천장 점검구 위 설치(배선 제약) → SMC 바닥에서 2~3cm 띄우고 세워서, 전선은 드립루프. 절단·접속부는 중성 실리콘 + 접착제 내장 열수축튜브 2중 마감. 욕조 구간은 홈 바닥이 아니라 홈 측면에 부착(물 고임 회피)." } },
   "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 작은방 (3구)
   "BR-1": { zone: "작은방", switch: "작은방 3구 #1", desc: "COB 4개",
