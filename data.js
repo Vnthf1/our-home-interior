@@ -2098,10 +2098,10 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 39.7, y: 83.9, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #2" },
     { layer: "light", type: "pin", x: 25, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복4" },
     // 안방화장실 거울 = 알루미늄 거울 1400×900 둘레 전체 (140×2 + 90×2 = 460cm)
-    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 상(140)", length: 140 },
-    { layer: "light", type: "box", x: 32.7, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 하(140)", length: 140 },
-    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 좌(90)", length: 90 },
-    { layer: "light", type: "box", x: 32.1, y: 52.4, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 우(90)", length: 90 },
+    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 상(130)", length: 130 },
+    { layer: "light", type: "box", x: 32.7, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 하(130)", length: 130 },
+    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 좌(80)", length: 80 },
+    { layer: "light", type: "box", x: 32.1, y: 52.4, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 우(80)", length: 80 },
     // 거실화장실 거울 = 1450 위·아래 2줄
     { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 거울 위", length: 145 },
     { layer: "light", type: "box", x: 34.9, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 거울 아래", length: 145 },
@@ -2958,8 +2958,8 @@ const LIGHTING_SWITCHES = {
   "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
             spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
   "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "거울 둘레 + 천장·욕조·상부장 (8.04m)",
-            spec: { lights: { strip_aqara_wp: 1.608 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 80,
-                    note: "📏 실측 — 20mm 두께 알루미늄 판 1400×900, 거울은 사방 5cm 더 커서 1500×1000(처마처럼 덮음). 스트립은 **판 측면(20mm 면)** 둘레에 부착 → 140×2 + 90×2 = 460cm. + 천장 159 + 욕조 100 + 상부장 85 = 804cm. 아카라 방수 H2 5M(#167) 1.608롤 × 10W/m = 80.4W. ⚠️ 100W SMPS면 80% 부하 + 천장 매입(밀폐) 디레이팅 → u200 권장. Aqara DR(#140) 1 (56% 부하). 코너 3~4곳 절단·접속 → 중성 실리콘 + 접착제 내장 열수축튜브로 방수 마감. 판 측면이 20mm뿐이라 프로파일 쓰려면 외폭 20mm 이하 (스트립 폭 12.5mm)." } },
+            spec: { lights: { strip_aqara_wp: 1.528 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 76,
+                    note: "📏 실측 — 거울 1400×900 뒤에 20mm 두께 알루미늄 판(1300×800, 거울이 사방 5cm 더 큼). 스트립은 **판 측면(20mm 면)** 둘레에 부착 → 130×2 + 80×2 = 420cm(거울 둘레 460이 아님). + 천장 159 + 욕조 100 + 상부장 85 = 764cm. 아카라 방수 H2 5M(#167) 1.528롤 × 10W/m = 76.4W. ⚠️ 100W SMPS면 76% 부하 + 천장 매입(밀폐)이라 디레이팅 필요 → u200 권장. Aqara DR(#140) 1 (53% 부하). 코너 3~4곳 절단·접속 → 중성 실리콘 + 접착제 내장 열수축튜브로 방수 마감. 판 측면 20mm에 붙으므로 프로파일 쓰려면 외폭 20mm 이하." } },
   "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 작은방 (3구)
   "BR-1": { zone: "작은방", switch: "작은방 3구 #1", desc: "COB 4개",
