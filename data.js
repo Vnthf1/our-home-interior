@@ -236,7 +236,7 @@ const CONTACTS = [
   { role: "입주청소", name: "티끌하나", phone: "010-8478-9533", company: "", decided: true, note: "이사청소 39만 · 준공청소 시 76만 · 8/13" },
   { role: "커튼", name: "마스터 커튼", phone: "010-7148-8624", company: "", decided: true, note: "220만 (전동커튼 포함) · 계약금 110만 지급 · 실측 8/4 · 시공 8/12" },
   { role: "거울", name: "성문거울", phone: "", company: "", decided: true, note: "거울 127만 확정 · 8/5 입고·설치" },
-  { role: "중문·슬라이딩도어", name: "성원목재합판 (서동찬)", phone: "010-4028-0925", company: "영림 대리점", decided: true, note: "467.17만 (VAT 포함) · 중문 + 드레스룸 미러 히든 슬라이딩도어 + 결 아트판넬 일괄 · 실측 8/3 · 시공 8/12" },
+  { role: "중문·슬라이딩도어", name: "성원목재합판 (서동찬)", phone: "010-4028-0925", company: "영림 대리점", decided: true, note: "370만 (견적 467.17만에서 조정) · 중문 + 드레스룸 미러 히든 슬라이딩도어 + 결 아트판넬 일괄 · 실측 8/3 · 시공 8/12" },
   // 아래는 후보(미확정) — 연락처 페이지엔 안 나옴, 참고용
   { role: "타일(자재 후보)", name: "류기문 사장님", phone: "010-5320-8019", company: "용세라믹스", note: "개인사업자 / 최저가" },
   { role: "온도조절기(후보)", name: "지온서비스", phone: "", company: "", note: "네스트/아카라 후보 (미채택)" },
@@ -266,7 +266,7 @@ const QUOTE_SUMMARY = [
   { phase: "보일러/온도조절기", company: "그린뱅크", price: 2100000, deposit: 900000, final: null, note: "보일러 설비 동일 업체 · 약 210만 · 선납 90만 · 잔금 약 120만 · 설치 8/3" },
   { phase: "욕실천장", company: "한반장", price: 1100000, priceText: "110만 (최종 완납)", deposit: 1100000, final: 1100000, note: "✅ 완납 완료 — 최종 110만원 · 무광 SMC · 업체 한반장. ⭐평점 2/5 — 담배 피움, 점검구 너무 크고 이상함, 재료 미리 준비 안 함" },
   { phase: "도배", company: "신한벽지", price: 4611200, priceText: "461.12만 (완납)", deposit: 4611200, final: 4611200, note: "✅ 완납 완료 — 4,611,200원 · 디아망 + 초배 띄움 포함" },
-  { phase: "중문·슬라이딩도어", company: "성원목재합판 (영림 대리점)", price: 4671700, priceText: "467.17만 (VAT 포함)", deposit: null, final: null, note: "중문(간살 슬라이딩) + 드레스룸 미러 히든 슬라이딩도어 + 침대위 결 아트판넬 일괄 · 실측 8/3 · 시공 8/12 · 010-4028-0925 · ⚠️ 실측 후 부자재 추가금 있을 수 있음" },
+  { phase: "중문·슬라이딩도어", company: "성원목재합판 (영림 대리점)", price: 3700000, priceText: "370만 (최종 조정)", deposit: null, final: null, note: "✅ 확정 — 중문(간살 슬라이딩) + 드레스룸 미러 히든 슬라이딩도어 + 침대위 결 아트판넬 일괄 370만 (견적 467.17만에서 조정) · 실측 8/3 · 시공 8/12 · 010-4028-0925" },
   { phase: "가구", company: "싱크 삼형제", price: 21000000, deposit: 200000, final: null, note: "✅ 확정 — 가구 일괄 2,100만 (견적 2,366.12만에서 조정) · 계약금 20만 선입금 · 시공 8/4~8/6" },
   { phase: "세라믹", company: "아트라인", price: 8800000, deposit: null, final: null, note: "✅ 확정 — 세라믹 일괄 880만 · 주방 상판·벽면 / 아트월 / 장식장 / 안방 세면대 · 설치 8/4" },
   { phase: "인터폰", company: "", price: 595000, priceText: "59.5만 (완납)", deposit: 595000, final: 595000, note: "✅ 완납 완료 — 595,000원 · 월패드·인터폰 교체 및 설치 · 7/18" },
@@ -1282,10 +1282,10 @@ const QUOTES = [
     phase: "middle-door", // 중문 (+ 슬라이딩도어 + 침대위 결 아트판넬) — 영림 대리점 2곳 견적
     candidates: [
       {
-        name: "성원목재합판 (서동찬)", company: "영림 대리점", phone: "010-4028-0925", price: "4,671,700원 (VAT 포함)",
-        status: "received",
+        name: "성원목재합판 (서동찬)", company: "영림 대리점", phone: "010-4028-0925", price: "3,700,000원 (최종 조정 · 견적 4,671,700원)",
+        status: "decided",
         scope: "중문(간살 슬라이딩 YS-Z02S 투명유리) + 미러 히든 슬라이딩도어 35T + 결(GYEOL) 아트판넬·레일 일괄. 실측/시공비 포함. 영림 191번 색상.",
-        summary: "중문 + 슬라이딩도어 + 침대위 결 아트판넬 통합 — 합계 467.17만원(VAT 포함).",
+        summary: "✅ 확정 — 중문 + 슬라이딩도어 + 침대위 결 아트판넬 통합. 최종 370만원 (견적 467.17만에서 조정) · 시공 8/12.",
         items: [
           { label: "간살 슬라이딩 YS-Z02S 투명유리 (1270×2300)", amount: "1,760,000원" },
           { label: "영림 중문팀 실측/시공비", amount: "350,000원" },
@@ -1297,7 +1297,7 @@ const QUOTES = [
           { label: "합계 (VAT 포함)", amount: "4,671,700원" },
         ],
         files: [],
-        note: "영림 대리점. 견적일 2026-06-15 · 견적번호 49915 · 사업자 522-09-02200. 입금 우리 1005-604-368211 서동찬. ⚠️ 부자재·마감재는 실측 후 추가금 확인 가능. ※ 김이사 견적 대비 슬라이딩 부품이 약 30만원 더 듦.",
+        note: "✅ 확정 — 최종 370만원(견적 467.17만에서 조정). 위 세부 내역은 최초 견적서 기준. 영림 대리점. 견적일 2026-06-15 · 견적번호 49915 · 사업자 522-09-02200. 입금 우리 1005-604-368211 서동찬. 실측 8/3 · 시공 8/12. ※ 김이사 견적 대비 슬라이딩 부품이 약 30만원 더 듦.",
       },
       {
         name: "김이사 (영림 대리점)", company: "영림 대리점", phone: "010-6212-3273", price: "일부만 견적 (도어 단가 미기재)",
@@ -2098,10 +2098,10 @@ const FLOORPLAN = {
     { layer: "light", type: "pin", x: 39.7, y: 83.9, label: "COB조명", kind: "cob2n", circuit: "DR-1", zone: "드레스룸", name: "드레스룸 COB #2" },
     { layer: "light", type: "pin", x: 25, y: 58.8, label: "확산조명", kind: "diff2", circuit: "MRH-2", zone: "안방복도", name: "안복4" },
     // 안방화장실 거울 = 알루미늄 거울 1400×900 둘레 전체 (140×2 + 90×2 = 460cm)
-    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 위(140)", length: 140 },
-    { layer: "light", type: "box", x: 32.7, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 아래(140)", length: 140 },
-    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 좌(90)", length: 90 },
-    { layer: "light", type: "box", x: 32.1, y: 52.4, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 우(90)", length: 90 },
+    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 상(130)", length: 130 },
+    { layer: "light", type: "box", x: 32.7, y: 46.1, w: 0.1, h: 6.4, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 하(130)", length: 130 },
+    { layer: "light", type: "box", x: 32.1, y: 46.1, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 좌(80)", length: 80 },
+    { layer: "light", type: "box", x: 32.1, y: 52.4, w: 0.7, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 거울 판둘레 우(80)", length: 80 },
     // 거실화장실 거울 = 1450 위·아래 2줄
     { layer: "light", type: "box", x: 34.3, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 거울 위", length: 145 },
     { layer: "light", type: "box", x: 34.9, y: 45.7, w: 0.3, h: 7.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 거울 아래", length: 145 },
@@ -2958,8 +2958,8 @@ const LIGHTING_SWITCHES = {
   "MB-1": { zone: "안방화장실", switch: "안방화장실 3구 #1", desc: "다운라이트",
             spec: { lights: { cob2n: 3 }, note: "일반 COB(뤼네브 257) 3개 · AC220V 직결 — 드라이버/SMPS 불필요" } },
   "MB-2": { zone: "안방화장실", switch: "안방화장실 3구 #2", desc: "거울 둘레 + 천장·욕조·상부장 (8.04m)",
-            spec: { lights: { strip_aqara_wp: 1.608 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 80,
-                    note: "📏 실측 — 알루미늄 거울 1400×900 **둘레 전체**(140×2 + 90×2 = 460cm) + 천장 159 + 욕조 100 + 상부장 85 = 804cm. 아카라 방수 H2 5M(#167) 1.608롤 × 10W/m = 80.4W. ⚠️ 100W SMPS면 80% 부하라 발열 → **u200으로 상향**. Aqara DR(#140) 1 (56% 부하). 거울 4변은 코너 3~4곳 절단·접속 → 방수 실리콘 마감 필수. 거울이 벽에서 20~25mm는 떠야 프로파일(12mm)+발광 공간이 나옴." } },
+            spec: { lights: { strip_aqara_wp: 1.528 }, drivers: { aqara: 1 }, smps: { u200: 1 }, watt: 76,
+                    note: "📏 실측 — 거울 1400×900 뒤에 20mm 두께 알루미늄 판(1300×800, 거울이 사방 5cm 더 큼). 스트립은 **판 측면(20mm 면)** 둘레에 부착 → 130×2 + 80×2 = 420cm(거울 둘레 460이 아님). + 천장 159 + 욕조 100 + 상부장 85 = 764cm. 아카라 방수 H2 5M(#167) 1.528롤 × 10W/m = 76.4W. ⚠️ 100W SMPS면 76% 부하 + 천장 매입(밀폐)이라 디레이팅 필요 → u200 권장. Aqara DR(#140) 1 (53% 부하). 코너 3~4곳 절단·접속 → 중성 실리콘 + 접착제 내장 열수축튜브로 방수 마감. 판 측면 20mm에 붙으므로 프로파일 쓰려면 외폭 20mm 이하." } },
   "MB-3": { zone: "안방화장실", switch: "안방화장실 3구 #3", desc: "환풍기" },
   // 작은방 (3구)
   "BR-1": { zone: "작은방", switch: "작은방 3구 #1", desc: "COB 4개",
