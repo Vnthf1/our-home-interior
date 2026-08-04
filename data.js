@@ -2050,8 +2050,14 @@ const FLOORPLAN = {
     { layer: "light", type: "box", x: 36.5, y: 87.6, w: 8.8, h: 0.1, label: "간접조명", kind: "strip_normal", circuit: "DR-3", zone: "드레스룸", name: "드레스룸 간접" },
     { layer: "light", type: "box", x: 22.5, y: 40.7, w: 8, h: 0, label: "간접조명", kind: "strip_aqara_wp", circuit: "MB-2", zone: "안방화장실", name: "안방화장실 상부장 간접", length: 85 },
     { layer: "light", type: "box", x: 36.1, y: 57.6, w: 3.8, h: 0.1, label: "간접조명", kind: "strip_aqara_wp", circuit: "LB-2", zone: "거실화장실", name: "거실화장실 샤워 조명", length: 120 },
-    { layer: "light", type: "box", x: 50.6, y: 23.7, w: 12.1, h: 8.8, label: "우물천장 간접등", kind: "strip_ultra", circuit: "LR-3a", zone: "거실", name: "거실 우물천장 스트립", length: 1000 },
-    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 7.7, h: 13.1, label: "우물천장 간접등", kind: "strip_ultra", circuit: "MR-2a", zone: "안방", name: "안방 우물천장 스트립", length: 500 },
+    // 거실 우물천장(실측 260×280) — 네 면 각각 250cm 통짜. 드라이버1 = 면1+면3, 드라이버2 = 면2+면4 (각 500cm).
+    { layer: "light", type: "box", x: 50.6, y: 23.7,  w: 12.1, h: 0.1, label: "우물천장 간접등", kind: "strip_ultra", circuit: "LR-3a", zone: "거실", name: "거실 우물 면1 (장변·DR1)", length: 250 },
+    { layer: "light", type: "box", x: 50.6, y: 32.4,  w: 12.1, h: 0.1, label: "우물천장 간접등", kind: "strip_ultra", circuit: "LR-3a", zone: "거실", name: "거실 우물 면2 (장변·DR2)", length: 250 },
+    { layer: "light", type: "box", x: 50.6, y: 23.7,  w: 0.1,  h: 8.8, label: "우물천장 간접등", kind: "strip_ultra", circuit: "LR-3a", zone: "거실", name: "거실 우물 면3 (단변·DR1)", length: 250 },
+    { layer: "light", type: "box", x: 62.6, y: 23.7,  w: 0.1,  h: 8.8, label: "우물천장 간접등", kind: "strip_ultra", circuit: "LR-3a", zone: "거실", name: "거실 우물 면4 (단변·DR2)", length: 250 },
+    // 안방 우물천장(실측 268×278) — 네 면 중 2면만 시공. 한 드라이버가 2면(500cm).
+    { layer: "light", type: "box", x: 24.1, y: 70.8, w: 0.1, h: 13.1, label: "우물천장 간접등", kind: "strip_ultra", circuit: "MR-2a", zone: "안방", name: "안방 우물 면1 (250)", length: 250 },
+    { layer: "light", type: "box", x: 31.7, y: 70.8, w: 0.1, h: 13.1, label: "우물천장 간접등", kind: "strip_ultra", circuit: "MR-2a", zone: "안방", name: "안방 우물 면2 (250)", length: 250 },
     { layer: "light", type: "box", x: 49.2, y: 35.3, w: 2.5, h: 0, label: "멀티매입등", kind: "multi10", circuit: "LR-1", zone: "거실", name: "거실 좌측 10구 멀티" },
     { layer: "light", type: "box", x: 63, y: 35.5, w: 2.6, h: 0, label: "멀티매입등", kind: "multi10", circuit: "LR-1", zone: "거실", name: "거실 우측 10구 멀티" },
     { layer: "light", type: "pin", x: 65.2, y: 20.2, label: "COB조명", kind: "cob2", circuit: "LR-2", zone: "거실", name: "거실 우측상단 COB-A" },
@@ -2889,7 +2895,7 @@ const LIGHTING_SWITCHES = {
   // 거실 3구 #3 — 우물천장. (커튼박스는 주방 3구 #3(KT-3)으로 이동)
   "LR-3a": { zone: "거실", switch: "거실 3구 #3", desc: "우물천장 4면 (250×4 = 10m·200W · 울트라 루멘)",
              spec: { lights: { strip_ultra: 2 }, drivers: { aqara: 2 }, smps: { u200: 2 }, watt: 200,
-                     note: "📏 실측 우물 260×280 (깊이 13 · 높이 15). 네 면을 각각 250cm 통짜로 재단 → 5M 롤 1개 = 2면(250+250), 총 2롤. 면마다 전선을 따로 물려 개별 급전(코너 점퍼 불필요) · DR 1개가 2면(500cm·100W) 담당. #140 Aqara DR 최대 144W → 70% 부하. 각 DR마다 전용 SMPS u200 ×1 (50% 부하). ⚠️ 프로파일은 20W/m라 대형·방열핀(미터당 300~400g)으로 — 슬림형은 방열 부족." } },
+                     note: "📏 실측 우물 260×280 (깊이 13 · 높이 15). 네 면을 각각 250cm 통짜로 재단 → 5M 롤 1개 = 2면(250+250), 총 2롤. 면마다 전선을 따로 물려 개별 급전(코너 점퍼 불필요) · DR1 = 면1+면3(인접 ㄱ자), DR2 = 면2+면4 → 각 500cm·100W. #140 Aqara DR 최대 144W → 70% 부하. 각 DR마다 전용 SMPS u200 ×1 (50% 부하). ⚠️ 프로파일은 20W/m라 대형·방열핀(미터당 300~400g)으로 — 슬림형은 방열 부족." } },
   // 주방 (3구) — 거실 스위치 옆. #3은 커튼박스(거실 기존 + 신설) 통합 제어.
   "KT-1": { zone: "주방", switch: "주방 3구 #1", desc: "아일랜드 위", spec: { lights: { diff2: 3 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 24 } },
   "KT-2": { zone: "주방", switch: "주방 3구 #2", desc: "냉장고 앞 (키큰장 월워시)", spec: { lights: { cob2: 5 }, drivers: { aqara: 1 }, smps: { u100: 1 }, watt: 35, note: "COB IoT(#17) 5개 × 7W = 35W · 키큰장 문짝면 월워시 · 벽에서 20~30cm 앞 등간격 · Aqara DR 1 + 100W SMPS 1" } },
