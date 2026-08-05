@@ -21,7 +21,7 @@ const CORE = [
   "schedule.html", "plans.html", "work.html", "floorplan.html", "lighting.html",
   "quotes.html", "total-quote.html", "references.html", "contacts.html", "materials.html",
   "furniture.html", "furniture3d.js", "ceramic.html", "memo.html", "memo.js",
-  "uploader.js", "print.html",
+  "uploader.js", "print.html", "vanity-frame.html",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "icons/favicon-64.png",
 ];
 

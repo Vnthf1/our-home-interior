@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>안방화장실 세면대 받침 프레임 — 제작 의뢰서</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --ink:#2b2420; --mut:#7a6a5c; --line:#d8cec2; --bg:#fdfbf7;
+    --accent:#a9714b; --warn:#c2410c; --box:#faf6ef;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px 16px 60px;background:var(--bg);color:var(--ink);
+       font-family:Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+       font-size:14px;line-height:1.65;-webkit-text-size-adjust:100%}
+  .wrap{max-width:900px;margin:0 auto}
+  h1{font-size:21px;margin:0 0 4px;letter-spacing:-.02em}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 20px}
+  h2{font-size:16px;margin:30px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+  .fig{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin:0 0 18px}
+  .fig h3{font-size:13px;margin:0 0 8px;color:var(--accent);font-weight:700}
+  svg{width:100%;height:auto;display:block}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 18px;background:#fff}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{background:var(--box);width:34%;font-weight:600;white-space:nowrap}
+  .warn{background:#fff5ed;border:1px solid #f0c9a8;border-left:4px solid var(--warn);
+        border-radius:8px;padding:12px 14px;margin:0 0 18px}
+  .warn b{color:var(--warn)}
+  .ask{background:#eef4fb;border:1px solid #c3d7ee;border-left:4px solid #3b6ea5;
+       border-radius:8px;padding:12px 14px;margin:0 0 18px}
+  ul{margin:6px 0 0;padding-left:20px}
+  li{margin:3px 0}
+  .tbd{color:var(--warn);font-weight:700}
+  .note{font-size:12px;color:var(--mut);margin-top:-10px;margin-bottom:16px}
+  @media print{
+    body{background:#fff;padding:0;font-size:11px}
+    .fig{break-inside:avoid;page-break-inside:avoid}
+    h2{margin-top:16px}
+  }
+</style>
+</head>
+<body>
+<!-- 도면 3장이 공유하는 마커·해치 정의 (문서 전역) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="hatch" width="14" height="14" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="14" stroke="#c9bfb2" stroke-width="4"/>
+    </pattern>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#7a6a5c"/>
+    </marker>
+    <marker id="arL" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+      <path d="M9,0 L0,3 L9,6 Z" fill="#7a6a5c"/>
+    </marker>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<h1>안방화장실 세면대 받침 프레임 — 제작 의뢰서</h1>
+<p class="sub">폭 1,600mm · 세라믹 상판(약 100kg) · 바닥 지지 3다리 방식 · 벽 지지 미사용</p>
+
+<div class="warn">
+  <b>⚠ 벽 지지를 쓰지 않는 이유</b><br>
+  양쪽 벽이 <b>스틸 스터드 + 시멘트보드 + 타일 마감</b>입니다. 타일이 이미 시공되어 벽체 보강이 불가능하고,
+  경량철골은 캔틸레버 하중(상단 볼트 인발 약 125kg)을 견디지 못합니다.
+  따라서 <b>하중 전량을 바닥에서 받고</b>, 벽에는 전도 방지용 고정만 합니다.
+</div>
+
+<h2>1. 정면도</h2>
+<div class="fig">
+  <h3>FRONT — 벽과 벽 사이 1,600 (단위: mm)</h3>
+  <svg viewBox="-230 -80 2060 1260" role="img" aria-label="정면도">
+    <!-- 좌우 벽 -->
+    <rect x="-190" y="0" width="190" height="1000" fill="url(#hatch)" stroke="#8d8175" stroke-width="4"/>
+    <rect x="1600" y="0" width="190" height="1000" fill="url(#hatch)" stroke="#8d8175" stroke-width="4"/>
+    <text x="-95" y="520" font-size="42" fill="#6b6055" text-anchor="middle" transform="rotate(-90 -95 520)">벽 (타일)</text>
+    <text x="1695" y="520" font-size="42" fill="#6b6055" text-anchor="middle" transform="rotate(-90 1695 520)">벽 (타일)</text>
+
+    <!-- 바닥 -->
+    <line x1="-230" y1="1000" x2="1830" y2="1000" stroke="#3a332c" stroke-width="8"/>
+    <text x="1560" y="1060" font-size="40" fill="#6b6055" text-anchor="end">바닥 (타일 · 배수 구배 있음)</text>
+
+    <!-- 세라믹 상판 -->
+    <rect x="0" y="150" width="1600" height="40" fill="#e6ded2" stroke="#8d8175" stroke-width="5"/>
+    <text x="800" y="128" font-size="44" fill="#2b2420" text-anchor="middle">세라믹 상판 (핫벤딩 일체형 · 약 100kg)</text>
+
+    <!-- 하부장 -->
+    <rect x="0" y="190" width="1600" height="560" fill="#f6f1e9" stroke="#8d8175" stroke-width="5"/>
+    <line x1="533" y1="190" x2="533" y2="750" stroke="#c3b8a9" stroke-width="3" stroke-dasharray="16 10"/>
+    <line x1="1067" y1="190" x2="1067" y2="750" stroke="#c3b8a9" stroke-width="3" stroke-dasharray="16 10"/>
+    <text x="266" y="500" font-size="42" fill="#6b6055" text-anchor="middle">서랍</text>
+    <text x="800" y="480" font-size="42" fill="#c2410c" text-anchor="middle">트랩 자리</text>
+    <text x="800" y="530" font-size="36" fill="#c2410c" text-anchor="middle">(오픈 or U컷)</text>
+    <text x="1334" y="500" font-size="42" fill="#6b6055" text-anchor="middle">서랍</text>
+
+    <!-- 프레임 상부 가로재 -->
+    <rect x="0" y="750" width="1600" height="40" fill="#4a5568" stroke="#2d3748" stroke-width="4"/>
+    <text x="1560" y="737" font-size="38" fill="#3b4351" text-anchor="end">프레임 상부 가로재 (40×40 각파이프)</text>
+
+    <!-- 다리 3개 -->
+    <rect x="230" y="790" width="40" height="185" fill="#4a5568" stroke="#2d3748" stroke-width="4"/>
+    <rect x="780" y="790" width="40" height="185" fill="#4a5568" stroke="#2d3748" stroke-width="4"/>
+    <rect x="1330" y="790" width="40" height="185" fill="#4a5568" stroke="#2d3748" stroke-width="4"/>
+    <!-- 레벨러 -->
+    <rect x="222" y="975" width="56" height="25" fill="#94a3b8" stroke="#2d3748" stroke-width="4"/>
+    <rect x="772" y="975" width="56" height="25" fill="#94a3b8" stroke="#2d3748" stroke-width="4"/>
+    <rect x="1322" y="975" width="56" height="25" fill="#94a3b8" stroke="#2d3748" stroke-width="4"/>
+    <text x="250" y="905" font-size="36" fill="#fff" text-anchor="middle" transform="rotate(-90 250 905)">다리1</text>
+    <text x="800" y="905" font-size="36" fill="#fff" text-anchor="middle" transform="rotate(-90 800 905)">다리2</text>
+    <text x="1350" y="905" font-size="36" fill="#fff" text-anchor="middle" transform="rotate(-90 1350 905)">다리3</text>
+
+    <!-- 치수: 전체 폭 -->
+    <line x1="0" y1="1110" x2="1600" y2="1110" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <line x1="0" y1="1000" x2="0" y2="1130" stroke="#b5a897" stroke-width="2"/>
+    <line x1="1600" y1="1000" x2="1600" y2="1130" stroke="#b5a897" stroke-width="2"/>
+    <text x="800" y="1096" font-size="48" fill="#2b2420" text-anchor="middle">1,600 (벽~벽 실측 필요)</text>
+
+    <!-- 치수: 다리 간격 -->
+    <line x1="0" y1="1035" x2="250" y2="1035" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <line x1="250" y1="1035" x2="800" y2="1035" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <line x1="800" y1="1035" x2="1350" y2="1035" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <line x1="1350" y1="1035" x2="1600" y2="1035" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="125" y="1024" font-size="38" fill="#6b6055" text-anchor="middle">250</text>
+    <text x="525" y="1024" font-size="38" fill="#6b6055" text-anchor="middle">550</text>
+    <text x="1075" y="1024" font-size="38" fill="#6b6055" text-anchor="middle">550</text>
+    <text x="1475" y="1024" font-size="38" fill="#6b6055" text-anchor="middle">250</text>
+
+    <!-- 치수: 높이 -->
+    <line x1="1870" y1="150" x2="1870" y2="1000" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="1858" y="575" font-size="44" fill="#2b2420" text-anchor="middle" transform="rotate(-90 1858 575)">850 (완성 높이)</text>
+    <line x1="-140" y1="750" x2="-140" y2="1000" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="-152" y="875" font-size="42" fill="#c2410c" text-anchor="middle" transform="rotate(-90 -152 875)">250 띄움</text>
+  </svg>
+</div>
+<p class="note">※ 다리2(중앙)는 <b class="tbd">배수 트랩 위치 확정 후 좌우로 100~150mm 이동</b>할 수 있습니다. 스팬이 700mm 이내면 문제없습니다.</p>
+
+<h2>2. 측면도</h2>
+<div class="fig">
+  <h3>SIDE — 다리는 앞면에서 250 뒤로 물림 (정면·측면에서 보이지 않음)</h3>
+  <svg viewBox="-260 -80 1180 1260" role="img" aria-label="측면도">
+    <!-- 벽 -->
+    <rect x="500" y="0" width="180" height="1000" fill="url(#hatch)" stroke="#8d8175" stroke-width="4"/>
+    <text x="590" y="520" font-size="42" fill="#6b6055" text-anchor="middle" transform="rotate(-90 590 520)">벽</text>
+    <!-- 바닥 -->
+    <line x1="-260" y1="1000" x2="920" y2="1000" stroke="#3a332c" stroke-width="8"/>
+
+    <!-- 상판 -->
+    <rect x="-20" y="150" width="520" height="40" fill="#e6ded2" stroke="#8d8175" stroke-width="5"/>
+    <text x="240" y="128" font-size="42" fill="#2b2420" text-anchor="middle">세라믹 상판</text>
+    <!-- 하부장 -->
+    <rect x="0" y="190" width="500" height="560" fill="#f6f1e9" stroke="#8d8175" stroke-width="5"/>
+    <text x="250" y="480" font-size="42" fill="#6b6055" text-anchor="middle">하부장</text>
+
+    <!-- 프레임 가로재 앞/뒤 -->
+    <rect x="50" y="750" width="40" height="40" fill="#4a5568" stroke="#2d3748" stroke-width="4"/>
+    <rect x="410" y="750" width="40" height="40" fill="#4a5568" stroke="#2d3748" stroke-width="4"/>
+    <!-- 앞뒤 연결재 -->
+    <rect x="50" y="758" width="400" height="24" fill="#4a5568" stroke="#2d3748" stroke-width="3"/>
+    <!-- 다리 -->
+    <rect x="230" y="790" width="40" height="185" fill="#4a5568" stroke="#2d3748" stroke-width="4"/>
+    <rect x="222" y="975" width="56" height="25" fill="#94a3b8" stroke="#2d3748" stroke-width="4"/>
+    <text x="330" y="900" font-size="38" fill="#3b4351">다리 (40×40)</text>
+    <text x="330" y="948" font-size="34" fill="#c2410c">레벨러</text>
+
+    <!-- 치수 -->
+    <line x1="0" y1="1110" x2="500" y2="1110" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="250" y="1096" font-size="44" fill="#2b2420" text-anchor="middle">깊이 500 <tspan fill="#c2410c">(확정 필요)</tspan></text>
+    <line x1="0" y1="1040" x2="250" y2="1040" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="125" y="1029" font-size="38" fill="#c2410c" text-anchor="middle">250</text>
+    <text x="-40" y="1029" font-size="36" fill="#6b6055" text-anchor="end">앞면</text>
+
+    <line x1="-160" y1="750" x2="-160" y2="1000" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="-172" y="875" font-size="42" fill="#c2410c" text-anchor="middle" transform="rotate(-90 -172 875)">250 띄움</text>
+  </svg>
+</div>
+
+<h2>3. 평면도 (프레임만)</h2>
+<div class="fig">
+  <h3>PLAN — 상부 ㅁ자 프레임 + 앞뒤 연결재 3개 + 다리 3개</h3>
+  <svg viewBox="-160 -160 1920 900" role="img" aria-label="평면도">
+    <!-- 하부장 외곽 -->
+    <rect x="0" y="0" width="1600" height="500" fill="none" stroke="#b5a897" stroke-width="4" stroke-dasharray="20 12"/>
+    <text x="1580" y="-30" font-size="40" fill="#8d8175" text-anchor="end">점선 = 하부장 외곽 (1600 × 500)</text>
+
+    <!-- 프레임 외곽 -->
+    <rect x="0" y="50" width="1600" height="400" fill="none" stroke="#2d3748" stroke-width="8"/>
+    <!-- 앞뒤 연결재 -->
+    <rect x="230" y="50" width="40" height="400" fill="#4a5568" stroke="#2d3748" stroke-width="3"/>
+    <rect x="780" y="50" width="40" height="400" fill="#4a5568" stroke="#2d3748" stroke-width="3"/>
+    <rect x="1330" y="50" width="40" height="400" fill="#4a5568" stroke="#2d3748" stroke-width="3"/>
+    <!-- 다리 위치 -->
+    <rect x="222" y="222" width="56" height="56" fill="#1f2937" stroke="#000" stroke-width="4"/>
+    <rect x="772" y="222" width="56" height="56" fill="#1f2937" stroke="#000" stroke-width="4"/>
+    <rect x="1322" y="222" width="56" height="56" fill="#1f2937" stroke="#000" stroke-width="4"/>
+    <text x="250" y="330" font-size="36" fill="#1f2937" text-anchor="middle">다리1</text>
+    <text x="800" y="330" font-size="36" fill="#1f2937" text-anchor="middle">다리2</text>
+    <text x="1350" y="330" font-size="36" fill="#1f2937" text-anchor="middle">다리3</text>
+
+    <!-- 배수구 -->
+    <circle cx="800" cy="140" r="52" fill="none" stroke="#c2410c" stroke-width="6" stroke-dasharray="14 9"/>
+    <text x="880" y="130" font-size="38" fill="#c2410c">배수구·트랩</text>
+    <text x="880" y="176" font-size="34" fill="#c2410c">(위치 확정 필요 — 다리2와 간섭 시 이동)</text>
+
+    <text x="20" y="30" font-size="36" fill="#6b6055">앞</text>
+    <text x="20" y="490" font-size="36" fill="#6b6055">벽 쪽</text>
+
+    <!-- 치수 -->
+    <line x1="0" y1="600" x2="1600" y2="600" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="800" y="586" font-size="46" fill="#2b2420" text-anchor="middle">1,600</text>
+    <line x1="1700" y1="50" x2="1700" y2="450" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="1688" y="250" font-size="42" fill="#2b2420" text-anchor="middle" transform="rotate(-90 1688 250)">프레임 400</text>
+    <line x1="0" y1="680" x2="250" y2="680" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <line x1="250" y1="680" x2="800" y2="680" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <line x1="800" y1="680" x2="1350" y2="680" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <line x1="1350" y1="680" x2="1600" y2="680" stroke="#7a6a5c" stroke-width="3" marker-start="url(#arL)" marker-end="url(#ar)"/>
+    <text x="125" y="668" font-size="38" fill="#6b6055" text-anchor="middle">250</text>
+    <text x="525" y="668" font-size="38" fill="#6b6055" text-anchor="middle">550</text>
+    <text x="1075" y="668" font-size="38" fill="#6b6055" text-anchor="middle">550</text>
+    <text x="1475" y="668" font-size="38" fill="#6b6055" text-anchor="middle">250</text>
+  </svg>
+</div>
+
+<h2>4. 사양</h2>
+<table>
+  <tr><th>재질</th><td><b>스테인리스 SUS304</b> (또는 철제 + 분체도장). 욕실이라 일반 철제 무도장 불가 — 1~2년이면 녹물</td></tr>
+  <tr><th>부재</th><td>각파이프 <b>40 × 40 × 2T</b></td></tr>
+  <tr><th>구성</th><td>상부 ㅁ자 프레임 1,600 × 400 + 앞뒤 연결재 3개 + 다리 3개</td></tr>
+  <tr><th>다리 위치</th><td>좌우 — 양 끝에서 250 안쪽 + 중앙 (550 간격)<br>앞뒤 — 앞면에서 <b>250 뒤</b> (정면·측면에서 보이지 않음)</td></tr>
+  <tr><th>레벨러</th><td><b>필수.</b> 욕실 바닥은 배수 구배(1~2%)가 있어 1,600 폭에서 좌우 높이차가 최대 24mm 발생 → 높이조절 아쥬스터로 수평 확보</td></tr>
+  <tr><th>바닥 고정</th><td>다리마다 베이스 플레이트 + 앵커 2개 (바닥 타일 위 콘크리트)</td></tr>
+  <tr><th>벽 고정</th><td>상부 좌우 2곳, <b>전도 방지용</b>만. 하중 거의 없음 → 시멘트보드용 앵커로 충분</td></tr>
+  <tr><th>설계 하중</th><td>세라믹 100kg + 하부장·내용물·사용하중 100kg = <b>약 200kg</b> (다리당 약 67kg)</td></tr>
+</table>
+
+<div class="ask">
+  <b>💬 제작 업체에 전달할 문장</b>
+  <ul>
+    <li>욕실 세면대 받침 프레임입니다. 폭 1,600, 위에 세라믹 상판 약 100kg이 올라갑니다.</li>
+    <li>벽이 스틸 스터드 + 타일 마감이라 <b>벽 지지를 쓰지 않고 바닥에서 전량 지지</b>합니다.</li>
+    <li>다리는 <b>앞면에서 250 뒤로 물려 3개</b>, 정면에서 보이지 않게 해주세요.</li>
+    <li><b>레벨러 필수</b>이고 <b>재질은 SUS304</b>입니다.</li>
+    <li>배수구 위치가 확정되면 중앙 다리 위치를 조정하겠습니다.</li>
+  </ul>
+</div>
+
+<h2>5. 확정 필요 항목</h2>
+<table>
+  <tr><th>벽~벽 실측 치수</th><td class="tbd">현장 실측 필요 (도면은 1,600 가정)</td></tr>
+  <tr><th>배수구·트랩 위치</th><td class="tbd">세라믹 업체에서 받을 것 → 중앙 다리 위치와 서랍 배치 결정</td></tr>
+  <tr><th>세라믹 실제 무게·무게중심</th><td class="tbd">100kg 기준으로 설계. 스커트가 깊게 내려오면 앞쪽으로 쏠려 모멘트 증가</td></tr>
+  <tr><th>하부장 깊이</th><td class="tbd">도면은 500 가정</td></tr>
+  <tr><th>완성 높이 / 띄움 높이</th><td>완성 850 · 띄움 250 (권장). 띄움 200~250이면 양동이·발판이 들어가고 청소도 편함</td></tr>
+  <tr><th>청소도구장 여부</th><td>한쪽 끝 400 정도를 바닥까지 내려 청소장으로 만들면 <b>그 몸통이 다리 역할</b>을 해서 다리를 2개로 줄일 수 있음</td></tr>
+</table>
+
+<h2>6. 시공 순서</h2>
+<table>
+  <tr><th>① 세라믹 도면 확정</th><td>볼 위치 · 배수구 위치 · 무게 · 무게중심</td></tr>
+  <tr><th>② 프레임 제작·설치</th><td>①의 배수구 위치 반영해 다리 배치 확정 → 바닥 앵커 고정 → 레벨러로 수평</td></tr>
+  <tr><th>③ 하부장 제작·설치</th><td>"프레임 위에 얹히는 구조"로 발주. 트랩 자리는 오픈 or U자 컷아웃 서랍</td></tr>
+  <tr><th>④ 세라믹 상판 설치</th><td>하부장 위에 안착 + 실리콘 마감</td></tr>
+</table>
+
+<p class="note">우리집 인테리어 · 안방화장실 세면대 받침 프레임 의뢰서 · 치수 단위 mm</p>
+
+</div>
+</body>
+</html>
