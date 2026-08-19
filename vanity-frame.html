@@ -89,8 +89,19 @@
     <tr><td>높이</td><td>전체 250 (개방 약 220)</td><td><b>개방 200 + 가로재 30 = 전체 230</b></td></tr>
     <tr><td>프레임 깊이</td><td>450</td><td><b>500</b> (뒷벽 밀착)</td></tr>
     <tr><td>벽고정브라켓</td><td>있음</td><td class="tbd">없음 — 전량 바닥 지지</td></tr>
-    <tr><td>발</td><td>M8 수평조절 고무발</td><td><b>M12 레벨링 풋 Ø60</b> + 다리 하단 3T 베이스플레이트</td></tr>
+    <tr><td>발</td><td>M8 수평조절 고무발</td><td class="ok"><b>그대로 유지</b> (M8 고무발 Ø30)<br>+ 다리 하단 <b>M8 너트 용접</b> (1.1T엔 탭 불가)</td></tr>
   </table>
+</div>
+
+<div class="ask">
+  <b>💬 받은 도면의 "벽고정브라켓"에 대하여</b><br>
+  받은 도면에는 정면 단면도에 <b>지시선 한 줄로 "벽고정브라켓"</b>이라고만 적혀 있고,
+  <b>개수 · 위치 · 규격이 전혀 표기돼 있지 않습니다.</b> 지시선이 상부 가로재를 가리키고 있어
+  뒤쪽 가로재를 뒷벽에 붙이는 것으로 읽힙니다.<br><br>
+  다만 원안은 다리가 앞면에서 <b>50</b>이라 전도 하중이 <b>820 kg</b>입니다 —
+  <b>전도 방지용이 아니라 밀림 방지용</b>이었을 가능성이 높습니다.
+  이 도면에서는 벽을 잡지 않으므로 브라켓은 삭제하고, 대신 고무발 6곳을 구조용 실리콘으로 바닥에 점접착합니다.<br>
+  <b>업체에 원래 의도(전도 방지인지 밀림 방지인지)를 한 번 확인해 두면 좋겠습니다.</b>
 </div>
 
 <h2>1. 평면도</h2>
@@ -118,10 +129,10 @@
       <rect x="1435" y="30" width="30" height="440"/>
     </g>
 
-    <!-- 레벨링 풋 -->
-    <g fill="none" stroke="#b5462a" stroke-width="3" stroke-dasharray="14 9">
-      <circle cx="150" cy="350" r="30"/><circle cx="800" cy="350" r="30"/><circle cx="1450" cy="350" r="30"/>
-      <circle cx="150" cy="15" r="30"/><circle cx="800" cy="15" r="30"/><circle cx="1450" cy="15" r="30"/>
+    <!-- M8 고무발 (Ø30) -->
+    <g fill="none" stroke="#b5462a" stroke-width="3" stroke-dasharray="12 8">
+      <circle cx="150" cy="350" r="15"/><circle cx="800" cy="350" r="15"/><circle cx="1450" cy="350" r="15"/>
+      <circle cx="150" cy="15" r="15"/><circle cx="800" cy="15" r="15"/><circle cx="1450" cy="15" r="15"/>
     </g>
     <!-- 다리 6개 -->
     <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
@@ -151,7 +162,7 @@
     <text x="420" y="736" font-size="32" fill="#1a1a1a" text-anchor="middle">30×30×1.1T 각파이프 (전 부재)</text>
     <line x1="165" y1="350" x2="330" y2="240" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
     <text x="346" y="232" font-size="32" fill="#b5462a">다리 6개 — 3열 × 앞뒤 2</text>
-    <text x="346" y="272" font-size="28" fill="#b5462a">(점선 원 = 레벨링 풋 Ø60)</text>
+    <text x="346" y="272" font-size="28" fill="#b5462a">(점선 원 = M8 고무발 Ø30)</text>
     <line x1="815" y1="200" x2="1150" y2="330" stroke="#c2410c" stroke-width="2.5" marker-start="url(#lead)"/>
     <text x="1166" y="336" font-size="28" fill="#c2410c">중앙 연결재 ↔ 배수구 15</text>
     <text x="1166" y="372" font-size="28" fill="#c2410c">(배관은 개구부 중앙으로)</text>
@@ -253,33 +264,30 @@
 
     <!-- 앞열 다리 3개 -->
     <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
-      <rect x="135" y="800" width="30" height="150"/>
-      <rect x="785" y="800" width="30" height="150"/>
-      <rect x="1435" y="800" width="30" height="150"/>
+      <rect x="135" y="800" width="30" height="165"/>
+      <rect x="785" y="800" width="30" height="165"/>
+      <rect x="1435" y="800" width="30" height="165"/>
     </g>
     <g fill="none" stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10">
-      <rect x="135" y="800" width="30" height="150"/>
-      <rect x="785" y="800" width="30" height="150"/>
-      <rect x="1435" y="800" width="30" height="150"/>
+      <rect x="135" y="800" width="30" height="165"/>
+      <rect x="785" y="800" width="30" height="165"/>
+      <rect x="1435" y="800" width="30" height="165"/>
     </g>
-    <!-- 베이스플레이트 + 레벨링 풋 -->
+    <!-- 너트 캡플레이트 + M8 고무발 -->
     <g fill="#e4e0da" stroke="#1a1a1a" stroke-width="3">
-      <rect x="125" y="950" width="50" height="12"/>
-      <rect x="142" y="962" width="16" height="14"/>
-      <path d="M120,1000 L124,976 L176,976 L180,1000 Z"/>
-      <rect x="775" y="950" width="50" height="12"/>
-      <rect x="792" y="962" width="16" height="14"/>
-      <path d="M770,1000 L774,976 L826,976 L830,1000 Z"/>
-      <rect x="1425" y="950" width="50" height="12"/>
-      <rect x="1442" y="962" width="16" height="14"/>
-      <path d="M1420,1000 L1424,976 L1476,976 L1480,1000 Z"/>
+      <rect x="130" y="965" width="40" height="10"/>
+      <path d="M135,1000 L140,975 L160,975 L165,1000 Z"/>
+      <rect x="780" y="965" width="40" height="10"/>
+      <path d="M785,1000 L790,975 L810,975 L815,1000 Z"/>
+      <rect x="1430" y="965" width="40" height="10"/>
+      <path d="M1435,1000 L1440,975 L1460,975 L1465,1000 Z"/>
     </g>
 
     <text x="475" y="880" font-size="30" fill="#b5462a" text-anchor="middle">스팬 650</text>
     <text x="1125" y="880" font-size="30" fill="#b5462a" text-anchor="middle">스팬 650</text>
 
-    <line x1="180" y1="988" x2="400" y2="1130" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="416" y="1140" font-size="30" fill="#b5462a">다리 하단 3T 베이스플레이트 50×50 + M12 너트 용접 → 레벨링 풋 Ø60</text>
+    <line x1="170" y1="985" x2="400" y2="1130" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
+    <text x="416" y="1140" font-size="30" fill="#b5462a">다리 하단 2~3T 캡플레이트 + M8 너트 용접 → M8 수평조절 고무발 Ø30 (업체 원 사양)</text>
     <line x1="900" y1="785" x2="1120" y2="670" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
     <text x="1136" y="662" font-size="32" fill="#1a1a1a">앞 가로재 30×30×1.1T</text>
 
@@ -300,11 +308,10 @@
       <line x1="-200" y1="800" x2="-200" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
       <line x1="-320" y1="770" x2="-320" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
       <line x1="1690" y1="800" x2="1900" y2="800"/>
-      <line x1="1690" y1="950" x2="1900" y2="950"/>
-      <line x1="1690" y1="976" x2="1900" y2="976"/>
+      <line x1="1690" y1="965" x2="1900" y2="965"/>
       <line x1="1870" y1="770" x2="1870" y2="800" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="1870" y1="800" x2="1870" y2="950" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="1870" y1="976" x2="1870" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="1870" y1="800" x2="1870" y2="965" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="1870" y1="965" x2="1870" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
     </g>
     <text x="800" y="1256" font-size="40" fill="#2f6fb0" text-anchor="middle">1,600</text>
     <text x="75" y="1171" font-size="30" fill="#2f6fb0" text-anchor="middle">150</text>
@@ -314,8 +321,8 @@
     <text x="-212" y="900" font-size="42" fill="#c2410c" text-anchor="middle" transform="rotate(-90 -212 900)">개방 200</text>
     <text x="-332" y="885" font-size="36" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -332 885)">전체 230</text>
     <text x="1920" y="796" font-size="28" fill="#2f6fb0">30 (가로재)</text>
-    <text x="1920" y="886" font-size="28" fill="#2f6fb0">150 (다리)</text>
-    <text x="1920" y="1000" font-size="28" fill="#2f6fb0">50 (플레이트+풋 · 조절 35↑)</text>
+    <text x="1920" y="894" font-size="28" fill="#2f6fb0">165 (다리 · 실측 후 개별 조정)</text>
+    <text x="1920" y="994" font-size="28" fill="#2f6fb0">35 (캡플레이트 + 고무발)</text>
 
     <text x="800" y="1390" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 정 면 도 &gt;</text>
   </svg>
@@ -350,16 +357,14 @@
     </g>
 
     <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
-      <rect x="135" y="800" width="30" height="150"/>
-      <rect x="470" y="800" width="30" height="150"/>
+      <rect x="135" y="800" width="30" height="165"/>
+      <rect x="470" y="800" width="30" height="165"/>
     </g>
     <g fill="#e4e0da" stroke="#1a1a1a" stroke-width="3">
-      <rect x="125" y="950" width="50" height="12"/>
-      <rect x="142" y="962" width="16" height="14"/>
-      <path d="M120,1000 L124,976 L176,976 L180,1000 Z"/>
-      <rect x="460" y="950" width="50" height="12"/>
-      <rect x="477" y="962" width="16" height="14"/>
-      <path d="M455,1000 L459,976 L511,976 L515,1000 Z"/>
+      <rect x="130" y="965" width="40" height="10"/>
+      <path d="M135,1000 L140,975 L160,975 L165,1000 Z"/>
+      <rect x="465" y="965" width="40" height="10"/>
+      <path d="M470,1000 L475,975 L495,975 L500,1000 Z"/>
     </g>
 
     <circle cx="250" cy="620" r="22" fill="none" stroke="#1a1a1a" stroke-width="3.5"/>
@@ -374,9 +379,9 @@
 
     <line x1="-400" y1="740" x2="0" y2="800" stroke="#2f6fb0" stroke-width="2.5" stroke-dasharray="18 12"/>
     <line x1="0" y1="800" x2="120" y2="1000" stroke="#2f6fb0" stroke-width="3" stroke-dasharray="18 12"/>
-    <text x="-400" y="716" font-size="28" fill="#2f6fb0">눈높이 1.6m · 0.84m 거리 시선</text>
+    <text x="-400" y="716" font-size="28" fill="#2f6fb0">눈높이 1.6m · 0.94m 거리 시선</text>
     <text x="-400" y="752" font-size="26" fill="#2f6fb0">(가로재 아랫모서리를 스침)</text>
-    <text x="196" y="946" font-size="28" fill="#2f6fb0">← 여기까지만 보임 (120)</text>
+    <text x="196" y="946" font-size="28" fill="#2f6fb0">← 여기까지만 보임 (135)</text>
 
     <line x1="500" y1="880" x2="720" y2="780" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
     <text x="736" y="772" font-size="30" fill="#b5462a">뒷열 다리 — 뒤 가로재 바로 밑</text>
@@ -385,11 +390,11 @@
     <text x="356" y="662" font-size="30" fill="#b5462a">앞열 다리</text>
 
     <g stroke="#2f7d4f" stroke-width="2.5" fill="none">
-      <line x1="180" y1="1022" x2="280" y2="1022" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="390" y1="1022" x2="455" y2="1022" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="165" y1="1022" x2="280" y2="1022" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="390" y1="1022" x2="470" y2="1022" marker-start="url(#daL)" marker-end="url(#da)"/>
     </g>
-    <text x="230" y="1012" font-size="26" fill="#2f7d4f" text-anchor="middle">100</text>
-    <text x="423" y="1012" font-size="26" fill="#2f7d4f" text-anchor="middle">65</text>
+    <text x="222" y="1012" font-size="26" fill="#2f7d4f" text-anchor="middle">115</text>
+    <text x="430" y="1012" font-size="26" fill="#2f7d4f" text-anchor="middle">80</text>
 
     <g stroke="#2f6fb0" stroke-width="2.5" fill="none">
       <line x1="0" y1="1046" x2="0" y2="1300"/>
@@ -423,14 +428,14 @@
 <h2>4. 배수구와의 간섭 검토</h2>
 <table>
   <tr><th>배수구 위치</th><td>오른쪽 벽에서 <b>460</b> · 뒷벽에서 <b>110</b> · 크기 <b>310(좌우) × 110(앞뒤)</b> · <span class="ok">모서리 기준 (확정)</span><br>→ 프레임 기준: 좌우 <b>830 ~ 1,140</b> · 앞면에서 <b>280 ~ 390</b></td></tr>
-  <tr><th>레벨링 풋과의 관계</th><td class="ok">간섭 없음. 다리열이 앞면에서 <b>150</b>과 <b>485</b>라 배수구(280~390)를 앞뒤로 비켜갑니다<br>앞열 풋 ↔ 배수구 앞모서리 = <b>100</b> &nbsp;/&nbsp; 뒷열 풋 ↔ 배수구 뒤모서리 = <b>65</b></td></tr>
+  <tr><th>고무발과의 관계</th><td class="ok">간섭 없음. 다리열이 앞면에서 <b>150</b>과 <b>485</b>라 배수구(280~390)를 앞뒤로 비켜갑니다<br>앞열 고무발 ↔ 배수구 앞모서리 = <b>115</b> &nbsp;/&nbsp; 뒷열 고무발 ↔ 배수구 뒤모서리 = <b>80</b><br>(고무발 Ø30 기준. Ø60 레벨링 풋이었다면 100 / 65)</td></tr>
   <tr><th class="tbd">중앙 연결재</th><td>중앙 연결재가 <b>785~815</b>, 배수구 왼쪽 끝이 <b>830</b> → <b class="tbd">이격 15</b><br>· 연결재는 바닥에서 200 떠 있으므로 개구부와 물리적으로 부딪히지는 않습니다<br>· <b>다만 배관을 개구부 왼쪽 끝에 붙여 세우면 연결재와 닿습니다.</b> 배관은 개구부 중앙(약 985) 쪽으로 세워 주세요</td></tr>
   <tr><th>배관 상승 경로</th><td class="ok">가로재는 앞(0~30)·뒤(470~500)에만 있고 배수구는 280~390이라, 배관이 프레임 사이로 그대로 올라옵니다</td></tr>
 </table>
 <div class="warn">
   <b>⚠ 설치 시 반드시 확인</b><br>
-  배수구가 <b>바닥 개구부</b>라면 레벨링 풋이 개구부 가장자리(모서리에서 30mm 이내)에 얹히면 안 됩니다. 타일 가장자리가 눌려 깨집니다.
-  뒷열 풋 이격이 <b>65mm</b>로 여유가 크지 않으니, 설치 전에 실제 배수구 위치를 바닥에 표시하고 풋 자리와 대조하세요.<br>
+  배수구가 <b>바닥 개구부</b>라면 고무발이 개구부 가장자리(모서리에서 30mm 이내)에 얹히면 안 됩니다. 타일 가장자리가 눌려 깨집니다.
+  뒷열 고무발 이격이 <b>80mm</b>로 여유가 크지 않으니, 설치 전에 실제 배수구 위치를 바닥에 표시하고 풋 자리와 대조하세요.<br>
   간섭이 생기면 <b>중앙 다리열(800)을 좌우로 옮기면 됩니다</b> — 다만 <b>스팬이 760을 넘지 않는 범위</b>에서만 (1.1T의 한계).
 </div>
 
@@ -440,9 +445,9 @@
   <tr><td>①</td><td>앞 · 뒤 가로재</td><td>각파이프 30×30×1.1T</td><td class="num">1,600</td><td class="num">2</td><td>벽~벽 실측값에 맞춤</td></tr>
   <tr><td>②</td><td>좌 · 우 세로재</td><td>각파이프 30×30×1.1T</td><td class="num">440</td><td class="num">2</td><td>①사이에 끼워 용접</td></tr>
   <tr><td>③</td><td>앞뒤 연결재</td><td>각파이프 30×30×1.1T</td><td class="num">440</td><td class="num">3</td><td>좌 150 / 중앙 800 / 우 1,450</td></tr>
-  <tr><td>④</td><td>다리</td><td>각파이프 30×30×1.1T</td><td class="num">150</td><td class="num">6</td><td>앞열 3 · 뒷열 3</td></tr>
-  <tr><td>⑤</td><td>다리 하단 베이스플레이트</td><td>SUS 3T · 50×50</td><td class="num">—</td><td class="num">6</td><td class="tbd"><b>1.1T 벽에는 M12 탭이 안 남</b> → 플레이트에 너트 용접</td></tr>
-  <tr><td>⑥</td><td>레벨링 풋</td><td>M12 · 베이스 Ø60</td><td class="num">—</td><td class="num">6</td><td>조절범위 35 이상 · 수지패드</td></tr>
+  <tr><td>④</td><td>다리</td><td>각파이프 30×30×1.1T</td><td class="num">165</td><td class="num">6</td><td class="tbd">앞열 3 · 뒷열 3<br><b>바닥 실측 후 6개를 각각 다른 길이로</b> (아래 참조)</td></tr>
+  <tr><td>⑤</td><td>다리 하단 캡플레이트</td><td>SUS 2~3T · 40×40</td><td class="num">—</td><td class="num">6</td><td class="tbd"><b>1.1T 벽에는 M8 탭이 안 남</b> (나사산 0.9개) → 캡플레이트에 M8 너트 용접</td></tr>
+  <tr><td>⑥</td><td>M8 수평조절 고무발</td><td class="ok">업체 원 사양 유지<br>M8 · 고무 Ø30 내외</td><td class="num">—</td><td class="num">6</td><td>스터드 길이 확인 필요 — 조절범위가 좁으면 ④로 보정</td></tr>
 </table>
 <p class="note">각파이프 소요 약 <b>6.3 m</b> (6m 1본 + 잔재, 또는 2본). 프레임 자중 약 <b>7 kg</b>.<br>
 전 부재 <b>SUS304</b> + <b>무광 블랙 분체도장</b>. 용접부 산세·부동태 처리 후 도장.</p>
@@ -501,8 +506,8 @@
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 뒷열 = 61 kg &nbsp;(3개 → <b>20 kg/개</b>)<br>
   &nbsp;&nbsp;사용하중 100kg 재하 시 앞열 = +145 kg → <b>앞다리 1개 최대 약 150 kg</b> (한쪽 집중 기준)<br><br>
   &nbsp;&nbsp;다리 압축응력 = 150 kg ÷ 127.2 mm² = <b class="ok">11.6 MPa</b> &nbsp;(항복 205 MPa의 5.6%)<br>
-  &nbsp;&nbsp;다리 세장비 L/r = 150 ÷ 11.8 = <b class="ok">12.7</b> &nbsp;→ 좌굴 검토 불필요<br>
-  &nbsp;&nbsp;레벨링 풋 면압 = 150 kg ÷ 28.3 cm² = <b class="ok">5.3 kg/cm²</b><br><br>
+  &nbsp;&nbsp;다리 세장비 L/r = 165 ÷ 11.8 = <b class="ok">14.0</b> &nbsp;→ 좌굴 검토 불필요<br>
+  &nbsp;&nbsp;고무발 면압 = 150 kg ÷ 7.1 cm² (Ø30) = <b class="ok">21 kg/cm²</b> &nbsp;(사람 뒤꿈치 면압 수준 — 타일에 무해)<br>&nbsp;&nbsp;&nbsp;&nbsp;· 고무라서 하중을 받으면 <b>1~2mm 눌립니다.</b> 6개가 고르게 접지되어야 함<br><br>
 
   <b>■ 가로재 — 여기가 1.1T의 한계선</b><br>
   &nbsp;&nbsp;중앙 스팬 650 한가운데 100 kg → 처짐 <b>1.64 mm</b> · 응력 <b>135 MPa</b> (안전율 <b>1.52</b>)<br>
@@ -549,18 +554,18 @@
 <table class="wide">
   <tr>
     <th style="width:14%">앞다리 위치</th>
-    <th style="width:16%">풋(Ø60) 앞 모서리</th>
+    <th style="width:16%">고무발(Ø30) 앞 모서리</th>
     <th style="width:20%">이 거리까지 안 보임</th>
     <th style="width:20%">앞모서리 전도 하중</th>
     <th>판정</th>
   </tr>
-  <tr><td class="num">50 (업체 원안)</td><td class="num">20</td><td class="num">0.14 m</td><td class="num">820 kg</td><td class="tbd">전도는 안전하지만 다리가 그대로 다 보임</td></tr>
-  <tr><td class="num">100</td><td class="num">70</td><td class="num">0.49 m</td><td class="num">307 kg</td><td>과하게 안전 · 60cm에서 보임</td></tr>
-  <tr><td class="num">120</td><td class="num">90</td><td class="num">0.63 m</td><td class="num">189 kg</td><td>서랍 다 열어도 여유 있음</td></tr>
-  <tr class="pick"><td class="num"><b>150</b></td><td class="num"><b>120</b></td><td class="num"><b>0.84 m</b></td><td class="num"><b>137 kg</b></td><td><b class="ok">채택 — 평소 보는 거리 0.6m를 여유 있게 커버</b></td></tr>
-  <tr><td class="num">170</td><td class="num">140</td><td class="num">0.98 m</td><td class="num">96 kg</td><td>성인이 앞 끝에 체중 실으면 위험</td></tr>
-  <tr class="bad"><td class="num">200</td><td class="num">170</td><td class="num">1.19 m</td><td class="num">51 kg</td><td class="tbd">불가 — 아이가 매달리면 넘어감</td></tr>
-  <tr class="bad"><td class="num">250 이상</td><td class="num">220</td><td class="num">1.54 m</td><td class="num">0 kg</td><td class="tbd">불가 — 자중만으로 앞으로 기움</td></tr>
+  <tr><td class="num">50 (업체 원안)</td><td class="num">35</td><td class="num">0.25 m</td><td class="num">820 kg</td><td class="tbd">전도는 안전하지만 다리가 그대로 다 보임</td></tr>
+  <tr><td class="num">100</td><td class="num">85</td><td class="num">0.60 m</td><td class="num">307 kg</td><td>과하게 안전 · 60cm에서 보임</td></tr>
+  <tr><td class="num">120</td><td class="num">105</td><td class="num">0.74 m</td><td class="num">189 kg</td><td>서랍 다 열어도 여유 있음</td></tr>
+  <tr class="pick"><td class="num"><b>150</b></td><td class="num"><b>135</b></td><td class="num"><b>0.94 m</b></td><td class="num"><b>137 kg</b></td><td><b class="ok">채택 — 평소 보는 거리 0.6m를 여유 있게 커버</b></td></tr>
+  <tr><td class="num">170</td><td class="num">155</td><td class="num">1.09 m</td><td class="num">96 kg</td><td>성인이 앞 끝에 체중 실으면 위험</td></tr>
+  <tr class="bad"><td class="num">200</td><td class="num">185</td><td class="num">1.30 m</td><td class="num">51 kg</td><td class="tbd">불가 — 아이가 매달리면 넘어감</td></tr>
+  <tr class="bad"><td class="num">250 이상</td><td class="num">235</td><td class="num">1.65 m</td><td class="num">0 kg</td><td class="tbd">불가 — 자중만으로 앞으로 기움</td></tr>
 </table>
 
 <div class="calc">
@@ -568,8 +573,8 @@
   눈높이 1,600에서 <b>프레임 앞 가로재의 아랫모서리(바닥에서 200)</b>를 스치는 시선이 바닥에 닿는 지점:<br>
   &nbsp;&nbsp;— 시선을 막는 가장 낮은 앞모서리는 하부장 밑면(230)이 아니라 <b>가로재 밑면(200)</b>입니다<br>
   &nbsp;&nbsp;보이는 깊이 = 보는 거리 × 200 ÷ (1,600 − 200) = <b>보는 거리 ÷ 7</b><br><br>
-  &nbsp;&nbsp;0.6 m (평소 사용 거리) → &nbsp;<b class="ok">86 mm</b> — 풋 앞 모서리 120보다 얕음 → <b class="ok">안 보임</b><br>
-  &nbsp;&nbsp;0.84 m → 120 mm — 여기서부터 풋 끝이 보이기 시작<br>
+  &nbsp;&nbsp;0.6 m (평소 사용 거리) → &nbsp;<b class="ok">86 mm</b> — 고무발 앞 모서리 135보다 얕음 → <b class="ok">안 보임</b><br>
+  &nbsp;&nbsp;0.94 m → 135 mm — 여기서부터 고무발 끝이 보이기 시작<br>
   &nbsp;&nbsp;1.5 m (문 앞) → 214 mm — <b class="tbd">앞열 다리 밑동이 보임</b><br><br>
   → <b>평소 쓰는 거리에서는 안 보이고, 문 앞까지 물러서면 다리 밑동이 보입니다.</b>
   벽을 안 잡는 이상 이건 물리적으로 피할 수 없습니다. 무광 블랙 + 하부 간접등 금지로 실제 인지는 크게 줄어듭니다.
@@ -577,7 +582,7 @@
 
 <div class="warn">
   <b>⚠ 하부장 밑에는 간접등을 넣지 마세요.</b><br>
-  바닥이 밝아지면 다리·레벨링 풋이 그대로 드러나서 띄움 효과가 사라집니다. 어두워야 다리가 사라집니다.
+  바닥이 밝아지면 다리·고무발이 그대로 드러나서 띄움 효과가 사라집니다. 어두워야 다리가 사라집니다.
 </div>
 
 <h2>9. ⚠ 서랍을 끝까지 열어 놓았을 때 — 이건 프레임으로 못 막습니다</h2>
@@ -654,12 +659,12 @@
   <tr><th>재질 · 도장</th><td><b>SUS304</b> + <b>무광 블랙 분체도장</b><br>· 무광 블랙 = 띄움 공간의 그늘에 묻혀 다리가 시각적으로 사라짐<br>· 광택 스테인리스는 빛을 받아 오히려 눈에 띔<br>· 일반 철제 무도장 금지 (1~2년이면 녹물)</td></tr>
   <tr><th>부재</th><td>각파이프 <b>30 × 30 × 1.1T</b> 전 부재 공통 (업체 원 사양 유지)</td></tr>
   <tr><th>다리 위치</th><td>좌우 — <b>150 / 800 / 1,450</b> (양끝 내밈 150 · 스팬 650)<br>앞뒤 — 앞열 <b>150</b> · 뒷열 <b>485</b> (뒤 가로재 바로 밑)<br>다리 길이 <b>150</b> · 총 <b>6개</b></td></tr>
-  <tr><th>다리 하단</th><td class="tbd"><b>SUS 3T 베이스플레이트 50×50 + M12 너트 용접</b><br>· 1.1T 벽에는 M12 탭을 낼 수 없습니다 (나사산이 1개밖에 안 걸림)<br>· 플레이트를 다리 하단에 용접하고 그 위에 너트를 붙여 레벨링 풋을 체결</td></tr>
-  <tr><th>레벨링 풋</th><td><b>M12 중하중용 · 베이스 Ø60 · 조절범위 35mm 이상</b> · 수지/고무 패드 일체형<br>· 욕실 바닥은 배수 구배(1~2%)가 있어 1,600 폭에서 좌우 높이차가 20~25mm 발생 → 조절범위 35 미만은 사용 불가<br>· <b>6개 모두 확실히 접지</b>시킬 것. 하나라도 뜨면 그 구간 스팬이 1,300이 되어 계산이 무효가 됨</td></tr>
-  <tr><th>벽 고정</th><td class="tbd">없음 — 전량 바닥 지지<br>대신 <b>구조용 실리콘으로 레벨링 풋 6곳을 바닥에 점접착</b> (미끄럼 방지용, 구조 계산에는 미포함)</td></tr>
+  <tr><th>다리 하단</th><td class="tbd"><b>SUS 2~3T 캡플레이트 40×40 + M8 너트 용접</b><br>· 1.1T 벽에는 M8 탭을 낼 수 없습니다 (피치 1.25 → 나사산이 <b>0.9개</b>)<br>· 다리 하단을 캡플레이트로 막고 그 위에 M8 너트를 용접해 고무발을 체결</td></tr>
+  <tr><th>수평조절 고무발</th><td class="ok"><b>M8 수평조절 고무발 — 업체 원 사양 그대로</b> (고무 Ø30 내외)<br>· 면압 21 kg/cm² · 시야에는 오히려 유리 (Ø60 대비 앞모서리가 15mm 뒤로)<br>· <b class="tbd">⚠ 조절범위가 관건입니다.</b> 욕실 바닥은 배수 구배(1~2%)가 있어 1,600 폭에서 좌우 높이차가 20~25mm 납니다. M8 고무발의 스터드가 짧으면 이 차이를 못 흡수합니다<br>· <b>해결: 바닥 6점 높이를 미리 실측해 다리 6개를 각각 다른 길이로 절단.</b> 고무발은 ±7mm 미세조정용으로만 사용<br>· 고무라서 하중을 받으면 1~2mm 눌립니다 → <b>6개 모두 확실히 접지</b>시킬 것. 하나라도 뜨면 그 구간 스팬이 1,300이 되어 계산이 무효가 됨</td></tr>
+  <tr><th>벽 고정</th><td class="tbd">없음 — 전량 바닥 지지<br>대신 <b>구조용 실리콘으로 고무발 6곳을 바닥에 점접착</b> (미끄럼 방지용, 구조 계산에는 미포함)</td></tr>
   <tr><th>바닥 고정</th><td class="tbd">타공 없음. 욕실 방수층이 뚫리면 누수로 이어짐</td></tr>
   <tr><th>하부장 결합</th><td>하부장은 프레임 위에 얹고 <b>SUS 피스 4~6개</b>로 고정 (미끄럼 방지용)<br>하부장 뒷판에 벽 볼트를 박지 않음 — MDF는 찢어짐</td></tr>
-  <tr><th>배수구</th><td class="ok">오른쪽 벽에서 460 · 뒷벽에서 110 · 310×110 — 레벨링 풋과 간섭 없음 (4항)</td></tr>
+  <tr><th>배수구</th><td class="ok">오른쪽 벽에서 460 · 뒷벽에서 110 · 310×110 — 고무발과 간섭 없음 (4항)</td></tr>
   <tr><th>설계 하중</th><td>자중 205 kg + 앞모서리 사용하중 100 kg. <b>앞다리 1개당 최대 150 kg</b> · 최소 안전율 <b>1.52</b></td></tr>
 </table>
 
@@ -672,8 +677,8 @@
     <li><b>바닥은 방수층 때문에 타공하지 않습니다.</b> 다리는 얹히고 실리콘 점접착만 합니다.</li>
     <li>핵심 요구: <b>서서 봤을 때 다리가 보이지 않아야 합니다.</b> 다리는 <b>앞뒤 2열 × 3줄 = 6개</b>, 앞열은 <b>앞면에서 150</b>, 뒷열은 <b>485</b>(뒤 가로재 바로 밑)입니다. <b>앞열 150을 앞으로 당기지 말아 주세요.</b></li>
     <li>좌우는 <b>150 / 800 / 1,450</b>입니다. 1.1T에서는 <b>다리 간격 650이 한계</b>라 이보다 벌리면 처짐·항복이 납니다.</li>
-    <li><b>1.1T 벽에는 M12 탭이 안 나므로</b>, 다리 하단에 <b>SUS 3T 베이스플레이트(50×50)를 용접하고 M12 너트를 붙여</b> 레벨링 풋을 체결해 주세요.</li>
-    <li>발은 <b>M12 레벨링 풋 · 베이스 Ø60 · 조절범위 35mm 이상</b>. 욕실 구배 때문에 M8 고무발로는 수평이 안 나옵니다.</li>
+    <li><b>발은 주신 M8 수평조절 고무발 그대로 갑니다.</b> 다만 <b>1.1T 벽에는 M8 탭이 안 납니다</b>(피치 1.25 → 나사산 0.9개). 다리 하단을 <b>SUS 2~3T 캡플레이트(40×40)로 막고 M8 너트를 용접</b>해 주세요.</li>
+    <li><b>⚠ 고무발 스터드(나사부) 길이를 알려주세요.</b> 욕실 바닥 구배 때문에 1,600 폭에서 높이차가 20~25mm 납니다. 조절범위가 부족하면 <b>바닥 6점을 실측해 다리 6개를 각각 다른 길이로 절단</b>하겠습니다 — 제작 전에 치수를 드리겠습니다.</li>
     <li>1.1T 박판이라 다리 접합부는 <b>burn-through에 주의</b>해 주세요. 필요하면 3T 거싯 보강 부탁드립니다.</li>
     <li>배수구가 오른쪽 벽에서 460 · 뒷벽에서 110 위치에 310×110로 있습니다. 다리와는 간섭이 없습니다.</li>
     <li><b>SUS304 + 무광 블랙 분체도장</b>. 용접부 산세·부동태 처리 후 도장해 주세요.</li>
@@ -691,17 +696,18 @@
   <tr><th>세라믹 실제 무게</th><td class="tbd">100kg 기준 설계. 무거워질수록 <b>전도에는 유리</b>, 다리 하중만 비례 증가</td></tr>
   <tr><th>하부장 몸통 높이</th><td class="tbd">완성 850 유지 시 전체 230 + 몸통 <b>580</b> + 상판 40</td></tr>
   <tr><th>부재 규격</th><td class="ok">30각 1.1T 유지 확정 (업체 원 사양)</td></tr>
-  <tr><th>배수구 위치·기준</th><td class="ok">모서리 기준 확정. 레벨링 풋과 간섭 없음 (4항)</td></tr>
+  <tr><th>배수구 위치·기준</th><td class="ok">모서리 기준 확정. 고무발과 간섭 없음 (4항)</td></tr>
+  <tr><th>고무발 스터드 길이 / 조절범위</th><td class="tbd">업체 확인 필요. 부족하면 <b>바닥 6점 실측 → 다리 6개 개별 절단</b>으로 보정 (11항)</td></tr>
   <tr><th>하부장 깊이 / 배치</th><td class="ok">500 · 뒷벽 밀착 · 앞 90 여유 확정</td></tr>
   <tr><th>높이 / 다리 위치</th><td class="ok">개방 200 + 가로재 30 = 전체 230 / 앞열 150 · 뒷열 485 / 좌우 150·800·1,450 확정</td></tr>
 </table>
 
 <h2>13. 시공 순서</h2>
 <table>
-  <tr><th>① 벽~벽 실측</th><td>바닥 구배와 <b>배수구 실제 위치</b>도 같이 측정 (좌우 높이차가 25mm를 넘으면 레벨링 풋 사양 상향)</td></tr>
-  <tr><th>② 프레임 제작</th><td>실측 폭 반영</td></tr>
-  <tr><th>③ 바닥 먹매김</th><td class="tbd">레벨링 풋 6곳 자리를 바닥에 표시하고 <b>배수구와 30mm 이상 떨어졌는지 확인</b>. 겹치면 중앙 다리열을 좌우로 이동(스팬 760 이내)</td></tr>
-  <tr><th>④ 프레임 설치</th><td>바닥에 안착 → 레벨링 풋 <b>6개 모두</b> 확실히 접지시키며 수평 → 풋 밑에 구조용 실리콘 점접착</td></tr>
+  <tr><th>① 벽~벽 실측</th><td>폭 · <b>배수구 실제 위치</b> · <b class="tbd">다리 6곳 자리의 바닥 높이(6점)</b>를 모두 측정<br>고무발 조절범위가 좁으므로 <b>다리 길이를 6개 각각 정하기 위해</b> 6점 레벨이 필요합니다</td></tr>
+  <tr><th>② 프레임 제작</th><td>실측 폭 반영 + <b>①의 바닥 6점 레벨에 맞춰 다리 6개를 각각 절단</b></td></tr>
+  <tr><th>③ 바닥 먹매김</th><td class="tbd">고무발 6곳 자리를 바닥에 표시하고 <b>배수구와 30mm 이상 떨어졌는지 확인</b>. 겹치면 중앙 다리열을 좌우로 이동(스팬 760 이내)</td></tr>
+  <tr><th>④ 프레임 설치</th><td>바닥에 안착 → 고무발 <b>6개 모두</b> 확실히 접지시키며 수평 → 고무발 밑에 구조용 실리콘 점접착</td></tr>
   <tr><th>⑤ 하중 시험</th><td class="tbd">하부장 올리기 전에 <b>프레임 앞 가로재를 손으로 눌러 봅니다.</b> 흔들리거나 한쪽 풋이 뜨면 다시 수평 — 1.1T는 여유가 적어 이 단계가 특히 중요합니다</td></tr>
   <tr><th>⑥ 하부장 설치</th><td>프레임 위에 얹고 피스 고정</td></tr>
   <tr><th>⑦ (옵션) 상판 쇠판</th><td>하부장 상단 뒷면에 ㄱ자 쇠판 3개를 얹고 뒷벽에 고정</td></tr>
