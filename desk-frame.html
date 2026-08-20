@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>책상 프레임 — 제작 도면</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --ink:#2b2420; --mut:#7a6a5c; --line:#d8cec2; --bg:#fdfbf7;
+    --accent:#a9714b; --warn:#c2410c; --box:#faf6ef;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px 16px 60px;background:var(--bg);color:var(--ink);
+       font-family:Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+       font-size:14px;line-height:1.65;-webkit-text-size-adjust:100%}
+  .wrap{max-width:920px;margin:0 auto}
+  h1{font-size:21px;margin:0 0 4px;letter-spacing:-.02em}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 20px}
+  h2{font-size:16px;margin:30px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line);letter-spacing:-.01em}
+  h3{font-size:14px;margin:22px 0 8px}
+  .fig{background:#fff;border:1px solid #c9c2b7;border-radius:4px;padding:16px 14px 10px;margin:0 0 18px}
+  .fig h3{font-size:12px;margin:0 0 10px;color:#555;font-weight:600;letter-spacing:.02em;
+          border-bottom:1px solid #e5e0d8;padding-bottom:6px}
+  svg{width:100%;height:auto;display:block}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:0 0 18px;background:#fff}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{background:var(--box);width:32%;font-weight:600}
+  table.wide th{width:auto}
+  .warn{background:#fff5ed;border:1px solid #f0c9a8;border-left:4px solid var(--warn);
+        border-radius:8px;padding:12px 14px;margin:0 0 18px}
+  .warn b{color:var(--warn)}
+  .ask{background:#eef4fb;border:1px solid #c3d7ee;border-left:4px solid #3b6ea5;
+       border-radius:8px;padding:12px 14px;margin:0 0 18px}
+  .calc{background:#f4f1ea;border:1px solid #ddd4c4;border-radius:8px;padding:12px 14px;
+        margin:0 0 18px;font-variant-numeric:tabular-nums;font-size:13px}
+  .calc b{color:var(--accent)}
+  ul{margin:6px 0 0;padding-left:20px}
+  li{margin:3px 0}
+  .tbd{color:var(--warn);font-weight:700}
+  .ok{color:#2f7d4f;font-weight:700}
+  .note{font-size:12px;color:var(--mut);margin:-10px 0 16px}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  tr.pick td,tr.pick th{background:#f0f6f1}
+  tr.bad td{background:#fff5ed}
+  @media print{
+    body{background:#fff;padding:0;font-size:11px}
+    .fig{break-inside:avoid;page-break-inside:avoid}
+    h2{margin-top:16px}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="hatch" width="26" height="26" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="26" stroke="#b9b2a8" stroke-width="3"/>
+    </pattern>
+    <marker id="da" markerUnits="userSpaceOnUse" markerWidth="34" markerHeight="24" refX="32" refY="12" orient="auto">
+      <path d="M0,2 L32,12 L0,22 Z" fill="#2f6fb0"/>
+    </marker>
+    <marker id="daL" markerUnits="userSpaceOnUse" markerWidth="34" markerHeight="24" refX="2" refY="12" orient="auto">
+      <path d="M34,2 L2,12 L34,22 Z" fill="#2f6fb0"/>
+    </marker>
+    <marker id="lead" markerUnits="userSpaceOnUse" markerWidth="26" markerHeight="18" refX="24" refY="9" orient="auto">
+      <path d="M0,1 L24,9 L0,17 Z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<p style="margin:0 0 14px"><a href="index.html" style="color:#a9714b;text-decoration:none;font-size:13px">← 전체 사이트</a></p>
+
+<h1>책상 프레임 — 제작 도면</h1>
+<p class="sub">1,350 × 589 × H720 · 세라믹 12T 상판 · <b>상부 프레임 30×50×1.1T 세워서</b> · 다리 30×30×1.5T 4본</p>
+
+<div class="warn">
+  <b>⚠ 업체 도면(전부 30각 1.1T) 대비 변경점</b>
+  <table style="margin:8px 0 0;font-size:12.5px">
+    <tr><th style="width:26%">항목</th><th style="width:30%">받은 도면</th><th>이 도면</th></tr>
+    <tr><td><b>상부 프레임</b></td><td>30×30×1.1T</td><td class="ok"><b>30×50×1.1T — 세워서</b> (50이 위아래 방향)</td></tr>
+    <tr><td>다리 4본</td><td>30×30×1.1T</td><td><b>30×30×1.5T</b></td></tr>
+    <tr><td>세로 연결재</td><td>30각 4본 (300 간격)</td><td>30×50×1.1T 4본 (300 간격) — 상부와 동일</td></tr>
+    <tr><td>하부 스트레처</td><td>없음</td><td class="tbd"><b>검토 중</b> — 흔들림 0.68 → 0.10mm</td></tr>
+    <tr><td>발</td><td>M8 수평조절 고무발</td><td class="ok">그대로 유지 + 다리 하단 M8 너트 용접</td></tr>
+    <tr><td>치수 · 다리 위치</td><td>1,350 × 589 · 4모서리</td><td class="ok">그대로 유지</td></tr>
+  </table>
+</div>
+
+<div class="ask">
+  <b>💬 왜 "세워서" 쓰는가 — 이 도면의 핵심 한 가지</b><br>
+  30×50 각파이프는 <b>어느 방향으로 놓느냐에 따라 성능이 2.2배 달라집니다.</b>
+  휨 강성이 <b>하중 방향 높이의 세제곱</b>에 비례하기 때문입니다 (자를 눕혀 잡으면 쉽게 휘고, 세워 잡으면 안 휘는 것과 같은 원리).
+  <table style="margin:8px 0 0;font-size:12.5px">
+    <tr><th style="width:34%">놓는 방향</th><th style="width:22%">단면2차 I</th><th style="width:22%">처짐</th><th>판정</th></tr>
+    <tr class="bad"><td>눕혀서 (폭 50 × 높이 30)</td><td class="num">33,347</td><td class="num">4.35 mm</td><td class="tbd">✗ 잘못된 방향</td></tr>
+    <tr class="pick"><td><b>세워서 (폭 30 × 높이 50)</b></td><td class="num"><b>59,484</b></td><td class="num"><b>2.44 mm</b></td><td class="ok">✓ 이 도면</td></tr>
+  </table>
+  <b>같은 파이프, 같은 무게, 90도만 돌린 것</b>입니다. 제작 시 반드시 확인해 주세요.
+</div>
+
+<h2>1. 평면도</h2>
+<div class="fig">
+  <h3>PLAN &nbsp;— &nbsp;S : N.S. &nbsp;/&nbsp; UNIT : mm</h3>
+  <svg viewBox="-260 -240 1900 1120" role="img" aria-label="평면도">
+    <!-- 프레임 둘레 -->
+    <g fill="none" stroke="#1a1a1a" stroke-width="4">
+      <rect x="0" y="0" width="1350" height="30"/>
+      <rect x="0" y="559" width="1350" height="30"/>
+      <rect x="0" y="30" width="30" height="529"/>
+      <rect x="1320" y="30" width="30" height="529"/>
+    </g>
+    <!-- 세로 연결재 4본 (300 간격) -->
+    <g fill="none" stroke="#1a1a1a" stroke-width="4">
+      <rect x="285" y="30" width="30" height="529"/>
+      <rect x="585" y="30" width="30" height="529"/>
+      <rect x="885" y="30" width="30" height="529"/>
+      <rect x="1185" y="30" width="30" height="529"/>
+    </g>
+    <!-- 다리 4개 (모서리) -->
+    <g fill="#f2c9b8" stroke="#b5462a" stroke-width="4">
+      <rect x="0" y="0" width="30" height="30"/>
+      <rect x="1320" y="0" width="30" height="30"/>
+      <rect x="0" y="559" width="30" height="30"/>
+      <rect x="1320" y="559" width="30" height="30"/>
+    </g>
+    <g stroke="#b5462a" stroke-width="3">
+      <path d="M0,0 L30,30 M30,0 L0,30"/><path d="M1320,0 L1350,30 M1350,0 L1320,30"/>
+      <path d="M0,559 L30,589 M30,559 L0,589"/><path d="M1320,559 L1350,589 M1350,559 L1320,589"/>
+    </g>
+
+    <!-- 지시선 -->
+    <line x1="600" y1="300" x2="760" y2="180" stroke="#333" stroke-width="3" marker-start="url(#lead)"/>
+    <text x="776" y="172" font-size="30" fill="#1a1a1a">30×50×1.1T — 전부 세워서</text>
+    <text x="776" y="210" font-size="26" fill="#6b6055">(둘레 4본 + 세로 연결재 4본)</text>
+    <line x1="30" y1="15" x2="200" y2="-110" stroke="#b5462a" stroke-width="3" marker-start="url(#lead)"/>
+    <text x="216" y="-118" font-size="30" fill="#b5462a">다리 30×30×1.5T (4모서리)</text>
+
+    <text x="675" y="330" font-size="28" fill="#8d8175" text-anchor="middle">세라믹 최대 스팬 300 → 처짐 0.05mm · 안전율 15</text>
+
+    <!-- 치수 -->
+    <g stroke="#2f6fb0" stroke-width="3" fill="none">
+      <line x1="0" y1="589" x2="0" y2="860"/>
+      <line x1="1350" y1="589" x2="1350" y2="860"/>
+      <line x1="300" y1="589" x2="300" y2="770"/>
+      <line x1="600" y1="589" x2="600" y2="770"/>
+      <line x1="900" y1="589" x2="900" y2="770"/>
+      <line x1="1200" y1="589" x2="1200" y2="770"/>
+      <line x1="0" y1="830" x2="1350" y2="830" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="0" y1="740" x2="300" y2="740" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="300" y1="740" x2="600" y2="740" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="600" y1="740" x2="900" y2="740" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="900" y1="740" x2="1200" y2="740" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="1200" y1="740" x2="1350" y2="740" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="1350" y1="0" x2="1620" y2="0"/>
+      <line x1="1350" y1="589" x2="1620" y2="589"/>
+      <line x1="1590" y1="0" x2="1590" y2="589" marker-start="url(#daL)" marker-end="url(#da)"/>
+    </g>
+    <text x="675" y="816" font-size="42" fill="#2f6fb0" text-anchor="middle">1,350</text>
+    <text x="150" y="728" font-size="32" fill="#2f6fb0" text-anchor="middle">300</text>
+    <text x="450" y="728" font-size="32" fill="#2f6fb0" text-anchor="middle">300</text>
+    <text x="750" y="728" font-size="32" fill="#2f6fb0" text-anchor="middle">300</text>
+    <text x="1050" y="728" font-size="32" fill="#2f6fb0" text-anchor="middle">300</text>
+    <text x="1275" y="728" font-size="28" fill="#2f6fb0" text-anchor="middle">150</text>
+    <text x="1578" y="294" font-size="42" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 1578 294)">589</text>
+
+    <text x="675" y="960" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 평 면 도 &gt;</text>
+  </svg>
+</div>
+
+<h2>2. 정면도</h2>
+<div class="fig">
+  <h3>FRONT ELEVATION &nbsp;— &nbsp;UNIT : mm</h3>
+  <svg viewBox="-360 -140 2020 1360" role="img" aria-label="정면도">
+    <!-- 바닥 -->
+    <line x1="-200" y1="1000" x2="1560" y2="1000" stroke="#1a1a1a" stroke-width="6"/>
+    <g stroke="#8d8175" stroke-width="3">
+      <path d="M-160,1000 L-200,1050 M-60,1000 L-100,1050 M40,1000 L0,1050 M140,1000 L100,1050
+               M240,1000 L200,1050 M340,1000 L300,1050 M440,1000 L400,1050 M540,1000 L500,1050
+               M640,1000 L600,1050 M740,1000 L700,1050 M840,1000 L800,1050 M940,1000 L900,1050
+               M1040,1000 L1000,1050 M1140,1000 L1100,1050 M1240,1000 L1200,1050 M1340,1000 L1300,1050
+               M1440,1000 L1400,1050 M1540,1000 L1500,1050"/>
+    </g>
+
+    <!-- 세라믹 상판 12T -->
+    <rect x="-10" y="280" width="1370" height="12" fill="#e6ded2" stroke="#8d8175" stroke-width="4"/>
+    <text x="675" y="262" font-size="32" fill="#2b2420" text-anchor="middle">세라믹 상판 12T (합판 보강 없음)</text>
+
+    <!-- 상부 프레임 30×50 세워서 -->
+    <rect x="0" y="292" width="1350" height="50" fill="#fff" stroke="#1a1a1a" stroke-width="4"/>
+    <g stroke="#1a1a1a" stroke-width="3">
+      <path d="M0,292 L30,342 M30,292 L0,342"/>
+      <path d="M1320,292 L1350,342 M1350,292 L1320,342"/>
+    </g>
+    <line x1="700" y1="317" x2="900" y2="200" stroke="#333" stroke-width="3" marker-start="url(#lead)"/>
+    <text x="916" y="192" font-size="30" fill="#1a1a1a">30×50×1.1T 세워서 (높이 50)</text>
+
+    <!-- 다리 -->
+    <g fill="#f2c9b8" stroke="#b5462a" stroke-width="4">
+      <rect x="0" y="342" width="30" height="633"/>
+      <rect x="1320" y="342" width="30" height="633"/>
+    </g>
+    <!-- 캡플레이트 + 고무발 -->
+    <g fill="#e4e0da" stroke="#1a1a1a" stroke-width="3">
+      <rect x="-5" y="975" width="40" height="8"/>
+      <path d="M0,1000 L3,983 L27,983 L30,1000 Z"/>
+      <rect x="1315" y="975" width="40" height="8"/>
+      <path d="M1320,1000 L1323,983 L1347,983 L1350,1000 Z"/>
+    </g>
+    <line x1="35" y1="660" x2="230" y2="560" stroke="#b5462a" stroke-width="3" marker-start="url(#lead)"/>
+    <text x="246" y="552" font-size="30" fill="#b5462a">다리 30×30×1.5T · L=633</text>
+
+    <!-- 스트레처 (미정) -->
+    <rect x="30" y="855" width="1290" height="30" fill="none" stroke="#3b6ea5" stroke-width="4" stroke-dasharray="24 14"/>
+    <line x1="700" y1="885" x2="880" y2="990" stroke="#3b6ea5" stroke-width="3" marker-start="url(#lead)"/>
+    <text x="896" y="998" font-size="30" fill="#3b6ea5">하부 스트레처 — 검토 중 (바닥에서 120)</text>
+    <text x="896" y="1036" font-size="26" fill="#3b6ea5">넣으면 흔들림 0.68 → 0.10mm</text>
+
+    <!-- 치수 -->
+    <g stroke="#2f6fb0" stroke-width="3" fill="none">
+      <line x1="0" y1="1000" x2="0" y2="1240"/>
+      <line x1="1350" y1="1000" x2="1350" y2="1240"/>
+      <line x1="0" y1="1210" x2="1350" y2="1210" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-10" y1="280" x2="-330" y2="280"/>
+      <line x1="-10" y1="292" x2="-330" y2="292"/>
+      <line x1="-10" y1="342" x2="-330" y2="342"/>
+      <line x1="-10" y1="975" x2="-330" y2="975"/>
+      <line x1="-300" y1="280" x2="-300" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-180" y1="280" x2="-180" y2="292" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-180" y1="292" x2="-180" y2="342" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-180" y1="342" x2="-180" y2="975" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-180" y1="975" x2="-180" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="1350" y1="342" x2="1620" y2="342"/>
+      <line x1="1350" y1="1000" x2="1620" y2="1000"/>
+      <line x1="1590" y1="342" x2="1590" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
+    </g>
+    <text x="675" y="1196" font-size="42" fill="#2f6fb0" text-anchor="middle">1,350</text>
+    <text x="-312" y="640" font-size="42" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -312 640)">720</text>
+    <text x="-150" y="292" font-size="24" fill="#2f6fb0">12 (세라믹)</text>
+    <text x="-150" y="325" font-size="24" fill="#2f6fb0">50 (프레임)</text>
+    <text x="-150" y="670" font-size="26" fill="#2f6fb0">633 (다리)</text>
+    <text x="-150" y="998" font-size="24" fill="#2f6fb0">25 (고무발)</text>
+    <text x="1636" y="680" font-size="30" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 1636 680)">무릎 여유 658</text>
+
+    <text x="675" y="1320" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 정 면 도 &gt;</text>
+  </svg>
+</div>
+
+<h2>3. 부재 목록 (절단 리스트)</h2>
+<table class="wide">
+  <tr><th style="width:8%">번호</th><th style="width:24%">부재</th><th style="width:24%">규격</th><th style="width:12%">길이</th><th style="width:9%">수량</th><th>비고</th></tr>
+  <tr><td>①</td><td>앞 · 뒤 긴 가로재</td><td>30×50×1.1T</td><td class="num">1,350</td><td class="num">2</td><td class="tbd"><b>세워서</b> (50이 위아래)</td></tr>
+  <tr><td>②</td><td>좌 · 우 짧은 가로재</td><td>30×50×1.1T</td><td class="num">529</td><td class="num">2</td><td>①사이에 끼워 용접 · <b>세워서</b></td></tr>
+  <tr><td>③</td><td>세로 연결재</td><td>30×50×1.1T</td><td class="num">529</td><td class="num">4</td><td>좌측에서 300 / 600 / 900 / 1,200 · <b>세워서</b></td></tr>
+  <tr><td>④</td><td>다리</td><td>30×30×1.5T</td><td class="num">633</td><td class="num">4</td><td>4모서리</td></tr>
+  <tr><td>⑤</td><td>다리 하단 캡플레이트</td><td>SUS 2~3T · 40×40</td><td class="num">—</td><td class="num">4</td><td class="tbd">M8 너트 용접 (1.5T엔 탭 불가)</td></tr>
+  <tr><td>⑥</td><td>M8 수평조절 고무발</td><td class="ok">업체 원 사양 유지</td><td class="num">—</td><td class="num">4</td><td>고무 Ø30 내외</td></tr>
+  <tr class="bad"><td>⑦</td><td>하부 스트레처</td><td class="tbd">30×30×1.5T</td><td class="num">—</td><td class="num">3</td><td class="tbd"><b>검토 중</b> — 뒤 1,290 + 좌우 529×2, 바닥에서 120</td></tr>
+</table>
+<p class="note">
+  30×50×1.1T 소요 <b>5.87 m</b> (7.97 kg) · 30×30×1.5T 소요 <b>2.53 m</b> (3.43 kg) → <b>프레임 자중 약 11.4 kg</b><br>
+  ※ 스트레처를 넣으면 30각 1.5T가 2.35 m(3.2 kg) 추가되어 <b>약 14.6 kg</b>.<br>
+  ※ 높이 분해: 세라믹 12 + 프레임 50 + 다리 633 + 고무발 25 = <b>720</b>
+</p>
+
+<div class="warn">
+  <b>⚠ 제작 시 반드시 확인할 3가지</b>
+  <ul>
+    <li><b>30×50은 세워서.</b> 눕히면 처짐이 2.44 → 4.35mm로 나빠집니다. 도면의 모든 30×50이 해당됩니다.</li>
+    <li><b>세로 연결재는 상부 프레임과 윗면을 맞춰 용접.</b> 상판이 얹히는 면이 평평해야 합니다. 전 부재가 같은 30×50이므로 밑면도 자동으로 맞습니다.</li>
+    <li><b>1.1T·1.5T 모두 박판</b>이라 다리 접합부에 burn-through 주의. 저전류 TIG 단속 용접 권장.</li>
+  </ul>
+</div>
+
+<h2>4. 구조 계산</h2>
+<p class="note">
+  자중 <b>58 kg</b> = 세라믹 22.9 (1,350×589×12T) + 모니터 2대(스탠드) 15 + 물건 20<br>
+  사용하중은 <b>앞모서리 한가운데</b>에 거는 힘. 앞 긴 가로재가 75%를 받는 것으로 계산.
+</p>
+
+<div class="calc">
+  <b>■ 앞 긴 가로재 (30×50×1.1T · 스팬 1,350)</b> &nbsp; I = 59,484 mm⁴ · Z = 2,379 mm³<br><br>
+  <table style="margin:6px 0 0;font-size:12.5px;background:transparent">
+    <tr><th style="width:38%">앞모서리 하중</th><th style="width:20%">처짐</th><th style="width:20%">응력</th><th>안전율</th></tr>
+    <tr class="pick"><td><b>30 kg</b> — 팔꿈치 기대기 (일상)</td><td class="num"><b>1.78 mm</b></td><td class="num">51.5 MPa</td><td class="num"><b>3.98</b></td></tr>
+    <tr><td>50 kg — 체중 실어 짚기</td><td class="num">2.44 mm</td><td class="num">72.4 MPa</td><td class="num">2.83</td></tr>
+    <tr><td>80 kg — 모서리에 걸터앉음</td><td class="num">3.42 mm</td><td class="num">103.7 MPa</td><td class="num">1.98</td></tr>
+  </table>
+  <br>
+  <b>■ 나머지 부재 — 전부 여유</b><br>
+  &nbsp;&nbsp;세로 연결재 (529 스팬, 50kg 집중) → 처짐 <b class="ok">0.18 mm</b> · 안전율 <b class="ok">6.8</b><br>
+  &nbsp;&nbsp;다리 압축 (1개당 27kg) → <b class="ok">1.55 MPa</b> · 항복의 0.8% · 안전율 132<br>
+  &nbsp;&nbsp;다리 세장비 L/r = 633 ÷ 11.65 = <b class="ok">54</b> → 좌굴 무관 (100 이하)<br>
+  &nbsp;&nbsp;고무발 면압 (27kg ÷ Ø30) → <b class="ok">3.8 kg/cm²</b> — 바닥재에 무해<br>
+  &nbsp;&nbsp;세라믹 12T (300×589 패널, 50kg 집중) → 처짐 <b class="ok">0.05 mm</b> · 안전율 <b class="ok">15</b>
+</div>
+
+<h3>내하중 — 무엇이 먼저 한계에 닿나</h3>
+<table class="wide">
+  <tr><th style="width:40%">상황</th><th style="width:20%">한계</th><th>지배 요인</th></tr>
+  <tr class="pick"><td><b>상판 위에 고르게 적재</b></td><td class="num"><b>자중 외 약 236 kg</b></td><td class="ok">긴 가로재 휨 (안전율 2)</td></tr>
+  <tr><td>앞모서리 한 점 (안전율 2 기준)</td><td class="num">약 80 kg</td><td>긴 가로재 휨</td></tr>
+  <tr><td>앞모서리 굽힘 항복</td><td class="num">약 160 kg</td><td>긴 가로재</td></tr>
+  <tr><td>전도</td><td class="ok">해당 없음</td><td class="ok">다리가 4모서리에 있어 상판이 다리 밖으로 내밀리지 않음</td></tr>
+</table>
+<p class="note">세면대 프레임과 달리 <b>책상은 전도 걱정이 없습니다.</b> 다리가 상판 네 귀퉁이에 그대로 붙어 있어 회전축 바깥으로 나가는 하중이 없기 때문입니다.</p>
+
+<h2>5. 흔들림 (수평 강성) — 유일한 미결 항목</h2>
+<p class="note">처짐과는 <b>원인이 다른 별개 문제</b>입니다. 처짐은 상부 가로재가, 흔들림은 다리와 브레이싱이 결정합니다.</p>
+
+<table class="wide">
+  <tr><th style="width:44%">구성</th><th style="width:24%">10kg 밀 때</th><th>판정</th></tr>
+  <tr class="bad"><td>원안 — 30각 1.1T 다리, 브레이싱 없음</td><td class="num">0.89 mm</td><td class="tbd">타이핑 시 흔들림 체감</td></tr>
+  <tr><td><b>현재안</b> — 30각 1.5T 다리, 브레이싱 없음</td><td class="num"><b>0.68 mm</b></td><td class="tbd">여전히 체감됨</td></tr>
+  <tr class="pick"><td><b>현재안 + 하부 스트레처</b> (바닥에서 120)</td><td class="num"><b>0.10 mm</b></td><td class="ok">해결</td></tr>
+  <tr><td>(대안) 40각 1.5T 다리, 브레이싱 없음</td><td class="num">0.28 mm</td><td>발 공간 그대로 · 다리 규격 변경</td></tr>
+</table>
+
+<div class="calc">
+  <b>■ 왜 다리 두께로는 안 잡히나</b><br><br>
+  &nbsp;&nbsp;다리 두께 1.1 → 1.5T : 흔들림 0.89 → <b>0.68 mm</b> (23% 개선에 그침)<br>
+  &nbsp;&nbsp;하부 스트레처 추가 &nbsp;: 흔들림 0.68 → <b class="ok">0.10 mm</b> (85% 개선)<br><br>
+  브레이싱이 없으면 다리 4본이 <b>바닥에 핀으로 꽂힌 외팔보</b>처럼 거동합니다.
+  이때 강성은 <b>높이의 세제곱에 반비례</b>하는데 다리가 633mm로 길어서, 두께를 조금 올려서는 상쇄가 안 됩니다.<br>
+  스트레처를 바닥 근처에 넣으면 다리의 <b>유효 휨 길이가 633 → 513으로 줄고 양단 구속</b>이 되어 강성이 한 번에 6배가 됩니다.<br><br>
+  <b>→ 스트레처를 넣으면 다리 두께는 사실상 무의미해집니다</b> (1.1T + 스트레처 = 0.13mm, 1.5T + 스트레처 = 0.10mm).
+</div>
+
+<div class="warn">
+  <b>⚠ 미결 — 하부 스트레처 채택 여부 (업체 확인 중)</b><br>
+  넣으면 흔들림이 해결되지만 <b>바닥에서 120mm 높이에 가로대가 지나가 발 공간을 일부 침범</b>합니다.<br>
+  <b>넣는 경우</b> — 뒤 1,290 + 좌우 529×2, 30×30×1.5T, 약 3.2 kg 추가<br>
+  <b>안 넣는 경우</b> — 흔들림 0.68mm 감수, 또는 다리를 40각으로 변경(0.28mm)
+</div>
+
+<h2>6. 세라믹 상판 (12T · 합판 보강 없음)</h2>
+<table>
+  <tr><th>규격</th><td>1,350 × 589 × <b>12T</b> · 자중 약 22.9 kg · 밑에 합판 보강 없음</td></tr>
+  <tr><th>지지 조건</th><td class="ok">세로 연결재가 300 간격이라 세라믹 패널은 최대 <b>300 × 589</b><br>50kg 집중에 처짐 0.05mm · 안전율 15 — <b>세라믹은 전혀 문제되지 않습니다</b></td></tr>
+  <tr><th>모니터 암</th><td class="ok"><b>사용 안 함</b> — 모니터는 스탠드로 올림<br>(암 클램프를 쓰면 8kg 모니터를 500 뻗을 때 상판 뒷모서리에 상하 67kg이 집중되어 12T 세라믹에 위험합니다)</td></tr>
+  <tr><th>모서리 가공</th><td class="tbd">팔이 닿는 부위이므로 <b>노출 모서리 4면 면취(C 또는 R)</b> 필요. 세라믹 절단면은 미세균열이 많아 그대로 두면 손이 베이고 결손이 생깁니다</td></tr>
+  <tr><th>미끄럼 방지</th><td class="tbd">합판 없이 프레임 위에 그냥 얹히므로 <b>고정 방법 확정 필요</b> (논슬립 패드 또는 점접착)</td></tr>
+</table>
+
+<div class="ask">
+  <b>💬 제작 업체에 전달할 문장</b>
+  <ul>
+    <li>책상 프레임입니다. 1,350 × 589 × 높이 720, 위에 세라믹 12T 상판이 올라갑니다. <b>치수와 다리 위치(4모서리)는 주신 도면 그대로입니다.</b></li>
+    <li><b>상부 프레임 전부를 30×50×1.1T로, 반드시 "세워서"(50이 위아래 방향) 써주세요.</b> 눕혀 쓰면 처짐이 2배가 됩니다. 둘레 4본 + 세로 연결재 4본 모두 해당됩니다.</li>
+    <li>주신 30각 1.1T로는 앞모서리에 50kg만 걸려도 <b>8.2mm</b> 처지고, 80kg(모서리에 걸터앉음)에서는 항복합니다. 30×50 세워서 쓰면 2.4mm로 잡힙니다.</li>
+    <li><b>다리 4본은 30×30×1.5T</b>로 해주세요. 길이 633입니다.</li>
+    <li>세로 연결재는 <b>상부 프레임과 윗면을 맞춰</b> 용접해 주세요 (상판이 평평하게 앉아야 함).</li>
+    <li><b>발은 주신 M8 수평조절 고무발 그대로</b>입니다. 다만 1.5T 벽에는 M8 탭이 안 나므로(나사산 1.2개), 다리 하단을 <b>SUS 2~3T 캡플레이트(40×40)로 막고 M8 너트를 용접</b>해 주세요.</li>
+    <li>박판이라 다리 접합부는 <b>burn-through에 주의</b>해 주세요.</li>
+    <li class="tbd"><b>하부 스트레처를 넣을지 검토 중입니다.</b> 넣는다면 뒤 1,290 + 좌우 529×2를 30×30×1.5T로, 바닥에서 120 높이입니다. 견적을 있는 경우/없는 경우 둘 다 주시면 좋겠습니다.</li>
+  </ul>
+</div>
+
+<h2>7. 확정 필요 항목</h2>
+<table>
+  <tr><th class="tbd">하부 스트레처 채택 여부</th><td class="tbd"><b>업체 확인 중.</b> 없으면 흔들림 0.68mm 감수 / 있으면 0.10mm · +3.2kg · 발 공간 일부 침범 (5항)</td></tr>
+  <tr><th class="tbd">재질 (SUS vs 일반 강관)</th><td class="tbd">책상은 실내 건조 환경이라 <b>일반 강관 + 분체도장으로 충분</b>합니다. SUS로 견적받으셨다면 바꾸는 것만으로 크게 절감됩니다<br>(세면대 프레임은 욕실이라 SUS304가 필수 — 두 물건의 재질이 달라도 됩니다)</td></tr>
+  <tr><th class="tbd">세라믹 상판 고정 방법</th><td class="tbd">합판 보강이 없어 그냥 얹히는 구조. 논슬립 패드 또는 점접착 중 선택</td></tr>
+  <tr><th class="tbd">세라믹 모서리 가공</th><td class="tbd">노출 4면 면취(C 또는 R) 사양 확정 필요</td></tr>
+  <tr><th>상부 프레임</th><td class="ok">30×50×1.1T 세워서 확정</td></tr>
+  <tr><th>다리</th><td class="ok">30×30×1.5T · 4모서리 · L=633 확정</td></tr>
+  <tr><th>치수</th><td class="ok">1,350 × 589 × H720 확정 (업체 원안 유지)</td></tr>
+  <tr><th>모니터 암</th><td class="ok">사용 안 함 확정</td></tr>
+</table>
+
+<p class="note">우리집 인테리어 · 책상 프레임 제작 도면 · 치수 단위 mm</p>
+
+</div>
+</body>
+</html>
