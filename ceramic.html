@@ -24,12 +24,15 @@
   .cer-chip .id{font-size:11px;color:var(--muted);font-weight:700}
   .cer-chip .body{flex:1;min-width:0}
   .cer-chip .tag{display:inline-block;margin-left:6px;font-size:10.5px;padding:1px 7px;border-radius:99px;background:#fdecec;color:#c0392b;font-weight:700}
+  .cer-chip .tag.ok{background:#e3f4e0;color:#2f7a1f}
 
   .cer-scen{margin:32px 0 20px}
   .cer-scen-h{margin:0 0 6px;font-size:22px;font-weight:800;color:var(--accent);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .cer-scen-badge{display:inline-block;padding:3px 10px;border-radius:99px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;letter-spacing:.5px}
   .cer-scen-badge.b{background:#8e5a3a}
   .cer-scen-badge.art{background:#d15588}
+  .cer-scen-badge.camo{background:#6b56a0}
+  .cer-scen-badge.qty{background:#2f7a1f}
   .cer-scen-sub{margin:0 0 14px;font-size:14px;color:var(--muted)}
 
   .cer-slabs{display:grid;grid-template-columns:1fr;gap:16px}
@@ -42,7 +45,19 @@
   .cer-slab-util.hi{background:#e3f4e0;color:#2f7a1f}
   .cer-slab-util.md{background:#fdf0dd;color:#8b5a1a}
   .cer-slab-util.lo{background:#fdecec;color:#a83030}
+  .cer-slab-done{flex-shrink:0;padding:4px 10px;border-radius:99px;background:#e3f4e0;color:#2f7a1f;font-size:12px;font-weight:800;margin-right:6px}
+  .cer-slab.done{border-color:#bcd9b4;background:#fbfdfa}
   .cer-svg{width:100%;height:auto;display:block;border-radius:8px;background:#efe6d2}
+
+  /* 두 장을 위아래로 공백 없이 쌓아 결 연결을 보는 레이아웃 */
+  .cer-stack{display:grid;grid-template-columns:1fr;gap:0}
+  /* 2열 그리드의 카드 1장과 같은 폭으로 맞춤 (다른 원장들과 크기 통일) */
+  @media (min-width:900px){ .cer-stack{max-width:calc(50% - 8px)} }
+  .cer-stack .cer-slab:first-child{border-bottom:0;border-radius:14px 14px 0 0;padding-bottom:0}
+  .cer-stack .cer-slab:last-child{border-radius:0 0 14px 14px}
+  .cer-stack .cer-slab:first-child .cer-svg{border-radius:8px 8px 0 0}
+  .cer-stack .cer-slab:last-child  .cer-svg{border-radius:0 0 8px 8px}
+  .cer-stack .cer-slab:last-child .cer-slab-h{padding-top:10px}
 
   .cer-subsection{margin-top:16px}
   .cer-subsection-h{margin:0 0 8px;font-size:15px;font-weight:800;color:#8b5a1a;display:flex;align-items:center;gap:8px}
@@ -74,61 +89,87 @@
 <section><div class="wrap">
   <div class="sec-title">CERAMIC SLAB PLANNING</div>
   <h2 class="sec-head">세라믹 원장 계획</h2>
-  <p class="ov-lead">빅슬랩 3200 × 1600 기준. 필요 부재를 슬랩에 배치해서 발주 수량을 산정합니다. 2개 시나리오(통일 vs 분리).</p>
+  <p class="ov-lead">빅슬랩 3200 × 1600 기준. 종류·수량 확정 — <b>앙카라 3장 · 카모 화이트 1장 · 불가리 1장 = 총 5장</b>.</p>
 
   <!-- 원장 사양 -->
   <div class="cer-intro-grid">
     <div class="cer-stat"><div class="k">원장 사이즈</div><div class="v">3200 × 1600</div><div class="sub">1장 = 5.12㎡</div></div>
-    <div class="cer-stat"><div class="k">엘베 제약</div><div class="v">2400 이하</div><div class="sub">초과 부재는 조인 필요</div></div>
+    <div class="cer-stat"><div class="k">총 발주</div><div class="v">5장</div><div class="sub">앙카라 3 · 카모 1 · 불가리 1</div></div>
+    <div class="cer-stat"><div class="k">엘베 반입 한계</div><div class="v">2860</div><div class="sub">실측 — 2860까지 반입 확인</div></div>
     <div class="cer-stat"><div class="k">재단 간격</div><div class="v">10 ~ 20 mm</div><div class="sub">부재 사이 여유</div></div>
-    <div class="cer-stat"><div class="k">아트월(9번)</div><div class="v">별도 종류</div><div class="sub">단독 1장 (북매칭 시 2장)</div></div>
+  </div>
+
+  <!-- 종류별 배정 -->
+  <div class="cer-compare" style="margin-top:0">
+    <h3>🎨 종류별 배정</h3>
+    <table>
+      <thead><tr><th>세라믹</th><th>적용 부위</th><th class="num">수량</th></tr></thead>
+      <tbody>
+        <tr><td><b>앙카라</b></td><td>주방 벽면 · 주방 상판 · 아일랜드 · 졸리컷 · 책상 2 · 화장대 · 침대옆 2</td><td class="num">3장</td></tr>
+        <tr><td><b>카모 화이트</b></td><td>거실 장식장 · <span style="color:#7a6ba8;font-weight:700">식탁 (가안)</span></td><td class="num">1장</td></tr>
+        <tr><td><b>불가리</b></td><td>아트월 (1400 × 2380) · <span style="color:#c2557f;font-weight:700">사운드바 박스 4면 (가안)</span></td><td class="num">1장</td></tr>
+        <tr class="total"><td>합계</td><td></td><td class="num">5장</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- 부재 리스트 (색상 범례) -->
   <h3 style="margin:16px 0 8px;font-size:15px;color:var(--muted);font-weight:700;letter-spacing:.4px;text-transform:uppercase">부재 리스트</h3>
   <div id="cer-legend" class="cer-legend"></div>
 
-  <!-- 시나리오 A -->
-  <div id="cer-scen-a" class="cer-scen"></div>
+  <!-- 앙카라 -->
+  <div id="cer-ankara" class="cer-scen"></div>
 
-  <!-- 시나리오 B -->
-  <div id="cer-scen-b" class="cer-scen"></div>
+  <!-- 카모 화이트 -->
+  <div id="cer-camo" class="cer-scen"></div>
 
-  <!-- 아트월 공통 -->
-  <div id="cer-scen-art" class="cer-scen"></div>
+  <!-- 불가리 -->
+  <div id="cer-bulgari" class="cer-scen"></div>
 
-  <!-- 비교표 -->
+  <!-- 슬랩별 활용률 -->
   <div class="cer-compare">
-    <h3>📊 발주 수량 비교</h3>
+    <h3>📊 슬랩별 활용률</h3>
     <table>
-      <thead><tr><th>항목</th><th class="num">시나리오 A (통일)</th><th class="num">시나리오 B (분리)</th></tr></thead>
+      <thead><tr><th>슬랩</th><th>주요 부재</th><th class="num">활용률</th></tr></thead>
       <tbody>
-        <tr><td>메인 슬랩 최소</td><td class="num">4장</td><td class="num">5장 (X 3 + Y 2)</td></tr>
-        <tr><td>여유분 (파손·재작업)</td><td class="num">+1장</td><td class="num">+1~2장</td></tr>
-        <tr><td>아트월 (단독)</td><td class="num">1장</td><td class="num">1장</td></tr>
-        <tr><td>아트월 (북매칭 시)</td><td class="num">2장</td><td class="num">2장</td></tr>
-        <tr><td>슬랩 평균 활용률</td><td class="num">약 60%</td><td class="num">약 48%</td></tr>
-        <tr class="total"><td>권장 발주 수량</td><td class="num">6장</td><td class="num">7~8장</td></tr>
+        <tr><td>앙카라 1</td><td>주방 벽면 A·B <b style="color:#2f7a1f">— 시공 완료</b></td><td class="num">70%</td></tr>
+        <tr><td>앙카라 2</td><td><b style="color:#b8860b">상판 A + B (인접 재단 · 무늬 연속)</b> · 졸리컷 b1·b2 · 화장대 · 침대옆 2</td><td class="num">72%</td></tr>
+        <tr><td>앙카라 3</td><td>아일랜드 앞면 · 졸리컷 a · ㄱ자 팔 나머지 · 책상 2장</td><td class="num">62%</td></tr>
+        <tr><td>카모 화이트 1</td><td>거실 장식장 본체 + 상부 · <span style="color:#7a6ba8">식탁(가안)</span></td><td class="num">78%</td></tr>
+        <tr><td>불가리 1</td><td>아트월 1400×2380 · <span style="color:#c2557f">사운드바 박스 4면(가안)</span></td><td class="num">74%</td></tr>
+        <tr class="total"><td>합계</td><td>5장 · 평균 73%</td><td class="num">5장</td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 추천 -->
+  <!-- 확정 메모 -->
   <div class="cer-rec">
-    <h3>💡 추천</h3>
-    <p style="margin:0 0 10px;font-size:14px"><span class="pick">추천</span><b>시나리오 A (통일)</b> — 슬랩 1장 절약, 자투리 유동적 활용, 결·색 일관성.</p>
+    <h3>💡 배치 메모</h3>
     <ul>
-      <li><b>시나리오 B로 갈 경우</b>: 주방은 초고밀도·저흡수(오염·기름 저항) 라인, 나머지는 디자인 라인으로 스펙·가격 최적화 가능. 톤 대비를 의도할 때.</li>
-      <li><b>X-3 슬랩 낭비 주의</b>: 시나리오 B의 X-3(주방 상판 L자 팔) 슬랩은 활용률 24% — 남은 자투리로 X-1/X-2 파손분 커버해서 여유분 1장 줄일 수 있음.</li>
-      <li><b>아트월 북매칭</b>: 결이 뚜렷하면 2장 발주해서 좌우 대칭 패턴 (거울처럼). 결이 약하면 1장으로 충분.</li>
+      <li><b>앙카라 1은 이미 시공 완료</b> — 주방 벽면에 1400×650 · 1400×1900 두 장이 붙었음. <b>남은 자투리 양은 미확인</b> → 석재상에 잔재 보관 여부·크기 확인 필요. 자투리가 크면 앙카라 3의 부재 일부를 옮겨 담을 여지 있음.</li>
+      <li><b>책상은 1350 × 590 두 개</b> — 조인 불필요, 엘베 반입 문제 없음.</li>
+      <li><b>졸리컷은 아일랜드 오른쪽 면에만</b> 적용 — 밑으로 내린 앞면 옆(920×60)과 그 옆 상판 라인(2940×60) 두 곳뿐. 나머지 면은 졸리컷 없음.</li>
+      <li><b>2940 졸리컷은 조인 필요</b> — 엘베 반입 한계 2400 초과. 두 토막으로 나눠 반입 후 현장 접합.</li>
+      <li><b style="color:#b8860b">⚠ 결 맞춤</b> — 아일랜드 앞면은 상판에서 접혀 내려오므로 모서리에서 결이 이어져야 함. 슬랩 배경에 <b>실물 앙카라 텍스처</b>를 깔아 재단 위치별 결을 확인할 수 있게 함(실제 원장과는 다름 · 참고용). 주방 상판 전체 길이는 <b>3000</b>(본체 2350 + 팔 폭 650). 그런데 <b>앞면 920 + 상판 3000 = 3920</b>으로 원장 폭 3200을 넘음. 그래서 상판을 <b>2280 + 720</b>으로 쪼갬:
+        <ul style="margin:4px 0">
+          <li><b>앙카라 2</b>: 앞면 920 + 상판 A 2280 = <b>3200 한 줄</b> (원장 폭 꽉). <b>졸리컷은 각자 바로 밑</b> — 졸리컷 a(920)는 앞면 밑, 졸리컷 b1(2280)은 상판 A 밑 → 결이 정확히 이어짐</li>
+          <li><b>앙카라 3</b>: 나머지 <b>상판 B = 3000 − 2280 = 720 × 1000</b>, 그 밑에 졸리컷 b2(660). ㄱ자 팔 나머지(<b>900 × 650</b>)는 상판 B 왼쪽. <b>※ 팔·상판 B 배치는 사용자 조정 예정</b></li>
+          <li>검산: 상판 A 2280 + 상판 B 720 = <b>3000</b> ✓ / 팔 650×1000(코너에 포함) + 650×900 = <b>650×1900</b> ✓</li>
+        </ul>
+        ⚠️ 상판 A와 상판 B 사이에 <b>조인선</b>이 생김(상판 끝에서 2280 지점). 이 줄눈이 보이는 위치인지 확인 필요 — 싱크·인덕션 아래로 숨길 수 있으면 최선.</li>
+      <li><b style="color:#7a6ba8">식탁 · 사운드바 선반은 가안(점선 표시)</b> — 카모 화이트 여백(1720 × 1220)에 <b>식탁 1600 × 900</b>과 <b>사운드바 선반 1400 × 300</b>이 들어감. 슬랩 추가 없이 활용률 50% → <b>86%</b>. 거실 장식장과 같은 슬랩이라 톤이 통일됨. ※ 아일랜드(앙카라)와 식탁 톤을 맞추려면 <b>앙카라 4번째 장</b>이 필요.</li>
+      <li><b>사운드바 선반 치수 미확정</b> — 1400 × 300은 임시값. 삼성 사운드바 실제 길이 + 좌우 여유로 확정 필요. 세로 300은 슬랩 여백상 <b>최대치</b>라 더 깊게는 불가.</li>
+      <li><b>앙카라 2·3에 여유 공간 있음</b> — 파손 시 재단 여지가 남아 있어 별도 여유분 슬랩 없이 진행 가능. 다만 결·색을 맞춰야 하는 부재(책상 2장)는 파손 시 같은 슬랩에서 다시 못 뽑을 수 있음.</li>
     </ul>
   </div>
 
   <!-- 주의사항 -->
   <div class="cer-notice">
-    ⚠ <b>결·색 방향</b>: 위 배치는 결 방향 무시 상태. 결이 뚜렷한 세라믹이면 <b>90° 회전한 부재(1a-2, 5b, 아트월)</b>는 결이 어긋나 부자연스러울 수 있음 → 결 방향 고정하면 활용률 떨어져 +1장 필요할 수 있음.
+    ⚠ <b>결·색 방향</b>: 위 배치는 결 방향 무시 상태. 결이 뚜렷한 세라믹이면 <b>90° 회전한 부재(ㄱ자 팔·아일랜드 앞면·책상 1·아트월)</b>는 결이 어긋나 부자연스러울 수 있음 → 결 방향을 고정하면 활용률이 떨어져 슬랩이 더 필요할 수 있음.
     <br><br>
-    ⚠ <b>엘베 반입</b>: 원장을 3200 통으로 크레인/양중으로 반입 가능한지 업체 확인. 불가능하면 사전 재단 필요 → 3000×80(졸리컷)·2350×1000(주방 상판)·590×3200(책상)은 조인 처리.
+    ⚠ <b>책상 2장 결 매칭</b>: 책상 1(앙카라 2)과 책상 2(앙카라 3)가 <b>서로 다른 슬랩</b>에서 나옴. 두 개를 나란히 놓는다면 결·색이 튈 수 있으니, 같은 슬랩에서 뽑을지 석재상과 협의.
+    <br><br>
+    ⚠ <b>엘베 반입 한계 2860</b> (실측). 현재 부재 중 최장은 <b>상판 A 2280</b> · <b>졸리컷 b1 2280</b> · <b>아트월 2300</b> — 모두 통과. <b>상판을 3000 통짜로 뽑는 안은 엘베에 안 들어가므로 불가</b>(A 2280 + B 720 분할이 강제됨). 원장 3200 통 반입은 불가하니 <b>석재상에서 사전 재단 후 반입</b>.
     <br><br>
     ⚠ <b>최종 판짜기는 석재상</b>: 위 배치는 <b>발주량 산정용</b>. 실제 재단은 석재상에서 원장 결·색 실물 보고 CAD로 다시 짬.
   </div>
@@ -143,89 +184,100 @@
 /* ---------- 세라믹 계획 데이터 ---------- */
 (function () {
   const PIECES = {
-    "6":   { name: "책상",             color: "#4a8a5c", w: 3200, h: 590,  tag: "조인 필요" },
-    "7":   { name: "침대 옆 상판",       color: "#8bc48a", w: 350,  h: 150 },
-    "8":   { name: "화장대",           color: "#3a9b8b", w: 800,  h: 500 },
-    "1a1": { name: "주방 상판 본체",     color: "#d75a3c", w: 2350, h: 1000 },
-    "1a2": { name: "주방 상판 L자 팔",   color: "#f0a030", w: 650,  h: 1900 },
-    "2":   { name: "졸리컷",           color: "#a03030", w: 3000, h: 80,   tag: "분할 필요" },
-    "3":   { name: "아일랜드 옆면",       color: "#b06b3a", w: 1000, h: 920 },
-    "4":   { name: "주방 벽면",         color: "#e26533", w: 1900, h: 1380 },
-    "5a":  { name: "거실 장식장 본체",    color: "#6b56a0", w: 1460, h: 1380 },
-    "5b":  { name: "거실 장식장 상부",    color: "#a394c8", w: 1460, h: 360 },
-    "9":   { name: "아트월",           color: "#d15588", w: 1300, h: 2200, tag: "별도 종류" },
+    /* ── 앙카라 (3장) ── */
+    "1":  { name: "주방 벽면 A",        color: "#e26533", w: 1900, h: 1400, tag: "시공완료", tagOk: true },
+    "2":  { name: "주방 벽면 B",        color: "#f0a030", w: 650,  h: 1400, tag: "시공완료", tagOk: true },
+    "3a": { name: "주방 상판 A",        color: "#d75a3c", w: 2350, h: 1000 },
+    "3b": { name: "주방 상판 B (코너)",   color: "#e0714f", w: 650,  h: 1000, tag: "A와 통재단" },
+    "4b": { name: "ㄱ자 팔 나머지",       color: "#c9622a", w: 650,  h: 900,  tag: "코너 B 왼쪽" },
+    "5":  { name: "아일랜드 앞면",        color: "#b06b3a", w: 920,  h: 1000 },
+    "6a":  { name: "졸리컷 · 앞면 밑",    color: "#a03030", w: 920,  h: 60 },
+    "6b1": { name: "졸리컷 · 상판 A 밑",  color: "#8e2d2d", w: 2350, h: 60 },
+    "6b2": { name: "졸리컷 · 상판 B 밑",  color: "#7a2626", w: 590,  h: 60 },
+    "7":  { name: "책상",              color: "#4a8a5c", w: 1350, h: 590, qty: 2 },
+    "8":  { name: "화장대",            color: "#3a9b8b", w: 800,  h: 500 },
+    "9":  { name: "침대 옆 상판",        color: "#8bc48a", w: 350,  h: 150, qty: 2 },
+    /* ── 카모 화이트 (1장) ── */
+    "10": { name: "거실 장식장 본체",     color: "#6b56a0", w: 1460, h: 1380 },
+    "11": { name: "거실 장식장 상부",     color: "#a394c8", w: 1460, h: 360 },
+    /* ── 불가리 (1장) ── */
+    "12": { name: "아트월",             color: "#d15588", w: 1400, h: 2380 },
+    /* ── 가안 (미확정 · 점선 표시) ── */
+    "13": { name: "식탁",              color: "#7a6ba8", w: 1600, h: 900, tag: "가안", provisional: true },
+    /* 사운드바 박스 — 위·앞·옆 4면. L1400 × D200 × H100 가정 (치수 미확정) */
+    "14": { name: "사운드바 상판",       color: "#c2557f", w: 1400, h: 200, tag: "가안", provisional: true },
+    "15": { name: "사운드바 전면",       color: "#d1729a", w: 1400, h: 100, provisional: true },
+    "16": { name: "사운드바 측면",       color: "#de92b0", w: 200,  h: 100, qty: 2, provisional: true },
   };
 
-  const SLAB_A = [
-    { title: "슬랩 1", note: "책상 + 주방 상판 본체 + 화장대 + 침대옆", util: 93,
+  /* 앙카라 3장 — 주방·아일랜드 메인, 남는 자리에 책상·화장대·침대옆 */
+  const SLAB_ANKARA = [
+    { title: "앙카라 1", note: "주방 벽면 A · B — 이미 시공 완료 (잔재량 미확인)", util: 70, done: true,
+      texture: "images/앙카라.png", textureMirror: true,   // 상하반전 + 180° = 좌우반전
       pieces: [
-        { id: "6",   x: 0,    y: 0,    w: 3200, h: 590 },
-        { id: "1a1", x: 0,    y: 610,  w: 2350, h: 1000 },
-        { id: "8",   x: 2370, y: 610,  w: 800,  h: 500 },
-        { id: "7",   x: 2370, y: 1125, w: 350,  h: 150, sub: "1/2" },
-        { id: "7",   x: 2740, y: 1125, w: 350,  h: 150, sub: "2/2" },
+        { id: "2", x: 0,   y: 0, w: 650,  h: 1400 },
+        { id: "1", x: 670, y: 0, w: 1900, h: 1400 },
       ]},
-    { title: "슬랩 2", note: "아일랜드 옆면 + 주방 상판 L자 팔 + 졸리컷 1/2", util: 47,
+    { title: "앙카라 2", note: "상판 A · B 인접 재단(분절선 650 · 무늬 연속) + 졸리컷 각자 밑 + 화장대·침대옆 2", util: 72,
+      texture: "images/앙카라.png", textureRotate: 180,
       pieces: [
-        { id: "3",   x: 0,    y: 0,   w: 1000, h: 920 },
-        { id: "2",   x: 1020, y: 0,   w: 1500, h: 80,  sub: "1/2" },
-        { id: "1a2", x: 0,    y: 940, w: 1900, h: 650, rotated: true },
+        /* ── 위(우측 정렬): 상판 A · B 인접 재단(무늬 연속) · 분절선 650. B가 우측 끝 = 위 원장의 팔과 맞닿음 ── */
+        { id: "3a",  x: 200,  y: 0,    w: 2350, h: 1000 },
+        { id: "3b",  x: 2550, y: 0,    w: 650,  h: 1000 },
+        { id: "6b1", x: 200,  y: 1010, w: 2350, h: 60 },
+        { id: "6b2", x: 2550, y: 1010, w: 590,  h: 60 },
+        /* ── 아래: 화장대 · 침대옆 ── */
+        { id: "8",   x: 0,    y: 1090, w: 800,  h: 500 },
+        { id: "9",   x: 820,  y: 1090, w: 350,  h: 150, sub: "1/2" },
+        { id: "9",   x: 820,  y: 1260, w: 350,  h: 150, sub: "2/2" },
       ]},
-    { title: "슬랩 3", note: "주방 벽면 + 졸리컷 2/2", util: 52,
+    { title: "앙카라 3", note: "아일랜드 앞면(하단 정렬) + 졸리컷 a 바로 위 · ㄱ자 팔 나머지 · 책상 2장은 밝은 구역 배치", util: 62,
+      texture: "images/앙카라.png", textureMirror: true,   // 앙카라 1과 동일 (좌우 반전)
       pieces: [
-        { id: "4",   x: 0, y: 0,    w: 1900, h: 1380 },
-        { id: "2",   x: 0, y: 1400, w: 1500, h: 80, sub: "2/2" },
-      ]},
-    { title: "슬랩 4", note: "거실 장식장 (5a + 5b · 결 매칭)", util: 50,
-      pieces: [
-        { id: "5a", x: 0,    y: 0, w: 1460, h: 1380 },
-        { id: "5b", x: 1480, y: 0, w: 1460, h: 360 },
-      ]},
-  ];
-
-  const SLAB_B_X = [
-    { title: "슬랩 X-1", note: "주방 상판 본체 + 졸리컷 1/2", util: 51,
-      pieces: [
-        { id: "1a1", x: 0, y: 0,    w: 2350, h: 1000 },
-        { id: "2",   x: 0, y: 1020, w: 1500, h: 80, sub: "1/2" },
-      ]},
-    { title: "슬랩 X-2", note: "주방 벽면 + 아일랜드 옆면 + 졸리컷 2/2", util: 76,
-      pieces: [
-        { id: "4",   x: 0,    y: 0,    w: 1900, h: 1380 },
-        { id: "3",   x: 1920, y: 0,    w: 1000, h: 920 },
-        { id: "2",   x: 0,    y: 1400, w: 1500, h: 80, sub: "2/2" },
-      ]},
-    { title: "슬랩 X-3", note: "주방 상판 L자 팔 (단독 · 활용률 낮음)", util: 24,
-      pieces: [
-        { id: "1a2", x: 0, y: 0, w: 1900, h: 650, rotated: true },
+        /* ㄱ자 팔 나머지 = 맨 밑 우측 (아래 원장의 상판 B와 맞닿아 결 연결) */
+        { id: "4b",  x: 2550, y: 700,  w: 650,  h: 900 },
+        /* 아일랜드 앞면 = 상판 A와 같은 x=200에서 시작 · 하단 정렬 → 아래 원장 상판 A와 맞닿음
+           졸리컷 a는 앞면 바로 위 → 접었을 때 무늬가 이어짐 */
+        { id: "6a",  x: 200,  y: 530,  w: 920,  h: 60 },
+        { id: "5",   x: 200,  y: 600,  w: 920,  h: 1000 },
+        /* 책상 2장 = 무늬 연속 포기. 원장에서 가장 밝은(흰) 구역에 배치 */
+        { id: "7",   x: 1850, y: 0,    w: 1350, h: 590, sub: "1/2" },
+        { id: "7",   x: 1180, y: 740,  w: 1350, h: 590, sub: "2/2" },
       ]},
   ];
 
-  const SLAB_B_Y = [
-    { title: "슬랩 Y-1", note: "책상 + 화장대 + 침대옆", util: 47,
+  /* 카모 화이트 1장 — 거실 장식장 전용 */
+  const SLAB_CAMO = [
+    { title: "카모 화이트 1", note: "본체·상부 90° 회전해 1460변끼리 인접 재단(무늬 연속) + 식탁(가안)", util: 78,
+      texture: "images/카모화이트.png", textureRotate: 90,   // 원본이 세로 1:2 → 90° 회전해야 원장에 맞음
       pieces: [
-        { id: "6", x: 0,    y: 0,    w: 3200, h: 590 },
-        { id: "8", x: 2370, y: 610,  w: 800,  h: 500 },
-        { id: "7", x: 2370, y: 1125, w: 350,  h: 150, sub: "1/2" },
-        { id: "7", x: 2740, y: 1125, w: 350,  h: 150, sub: "2/2" },
-      ]},
-    { title: "슬랩 Y-2", note: "거실 장식장 (5a + 5b · 결 매칭)", util: 50,
-      pieces: [
-        { id: "5a", x: 0,    y: 0, w: 1460, h: 1380 },
-        { id: "5b", x: 1480, y: 0, w: 1460, h: 360 },
+        /* 본체·상부 둘 다 90° 회전 → 1460 변끼리 맞대어 인접 재단 (본체 하부 ↔ 상부 위쪽 무늬 연속) */
+        { id: "10", x: 0,    y: 0, w: 1380, h: 1460, rotated: true },
+        { id: "11", x: 1380, y: 0, w: 360,  h: 1460, rotated: true },
+        { id: "13", x: 1760, y: 0, w: 900,  h: 1600, rotated: true },
       ]},
   ];
 
-  const SLAB_ART = { title: "슬랩 α", note: "아트월 단독 · 별도 세라믹 종류", util: 56,
-    pieces: [
-      { id: "9", x: 0, y: 0, w: 2200, h: 1300, rotated: true },
-    ]};
+  /* 불가리 1장 — 아트월 전용 */
+  const SLAB_BULGARI = [
+    { title: "불가리 1", note: "아트월 1400 × 2380 + 사운드바 박스 4면 (가안) · 남는 자투리로 해결", util: 74,
+      // 불가리는 명암 대비가 강해 글씨가 묻힘 → 부재 채움을 진하게 + 텍스처는 살짝 낮춤
+      texture: "images/불가리.png", textureRotate: 90, fillOpacity: 0.58, texOpacity: 0.8,
+      pieces: [
+        { id: "12", x: 0,    y: 100,  w: 2380, h: 1400, rotated: true },
+        { id: "14", x: 2400, y: 0,    w: 200,  h: 1400, rotated: true },
+        { id: "15", x: 2620, y: 0,    w: 100,  h: 1400, rotated: true },
+        { id: "16", x: 2740, y: 0,    w: 200,  h: 100,  sub: "좌" },
+        { id: "16", x: 2740, y: 120,  w: 200,  h: 100,  sub: "우" },
+      ]},
+  ];
 
   /* ---------- SVG 렌더링 ---------- */
   const W = 3200, H = 1600;
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-  function pieceSVG(p) {
+  function pieceSVG(p, texFill) {
+    const hasTex = !!texFill;
     const meta = PIECES[p.id]; if (!meta) return "";
     const cx = p.x + p.w/2, cy = p.y + p.h/2;
     const short = Math.min(p.w, p.h);
@@ -233,14 +285,31 @@
     const isTiny  = p.w < 500 && p.h < 300;
     const isThin  = !isTiny && short < 200;
     const isSmall = !isTiny && !isThin && short < 500;
+    const prov = !!meta.provisional;                          // 가안 = 점선
+    // 텍스처가 깔린 슬랩은 채움을 아주 연하게 + 테두리를 부재색으로 굵게 → 무늬가 비쳐 보임
+    const TX = prov ? "#3a2a55" : (hasTex ? "#2c1810" : "#fff");
+    // 텍스처 위 글자 가독성: 흰색 외곽선(헤일로)
+    const HALO = hasTex ? ' stroke="#ffffff" stroke-width="11" stroke-opacity="0.9" paint-order="stroke" stroke-linejoin="round"' : "";
     let s = "";
     // 부재 사각형
-    s += `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="${meta.color}" stroke="#2c1810" stroke-width="8" rx="14"/>`;
+    s += prov
+      ? `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="${meta.color}" fill-opacity="0.22" stroke="${meta.color}" stroke-width="14" stroke-dasharray="70 45" stroke-linecap="round" rx="14"/>`
+      : hasTex
+      ? `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="${meta.color}" fill-opacity="${texFill}" stroke="${meta.color}" stroke-width="16" rx="14"/>`
+      : `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="${meta.color}" stroke="#2c1810" stroke-width="8" rx="14"/>`;
+    // 세로로 길고 좁은 부재: 글자를 90° 눕혀 길이 방향으로 → 박스 밖으로 안 넘침
+    if (p.h > p.w && short < 520) {
+      const fs = Math.max(34, Math.min(64, p.w * 0.34));
+      const label = `${esc(p.id)} · ${esc(meta.name)} · ${meta.w}×${meta.h}`
+        + (p.sub ? ` (${esc(p.sub)})` : "");
+      s += `<text x="${cx}" y="${cy}" transform="rotate(-90 ${cx} ${cy})" text-anchor="middle" dominant-baseline="central" font-size="${fs}" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${label}</text>`;
+      return s;
+    }
     if (isTiny) {
       // 아주 작음: ID + 이름 한 줄 (작게)
-      s += `<text x="${cx}" y="${cy - 22}" text-anchor="middle" dominant-baseline="central" font-size="48" font-weight="800" fill="#fff">${esc(p.id)}</text>`;
-      s += `<text x="${cx}" y="${cy + 26}" text-anchor="middle" dominant-baseline="central" font-size="36" font-weight="700" fill="#fff" opacity="0.9">${esc(meta.name)}</text>`;
-      if (p.sub) s += `<text x="${p.x + p.w - 10}" y="${p.y + p.h - 12}" text-anchor="end" font-size="28" font-weight="700" fill="#fff" opacity="0.8">${esc(p.sub)}</text>`;
+      s += `<text x="${cx}" y="${cy - 22}" text-anchor="middle" dominant-baseline="central" font-size="48" font-weight="800" fill="${TX}"${HALO}>${esc(p.id)}</text>`;
+      s += `<text x="${cx}" y="${cy + 26}" text-anchor="middle" dominant-baseline="central" font-size="36" font-weight="700" fill="${TX}"${HALO} opacity="0.9">${esc(meta.name)}</text>`;
+      if (p.sub) s += `<text x="${p.x + p.w - 10}" y="${p.y + p.h - 12}" text-anchor="end" font-size="28" font-weight="700" fill="${TX}"${HALO} opacity="0.8">${esc(p.sub)}</text>`;
       return s;
     }
     // ID 뱃지
@@ -250,19 +319,19 @@
     }
     if (isThin) {
       // 얇은 스트립: 한 줄
-      s += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="60" font-weight="800" fill="#fff" font-family="system-ui,-apple-system,sans-serif">${esc(p.id)} · ${esc(meta.name)} · ${meta.w}×${meta.h}${p.sub ? " ("+p.sub+")" : ""}</text>`;
+      s += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="60" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(p.id)} · ${esc(meta.name)} · ${meta.w}×${meta.h}${p.sub ? " ("+p.sub+")" : ""}</text>`;
     } else if (isSmall) {
       // 중간 부재: 이름 + 치수
-      s += `<text x="${cx}" y="${cy - 20}" text-anchor="middle" dominant-baseline="central" font-size="80" font-weight="800" fill="#fff" font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
-      s += `<text x="${cx}" y="${cy + 60}" text-anchor="middle" dominant-baseline="central" font-size="56" fill="#fff" opacity="0.9" font-family="system-ui,-apple-system,sans-serif">${meta.w}×${meta.h}</text>`;
-      if (p.sub) s += `<text x="${p.x + p.w - 28}" y="${p.y + p.h - 28}" text-anchor="end" font-size="46" font-weight="700" fill="#fff" opacity="0.85">${esc(p.sub)}</text>`;
+      s += `<text x="${cx}" y="${cy - 20}" text-anchor="middle" dominant-baseline="central" font-size="80" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
+      s += `<text x="${cx}" y="${cy + 60}" text-anchor="middle" dominant-baseline="central" font-size="56" fill="${TX}"${HALO} opacity="0.9" font-family="system-ui,-apple-system,sans-serif">${meta.w}×${meta.h}</text>`;
+      if (p.sub) s += `<text x="${p.x + p.w - 28}" y="${p.y + p.h - 28}" text-anchor="end" font-size="46" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${esc(p.sub)}</text>`;
     } else {
       // 큰 부재: 이름 + 치수 + 회전 + 태그
-      s += `<text x="${cx}" y="${cy - 40}" text-anchor="middle" dominant-baseline="central" font-size="130" font-weight="800" fill="#fff" font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
-      const dims = `${meta.w} × ${meta.h}${p.rotated ? "  ⟳ 90°" : ""}`;
-      s += `<text x="${cx}" y="${cy + 100}" text-anchor="middle" dominant-baseline="central" font-size="90" fill="#fff" opacity="0.94" font-family="system-ui,-apple-system,sans-serif">${dims}</text>`;
-      if (p.sub) s += `<text x="${p.x + p.w - 30}" y="${p.y + p.h - 40}" text-anchor="end" font-size="62" font-weight="700" fill="#fff" opacity="0.85">${esc(p.sub)}</text>`;
-      if (meta.tag) s += `<text x="${p.x + 160}" y="${p.y + 80}" font-size="52" font-weight="700" fill="#fff" opacity="0.85">⚠ ${esc(meta.tag)}</text>`;
+      s += `<text x="${cx}" y="${cy - 40}" text-anchor="middle" dominant-baseline="central" font-size="130" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
+      const dims = `${meta.w} × ${meta.h}`;
+      s += `<text x="${cx}" y="${cy + 100}" text-anchor="middle" dominant-baseline="central" font-size="90" fill="${TX}"${HALO} opacity="0.94" font-family="system-ui,-apple-system,sans-serif">${dims}</text>`;
+      if (p.sub) s += `<text x="${p.x + p.w - 30}" y="${p.y + p.h - 40}" text-anchor="end" font-size="62" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${esc(p.sub)}</text>`;
+      if (meta.tag) s += `<text x="${p.x + 160}" y="${p.y + 80}" font-size="52" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${meta.tagOk ? "✓" : "⚠"} ${esc(meta.tag)}</text>`;
     }
     return s;
   }
@@ -278,10 +347,29 @@
     </defs>`;
     // 원장 배경 (여백 패턴)
     s += `<rect x="0" y="0" width="${W}" height="${H}" fill="url(#waste-${slab.title.replace(/\W/g,'')})"/>`;
+    // 실물 세라믹 결 텍스처 (있으면 흐리게 깔기)
+    if (slab.texture) {
+      const r = slab.textureRotate || 0;
+      const swap = (r % 180) !== 0;                 // 90·270도면 가로세로 바꿔 그린 뒤 회전해야 원장을 꽉 채움
+      const iw = swap ? H : W, ih = swap ? W : H;
+      const tf = [];
+      if (r) tf.push(`rotate(${r} ${W/2} ${H/2})`);
+      if (slab.textureMirror) tf.push(`translate(${W} 0) scale(-1 1)`);   // 좌우 반전 (북매칭)
+      if (slab.textureFlip)   tf.push(`translate(0 ${H}) scale(1 -1)`);   // 상하 반전
+      const rot = tf.length ? ` transform="${tf.join(" ")}"` : "";
+      s += `<image href="${esc(slab.texture)}" x="${(W-iw)/2}" y="${(H-ih)/2}" width="${iw}" height="${ih}" preserveAspectRatio="xMidYMid slice" opacity="${slab.texOpacity ?? 0.95}"${rot}/>`;
+    }
     // 원장 외곽선
     s += `<rect x="10" y="10" width="${W-20}" height="${H-20}" fill="none" stroke="#5a3a22" stroke-width="20" rx="8"/>`;
+    // 결 방향 표시 (원장 장변 = 3200 방향)
+    s += `<g opacity="0.42">
+      <line x1="90" y1="${H-105}" x2="720" y2="${H-105}" stroke="#5a3a22" stroke-width="9" stroke-dasharray="34 22"/>
+      <path d="M720 ${H-105} l-46 -26 v52 z" fill="#5a3a22"/>
+      <text x="90" y="${H-135}" font-size="44" font-weight="800" fill="#5a3a22">결 방향</text>
+    </g>`;
     // 부재들
-    slab.pieces.forEach(p => { s += pieceSVG(p); });
+    // 텍스처가 있으면 부재 채움 농도(기본 0.20). 무늬가 강한 원장은 slab.fillOpacity로 올려 글씨 가독성 확보
+    slab.pieces.forEach(p => { s += pieceSVG(p, slab.texture ? (slab.fillOpacity ?? 0.20) : 0); });
     // 원장 크기 축 표시 (오른쪽·아래)
     s += `<text x="${W-40}" y="${H-40}" text-anchor="end" font-size="46" fill="#5a3a22" opacity="0.55" font-weight="700">3200 × 1600 · 5.12㎡</text>`;
     s += `</svg>`;
@@ -295,13 +383,16 @@
   }
 
   function slabCard(slab) {
-    return `<div class="cer-slab">
+    const done = slab.done ? `<span class="cer-slab-done">✓ 시공완료</span>` : "";
+    return `<div class="cer-slab${slab.done ? " done" : ""}">
       <div class="cer-slab-h">
         <div>
           <h4 class="cer-slab-title">${esc(slab.title)}</h4>
           <p class="cer-slab-note">${esc(slab.note)}</p>
         </div>
-        <span class="cer-slab-util ${utilClass(slab.util)}">활용 ${slab.util}%</span>
+        <div style="display:flex;align-items:center;flex-shrink:0">
+          ${done}<span class="cer-slab-util ${utilClass(slab.util)}">활용 ${slab.util}%</span>
+        </div>
       </div>
       ${slabSVG(slab)}
     </div>`;
@@ -309,59 +400,54 @@
 
   function renderLegend() {
     const el = document.getElementById("cer-legend"); if (!el) return;
-    const order = ["6","7","8","1a1","1a2","2","3","4","5a","5b","9"];
+    const order = ["1","2","5","3a","3b","4b","6a","6b1","6b2","7","8","9","10","11","12","13","14","15","16"];
     el.innerHTML = order.map(id => {
       const p = PIECES[id];
-      const tag = p.tag ? ` <span class="tag">${esc(p.tag)}</span>` : "";
+      const tag = p.tag ? ` <span class="tag${p.tagOk ? " ok" : ""}">${esc(p.tag)}</span>` : "";
       return `<div class="cer-chip">
         <div class="sw" style="background:${p.color}"></div>
         <div class="body">
           <div class="name"><span class="id">${esc(id)}</span> · ${esc(p.name)}${tag}</div>
-          <div class="dim">${p.w} × ${p.h} mm</div>
+          <div class="dim">${p.w} × ${p.h} mm${p.qty ? ` · ${p.qty}개` : ""}</div>
         </div>
       </div>`;
     }).join("");
   }
 
-  function renderScenarioA() {
-    const el = document.getElementById("cer-scen-a"); if (!el) return;
+  function renderAnkara() {
+    const el = document.getElementById("cer-ankara"); if (!el) return;
     el.innerHTML = `
-      <h3 class="cer-scen-h"><span class="cer-scen-badge">시나리오 A</span>통일 · 아트월 제외 전부 같은 세라믹</h3>
-      <p class="cer-scen-sub">메인 4장 + 아트월 별도 1장. 자투리 공용 활용 가능.</p>
-      <div class="cer-slabs">${SLAB_A.map(slabCard).join("")}</div>
+      <h3 class="cer-scen-h"><span class="cer-scen-badge">앙카라</span><span class="cer-scen-badge qty">3장</span>주방 · 아일랜드 메인</h3>
+      <p class="cer-scen-sub">주방 벽면과 아일랜드가 메인. 남는 자리에 책상 2장 · 화장대 · 침대 옆 상판 2장을 채워 넣음. 1번 슬랩은 이미 시공 완료.</p>
+      <div class="cer-slabs">${SLAB_ANKARA.filter(s => s.done).map(slabCard).join("")}</div>
+      <p class="cer-scen-sub" style="margin:18px 0 8px;color:#8b5a1a;font-weight:700">↕ 아래 두 장은 위아래로 맞붙임 — <b>앙카라 3 하단 우측(ㄱ자 팔)</b> ↔ <b>앙카라 2 상단 우측(상판 B)</b> 가 이어집니다</p>
+      <div class="cer-stack">${SLAB_ANKARA.filter(s => !s.done).slice().reverse().map(slabCard).join("")}</div>
     `;
   }
 
-  function renderScenarioB() {
-    const el = document.getElementById("cer-scen-b"); if (!el) return;
+  function renderCamo() {
+    const el = document.getElementById("cer-camo"); if (!el) return;
     el.innerHTML = `
-      <h3 class="cer-scen-h"><span class="cer-scen-badge b">시나리오 B</span>분리 · 주방 · 거실장식장(+침실) 다른 종류</h3>
-      <p class="cer-scen-sub">주방(X) 3장 + 거실장식장·침실(Y) 2장 = 메인 5장 + 아트월 별도 1장. 같은 부재의 분할 조각은 같은 슬랩 종류로.</p>
-      <div class="cer-subsection">
-        <h4 class="cer-subsection-h"><span class="stripe"></span>Type X · 주방 세라믹 (3장)</h4>
-        <div class="cer-slabs">${SLAB_B_X.map(slabCard).join("")}</div>
-      </div>
-      <div class="cer-subsection">
-        <h4 class="cer-subsection-h y"><span class="stripe"></span>Type Y · 거실장식장 + 침실 세라믹 (2장)</h4>
-        <div class="cer-slabs">${SLAB_B_Y.map(slabCard).join("")}</div>
-      </div>
+      <h3 class="cer-scen-h"><span class="cer-scen-badge camo">카모 화이트</span><span class="cer-scen-badge qty">1장</span>거실 장식장</h3>
+      <p class="cer-scen-sub">본체와 상부를 90° 회전해 1460 변끼리 맞대어 인접 재단 — 본체 하부와 상부 위쪽의 무늬가 이어짐. 남는 자리에 식탁 1600 × 900(가안).</p>
+      <div class="cer-slabs">${SLAB_CAMO.map(slabCard).join("")}</div>
     `;
   }
 
-  function renderArtWall() {
-    const el = document.getElementById("cer-scen-art"); if (!el) return;
+  function renderBulgari() {
+    const el = document.getElementById("cer-bulgari"); if (!el) return;
     el.innerHTML = `
-      <h3 class="cer-scen-h"><span class="cer-scen-badge art">공통</span>아트월 · 별도 세라믹 종류</h3>
-      <p class="cer-scen-sub">시나리오 A·B 공통. 아트월은 별도 종류라 항상 슬랩 1장 (북매칭 원하면 2장).</p>
-      <div class="cer-slabs">${slabCard(SLAB_ART)}</div>
+      <h3 class="cer-scen-h"><span class="cer-scen-badge art">불가리</span><span class="cer-scen-badge qty">1장</span>아트월</h3>
+      <p class="cer-scen-sub">1400 × 2380 아트월. 세로 2380이 원장 높이 1600을 넘어 90° 회전 배치. 남는 자투리(880 × 1600)에 사운드바 박스 4면을 채움 — 추가 발주 없음.</p>
+      <div class="cer-slabs">${SLAB_BULGARI.map(slabCard).join("")}</div>
     `;
   }
 
   function boot() {
     renderLegend();
-    renderScenarioA();
-    renderScenarioB();
-    renderArtWall();
+    renderAnkara();
+    renderCamo();
+    renderBulgari();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
