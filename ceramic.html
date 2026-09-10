@@ -25,6 +25,7 @@
   .cer-chip .body{flex:1;min-width:0}
   .cer-chip .tag{display:inline-block;margin-left:6px;font-size:10.5px;padding:1px 7px;border-radius:99px;background:#fdecec;color:#c0392b;font-weight:700}
   .cer-chip .tag.ok{background:#e3f4e0;color:#2f7a1f}
+  .cer-chip .tag.mv{background:#eef1f5;color:#5a6b7d}
 
   .cer-scen{margin:32px 0 20px}
   .cer-scen-h{margin:0 0 6px;font-size:22px;font-weight:800;color:var(--accent);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -133,11 +134,11 @@
       <thead><tr><th>슬랩</th><th>주요 부재</th><th class="num">활용률</th></tr></thead>
       <tbody>
         <tr><td>앙카라 1</td><td>주방 벽면 A·B <b style="color:#2f7a1f">— 시공 완료</b></td><td class="num">70%</td></tr>
-        <tr><td>앙카라 2</td><td><b style="color:#b8860b">상판 A + B (인접 재단 · 무늬 연속)</b> · 졸리컷 b1·b2 · 화장대 · 침대옆 2 · 신발장</td><td class="num">86%</td></tr>
-        <tr><td>앙카라 3</td><td>아일랜드 앞면 · 졸리컷 a · ㄱ자 팔 나머지 · 책상 2장</td><td class="num">62%</td></tr>
-        <tr><td>카모 화이트 1</td><td>거실 장식장 본체 + 상부 · <span style="color:#7a6ba8">식탁(가안)</span></td><td class="num">78%</td></tr>
+        <tr><td>앙카라 2</td><td>아일랜드 앞면 · 졸리컷 a · ㄱ자 팔 · 화장대 · 책상 2장</td><td class="num">69%</td></tr>
+        <tr><td>앙카라 3</td><td><b style="color:#b8860b">상판 A + B (인접 재단 · 무늬 연속)</b> · 졸리컷 b1·b2 · 침대옆 2 · 신발장</td><td class="num">78%</td></tr>
+        <tr><td>카모 화이트 1</td><td>거실 장식장 본체 + 상부 · <span style="color:#7a6ba8">식탁(가안)</span></td><td class="num">66%</td></tr>
         <tr><td>불가리 1</td><td>아트월 1400×2380 · <span style="color:#c2557f">사운드바 박스 4면(가안)</span></td><td class="num">74%</td></tr>
-        <tr class="total"><td>합계</td><td>5장 · 평균 76%</td><td class="num">5장</td></tr>
+        <tr class="total"><td>합계</td><td>5장 · 평균 71%</td><td class="num">5장</td></tr>
       </tbody>
     </table>
   </div>
@@ -191,20 +192,20 @@
     "3b": { name: "주방 상판 B (코너)",   color: "#e0714f", w: 650,  h: 1000, tag: "A와 통재단" },
     "4b": { name: "ㄱ자 팔 나머지",       color: "#c9622a", w: 650,  h: 900,  tag: "코너 B 왼쪽" },
     "5":  { name: "아일랜드 앞면",        color: "#b06b3a", w: 920,  h: 1000 },
-    "6a":  { name: "졸리컷 · 앞면 밑",    color: "#a03030", w: 920,  h: 70 },
-    "6b1": { name: "졸리컷 · 상판 A 밑",  color: "#8e2d2d", w: 2290, h: 70 },
+    "6a":  { name: "졸리컷 · 앞면 밑",    color: "#a03030", w: 860,  h: 70 },
+    "6b1": { name: "졸리컷 · 상판 A 밑",  color: "#8e2d2d", w: 2350, h: 70 },
     "6b2": { name: "졸리컷 · 상판 B 밑",  color: "#7a2626", w: 650,  h: 70 },
-    "7":  { name: "책상",              color: "#4a8a5c", w: 1350, h: 590, qty: 2 },
-    "8":  { name: "화장대",            color: "#3a9b8b", w: 800,  h: 500 },
-    "9":  { name: "침대 옆 상판",        color: "#8bc48a", w: 350,  h: 150, qty: 2 },
-    "17": { name: "신발장 가운데",       color: "#9b8b5a", w: 1840, h: 376 },
+    "7":  { name: "책상",              color: "#4a8a5c", w: 1350, h: 590, qty: 2, movable: true },
+    "8":  { name: "화장대",            color: "#3a9b8b", w: 800,  h: 500, movable: true },
+    "9":  { name: "침대 옆 상판",        color: "#8bc48a", w: 350,  h: 150, qty: 2, movable: true },
+    "17": { name: "신발장 가운데",       color: "#9b8b5a", w: 1840, h: 376, movable: true },
     /* ── 카모 화이트 (1장) ── */
     "10": { name: "거실 장식장 본체",     color: "#6b56a0", w: 1380, h: 1460 },
     "11": { name: "거실 장식장 상부",     color: "#a394c8", w: 360,  h: 1460 },
     /* ── 불가리 (1장) ── */
     "12": { name: "아트월",             color: "#d15588", w: 1400, h: 2380 },
     /* ── 가안 (미확정 · 점선 표시) ── */
-    "13": { name: "식탁",              color: "#7a6ba8", w: 900,  h: 1600, tag: "가안", provisional: true },
+    "13": { name: "식탁",              color: "#7a6ba8", w: 1200, h: 700, tag: "가안", provisional: true },
     /* 사운드바 박스 — 위·앞·옆 4면. 삼성 HW-Q990 본체 1232 × 70.8 × 138 기준
        선반 L1400(아트월 폭과 동일 · 좌우 여유 84) × D200(깊이 여유 62) × H100 */
     "14": { name: "사운드바 상판",       color: "#c2557f", w: 1400, h: 200, tag: "HW-Q990", provisional: true },
@@ -220,44 +221,47 @@
         { id: "2", x: 0,   y: 0, w: 650,  h: 1400 },
         { id: "1", x: 670, y: 0, w: 1900, h: 1400 },
       ]},
-    { title: "앙카라 2", note: "상판 A · B 인접 재단(분절선 650 · 무늬 연속) + 졸리컷 각자 밑 + 화장대 · 침대옆 2 · 신발장", util: 86,
-      texture: "images/앙카라.png", textureRotate: 180,
-      pieces: [
-        /* ── 위(우측 정렬): 상판 A · B 인접 재단(무늬 연속) · 분절선 650. B가 우측 끝 = 위 원장의 팔과 맞닿음 ── */
-        { id: "3a",  x: 200,  y: 0,    w: 2350, h: 1000 },
-        { id: "3b",  x: 2550, y: 0,    w: 650,  h: 1000 },
-        { id: "6b1", x: 260,  y: 1010, w: 2290, h: 70 },
-        { id: "6b2", x: 2550, y: 1010, w: 650,  h: 70 },
-        /* ── 아래: 화장대 · 침대옆 ── */
-        { id: "8",   x: 0,    y: 1090, w: 800,  h: 500 },
-        { id: "9",   x: 820,  y: 1090, w: 350,  h: 150, sub: "1/2" },
-        { id: "9",   x: 820,  y: 1260, w: 350,  h: 150, sub: "2/2" },
-        { id: "17",  x: 1190, y: 1100, w: 1840, h: 376 },
-      ]},
-    { title: "앙카라 3", note: "아일랜드 앞면(하단 정렬) + 졸리컷 a 바로 위 · ㄱ자 팔 나머지 · 책상 2장은 밝은 구역 배치", util: 62,
+    /* ▼ 아래 두 장은 위아래로 맞붙여 렌더 — 배열 순서 = 위에서 아래 순서 */
+    { title: "앙카라 2", note: "아일랜드 앞면(하단 정렬) + 졸리컷 a 바로 위 · ㄱ자 팔 나머지 · 화장대 · 책상 2장은 밝은 구역", util: 69,
       texture: "images/앙카라.png", textureMirror: true,   // 앙카라 1과 동일 (좌우 반전)
       pieces: [
         /* ㄱ자 팔 나머지 = 맨 밑 우측 (아래 원장의 상판 B와 맞닿아 결 연결) */
         { id: "4b",  x: 2550, y: 700,  w: 650,  h: 900 },
         /* 아일랜드 앞면 = 상판 A와 같은 x=200에서 시작 · 하단 정렬 → 아래 원장 상판 A와 맞닿음
            졸리컷 a는 앞면 바로 위 → 접었을 때 무늬가 이어짐 */
-        { id: "6a",  x: 200,  y: 520,  w: 920,  h: 70 },
+        { id: "6a",  x: 200,  y: 520,  w: 860,  h: 70 },
         { id: "5",   x: 200,  y: 600,  w: 920,  h: 1000 },
         /* 책상 2장 = 무늬 연속 포기. 원장에서 가장 밝은(흰) 구역에 배치 */
         { id: "7",   x: 1850, y: 0,    w: 1350, h: 590, sub: "1/2" },
         { id: "7",   x: 1180, y: 740,  w: 1350, h: 590, sub: "2/2" },
+        /* 화장대 = 좌상단 여유 공간 */
+        { id: "8",   x: 0,    y: 0,    w: 800,  h: 500 },
+      ]},
+    { title: "앙카라 3", note: "상판 A · B 인접 재단(분절선 650 · 무늬 연속) + 졸리컷 각자 밑 + 침대옆 2 · 신발장", util: 78,
+      texture: "images/앙카라.png", textureRotate: 180,
+      pieces: [
+        /* ── 위(우측 정렬): 상판 A · B 인접 재단(무늬 연속) · 분절선 650. B가 우측 끝 = 위 원장의 팔과 맞닿음 ── */
+        { id: "3a",  x: 200,  y: 0,    w: 2350, h: 1000 },
+        { id: "3b",  x: 2550, y: 0,    w: 650,  h: 1000 },
+        { id: "6b1", x: 200,  y: 1010, w: 2350, h: 70 },
+        { id: "6b2", x: 2550, y: 1010, w: 650,  h: 70 },
+        /* ── 아래: 침대옆 · 신발장 ── */
+        { id: "9",   x: 820,  y: 1090, w: 350,  h: 150, sub: "1/2" },
+        { id: "9",   x: 820,  y: 1260, w: 350,  h: 150, sub: "2/2" },
+        { id: "17",  x: 1190, y: 1100, w: 1840, h: 376 },
       ]},
   ];
 
   /* 카모 화이트 1장 — 거실 장식장 전용 */
   const SLAB_CAMO = [
-    { title: "카모 화이트 1", note: "본체·상부 90° 회전해 1460변끼리 인접 재단(무늬 연속) + 식탁(가안)", util: 78,
+    { title: "카모 화이트 1", note: "본체·상부 90° 회전해 1460변끼리 인접 재단(무늬 연속) + 식탁(가안)", util: 66,
       texture: "images/카모화이트.png", textureRotate: 90,   // 원본이 세로 1:2 → 90° 회전해야 원장에 맞음
       pieces: [
         /* 본체·상부 둘 다 90° 회전 → 1460 변끼리 맞대어 인접 재단 (본체 하부 ↔ 상부 위쪽 무늬 연속) */
-        { id: "10", x: 0,    y: 0, w: 1380, h: 1460 },
-        { id: "11", x: 1380, y: 0, w: 360,  h: 1460 },
-        { id: "13", x: 1760, y: 0, w: 900,  h: 1600 },
+        /* 식탁 = 좌측 끝 / 거실 장식장(본체+상부) = 우측 끝에 붙임 */
+        { id: "13", x: 0,    y: 0, w: 1200, h: 700 },
+        { id: "10", x: 1460, y: 0, w: 1380, h: 1460 },
+        { id: "11", x: 2840, y: 0, w: 360,  h: 1460 },
       ]},
   ];
 
@@ -304,7 +308,7 @@
     if (p.h > p.w && short < 520) {
       const fs = Math.max(34, Math.min(64, p.w * 0.34));
       const label = `${esc(p.id)} · ${esc(meta.name)} · ${meta.w}×${meta.h}`
-        + (p.sub ? ` (${esc(p.sub)})` : "");
+        + (p.sub ? ` (${esc(p.sub)})` : "") + (meta.movable ? "  (이동가능)" : "");
       s += `<text x="${cx}" y="${cy}" transform="rotate(-90 ${cx} ${cy})" text-anchor="middle" dominant-baseline="central" font-size="${fs}" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${label}</text>`;
       return s;
     }
@@ -312,6 +316,7 @@
       // 아주 작음: ID + 이름 한 줄 (작게)
       s += `<text x="${cx}" y="${cy - 22}" text-anchor="middle" dominant-baseline="central" font-size="48" font-weight="800" fill="${TX}"${HALO}>${esc(p.id)}</text>`;
       s += `<text x="${cx}" y="${cy + 26}" text-anchor="middle" dominant-baseline="central" font-size="36" font-weight="700" fill="${TX}"${HALO} opacity="0.9">${esc(meta.name)}</text>`;
+      if (meta.movable) s += `<text x="${cx}" y="${cy + 58}" text-anchor="middle" dominant-baseline="central" font-size="26" font-weight="700" fill="${TX}"${HALO} opacity="0.75">(이동가능)</text>`;
       if (p.sub) s += `<text x="${p.x + p.w - 10}" y="${p.y + p.h - 12}" text-anchor="end" font-size="28" font-weight="700" fill="${TX}"${HALO} opacity="0.8">${esc(p.sub)}</text>`;
       return s;
     }
@@ -327,12 +332,14 @@
       // 중간 부재: 이름 + 치수
       s += `<text x="${cx}" y="${cy - 20}" text-anchor="middle" dominant-baseline="central" font-size="80" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
       s += `<text x="${cx}" y="${cy + 60}" text-anchor="middle" dominant-baseline="central" font-size="56" fill="${TX}"${HALO} opacity="0.9" font-family="system-ui,-apple-system,sans-serif">${meta.w}×${meta.h}</text>`;
+      if (meta.movable) s += `<text x="${cx}" y="${cy + 118}" text-anchor="middle" dominant-baseline="central" font-size="42" font-weight="700" fill="${TX}"${HALO} opacity="0.75">(이동가능)</text>`;
       if (p.sub) s += `<text x="${p.x + p.w - 28}" y="${p.y + p.h - 28}" text-anchor="end" font-size="46" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${esc(p.sub)}</text>`;
     } else {
       // 큰 부재: 이름 + 치수 + 회전 + 태그
       s += `<text x="${cx}" y="${cy - 40}" text-anchor="middle" dominant-baseline="central" font-size="130" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
       const dims = `${meta.w} × ${meta.h}`;
       s += `<text x="${cx}" y="${cy + 100}" text-anchor="middle" dominant-baseline="central" font-size="90" fill="${TX}"${HALO} opacity="0.94" font-family="system-ui,-apple-system,sans-serif">${dims}</text>`;
+      if (meta.movable) s += `<text x="${cx}" y="${cy + 190}" text-anchor="middle" dominant-baseline="central" font-size="58" font-weight="700" fill="${TX}"${HALO} opacity="0.75">(이동가능)</text>`;
       if (p.sub) s += `<text x="${p.x + p.w - 30}" y="${p.y + p.h - 40}" text-anchor="end" font-size="62" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${esc(p.sub)}</text>`;
       if (meta.tag) s += `<text x="${p.x + 160}" y="${p.y + 80}" font-size="52" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${meta.tagOk ? "✓" : "⚠"} ${esc(meta.tag)}</text>`;
     }
@@ -406,7 +413,8 @@
     const order = ["1","2","5","3a","3b","4b","6a","6b1","6b2","7","8","9","17","10","11","12","13","14","15","16"];
     el.innerHTML = order.map(id => {
       const p = PIECES[id];
-      const tag = p.tag ? ` <span class="tag${p.tagOk ? " ok" : ""}">${esc(p.tag)}</span>` : "";
+      const tag = (p.tag ? ` <span class="tag${p.tagOk ? " ok" : ""}">${esc(p.tag)}</span>` : "")
+        + (p.movable ? ` <span class="tag mv">이동가능</span>` : "");
       return `<div class="cer-chip">
         <div class="sw" style="background:${p.color}"></div>
         <div class="body">
@@ -423,8 +431,8 @@
       <h3 class="cer-scen-h"><span class="cer-scen-badge">앙카라</span><span class="cer-scen-badge qty">3장</span>주방 · 아일랜드 메인</h3>
       <p class="cer-scen-sub">주방 벽면과 아일랜드가 메인. 남는 자리에 책상 2장 · 화장대 · 침대 옆 상판 2장을 채워 넣음. 1번 슬랩은 이미 시공 완료.</p>
       <div class="cer-slabs">${SLAB_ANKARA.filter(s => s.done).map(slabCard).join("")}</div>
-      <p class="cer-scen-sub" style="margin:18px 0 8px;color:#8b5a1a;font-weight:700">↕ 아래 두 장은 위아래로 맞붙임 — <b>앙카라 3 하단 우측(ㄱ자 팔)</b> ↔ <b>앙카라 2 상단 우측(상판 B)</b> 가 이어집니다</p>
-      <div class="cer-stack">${SLAB_ANKARA.filter(s => !s.done).slice().reverse().map(slabCard).join("")}</div>
+      <p class="cer-scen-sub" style="margin:18px 0 8px;color:#8b5a1a;font-weight:700">↕ 아래 두 장은 위아래로 맞붙임 — <b>앙카라 2 하단 우측(ㄱ자 팔)</b> ↔ <b>앙카라 3 상단 우측(상판 B)</b> 가 이어집니다</p>
+      <div class="cer-stack">${SLAB_ANKARA.filter(s => !s.done).map(slabCard).join("")}</div>
     `;
   }
 
@@ -432,7 +440,7 @@
     const el = document.getElementById("cer-camo"); if (!el) return;
     el.innerHTML = `
       <h3 class="cer-scen-h"><span class="cer-scen-badge camo">카모 화이트</span><span class="cer-scen-badge qty">1장</span>거실 장식장</h3>
-      <p class="cer-scen-sub">본체와 상부를 90° 회전해 1460 변끼리 맞대어 인접 재단 — 본체 하부와 상부 위쪽의 무늬가 이어짐. 남는 자리에 식탁 1600 × 900(가안).</p>
+      <p class="cer-scen-sub">본체와 상부를 90° 회전해 1460 변끼리 맞대어 인접 재단 — 본체 하부와 상부 위쪽의 무늬가 이어짐. 장식장은 우측 끝, 식탁(가안)은 좌측 끝에 배치.</p>
       <div class="cer-slabs">${SLAB_CAMO.map(slabCard).join("")}</div>
     `;
   }
