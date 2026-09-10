@@ -177,10 +177,8 @@
     <rect x="0" y="770" width="1600" height="35" fill="#e8dcc8" stroke="#1a1a1a" stroke-width="4"/>
     <text x="290" y="797" font-size="27" fill="#8a5a2b">하부 마감판 (프레임 가림)</text>
 
-    <!-- 가려진 프레임 가로재 : 파선 -->
-    <g stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10" fill="none">
-      <rect x="0" y="770" width="1600" height="30"/>
-    </g>
+    <!-- 가려진 프레임 가로재 : 파선 + 주황 배경 (전폭으로 이어짐) -->
+    <rect x="0" y="770" width="1600" height="30" fill="#f2c9b8" opacity="0.55" stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10"/>
 
     <!-- 프레임 앞열 다리 3개 -->
     <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
@@ -289,6 +287,9 @@
     <rect x="-18" y="752" width="18" height="53" fill="#e8dcc8" stroke="#1a1a1a" stroke-width="4"/>
 
     <!-- 프레임 -->
+    <!-- 프레임 몸체 (좌우로 이어지는 부분 — 절단면 뒤로 계속) -->
+    <rect x="0" y="770" width="500" height="30" fill="#f2c9b8" stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10"/>
+    <!-- 앞·뒤 가로재 절단면 -->
     <rect x="0" y="770" width="30" height="30" fill="#fff" stroke="#b5462a" stroke-width="3.5"/>
     <rect x="470" y="770" width="30" height="30" fill="#fff" stroke="#b5462a" stroke-width="3.5"/>
     <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
