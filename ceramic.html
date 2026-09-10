@@ -106,8 +106,8 @@
     <table>
       <thead><tr><th>세라믹</th><th>적용 부위</th><th class="num">수량</th></tr></thead>
       <tbody>
-        <tr><td><b>앙카라</b></td><td>주방 벽면 · 주방 상판 · 아일랜드 · 졸리컷 · 책상 2 · 화장대 · 침대옆 2 · 신발장</td><td class="num">3장</td></tr>
-        <tr><td><b>카모 화이트</b></td><td>거실 장식장 · <span style="color:#7a6ba8;font-weight:700">식탁 (가안)</span></td><td class="num">1장</td></tr>
+        <tr><td><b>앙카라</b></td><td>주방 벽면 · 주방 상판 · 아일랜드 · 졸리컷 · 책상 2 · 침대옆 2 · 신발장</td><td class="num">3장</td></tr>
+        <tr><td><b>카모 화이트</b></td><td>거실 장식장 · <span style="color:#7a6ba8;font-weight:700">식탁 (가안)</span> · <span style="color:#c25d1a;font-weight:700">화장대 (임시)</span></td><td class="num">1장</td></tr>
         <tr><td><b>불가리</b></td><td>아트월 (1400 × 2380) · <span style="color:#c2557f;font-weight:700">사운드바 박스 4면 (가안)</span></td><td class="num">1장</td></tr>
         <tr class="total"><td>합계</td><td></td><td class="num">5장</td></tr>
       </tbody>
@@ -134,11 +134,11 @@
       <thead><tr><th>슬랩</th><th>주요 부재</th><th class="num">활용률</th></tr></thead>
       <tbody>
         <tr><td>앙카라 1</td><td>주방 벽면 A·B <b style="color:#2f7a1f">— 시공 완료</b></td><td class="num">70%</td></tr>
-        <tr><td>앙카라 2</td><td>아일랜드 앞면 · 졸리컷 a · ㄱ자 팔 · 화장대 · 책상 2장</td><td class="num">70%</td></tr>
+        <tr><td>앙카라 2</td><td>아일랜드 앞면 + <b style="color:#b8860b">졸리컷 위·아래 2개</b> · ㄱ자 팔 · 책상 2장</td><td class="num">63%</td></tr>
         <tr><td>앙카라 3</td><td><b style="color:#b8860b">상판 A 2420 + B 650 · 졸리컷 70 은 상판 밑</b> · 침대옆 2 · 신발장</td><td class="num">80%</td></tr>
-        <tr><td>카모 화이트 1</td><td>거실 장식장 본체 + 상부 · <span style="color:#7a6ba8">식탁(가안)</span></td><td class="num">66%</td></tr>
+        <tr><td>카모 화이트 1</td><td>거실 장식장 본체 + 상부 · <span style="color:#7a6ba8">식탁(가안)</span> · <b style="color:#c25d1a">화장대(임시 이관)</b></td><td class="num">74%</td></tr>
         <tr><td>불가리 1</td><td>아트월 1400×2380 · <span style="color:#c2557f">사운드바 박스 4면(가안)</span></td><td class="num">74%</td></tr>
-        <tr class="total"><td>합계</td><td>5장 · 평균 72%</td><td class="num">5장</td></tr>
+        <tr class="total"><td>합계</td><td>5장 · 평균 71%</td><td class="num">5장</td></tr>
       </tbody>
     </table>
   </div>
@@ -192,7 +192,8 @@
     "3b": { name: "주방 상판 B (코너)",   color: "#e0714f", w: 650,  h: 1000, tag: "A와 통재단" },
     "4b": { name: "ㄱ자 팔 나머지",       color: "#c9622a", w: 650,  h: 900,  tag: "코너 B 왼쪽" },
     "5":  { name: "아일랜드 앞면",        color: "#b06b3a", w: 920,  h: 1000 },
-    "6a":  { name: "졸리컷 · 앞면 밑",    color: "#a03030", w: 920,  h: 70 },
+    "6a":  { name: "졸리컷 · 앞면 위",    color: "#b34040", w: 920,  h: 70 },
+    "6a2": { name: "졸리컷 · 앞면 밑",    color: "#a03030", w: 920,  h: 70 },
     "6b1": { name: "졸리컷 · 상판 A 밑",  color: "#8e2d2d", w: 2350, h: 70 },
     "6b2": { name: "졸리컷 · 상판 B 밑",  color: "#7a2626", w: 650,  h: 70 },
     "7":  { name: "책상",              color: "#4a8a5c", w: 1350, h: 590, qty: 2, movable: true },
@@ -222,21 +223,20 @@
         { id: "1", x: 670, y: 0, w: 1900, h: 1400 },
       ]},
     /* ▼ 아래 두 장은 위아래로 맞붙여 렌더 — 배열 순서 = 위에서 아래 순서 */
-    { title: "앙카라 2", note: "아일랜드 앞면 + 졸리컷(밑) · ㄱ자 팔 나머지 · 화장대 · 책상 2장은 밝은 구역", util: 70,
+    { title: "앙카라 2", note: "아일랜드 앞면 + 졸리컷 위·아래 2개 · ㄱ자 팔 나머지 · 책상 2장", util: 63,
       texture: "images/앙카라.png", textureMirror: true,   // 앙카라 1과 동일 (좌우 반전)
       gaps: [{ x: 2550, y: 1530, w: 650,  h: 70, label: "70 띄움" }],
       pieces: [
         /* ㄱ자 팔 나머지 = 맨 밑 우측 (아래 원장의 상판 B와 맞닿아 결 연결) */
         { id: "4b",  x: 2550, y: 630,  w: 650,  h: 900 },
-        /* 아일랜드 앞면 = 상판 A와 같은 x=200에서 시작 · 하단 정렬 → 아래 원장 상판 A와 맞닿음
-           졸리컷 a는 앞면 바로 위 → 접었을 때 무늬가 이어짐 */
+        /* 아일랜드 앞면 = 상판 A와 같은 x=130 · 위·아래 양쪽에 졸리컷 70 을 붙여 재단
+           → 접히는 두 모서리 모두 무늬가 이어짐 */
+        { id: "6a",  x: 130,  y: 460,  w: 920,  h: 70 },
         { id: "5",   x: 130,  y: 530,  w: 920,  h: 1000 },
-        { id: "6a",  x: 130,  y: 1530, w: 920,  h: 70 },
-        /* 책상 2장 = 무늬 연속 포기. 원장에서 가장 밝은(흰) 구역에 배치 */
-        { id: "7",   x: 1850, y: 0,    w: 1350, h: 590, sub: "1/2" },
-        { id: "7",   x: 1180, y: 740,  w: 1350, h: 590, sub: "2/2" },
-        /* 화장대 = 좌상단 여유 공간 */
-        { id: "8",   x: 0,    y: 0,    w: 800,  h: 500 },
+        { id: "6a2", x: 130,  y: 1530, w: 920,  h: 70 },
+        /* 책상 2장 (무늬 무관 · 이동가능) */
+        { id: "7",   x: 1070, y: 0,    w: 1350, h: 590, sub: "1/2" },
+        { id: "7",   x: 1070, y: 610,  w: 1350, h: 590, sub: "2/2" },
       ]},
     { title: "앙카라 3", note: "상판 3070 = A 2420 + B 650 · 졸리컷 70 은 상판 바로 밑에 붙여 재단(무늬 연속) · 침대옆 2 · 신발장", util: 80,
       texture: "images/앙카라.png", textureRotate: 180,
@@ -256,12 +256,14 @@
 
   /* 카모 화이트 1장 — 거실 장식장 전용 */
   const SLAB_CAMO = [
-    { title: "카모 화이트 1", note: "본체·상부 90° 회전해 1460변끼리 인접 재단(무늬 연속) + 식탁(가안)", util: 66,
+    { title: "카모 화이트 1", note: "본체·상부 90° 회전해 1460변끼리 인접 재단(무늬 연속) + 식탁(가안) + 화장대(임시 이관)", util: 74,
       texture: "images/카모화이트.png", textureRotate: 90,   // 원본이 세로 1:2 → 90° 회전해야 원장에 맞음
       pieces: [
         /* 본체·상부 둘 다 90° 회전 → 1460 변끼리 맞대어 인접 재단 (본체 하부 ↔ 상부 위쪽 무늬 연속) */
         /* 식탁 = 좌측 끝 / 거실 장식장(본체+상부) = 우측 끝에 붙임 */
-        { id: "13", x: 0,    y: 0, w: 1200, h: 700 },
+        { id: "13", x: 0,    y: 0,    w: 1200, h: 700 },
+        /* ⚠️ 화장대 = 앙카라에 자리가 없어 임시 이관 (종류 확정 필요) */
+        { id: "8",  x: 0,    y: 720,  w: 800,  h: 500 },
         { id: "10", x: 1460, y: 0, w: 1380, h: 1460 },
         { id: "11", x: 2840, y: 0, w: 360,  h: 1460 },
       ]},
@@ -417,7 +419,7 @@
 
   function renderLegend() {
     const el = document.getElementById("cer-legend"); if (!el) return;
-    const order = ["1","2","5","3a","3b","4b","6a","6b1","6b2","7","8","9","17","10","11","12","13","14","15","16"];
+    const order = ["1","2","5","3a","3b","4b","6a","6a2","6b1","6b2","7","8","9","17","10","11","12","13","14","15","16"];
     el.innerHTML = order.map(id => {
       const p = PIECES[id];
       const tag = (p.tag ? ` <span class="tag${p.tagOk ? " ok" : ""}">${esc(p.tag)}</span>` : "")
