@@ -218,6 +218,10 @@
   const SLAB_ANKARA = [
     { title: "앙카라 1", note: "주방 벽면 A · B — 이미 시공 완료 (잔재량 미확인)", util: 70, done: true,
       texture: "images/앙카라.png", textureMirror: true,   // 상하반전 + 180° = 좌우반전
+      joints: [
+        { x: 0,   y: 1400, len: 650,  dir: "h", code: "4", color: "#c25d1a" },  // 벽면 B 밑 ↔ ㄱ자 팔 윗
+        { x: 670, y: 1400, len: 1900, dir: "h", code: "3", color: "#b8446e" },  // 벽면 A 밑 ↔ 상판 B 우 + 팔 우
+      ],
       pieces: [
         { id: "2", x: 0,   y: 0, w: 650,  h: 1400 },
         { id: "1", x: 670, y: 0, w: 1900, h: 1400 },
@@ -226,6 +230,12 @@
     { title: "앙카라 2", note: "아일랜드 앞면 + 졸리컷 위·아래 2개 · ㄱ자 팔 나머지 · 책상 2장", util: 63,
       texture: "images/앙카라.png", textureMirror: true,   // 앙카라 1과 동일 (좌우 반전)
       gaps: [{ x: 2550, y: 1530, w: 650,  h: 70, label: "70 띄움" }],
+      joints: [
+        { x: 130,  y: 530,  len: 1000, dir: "v", code: "1", color: "#1f6fb2" }, // 앞면 좌 ↔ 상판 A 좌
+        { x: 2550, y: 1530, len: 650,  dir: "h", code: "2", color: "#2f7a1f" }, // 팔 밑 ↔ 상판 B 윗
+        { x: 3195, y: 630,  len: 900,  dir: "v", code: "3", color: "#b8446e" }, // 팔 우 ↔ 벽면 A 밑
+        { x: 2550, y: 630,  len: 650,  dir: "h", code: "4", color: "#c25d1a" }, // 팔 윗 ↔ 벽면 B 밑
+      ],
       pieces: [
         /* ㄱ자 팔 나머지 = 맨 밑 우측 (아래 원장의 상판 B와 맞닿아 결 연결) */
         { id: "4b",  x: 2550, y: 630,  w: 650,  h: 900 },
@@ -234,13 +244,20 @@
         { id: "6a",  x: 130,  y: 460,  w: 920,  h: 70 },
         { id: "5",   x: 130,  y: 530,  w: 920,  h: 1000 },
         { id: "6a2", x: 130,  y: 1530, w: 920,  h: 70 },
-        /* 책상 2장 (무늬 무관 · 이동가능) */
-        { id: "7",   x: 1070, y: 0,    w: 1350, h: 590, sub: "1/2" },
-        { id: "7",   x: 1070, y: 610,  w: 1350, h: 590, sub: "2/2" },
+        /* 책상 2장 — 방에서 가로로 이어붙음. 무늬를 잇는 대신 "맞닿는 가장자리 100mm 띠"가
+           순백·균일하도록 배치 → 줄이 걸치지 않아 이음매가 안 보임
+           1/2 우측띠 밝기 212.3 편차 8.7 / 2/2 좌측띠 밝기 218.6 편차 8.9 */
+        { id: "7",   x: 1080, y: 750,  w: 1350, h: 590, sub: "1/2" },
+        { id: "7",   x: 1160, y: 140,  w: 1350, h: 590, sub: "2/2" },
       ]},
     { title: "앙카라 3", note: "상판 3070 = A 2420 + B 650 · 졸리컷 70 은 상판 바로 밑에 붙여 재단(무늬 연속) · 침대옆 2 · 신발장", util: 80,
       texture: "images/앙카라.png", textureRotate: 180,
       gaps: [{ x: 130, y: 0, w: 2420, h: 70, label: "70 띄움" }],
+      joints: [
+        { x: 130,  y: 70, len: 1000, dir: "v", code: "1", color: "#1f6fb2" },   // 상판 A 좌 ↔ 앞면 좌
+        { x: 2550, y: 70, len: 650,  dir: "h", code: "2", color: "#2f7a1f" },   // 상판 B 윗 ↔ 팔 밑
+        { x: 3195, y: 70, len: 1000, dir: "v", code: "3", color: "#b8446e" },   // 상판 B 우 ↔ 벽면 A 밑
+      ],
       pieces: [
         /* ── 상판 3070(A 2420 + B 650) · 졸리컷 70 은 상판 바로 밑(총 3000 = 2350 + 650). 분절선 650 ── */
         { id: "3a",  x: 130,  y: 70,   w: 2420, h: 1000 },
@@ -384,6 +401,18 @@
     // 부재들
     // 텍스처가 있으면 부재 채움 농도(기본 0.20). 무늬가 강한 원장은 slab.fillOpacity로 올려 글씨 가독성 확보
     slab.pieces.forEach(p => { s += pieceSVG(p, slab.texture ? (slab.fillOpacity ?? 0.20) : 0); });
+    // 접합부 표시 — 같은 기호끼리 맞붙음
+    (slab.joints || []).forEach(j => {
+      const hz = j.dir === "h";
+      const x2 = hz ? j.x + j.len : j.x, y2 = hz ? j.y : j.y + j.len;
+      const col = j.color || "#1f6fb2";
+      s += `<line x1="${j.x}" y1="${j.y}" x2="${x2}" y2="${y2}" stroke="#fff" stroke-width="26" stroke-linecap="round" opacity="0.85"/>`;
+      s += `<line x1="${j.x}" y1="${j.y}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="14" stroke-linecap="round" stroke-dasharray="46 26"/>`;
+      const mx = Math.min(Math.max((j.x + x2) / 2, 90), W - 90);
+      const my = Math.min(Math.max((j.y + y2) / 2, 90), H - 90);
+      s += `<circle cx="${mx}" cy="${my}" r="58" fill="${col}" stroke="#fff" stroke-width="9"/>`;
+      s += `<text x="${mx}" y="${my}" text-anchor="middle" dominant-baseline="central" font-size="62" font-weight="800" fill="#fff">${esc(j.code)}</text>`;
+    });
     // 의도적으로 비워둔 띠 (무늬 맞춤용 오프셋)
     (slab.gaps || []).forEach(g => {
       s += `<rect x="${g.x}" y="${g.y}" width="${g.w}" height="${g.h}" fill="#c25d1a" fill-opacity="0.12" stroke="#c25d1a" stroke-width="6" stroke-dasharray="34 22"/>`;
@@ -438,6 +467,13 @@
     const el = document.getElementById("cer-ankara"); if (!el) return;
     el.innerHTML = `
       <h3 class="cer-scen-h"><span class="cer-scen-badge">앙카라</span><span class="cer-scen-badge qty">3장</span>주방 · 아일랜드 메인</h3>
+      <p class="cer-scen-sub" style="color:#1f6fb2;font-weight:700">
+        ● 접합부 — 같은 번호끼리 맞붙습니다 (원장이 달라도 동일)<br>
+        <span style="color:#1f6fb2">① 아일랜드 앞면 좌 ↔ 주방 상판 A 좌 (1000)</span> ·
+        <span style="color:#2f7a1f">② ㄱ자 팔 밑 ↔ 주방 상판 B 윗 (650)</span> ·
+        <span style="color:#b8446e">③ 상판 B 우(1000) + 팔 우(900) ↔ 주방 벽면 A 밑 (1900)</span> ·
+        <span style="color:#c25d1a">④ 주방 벽면 B 밑 ↔ ㄱ자 팔 윗 (650)</span>
+      </p>
       <p class="cer-scen-sub">주방 벽면과 아일랜드가 메인. 남는 자리에 책상 2장 · 화장대 · 침대 옆 상판 2장을 채워 넣음. 1번 슬랩은 이미 시공 완료.</p>
       <div class="cer-slabs">${SLAB_ANKARA.filter(s => s.done).map(slabCard).join("")}</div>
       <p class="cer-scen-sub" style="margin:18px 0 8px;color:#8b5a1a;font-weight:700">↕ 아래 두 장은 위아래로 맞붙임 — <b>앙카라 2 하단 우측(ㄱ자 팔)</b> ↔ <b>앙카라 3 상단 우측(상판 B)</b> 가 이어집니다</p>
