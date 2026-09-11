@@ -107,7 +107,7 @@
       <thead><tr><th>세라믹</th><th>적용 부위</th><th class="num">수량</th></tr></thead>
       <tbody>
         <tr><td><b>앙카라</b></td><td>주방 벽면 · 주방 상판 · 아일랜드 · 졸리컷 · 책상 2 · 신발장</td><td class="num">3장</td></tr>
-        <tr><td><b>카모 화이트</b></td><td>거실 장식장 · <span style="color:#c2557f;font-weight:700">사운드바 박스 6면</span> · <span style="color:#7a6ba8;font-weight:700">식탁 (가안)</span></td><td class="num">1장</td></tr>
+        <tr><td><b>카모 화이트</b></td><td>거실 장식장 · <span style="color:#c2557f;font-weight:700">사운드바 박스 5면</span> · <span style="color:#7a6ba8;font-weight:700">식탁 (가안)</span></td><td class="num">1장</td></tr>
         <tr><td><b>불가리</b></td><td>아트월 (1400 × 2380) · 화장대 · 침대 옆 상판 2</td><td class="num">1장</td></tr>
         <tr class="total"><td>합계</td><td></td><td class="num">5장</td></tr>
       </tbody>
@@ -136,9 +136,9 @@
         <tr><td>앙카라 1</td><td>주방 벽면 A·B <b style="color:#2f7a1f">— 시공 완료</b></td><td class="num">70%</td></tr>
         <tr><td>앙카라 2</td><td>아일랜드 앞면 + <b style="color:#b8860b">졸리컷 위·아래 2개</b> · ㄱ자 팔 · 책상 2장</td><td class="num">63%</td></tr>
         <tr><td>앙카라 3</td><td><b style="color:#b8860b">상판 A 2420 + B 650 · 졸리컷 70 은 상판 밑</b> · 신발장</td><td class="num">78%</td></tr>
-        <tr><td>카모 화이트 1</td><td>거실 장식장(좌하단) · <span style="color:#c2557f">사운드바 박스 6면</span> · <span style="color:#7a6ba8">식탁(가안)</span></td><td class="num">83%</td></tr>
-        <tr><td>불가리 1</td><td>아트월 1400×2380 · 화장대 · 침대 옆 상판 2</td><td class="num">75%</td></tr>
-        <tr class="total"><td>합계</td><td>5장 · 평균 74%</td><td class="num">5장</td></tr>
+        <tr><td>카모 화이트 1</td><td>거실 장식장(좌하단) · <span style="color:#c2557f">사운드바 박스 5면</span> · <span style="color:#7a6ba8">식탁(가안)</span></td><td class="num">87%</td></tr>
+        <tr><td>불가리 1</td><td>아트월 1400×2380 · 화장대 · 침대 옆 상판 2</td><td class="num">78%</td></tr>
+        <tr class="total"><td>합계</td><td>5장 · 평균 75%</td><td class="num">5장</td></tr>
       </tbody>
     </table>
   </div>
@@ -197,23 +197,22 @@
     "6b1": { name: "졸리컷 · 상판 A 밑",  color: "#8e2d2d", w: 2350, h: 70 },
     "6b2": { name: "졸리컷 · 상판 B 밑",  color: "#7a2626", w: 650,  h: 70 },
     "7":  { name: "책상",              color: "#4a8a5c", w: 1350, h: 590, qty: 2, movable: true },
-    "8":  { name: "화장대",            color: "#3a9b8b", w: 800,  h: 500, movable: true },
-    "9":  { name: "침대 옆 상판",        color: "#8bc48a", w: 350,  h: 150, qty: 2, movable: true },
+    "8":  { name: "화장대",            color: "#3a9b8b", w: 830,  h: 480, movable: true },
+    "9":  { name: "침대 옆 상판",        color: "#8bc48a", w: 250,  h: 515, qty: 2, movable: true },
     "17": { name: "신발장 가운데",       color: "#9b8b5a", w: 1840, h: 376, movable: true },
     /* ── 카모 화이트 (1장) ── */
-    "10": { name: "거실 장식장 본체",     color: "#6b56a0", w: 1380, h: 1460 },
-    "11": { name: "거실 장식장 상부",     color: "#a394c8", w: 360,  h: 1460 },
+    "10": { name: "거실 장식장 본체",     color: "#6b56a0", w: 1440, h: 1500 },
+    "11": { name: "거실 장식장 상부",     color: "#a394c8", w: 410,  h: 1460 },
     /* ── 불가리 (1장) ── */
     "12": { name: "아트월",             color: "#d15588", w: 1400, h: 2380 },
     /* ── 가안 (미확정 · 점선 표시) ── */
     "13": { name: "식탁",              color: "#7a6ba8", w: 1200, h: 700, tag: "가안", provisional: true },
     /* 사운드바 박스 — 위·앞·옆 4면. 삼성 HW-Q990 본체 1232 × 70.8 × 138 기준
        선반 L1400(아트월 폭과 동일 · 좌우 여유 84) × D200(깊이 여유 62) × H100 */
-    "14": { name: "사운드바 상판",       color: "#c2557f", w: 1400, h: 200, tag: "HW-Q990", provisional: true },
-    "19": { name: "사운드바 하판",       color: "#b04a70", w: 1400, h: 200, provisional: true },
-    "15": { name: "사운드바 전면",       color: "#d1729a", w: 1400, h: 100, provisional: true },
-    "18": { name: "사운드바 후면",       color: "#c9668f", w: 1400, h: 100, provisional: true },
-    "16": { name: "사운드바 측면",       color: "#de92b0", w: 200,  h: 100, qty: 2, provisional: true },
+    "14": { name: "사운드바 상판",       color: "#c2557f", w: 1600, h: 250, tag: "HW-Q990", provisional: true },
+    "15": { name: "사운드바 전면",       color: "#d1729a", w: 1600, h: 130, provisional: true },
+    "18": { name: "사운드바 후면",       color: "#c9668f", w: 1600, h: 130, provisional: true },
+    "16": { name: "사운드바 측면",       color: "#de92b0", w: 250,  h: 130, qty: 2, provisional: true },
   };
 
   /* 앙카라 3장 — 주방·아일랜드 메인, 남는 자리에 책상·화장대·침대옆 */
@@ -273,37 +272,37 @@
 
   /* 카모 화이트 1장 — 거실 장식장 전용 */
   const SLAB_CAMO = [
-    { title: "카모 화이트 1", note: "거실 장식장 좌하단 정렬 + 사운드바 6면을 전개도(전면→상판→후면→하판)로 이어붙여 재단 + 식탁(가안)", util: 83,
+    { title: "카모 화이트 1", note: "거실 장식장 좌하단 정렬 + 사운드바 5면 전개도(전면→상판→후면 510) + 식탁(가안)", util: 87,
       texture: "images/카모화이트.png", textureRotate: 90,   // 원본이 세로 1:2 → 90° 회전해야 원장에 맞음
       pieces: [
         /* 거실 장식장 = 왼쪽 하단부터. 본체·상부를 1460 변끼리 맞대어 인접 재단(무늬 연속) */
-        { id: "10", x: 0,    y: 140, w: 1380, h: 1460 },
-        { id: "11", x: 1380, y: 140, w: 360,  h: 1460 },
+        { id: "10", x: 0,    y: 100, w: 1440, h: 1500 },
+        { id: "11", x: 1440, y: 140, w: 410,  h: 1460 },
         /* 사운드바 박스 6면 = 전개도로 이어붙여 재단 → 무늬가 박스를 한 바퀴 감음
-           감는 순서: 전면 → 상판 → 후면 → 하판 (100+200+100+200 = 600)
+           감는 순서: 전면 → 상판 → 후면 (130+250+130 = 510) · 하판은 바닥에 닿아 미시공
+           사운드바 L1600 × D250 × H130
            측면 2장은 상판의 양 끝(200변)에 붙임 */
-        { id: "15", x: 1760, y: 100,  w: 100, h: 1400, rotated: true },
-        { id: "16", x: 1860, y: 0,    w: 200, h: 100,  sub: "좌" },
-        { id: "14", x: 1860, y: 100,  w: 200, h: 1400, rotated: true },
-        { id: "16", x: 1860, y: 1500, w: 200, h: 100,  sub: "우" },
-        { id: "18", x: 2060, y: 100,  w: 100, h: 1400, rotated: true },
-        { id: "19", x: 2160, y: 100,  w: 200, h: 1400, rotated: true },
+        { id: "15", x: 1870, y: 0,    w: 130, h: 1600, rotated: true },
+        { id: "14", x: 2000, y: 0,    w: 250, h: 1600, rotated: true },
+        { id: "18", x: 2250, y: 0,    w: 130, h: 1600, rotated: true },
+        { id: "16", x: 2400, y: 0,    w: 250, h: 130,  sub: "좌" },
+        { id: "16", x: 2400, y: 150,  w: 250, h: 130,  sub: "우" },
         /* 식탁 (가안) */
-        { id: "13", x: 2380, y: 0,    w: 700, h: 1200, rotated: true },
+        { id: "13", x: 2400, y: 300,  w: 700, h: 1200, rotated: true },
       ]},
   ];
 
   /* 불가리 1장 — 아트월 전용 */
   const SLAB_BULGARI = [
-    { title: "불가리 1", note: "아트월 1400 × 2380 + 화장대 + 침대 옆 상판 2", util: 75,
+    { title: "불가리 1", note: "아트월 1400 × 2380 + 화장대 830×480 + 침대 옆 상판 250×515 ×2", util: 78,
       // 불가리는 명암 대비가 강해 글씨가 묻힘 → 부재 채움을 진하게 + 텍스처는 살짝 낮춤
       texture: "images/불가리.png", textureRotate: 90, fillOpacity: 0.58, texOpacity: 0.8,
       pieces: [
         { id: "12", x: 0,    y: 100,  w: 2380, h: 1400, rotated: true },
         /* 화장대 = 불가리 확정 (아트월 자투리 활용) */
-        { id: "8",  x: 2400, y: 0,    w: 800,  h: 500 },
-        { id: "9",  x: 2400, y: 520,  w: 350,  h: 150, sub: "1/2" },
-        { id: "9",  x: 2770, y: 520,  w: 350,  h: 150, sub: "2/2" },
+        { id: "8",  x: 2400, y: 0,    w: 480, h: 830, rotated: true },
+        { id: "9",  x: 2400, y: 850,  w: 250, h: 515, sub: "1/2" },
+        { id: "9",  x: 2670, y: 850,  w: 250, h: 515, sub: "2/2" },
       ]},
   ];
 
@@ -455,7 +454,7 @@
 
   function renderLegend() {
     const el = document.getElementById("cer-legend"); if (!el) return;
-    const order = ["1","2","5","3a","3b","4b","6a","6a2","6b1","6b2","7","9","17","10","11","13","14","19","15","18","16","12","8"];
+    const order = ["1","2","5","3a","3b","4b","6a","6a2","6b1","6b2","7","9","17","10","11","13","14","15","18","16","12","8"];
     el.innerHTML = order.map(id => {
       const p = PIECES[id];
       const tag = (p.tag ? ` <span class="tag${p.tagOk ? " ok" : ""}">${esc(p.tag)}</span>` : "")
