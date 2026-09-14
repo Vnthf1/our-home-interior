@@ -27,18 +27,7 @@
   th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
   th{background:var(--box);width:32%;font-weight:600}
   table.wide th{width:auto}
-  .warn{background:#fff5ed;border:1px solid #f0c9a8;border-left:4px solid var(--warn);
-        border-radius:8px;padding:12px 14px;margin:0 0 18px}
-  .warn b{color:var(--warn)}
-  .ask{background:#eef4fb;border:1px solid #c3d7ee;border-left:4px solid #3b6ea5;
-       border-radius:8px;padding:12px 14px;margin:0 0 18px}
-  .calc{background:#f4f1ea;border:1px solid #ddd4c4;border-radius:8px;padding:12px 14px;
-        margin:0 0 18px;font-variant-numeric:tabular-nums;font-size:13px}
-  .calc b{color:var(--accent)}
-  ul{margin:6px 0 0;padding-left:20px}
-  li{margin:3px 0}
   .tbd{color:#c2410c;font-weight:700}
-  .ok{color:#2f7d4f;font-weight:700}
   .note{font-size:12px;color:var(--mut);margin:-10px 0 16px}
   td.num{text-align:right;font-variant-numeric:tabular-nums}
   tr.pick td,tr.pick th{background:#f0f6f1}
@@ -57,9 +46,6 @@
     </pattern>
     <pattern id="woodHatch" width="18" height="18" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
       <line x1="0" y1="0" x2="0" y2="18" stroke="#cbb79f" stroke-width="2.5"/>
-    </pattern>
-    <pattern id="drainHatch" width="22" height="22" patternTransform="rotate(-45)" patternUnits="userSpaceOnUse">
-      <line x1="0" y1="0" x2="0" y2="22" stroke="#e8a087" stroke-width="4"/>
     </pattern>
     <marker id="da" markerUnits="userSpaceOnUse" markerWidth="34" markerHeight="24" refX="32" refY="12" orient="auto">
       <path d="M0,2 L32,12 L0,22 Z" fill="#2f6fb0"/>
@@ -82,509 +68,241 @@
 </p>
 
 <h1>안방화장실 세면대 하부장 — 제작 도면</h1>
-<p class="sub">1,600 × 518 · 전면 H615 · <b>핸들리스</b> (상단 리세스 포켓 개폐) ·
-칸 분할 <b>500 / 600 / 500</b> · 좌·우 = 서랍 + 여닫이 / 중앙 = 여닫이 2짝 ·
-<b>스테인리스 프레임 위에 얹음</b> — 문이 아래로 내려와 프레임을 가림</p>
+<p class="sub"><b>1,600 × 520 × H410</b> · 좌 여닫이 2짝 / 우 서랍 (칸 800 / 800) · <b>핸들리스</b>(상단 포켓 · 리세스 25) ·
+스테인리스 프레임(H230) 위 거치 · 총높이 <b>820</b> = 프레임 230 + 하부장 410 + 심리스 세면대 180</p>
+<p class="note">도면 색 — <b>빨간색 = 마감재</b>(앞판·상단 세로 마감판) / 흰색 = 몸통(화이트 내장재)</p>
 
-<div class="ask">
-  <b>💬 이 도면은 별도 제작된 <a href="vanity-frame.html" style="color:#3b6ea5">스테인리스 받침 프레임(1,600×500·H230)</a> 위에 올라갑니다.</b><br>
-  프레임 상단(바닥에서 230)이 하부장 몸통의 <b>바닥면</b>이 됩니다.
-  문·좌우 필러가 몸통보다 아래로 35 내려와(바닥에서 195) 프레임 가로재를 가립니다.
-</div>
-
-<h2>1. 기준 치수</h2>
-<table>
-  <tr><th>전체 폭</th><td><b>1,600</b> (벽~벽) = 필러 18 + <b>몸통(화이트) 1,564</b> + 필러 18 — 몸통은 벽에서 좌우 18 이격</td></tr>
-  <tr><th>몸통 깊이</th><td><b>500</b> — 프레임과 동일 · 뒷면 벽 밀착</td></tr>
-  <tr><th>전체 깊이</th><td><b>518</b> = 몸통 500 + 전면재 18 (앞판·좌우 필러가 최전면)</td></tr>
-  <tr class="pick"><th>전면 구성 (위→아래)</th><td><b>리세스 마감판 노출 25</b> + <b>서랍 200</b> + 틈 20 + <b>문 370</b> = <b>615</b> (몸통 580 + 하향 연장 35) · 중앙 문 전고 590</td></tr>
-  <tr><th>바닥에서 하부장 밑면</th><td><b>230</b> (프레임 전체 높이 = 개방 200 + 가로재 30) · 문 하단은 <b>195</b></td></tr>
-  <tr><th>바닥~몸통 상단</th><td>230 <span style="color:#7a6a5c">(프레임)</span> + 580 <span style="color:#7a6a5c">(몸통)</span> = <b>810</b></td></tr>
-  <tr><th class="tbd">완성 높이</th><td>810 + <b>심리스 세라믹 상판 두께</b> = <span class="tbd">상판 두께 확정 후 결정</span> (도면은 40 가정 기준)</td></tr>
-  <tr><th>판재 두께</th><td><b>18T</b> — 재질은 표준 사양</td></tr>
-  <tr><th>칸 분할</th><td><b>500 / 600 / 500</b> — <b>독립 박스 3개 맞댐</b> (좌 482 / 중 600 / 우 482 · 맞댐부 = 측판 2장 36) · 맞댐 중심 500 / 1,100</td></tr>
-  <tr class="pick"><th>손잡이</th><td><b>없음 (핸들리스)</b> — 앞판 상단 뒤 포켓에 손가락을 넣어 앞판 상단을 걸어 개폐 (DETAIL 그림)</td></tr>
-</table>
-
-<div class="calc">
-  <b>핸들리스 구성</b><br>
-  &nbsp;&nbsp;앞판(서랍·문)·좌우 필러가 <b>최전면</b> (몸통보다 18 앞)<br>
-  &nbsp;&nbsp;상단: 앞판 뒤에 <b>수평 흰색판 + 세로 마감판(문보다 40 뒤 · 상단 = 몸통 상단)</b>이 포켓을 만듦 → 앞판 상단 뒤에 손가락을 걸어 개폐 · 정면에서는 마감판이 <b>25 리세스로 보임</b><br>
-  &nbsp;&nbsp;몸통은 <b>독립 박스 3개</b>를 맞대는 방식 — 칸 경계마다 측판 2장(18+18)<br>
-  &nbsp;&nbsp;앞판 폭 — 좌·우 <b>479</b> (측판~칸막이선 482 − 간격) · 중앙 2짝 <b>각 296</b> (600 − 간격) · 간격 3 기준<br>
-  &nbsp;&nbsp;하부 마감판 없음 — <b>문이 바닥에서 195까지 내려와</b> 프레임 가로재(200~230)를 덮음 (좌·우 필러도 195까지)
-</div>
-
-<p class="note">도면 색 — <b>빨간색 = 마감재</b>(앞판·상단 띠·필러) / <b>흰색 = 몸통</b>(화이트 내장재)</p>
-
-<h2>2. 정면도</h2>
+<h2>1. 정면도</h2>
 <div class="fig">
   <h3>FRONT ELEVATION &nbsp;— &nbsp;S : N.S. &nbsp;/&nbsp; UNIT : mm</h3>
-  <svg viewBox="-380 -60 2830 1560" role="img" aria-label="하부장 정면도">
-    <!-- 좌우 벽 -->
-    <rect x="-90" y="140" width="90" height="860" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
-    <rect x="1600" y="140" width="90" height="860" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
-
+  <svg viewBox="-390 -260 2820 1700" role="img" aria-label="정면도">
+    <!-- 벽 (개구 1610 · 하부장 1600 → 좌우 5) -->
+    <rect x="-95" y="-220" width="90" height="1320" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
+    <rect x="1605" y="-220" width="90" height="1320" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
     <!-- 바닥 -->
-    <line x1="-200" y1="1000" x2="1800" y2="1000" stroke="#1a1a1a" stroke-width="6"/>
+    <line x1="-200" y1="1100" x2="1800" y2="1100" stroke="#1a1a1a" stroke-width="6"/>
     <g stroke="#8d8175" stroke-width="2.5">
-      <path d="M-160,1000 L-200,1050 M-60,1000 L-100,1050 M40,1000 L0,1050 M140,1000 L100,1050
-               M240,1000 L200,1050 M340,1000 L300,1050 M440,1000 L400,1050 M540,1000 L500,1050
-               M640,1000 L600,1050 M740,1000 L700,1050 M840,1000 L800,1050 M940,1000 L900,1050
-               M1040,1000 L1000,1050 M1140,1000 L1100,1050 M1240,1000 L1200,1050 M1340,1000 L1300,1050
-               M1440,1000 L1400,1050 M1540,1000 L1500,1050 M1640,1000 L1600,1050 M1740,1000 L1700,1050"/>
+      <path d="M-160,1100 L-200,1150 M-40,1100 L-80,1150 M80,1100 L40,1150 M200,1100 L160,1150
+               M320,1100 L280,1150 M440,1100 L400,1150 M560,1100 L520,1150 M680,1100 L640,1150
+               M800,1100 L760,1150 M920,1100 L880,1150 M1040,1100 L1000,1150 M1160,1100 L1120,1150
+               M1280,1100 L1240,1150 M1400,1100 L1360,1150 M1520,1100 L1480,1150 M1640,1100 L1600,1150"/>
     </g>
 
-    <text x="800" y="150" font-size="28" fill="#8d8175" text-anchor="middle">※ 상부 심리스 세라믹 상판 별도 시공 (도면 미표기)</text>
+    <!-- 수전 (벽 · 바닥 1,000) -->
+    <rect x="740" y="88" width="120" height="24" rx="10" fill="#8d8175"/>
+    <text x="895" y="108" font-size="28" fill="#8d8175">수전 (바닥 1,000)</text>
 
-    <!-- 프레임 다리 (문 뒤·아래) -->
+    <!-- 심리스 세면대 180 -->
+    <rect x="0" y="280" width="1600" height="180" fill="#efe9e0" stroke="#1a1a1a" stroke-width="3.5"/>
+    <text x="800" y="380" font-size="34" fill="#8d8175" text-anchor="middle">심리스 세라믹 세면대 1,600 × 520 × 180 (별도)</text>
+
+    <!-- 프레임 -->
+    <rect x="0" y="870" width="1600" height="30" fill="#f2c9b8" opacity="0.3" stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10"/>
     <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
-      <rect x="135" y="800" width="30" height="165"/>
-      <rect x="785" y="800" width="30" height="165"/>
-      <rect x="1435" y="800" width="30" height="165"/>
+      <rect x="135" y="900" width="30" height="165"/>
+      <rect x="785" y="900" width="30" height="165"/>
+      <rect x="1435" y="900" width="30" height="165"/>
     </g>
     <g fill="#e4e0da" stroke="#1a1a1a" stroke-width="3">
-      <rect x="130" y="965" width="40" height="10"/>
-      <path d="M135,1000 L140,975 L160,975 L165,1000 Z"/>
-      <rect x="780" y="965" width="40" height="10"/>
-      <path d="M785,1000 L790,975 L810,975 L815,1000 Z"/>
-      <rect x="1430" y="965" width="40" height="10"/>
-      <path d="M1435,1000 L1440,975 L1460,975 L1465,1000 Z"/>
+      <rect x="130" y="1065" width="40" height="10"/>
+      <path d="M135,1100 L140,1075 L160,1075 L165,1100 Z"/>
+      <rect x="780" y="1065" width="40" height="10"/>
+      <path d="M785,1100 L790,1075 L810,1075 L815,1100 Z"/>
+      <rect x="1430" y="1065" width="40" height="10"/>
+      <path d="M1435,1100 L1440,1075 L1460,1075 L1465,1100 Z"/>
     </g>
 
-    <!-- 전면 필드 배경 (틈이 어둡게 보이도록) -->
-    <rect x="18" y="230" width="1564" height="575" fill="#3f3931"/>
-
-    <!-- 좌·우 전면 필러 (마감재 18 · 벽 밀착 · 195까지) -->
-    <g fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5">
-      <rect x="0" y="190" width="18" height="615"/>
-      <rect x="1582" y="190" width="18" height="615"/>
-    </g>
-
-    <!-- 상단 세로 마감판 (문보다 40 뒤 · 리세스로 25 노출) -->
-    <rect x="18" y="190" width="1564" height="25" fill="#c95c47" stroke="#1a1a1a" stroke-width="3"/>
-
-    <!-- 좌 칸 : 서랍 + 여닫이 -->
-    <rect x="20" y="215" width="479" height="200" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
-    <text x="259" y="330" font-size="34" fill="#4a1408" text-anchor="middle">서 랍</text>
-    <rect x="20" y="435" width="479" height="370" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
-    <text x="259" y="640" font-size="34" fill="#4a1408" text-anchor="middle">여 닫 이</text>
-
-    <!-- 우 칸 : 서랍 + 여닫이 -->
-    <rect x="1101" y="215" width="479" height="200" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
-    <text x="1340" y="330" font-size="34" fill="#4a1408" text-anchor="middle">서 랍</text>
-    <rect x="1101" y="435" width="479" height="370" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
-    <text x="1340" y="640" font-size="34" fill="#4a1408" text-anchor="middle">여 닫 이</text>
-
-    <!-- 중앙 칸 : 여닫이 2짝 (전고) -->
-    <rect x="502" y="215" width="296" height="590" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
-    <rect x="802" y="215" width="296" height="590" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
+    <!-- 몸통 -->
+    <rect x="0" y="460" width="1600" height="410" fill="#fff" stroke="#1a1a1a" stroke-width="4"/>
+    <rect x="8" y="470" width="1584" height="435" fill="#3f3931"/>
+    <!-- 상단 세로 마감판 (리세스 25) -->
+    <rect x="0" y="460" width="1600" height="25" fill="#c95c47" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- 좌 여닫이 2짝 -->
+    <rect x="2" y="485" width="395" height="420" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
+    <rect x="401" y="485" width="395" height="420" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
     <g stroke="#b5462a" stroke-width="2.5" fill="none" stroke-dasharray="14 10">
-      <path d="M798,215 L502,510 L798,805"/>
-      <path d="M802,215 L1098,510 L802,805"/>
+      <path d="M395,485 L2,695 L395,905"/>
+      <path d="M403,485 L796,695 L403,905"/>
     </g>
-    <text x="800" y="680" font-size="30" fill="#4a1408" text-anchor="middle">여닫이 2짝</text>
-    <text x="800" y="726" font-size="27" fill="#4a1408" text-anchor="middle">뒷판 배관 타공 (현장)</text>
-
-    <!-- 박스 맞댐부 — 측판 2장(18+18) (숨김 → 파선) -->
+    <text x="399" y="720" font-size="32" fill="#4a1408" text-anchor="middle">여 닫 이 2짝</text>
+    <!-- 우 서랍 2단 -->
+    <rect x="800" y="485" width="798" height="208" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
+    <rect x="800" y="697" width="798" height="208" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
+    <text x="1199" y="600" font-size="32" fill="#4a1408" text-anchor="middle">서 랍</text>
+    <text x="1199" y="812" font-size="32" fill="#4a1408" text-anchor="middle">서 랍</text>
+    <!-- 칸막이 (숨김) -->
     <g stroke="#9a8f82" stroke-width="2.5" stroke-dasharray="18 12" fill="none">
-      <rect x="482" y="215" width="18" height="555"/>
-      <rect x="500" y="215" width="18" height="555"/>
-      <rect x="1082" y="215" width="18" height="555"/>
-      <rect x="1100" y="215" width="18" height="555"/>
+      <rect x="791" y="470" width="18" height="400"/>
     </g>
-
-    <!-- 프레임 가로재 (문 뒤 · 파선) -->
-    <rect x="0" y="770" width="1600" height="30" fill="#f2c9b8" opacity="0.3" stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10"/>
-
-    <!-- 틈 리더 -->
-    <line x1="1200" y1="205" x2="1690" y2="60" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="1706" y="54" font-size="28" fill="#1a1a1a">리세스 마감판 25 노출 — 앞판 상단 뒤 포켓에 손가락</text>
-    <line x1="1490" y1="787" x2="1730" y2="880" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="1746" y="890" font-size="28" fill="#b5462a">프레임 가로재 30 — 문 뒤에 가려짐</text>
+    <!-- 배수구 (벽 · 센터 800 · 바닥 480) -->
+    <circle cx="800" cy="620" r="30" fill="none" stroke="#3b6ea5" stroke-width="4" stroke-dasharray="12 8"/>
+    <line x1="828" y1="608" x2="1250" y2="230" stroke="#3b6ea5" stroke-width="2.5" marker-start="url(#lead)"/>
+    <text x="1264" y="222" font-size="28" fill="#3b6ea5">벽 배수구 — 센터 800 · 바닥 480 (뒷판 타공)</text>
 
     <!-- 치수: 가로 -->
     <g stroke="#2f6fb0" stroke-width="2.5" fill="none">
-      <line x1="0" y1="1010" x2="0" y2="1330"/>
-      <line x1="500" y1="810" x2="500" y2="1250"/>
-      <line x1="1100" y1="810" x2="1100" y2="1250"/>
-      <line x1="1600" y1="1010" x2="1600" y2="1330"/>
+      <line x1="0" y1="1110" x2="0" y2="1330"/>
+      <line x1="800" y1="915" x2="800" y2="1250"/>
+      <line x1="1600" y1="1110" x2="1600" y2="1330"/>
       <line x1="0" y1="1300" x2="1600" y2="1300" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="0" y1="1215" x2="500" y2="1215" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="500" y1="1215" x2="1100" y2="1215" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="1100" y1="1215" x2="1600" y2="1215" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="0" y1="1215" x2="800" y2="1215" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="800" y1="1215" x2="1600" y2="1215" marker-start="url(#daL)" marker-end="url(#da)"/>
     </g>
-    <text x="800" y="1286" font-size="42" fill="#2f6fb0" text-anchor="middle">1,600</text>
-    <text x="250" y="1201" font-size="38" fill="#2f6fb0" text-anchor="middle">500</text>
-    <text x="800" y="1201" font-size="38" fill="#2f6fb0" text-anchor="middle">600</text>
-    <text x="1350" y="1201" font-size="38" fill="#2f6fb0" text-anchor="middle">500</text>
+    <text x="800" y="1286" font-size="42" fill="#2f6fb0" text-anchor="middle">1,600 (개구 1,610 — 좌우 5)</text>
+    <text x="400" y="1201" font-size="38" fill="#2f6fb0" text-anchor="middle">800</text>
+    <text x="1200" y="1201" font-size="38" fill="#2f6fb0" text-anchor="middle">800</text>
 
     <!-- 치수: 세로 왼쪽 -->
     <g stroke="#2f6fb0" stroke-width="2.5" fill="none">
-      <line x1="-90" y1="190" x2="-350" y2="190"/>
-      <line x1="-90" y1="770" x2="-260" y2="770"/>
-      <line x1="-90" y1="805" x2="-350" y2="805"/>
-      <line x1="-90" y1="1000" x2="-350" y2="1000"/>
-      <line x1="-200" y1="190" x2="-200" y2="770" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="-200" y1="805" x2="-200" y2="1000" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="-320" y1="190" x2="-320" y2="805" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-40" y1="280" x2="-350" y2="280"/>
+      <line x1="-40" y1="460" x2="-350" y2="460"/>
+      <line x1="-40" y1="870" x2="-260" y2="870"/>
+      <line x1="-40" y1="1100" x2="-350" y2="1100"/>
+      <line x1="-200" y1="280" x2="-200" y2="460" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-200" y1="460" x2="-200" y2="870" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-200" y1="870" x2="-200" y2="1100" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-320" y1="280" x2="-320" y2="1100" marker-start="url(#daL)" marker-end="url(#da)"/>
     </g>
-    <text x="-212" y="480" font-size="40" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -212 480)">몸통 580</text>
-    <text x="-212" y="903" font-size="32" fill="#c2410c" text-anchor="middle" transform="rotate(-90 -212 903)">195</text>
-    <text x="-332" y="497" font-size="36" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -332 497)">전면 615</text>
+    <text x="-212" y="370" font-size="32" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -212 370)">180</text>
+    <text x="-212" y="665" font-size="34" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -212 665)">410</text>
+    <text x="-212" y="985" font-size="32" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -212 985)">230</text>
+    <text x="-332" y="690" font-size="36" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 -332 690)">총 820</text>
 
-    <!-- 치수: 세로 오른쪽 (전면 분할) -->
+    <!-- 치수: 세로 오른쪽 -->
     <g stroke="#2f6fb0" stroke-width="2.5" fill="none">
-      <line x1="1690" y1="190" x2="1900" y2="190"/>
-      <line x1="1690" y1="215" x2="1900" y2="215"/>
-      <line x1="1690" y1="415" x2="1900" y2="415"/>
-      <line x1="1690" y1="435" x2="1900" y2="435"/>
-      <line x1="1690" y1="805" x2="1900" y2="805"/>
-      <line x1="1870" y1="215" x2="1870" y2="415" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="1870" y1="435" x2="1870" y2="805" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="1700" y1="460" x2="1900" y2="460"/>
+      <line x1="1700" y1="485" x2="1900" y2="485"/>
+      <line x1="1700" y1="905" x2="1900" y2="905"/>
+      <line x1="1870" y1="485" x2="1870" y2="905" marker-start="url(#daL)" marker-end="url(#da)"/>
     </g>
-    <text x="1920" y="210" font-size="24" fill="#c2410c">25 (리세스 마감판 노출)</text>
-    <text x="1920" y="330" font-size="27" fill="#2f6fb0">200 (서랍 앞판)</text>
-    <text x="1920" y="437" font-size="24" fill="#c2410c">20 (틈)</text>
-    <text x="1920" y="640" font-size="27" fill="#2f6fb0">370 (문 · 하단 195까지)</text>
+    <text x="1920" y="480" font-size="24" fill="#c2410c">25 (리세스)</text>
+    <text x="1920" y="700" font-size="27" fill="#2f6fb0">420 (앞판 · 하단 195까지)</text>
 
-    <text x="800" y="1430" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 정 면 도 &gt;</text>
-    <text x="800" y="1490" font-size="30" fill="#8d8175" text-anchor="middle">파선 = 앞판에 가려 안 보이는 부재 (칸막이 · 프레임 가로재)</text>
+    <text x="800" y="1420" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 정 면 도 &gt;</text>
   </svg>
 </div>
+<p class="note">앞판 간격 3 기준. 좌 문 2짝 각 395 · 우 서랍 앞판 798 × 208 ×2 (2단 기준 — 단수 협의). 앞판 하단 195 = 프레임 가로재(200~230)보다 5 아래.</p>
 
-<p class="note">앞판이 최전면 — 맨 위에 리세스된 마감판이 25 보이고 바로 앞판 시작. 중앙 문 전고 590. 좌·우는 서랍 200 + 틈 20 + 문 370. 간격·오버레이는 표준 사양(도면은 3mm 기준).</p>
-
+<h2>2. 측단면도</h2>
 <div class="fig">
-  <h3>FRONT &nbsp;— &nbsp;앞판(서랍·문) 전부 제거 상태 · 상단 3겹 구성 &nbsp;/&nbsp; UNIT : mm</h3>
-  <svg viewBox="-120 40 2500 1120" role="img" aria-label="앞판 제거 상태 정면도">
+  <h3>SIDE SECTION &nbsp;— &nbsp;좌 = 앞 · 우 = 뒷벽 &nbsp;/&nbsp; UNIT : mm</h3>
+  <svg viewBox="-620 -260 1820 1700" role="img" aria-label="측단면도">
+    <!-- 뒷벽 -->
+    <rect x="500" y="-220" width="90" height="1320" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
     <!-- 바닥 -->
-    <line x1="-60" y1="1000" x2="1720" y2="1000" stroke="#1a1a1a" stroke-width="6"/>
-    <!-- 프레임 (앞판 제거 → 노출) -->
-    <rect x="0" y="770" width="1600" height="30" fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5"/>
+    <line x1="-250" y1="1100" x2="700" y2="1100" stroke="#1a1a1a" stroke-width="6"/>
+    <g stroke="#8d8175" stroke-width="2.5">
+      <path d="M-210,1100 L-250,1150 M-90,1100 L-130,1150 M30,1100 L-10,1150 M150,1100 L110,1150
+               M270,1100 L230,1150 M390,1100 L350,1150 M510,1100 L470,1150 M630,1100 L590,1150"/>
+    </g>
+
+    <!-- 수전 -->
+    <rect x="380" y="88" width="120" height="24" rx="10" fill="#8d8175"/>
+    <text x="360" y="60" font-size="27" fill="#8d8175" text-anchor="end">수전 (바닥 1,000)</text>
+
+    <!-- 심리스 세면대 D520 -->
+    <rect x="-20" y="280" width="520" height="180" fill="#efe9e0" stroke="#1a1a1a" stroke-width="3.5"/>
+    <text x="240" y="380" font-size="30" fill="#8d8175" text-anchor="middle">심리스 세면대 D520 × H180</text>
+
+    <!-- 몸통 -->
+    <rect x="0" y="460" width="500" height="410" fill="#fff" stroke="#1a1a1a" stroke-width="4"/>
+    <rect x="0" y="460" width="500" height="18" fill="url(#woodHatch)" stroke="#1a1a1a" stroke-width="3"/>
+    <rect x="0" y="852" width="500" height="18" fill="url(#woodHatch)" stroke="#1a1a1a" stroke-width="3"/>
+    <rect x="491" y="478" width="9" height="374" fill="#eee7db" stroke="#1a1a1a" stroke-width="2.5"/>
+    <!-- 상단 포켓 -->
+    <rect x="0" y="505" width="120" height="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
+    <rect x="20" y="460" width="18" height="63" fill="#c95c47" stroke="#1a1a1a" stroke-width="3"/>
+    <!-- 앞판 (최전면 20T) -->
+    <rect x="-20" y="485" width="20" height="420" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
+
+    <!-- 배수구 -->
+    <circle cx="520" cy="620" r="26" fill="#dde8f4" stroke="#3b6ea5" stroke-width="4"/>
+    <line x1="545" y1="608" x2="640" y2="500" stroke="#3b6ea5" stroke-width="2.5" marker-start="url(#lead)"/>
+    <text x="652" y="492" font-size="27" fill="#3b6ea5">배수구 (바닥 480)</text>
+
+    <!-- 프레임 -->
+    <rect x="0" y="870" width="500" height="30" fill="#f2c9b8" stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10"/>
+    <rect x="0" y="870" width="30" height="30" fill="#fff" stroke="#b5462a" stroke-width="3.5"/>
+    <rect x="470" y="870" width="30" height="30" fill="#fff" stroke="#b5462a" stroke-width="3.5"/>
     <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
-      <rect x="135" y="800" width="30" height="165"/>
-      <rect x="785" y="800" width="30" height="165"/>
-      <rect x="1435" y="800" width="30" height="165"/>
+      <rect x="135" y="900" width="30" height="160"/>
+      <rect x="470" y="900" width="30" height="160"/>
     </g>
     <g fill="#e4e0da" stroke="#1a1a1a" stroke-width="3">
-      <rect x="130" y="965" width="40" height="10"/>
-      <path d="M135,1000 L140,975 L160,975 L165,1000 Z"/>
-      <rect x="780" y="965" width="40" height="10"/>
-      <path d="M785,1000 L790,975 L810,975 L815,1000 Z"/>
-      <rect x="1430" y="965" width="40" height="10"/>
-      <path d="M1435,1000 L1440,975 L1460,975 L1465,1000 Z"/>
+      <rect x="130" y="1060" width="40" height="10"/>
+      <path d="M135,1100 L140,1075 L160,1075 L165,1100 Z"/>
+      <rect x="465" y="1060" width="40" height="10"/>
+      <path d="M470,1100 L475,1075 L495,1075 L500,1100 Z"/>
     </g>
 
-    <!-- 박스 3개 (몸통) -->
-    <g fill="#f4f1ec" stroke="#1a1a1a" stroke-width="3.5">
-      <rect x="18" y="190" width="482" height="580"/>
-      <rect x="500" y="190" width="600" height="580"/>
-      <rect x="1100" y="190" width="482" height="580"/>
-    </g>
-    <!-- 맞댐부 측판 2장 · 바깥 측판 -->
-    <g fill="#efeae2" stroke="#1a1a1a" stroke-width="2.5">
-      <rect x="18" y="190" width="18" height="580"/>
-      <rect x="482" y="190" width="18" height="580"/>
-      <rect x="500" y="190" width="18" height="580"/>
-      <rect x="1082" y="190" width="18" height="580"/>
-      <rect x="1100" y="190" width="18" height="580"/>
-      <rect x="1564" y="190" width="18" height="580"/>
-    </g>
-    <!-- 밑판 -->
-    <g fill="url(#woodHatch)" stroke="#1a1a1a" stroke-width="2.5">
-      <rect x="36" y="752" width="446" height="18"/>
-      <rect x="518" y="752" width="564" height="18"/>
-      <rect x="1118" y="752" width="446" height="18"/>
-    </g>
-
-    <!-- ① 상단 세로 마감판 (전폭 · 상단 = 몸통 상단 · H50) -->
-    <rect x="18" y="190" width="1564" height="50" fill="#c95c47" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- ② 수평 흰색판 마구리 (박스별 · 포켓 바닥) -->
-    <g fill="#ffffff" stroke="#1a1a1a" stroke-width="3">
-      <rect x="36" y="240" width="446" height="18"/>
-      <rect x="518" y="240" width="564" height="18"/>
-      <rect x="1118" y="240" width="446" height="18"/>
-    </g>
-    <!-- 필러 -->
-    <g fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5">
-      <rect x="0" y="190" width="18" height="615"/>
-      <rect x="1582" y="190" width="18" height="615"/>
-    </g>
     <!-- 리더 -->
-    <line x1="790" y1="210" x2="1660" y2="110" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="1674" y="104" font-size="28" fill="#1a1a1a">① 세로 마감판 — 전폭 · 상단 = 몸통 상단 · H50</text>
-    <text x="1704" y="142" font-size="28" fill="#1a1a1a">(문 달면 문보다 40 뒤 · 25만 보임)</text>
-    <line x1="900" y1="250" x2="1660" y2="280" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="1674" y="274" font-size="28" fill="#1a1a1a">② 수평 흰색판 — 눕힘 보강대 (포켓 바닥)</text>
-    <line x1="1300" y1="785" x2="1660" y2="560" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="1674" y="554" font-size="28" fill="#b5462a">스테인리스 프레임 — 앞판 달면 가려짐</text>
+    <line x1="-11" y1="895" x2="-200" y2="990" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
+    <text x="-212" y="998" font-size="27" fill="#b5462a" text-anchor="end">앞판 하단 195 — 가로재 가림</text>
+    <line x1="-11" y1="500" x2="-200" y2="380" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
+    <text x="-212" y="372" font-size="27" fill="#1a1a1a" text-anchor="end">포켓 개폐 (하단 디테일)</text>
 
-    <text x="800" y="1100" font-size="42" fill="#1a1a1a" text-anchor="middle">&lt; 정면 — 앞판 전부 제거 상태 &gt;</text>
+    <!-- 치수 -->
+    <g stroke="#2f6fb0" stroke-width="2.5" fill="none">
+      <line x1="-20" y1="1160" x2="-20" y2="1330"/>
+      <line x1="0" y1="1160" x2="0" y2="1250"/>
+      <line x1="500" y1="1160" x2="500" y2="1330"/>
+      <line x1="0" y1="1215" x2="500" y2="1215" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="-20" y1="1300" x2="500" y2="1300" marker-start="url(#daL)" marker-end="url(#da)"/>
+      <line x1="620" y1="620" x2="740" y2="620"/>
+      <line x1="710" y1="620" x2="710" y2="1100" marker-start="url(#daL)" marker-end="url(#da)"/>
+    </g>
+    <text x="250" y="1201" font-size="34" fill="#2f6fb0" text-anchor="middle">몸통 500</text>
+    <text x="240" y="1286" font-size="38" fill="#2f6fb0" text-anchor="middle">전체 520 (앞판 20 포함)</text>
+    <text x="760" y="880" font-size="30" fill="#2f6fb0">480</text>
+
+    <text x="240" y="1420" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 측 단 면 도 &gt;</text>
   </svg>
 </div>
 
+<h2>3. 상단 개폐부 확대</h2>
 <div class="fig">
-  <h3>DETAIL &nbsp;— &nbsp;상단 개폐부 단면 확대 (좌 = 앞) &nbsp;/&nbsp; 높이·깊이는 예시 — 세부는 표준 디테일</h3>
-  <svg viewBox="-800 100 1840 420" role="img" aria-label="상단 개폐부 확대">
-    <!-- 몸통 상판 -->
+  <h3>DETAIL &nbsp;— &nbsp;좌 = 앞 &nbsp;/&nbsp; 높이·깊이는 예시 — 세부는 표준 디테일</h3>
+  <svg viewBox="-800 100 1840 460" role="img" aria-label="상단 개폐부 확대">
     <rect x="58" y="190" width="240" height="18" fill="url(#woodHatch)" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- ② 수평 흰색판 (포켓 바닥) -->
     <rect x="0" y="240" width="180" height="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- ① 세로 마감판 (흰색판 위에 세움 · 상단 = 몸통 상단) -->
     <rect x="22" y="190" width="18" height="50" fill="#c95c47" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- ③ 문 (최전면 · 상단 자유단) -->
-    <rect x="-18" y="215" width="18" height="230" fill="#e5705a" stroke="#1a1a1a" stroke-width="3"/>
+    <rect x="-20" y="215" width="20" height="230" fill="#e5705a" stroke="#1a1a1a" stroke-width="3"/>
 
-    <!-- 손가락: 문 상단 뒤 포켓에 걸림 -->
     <path d="M-160,180 C -80,178 -20,185 -8,205 C -3,215 -4,228 -10,232" fill="none" stroke="#2f6fb0" stroke-width="5" marker-end="url(#da)"/>
     <text x="-180" y="188" font-size="26" fill="#2f6fb0" text-anchor="end">손가락 — 문 상단 뒤 포켓(깊이 40)에 걸림</text>
 
-    <!-- 라벨 -->
     <line x1="31" y1="200" x2="150" y2="140" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="164" y="134" font-size="26" fill="#1a1a1a">① 세로 마감판 — 흰색판 위에 세움 · 상단 = 몸통 상단 (H50 예시)</text>
+    <text x="164" y="134" font-size="26" fill="#1a1a1a">① 세로 마감판 — 상단 = 몸통 상단 (25 리세스 노출)</text>
     <line x1="100" y1="250" x2="220" y2="310" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="234" y="316" font-size="26" fill="#1a1a1a">② 수평 흰색판 — 눕힘 보강대 · 포켓 바닥</text>
-    <line x1="-9" y1="380" x2="-120" y2="420" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="-134" y="428" font-size="26" fill="#1a1a1a" text-anchor="end">③ 문 — 최전면 · 상단은 몸통 상단보다 25 아래</text>
-    <line x1="8" y1="228" x2="-60" y2="300" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="-70" y="330" font-size="26" fill="#b5462a" text-anchor="end">포켓 — 문 뒤 40 · 바닥은 흰색판</text>
+    <text x="234" y="316" font-size="26" fill="#1a1a1a">② 수평 흰색판 — 포켓 바닥</text>
+    <line x1="-10" y1="380" x2="-120" y2="420" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
+    <text x="-134" y="428" font-size="26" fill="#1a1a1a" text-anchor="end">③ 앞판 — 최전면 · 상단 = 몸통 상단 −25</text>
 
-    <text x="60" y="500" font-size="36" fill="#1a1a1a" text-anchor="middle">&lt; 상단 개폐부 확대 &gt;</text>
+    <text x="60" y="516" font-size="36" fill="#1a1a1a" text-anchor="middle">&lt; 상단 개폐부 확대 &gt;</text>
   </svg>
 </div>
 
-<h2>3. 측단면도 — 핸들리스 구성과 프레임 가림</h2>
-<div class="fig">
-  <h3>SIDE SECTION &nbsp;— &nbsp;좌측 칸 기준 &nbsp;/&nbsp; UNIT : mm</h3>
-  <svg viewBox="-330 -60 1530 1560" role="img" aria-label="측단면도">
-    <!-- 뒷벽 -->
-    <rect x="500" y="140" width="90" height="860" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
-    <!-- 바닥 -->
-    <line x1="-200" y1="1000" x2="700" y2="1000" stroke="#1a1a1a" stroke-width="6"/>
-    <g stroke="#8d8175" stroke-width="2.5">
-      <path d="M-160,1000 L-200,1050 M-60,1000 L-100,1050 M40,1000 L0,1050 M140,1000 L100,1050
-               M240,1000 L200,1050 M340,1000 L300,1050 M440,1000 L400,1050 M540,1000 L500,1050
-               M640,1000 L600,1050"/>
-    </g>
-
-    <text x="250" y="150" font-size="26" fill="#8d8175" text-anchor="middle">※ 상부 세라믹 상판 별도 (도면 미표기)</text>
-
-    <!-- 몸통 -->
-    <rect x="0" y="190" width="500" height="580" fill="#fff" stroke="#1a1a1a" stroke-width="4.5"/>
-    <rect x="0" y="190" width="500" height="18" fill="url(#woodHatch)" stroke="#1a1a1a" stroke-width="3"/>
-    <rect x="0" y="417" width="500" height="18" fill="url(#woodHatch)" stroke="#1a1a1a" stroke-width="3"/>
-    <rect x="0" y="752" width="500" height="18" fill="url(#woodHatch)" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- 뒷판 -->
-    <rect x="491" y="208" width="9" height="544" fill="#eee7db" stroke="#1a1a1a" stroke-width="2.5"/>
-
-    <!-- 서랍 박스 -->
-    <rect x="140" y="272" width="330" height="130" fill="none" stroke="#9a8f82" stroke-width="3" stroke-dasharray="16 10"/>
-    <text x="300" y="348" font-size="30" fill="#8d8175" text-anchor="middle">서랍 박스</text>
-    <text x="250" y="620" font-size="30" fill="#8d8175" text-anchor="middle">여닫이 안 수납</text>
-
-    <!-- 상단 포켓: 수평 흰색판 + 세로 마감판 (문보다 40 뒤) -->
-    <rect x="0" y="240" width="130" height="18" fill="#ffffff" stroke="#1a1a1a" stroke-width="3"/>
-    <rect x="22" y="190" width="18" height="50" fill="#c95c47" stroke="#1a1a1a" stroke-width="3"/>
-    <!-- 전면재 (몸통 앞 18 돌출 · 최전면) -->
-    <rect x="-18" y="215" width="18" height="200" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
-    <rect x="-18" y="435" width="18" height="370" fill="#e5705a" stroke="#1a1a1a" stroke-width="3.5"/>
-
-    <!-- 프레임 몸체 (좌우로 이어지는 부분 — 절단면 뒤로 계속) -->
-    <rect x="0" y="770" width="500" height="30" fill="#f2c9b8" stroke="#b5462a" stroke-width="2.5" stroke-dasharray="16 10"/>
-    <!-- 앞·뒤 가로재 절단면 -->
-    <rect x="0" y="770" width="30" height="30" fill="#fff" stroke="#b5462a" stroke-width="3.5"/>
-    <rect x="470" y="770" width="30" height="30" fill="#fff" stroke="#b5462a" stroke-width="3.5"/>
-    <g fill="#f2c9b8" stroke="#b5462a" stroke-width="3.5">
-      <rect x="135" y="800" width="30" height="160"/>
-      <rect x="470" y="800" width="30" height="160"/>
-    </g>
-    <g fill="#e4e0da" stroke="#1a1a1a" stroke-width="3">
-      <rect x="130" y="965" width="40" height="10"/>
-      <path d="M135,1000 L140,975 L160,975 L165,1000 Z"/>
-      <rect x="465" y="965" width="40" height="10"/>
-      <path d="M470,1000 L475,975 L495,975 L500,1000 Z"/>
-    </g>
-
-    <!-- 배수구 -->
-    <rect x="280" y="1000" width="110" height="46" fill="url(#drainHatch)" stroke="#c2410c" stroke-width="3.5"/>
-    <text x="335" y="1090" font-size="28" fill="#c2410c" text-anchor="middle">배수구</text>
-
-    <!-- 리더 -->
-    <line x1="-9" y1="222" x2="220" y2="80" stroke="#333" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="236" y="60" font-size="28" fill="#1a1a1a">앞판이 최전면 — 상단 뒤 포켓(깊이 40)에 손가락</text>
-    <text x="236" y="102" font-size="28" fill="#1a1a1a">세로 마감판은 문보다 40 뒤 · 상단 = 몸통 상단</text>
-    <line x1="-9" y1="790" x2="220" y2="880" stroke="#b5462a" stroke-width="2.5" marker-start="url(#lead)"/>
-    <text x="236" y="874" font-size="28" fill="#b5462a">문이 앞으로 18 · 아래로 35 내려와</text>
-    <text x="236" y="916" font-size="28" fill="#b5462a">프레임 가로재(200~230)를 덮습니다</text>
-
-    <!-- 치수 -->
-    <g stroke="#2f6fb0" stroke-width="2.5" fill="none">
-      <line x1="-18" y1="1046" x2="-18" y2="1330"/>
-      <line x1="0" y1="1046" x2="0" y2="1250"/>
-      <line x1="500" y1="1046" x2="500" y2="1330"/>
-      <line x1="-18" y1="1300" x2="500" y2="1300" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="0" y1="1215" x2="500" y2="1215" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="-160" y1="770" x2="-260" y2="770"/>
-      <line x1="-160" y1="805" x2="-260" y2="805"/>
-      <line x1="-230" y1="770" x2="-230" y2="805" marker-start="url(#daL)" marker-end="url(#da)"/>
-    </g>
-    <text x="241" y="1286" font-size="40" fill="#2f6fb0" text-anchor="middle">전체 518</text>
-    <text x="250" y="1201" font-size="36" fill="#2f6fb0" text-anchor="middle">몸통 500</text>
-    <text x="-250" y="795" font-size="30" fill="#c2410c" text-anchor="end">35</text>
-
-    <text x="250" y="1430" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 측 단 면 도 &gt;</text>
-  </svg>
-</div>
-
-<div class="warn">
-  <b>⚠ 하부 마감판 없음 — 문이 프레임을 가립니다</b>
-  <ul>
-    <li>좌·우 문(370)·중앙 문(590)의 <b>하단 = 바닥에서 195</b> → 프레임 가로재 하단(200)보다 5 아래</li>
-    <li><b>좌·우 필러도 195까지 내려옴</b> (높이 615) — 양 끝에서 가로재가 보이지 않도록</li>
-    <li>문 아래로는 다리 3개와 고무발만 보임 (의도된 모습)</li>
-  </ul>
-</div>
-
-<h2>4. 평면도</h2>
-<div class="fig">
-  <h3>PLAN &nbsp;— &nbsp;상판·서랍 제거 상태 &nbsp;/&nbsp; UNIT : mm</h3>
-  <svg viewBox="-340 -280 2540 1180" role="img" aria-label="평면도">
-    <!-- 뒷벽 -->
-    <rect x="-90" y="-100" width="1780" height="100" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
-    <rect x="-90" y="0" width="90" height="590" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
-    <rect x="1600" y="0" width="90" height="590" fill="url(#hatch)" stroke="#6e675e" stroke-width="3.5"/>
-
-    <!-- 몸통 — 독립 박스 3개 맞댐 (화이트 · 벽에서 18 이격) -->
-    <rect x="18" y="0" width="482" height="500" fill="#fff" stroke="#1a1a1a" stroke-width="4.5"/>
-    <rect x="500" y="0" width="600" height="500" fill="#fff" stroke="#1a1a1a" stroke-width="4.5"/>
-    <rect x="1100" y="0" width="482" height="500" fill="#fff" stroke="#1a1a1a" stroke-width="4.5"/>
-    <!-- 뒷판 (박스별 · 중앙 칸 배관 타공) -->
-    <rect x="36" y="0" width="446" height="9" fill="#eee7db" stroke="#1a1a1a" stroke-width="2"/>
-    <rect x="518" y="0" width="564" height="9" fill="#eee7db" stroke="#1a1a1a" stroke-width="2"/>
-    <rect x="1118" y="0" width="446" height="9" fill="#eee7db" stroke="#1a1a1a" stroke-width="2"/>
-    <circle cx="800" cy="4.5" r="26" fill="none" stroke="#3b6ea5" stroke-width="3" stroke-dasharray="10 8"/>
-    <text x="800" y="-130" font-size="26" fill="#3b6ea5" text-anchor="middle">뒷판 배관 타공 (위치·크기 현장)</text>
-    <g fill="#efeae2" stroke="#1a1a1a" stroke-width="3">
-      <rect x="18" y="0" width="18" height="500"/>
-      <rect x="1564" y="0" width="18" height="500"/>
-      <rect x="482" y="0" width="18" height="500"/>
-      <rect x="500" y="0" width="18" height="500"/>
-      <rect x="1082" y="0" width="18" height="500"/>
-      <rect x="1100" y="0" width="18" height="500"/>
-    </g>
-    <!-- 좌·우 전면 필러 (마감재 · 벽 틈 18 · 앞쪽만 깊이 60) -->
-    <g fill="#e5705a" stroke="#1a1a1a" stroke-width="3">
-      <rect x="0" y="458" width="18" height="60"/>
-      <rect x="1582" y="458" width="18" height="60"/>
-    </g>
-    <text x="-40" y="466" font-size="24" fill="#8d8175" text-anchor="end">벽 이격 18 →</text>
-    <!-- 앞판 (측판과 동일 면) -->
-    <g fill="#e5705a" stroke="#1a1a1a" stroke-width="3">
-      <rect x="20" y="500" width="479" height="18"/>
-      <rect x="502" y="500" width="296" height="18"/>
-      <rect x="802" y="500" width="296" height="18"/>
-      <rect x="1101" y="500" width="479" height="18"/>
-    </g>
-    <text x="1710" y="560" font-size="28" fill="#8a5a2b">앞판 18T — 좌·우 필러와 동일 면</text>
-    <text x="1710" y="600" font-size="28" fill="#8a5a2b">(전면재 포함 깊이 518)</text>
-    <text x="1710" y="640" font-size="28" fill="#8a5a2b">몸통(화이트)은 벽에서 18 이격</text>
-
-    <!-- 배수구 (바닥 · 파선 · 참고) -->
-    <rect x="830" y="280" width="310" height="110" fill="url(#drainHatch)" stroke="#c2410c" stroke-width="3" stroke-dasharray="18 12"/>
-    <text x="985" y="440" font-size="28" fill="#c2410c" text-anchor="middle">바닥 배수구 (참고 · 하부장 밑면은 230 위)</text>
-
-    <!-- 칸 라벨 -->
-    <text x="254" y="250" font-size="34" fill="#5b5148" text-anchor="middle">좌 — 서랍 + 여닫이</text>
-    <text x="800" y="200" font-size="36" fill="#b5462a" text-anchor="middle">중앙 — 뚫림</text>
-    <text x="1346" y="250" font-size="34" fill="#5b5148" text-anchor="middle">우 — 서랍 + 여닫이</text>
-
-    <!-- 치수 -->
-    <g stroke="#2f6fb0" stroke-width="2.5" fill="none">
-      <line x1="0" y1="530" x2="0" y2="800"/>
-      <line x1="500" y1="530" x2="500" y2="720"/>
-      <line x1="1100" y1="530" x2="1100" y2="720"/>
-      <line x1="1600" y1="530" x2="1600" y2="800"/>
-      <line x1="0" y1="770" x2="1600" y2="770" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="0" y1="690" x2="500" y2="690" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="500" y1="690" x2="1100" y2="690" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="1100" y1="690" x2="1600" y2="690" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="1690" y1="0" x2="2160" y2="0"/>
-      <line x1="1690" y1="500" x2="2000" y2="500"/>
-      <line x1="1690" y1="518" x2="2160" y2="518"/>
-      <line x1="1970" y1="0" x2="1970" y2="500" marker-start="url(#daL)" marker-end="url(#da)"/>
-      <line x1="2130" y1="0" x2="2130" y2="518" marker-start="url(#daL)" marker-end="url(#da)"/>
-    </g>
-    <text x="800" y="756" font-size="42" fill="#2f6fb0" text-anchor="middle">1,600</text>
-    <text x="250" y="676" font-size="36" fill="#2f6fb0" text-anchor="middle">500</text>
-    <text x="800" y="676" font-size="36" fill="#2f6fb0" text-anchor="middle">600</text>
-    <text x="1350" y="676" font-size="36" fill="#2f6fb0" text-anchor="middle">500</text>
-    <text x="1958" y="250" font-size="34" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 1958 250)">몸통 500</text>
-    <text x="2118" y="259" font-size="40" fill="#2f6fb0" text-anchor="middle" transform="rotate(-90 2118 259)">전체 518</text>
-
-    <text x="800" y="880" font-size="46" fill="#1a1a1a" text-anchor="middle">&lt; 평 면 도 &gt;</text>
-  </svg>
-</div>
-
-<div class="ask">
-  <b>💬 중앙 칸 뒷판은 배관 타공</b><br>
-  뒷판은 3칸 모두 부착(표준 사양). 세면대 배관이 <b>뒤쪽 벽 중간</b>에서 나오므로,
-  중앙 칸 뒷판만 <b>배관 위치에 현장 타공</b>으로 통과시킵니다.
-  (평면도의 바닥 배수구는 참고 표시 — 바닥 배관은 별개이고, 하부장 밑면은 그보다 230 위)
-</div>
-
-<h2>5. 부재 재단 리스트</h2>
+<h2>4. 부재 재단 리스트</h2>
 <table class="wide">
-  <tr><th style="width:6%">번호</th><th style="width:24%">부재</th><th style="width:26%">규격 (W×H 또는 W×D)</th><th style="width:8%" class="num">수량</th><th>비고</th></tr>
-  <tr class="pick"><td>①</td><td><b>박스 (화이트 몸통)</b></td><td>좌 482 / 중 600 / 우 482 (외폭) × 500 × 580</td><td class="num">3</td><td>독립 박스 3개 맞댐 — 칸 경계 = 측판 2장(36) · 벽에서 좌우 18 이격</td></tr>
-  <tr><td>②</td><td>└ 측판</td><td>500 × 580 × 18T</td><td class="num">6</td><td>박스당 2</td></tr>
-  <tr><td>③</td><td>└ 상판·밑판</td><td>좌·우 446 × 500 / 중 564 × 500 × 18T</td><td class="num">6</td><td>박스당 2 · 밑판이 프레임 상단(230)에 닿음</td></tr>
-  <tr><td>④</td><td>└ 중간 가로판</td><td>446 × 500 × 18T</td><td class="num">2</td><td>좌·우 박스 서랍 아래</td></tr>
-  <tr class="pick"><td>⑥</td><td><b>전면 필러 (마감재)</b></td><td>60 × 615 × 18T</td><td class="num">2</td><td>벽~몸통 틈(18)에 세로 삽입 · <b>앞쪽만 (깊이 60)</b> · 하단 195까지</td></tr>
-  <tr class="pick"><td>⑦</td><td><b>상단 세로 마감판</b></td><td>1,564 × 50 × 18T</td><td class="num">1</td><td>수평 흰색판 위에 세움 · <b>문보다 40 뒤</b> · 상단 = 몸통 상단 (25 리세스 노출)</td></tr>
-  <tr><td>⑧</td><td>서랍 앞판</td><td>479 × 200 × 18T</td><td class="num">2</td><td>좌·우 · 상단 틈 20</td></tr>
-  <tr><td>⑨</td><td>여닫이문 (좌·우)</td><td>479 × 370 × 18T</td><td class="num">2</td><td>하단 195까지</td></tr>
-  <tr><td>⑩</td><td>여닫이문 (중앙)</td><td>296 × 590 × 18T</td><td class="num">2</td><td>상단 틈 20 · 하단 195까지</td></tr>
-  <tr><td>⑪</td><td>서랍 박스</td><td>내폭에 맞춤 (개구폭 446)</td><td class="num">2</td><td>슬라이드는 6항 참고</td></tr>
-  <tr><td>⑫</td><td>뒷판</td><td>표준 사양 (얇은 판)</td><td class="num">3</td><td>박스별 부착 · <b>중앙 박스만 배관 위치 현장 타공</b></td></tr>
-  <tr><td>⑬</td><td>수평 흰색판</td><td>표준 사양 (박스별)</td><td class="num">3</td><td>박스 상부 앞 · 눕힘 · 포켓 바닥 — DETAIL 참조</td></tr>
+  <tr><th style="width:6%">번호</th><th style="width:26%">부재</th><th style="width:28%">규격</th><th style="width:8%" class="num">수량</th><th>비고</th></tr>
+  <tr class="pick"><td>①</td><td><b>박스 (화이트 몸통)</b></td><td>외폭 800 × 500 × H410</td><td class="num">2</td><td>좌 여닫이 / 우 서랍 · 맞댐</td></tr>
+  <tr><td>②</td><td>상단 세로 마감판</td><td>1,600 × 50 × 18T</td><td class="num">1</td><td>수평 흰색판 위 · 25 리세스 노출</td></tr>
+  <tr><td>③</td><td>여닫이문</td><td>395 × 420 × 20T</td><td class="num">2</td><td>좌 칸 · 하단 195까지</td></tr>
+  <tr><td>④</td><td>서랍 앞판</td><td>798 × 208 × 20T</td><td class="num">2</td><td>우 칸 2단 · 아래짝 하단 195까지</td></tr>
+  <tr><td>⑤</td><td>서랍 박스</td><td>내폭 맞춤</td><td class="num">2</td><td>3/4 개방 슬라이드</td></tr>
+  <tr><td>⑥</td><td>뒷판</td><td>표준 사양</td><td class="num">2</td><td><b>배수구(센터 800 · H480) 타공 — 현장</b></td></tr>
 </table>
 
-<h2>6. 이 현장의 조건</h2>
+<h2>5. 비고</h2>
 <table>
-  <tr><th>바닥에 닿지 않습니다</th><td>별도 제작된 <b>스테인리스 프레임 위에 얹히는</b> 구조입니다. 다리·수평조절은 프레임이 담당합니다</td></tr>
-  <tr class="pick"><th>핸들리스</th><td>손잡이 없음 — 앞판 최전면 · 상단 뒤 포켓(수평 흰색판 + 세로 마감판 40 뒤)으로 개폐 · DETAIL 그림 참조</td></tr>
-  <tr><th class="tbd">서랍 슬라이드</th><td><b>3/4 개방 사양</b> — 받침 프레임 구조 계산상 풀오픈 2개 동시 개방 시 전도 여유 부족 (프레임 도면 9항)</td></tr>
-  <tr><th>프레임 가림</th><td>하부 마감판 없음 — <b>문·좌우 필러가 바닥에서 195까지 내려와</b> 프레임 가로재(200~230)를 가림</td></tr>
-  <tr><th>세라믹 상판</th><td><b>심리스 세라믹 상판</b>이 별도 시공으로 하부장 상판(②) 위에 얹힘<br>
-    <span class="tbd">두께 미정</span> — 도면은 40 가정. 확정되면 완성 높이(810 + 두께)만 바뀝니다</td></tr>
+  <tr><th>개구</th><td>벽~벽 실측 <b>1,610</b> · 하부장 1,600 → 좌우 5 (딱 맞춤 불필요 · 실리콘 마감)</td></tr>
+  <tr class="pick"><th class="tbd">중앙 칸막이 ↔ 배수구</th><td>박스 맞댐부(800) = 벽 배수구 위치(센터 · H480) — <b>배관 통과부 노치/타공 현장 협의</b></td></tr>
+  <tr><th>서랍 슬라이드</th><td><b>3/4 개방</b> — 받침 프레임 전도 계산상 풀오픈 여유 부족 (프레임 도면 9항)</td></tr>
+  <tr><th>거치</th><td>스테인리스 프레임(1,600×500·H230) 위 — 다리·수평은 프레임 담당 · 앞판이 195까지 내려와 가로재 가림</td></tr>
+  <tr><th>세면대</th><td>심리스 세라믹 <b>1,600 × 520 × 180</b> 별도 시공 · 수전 바닥 1,000</td></tr>
 </table>
 
-<h2>7. 협의 항목</h2>
-<table>
-  <tr><th>① 마감·색상</th><td>노출면(앞판·상단 세로 마감판·필러) = 지정 마감재 · 내부(몸통·서랍박스) = 화이트 표준 — 색상 협의</td></tr>
-  <tr><th>② 좌·우 여닫이</th><td>1짝(479) 기준 — 2짝(각 238) 여부 협의</td></tr>
-  <tr><th>③ 틈·띠 치수</th><td>틈 20 · 리세스 노출 25 · 포켓 깊이 40 기준 (표준 있으면 따름)</td></tr>
-  <tr><th>④ 서랍 개수</th><td>좌·우 각 1단 기준</td></tr>
-  <tr><th>⑤ 여닫이 안 선반</th><td>좌·우 칸 가동 선반 여부 협의 · 중앙은 없음(배관)</td></tr>
-  <tr><th>⑥ 세라믹 상판 두께</th><td>미정 — 확정 시 완성 높이(810 + 두께) 결정</td></tr>
-</table>
-
-<h2>8. 요약</h2>
-<div class="calc">
-  <b>세면대 하부장 1대 — 핸들리스</b><br>
-  &nbsp;&nbsp;· 외형 <b>1,600(W) × 518(D) × 615(전면 H)</b> — 깊이 518 = 몸통 500 + 전면재 18<br>
-  &nbsp;&nbsp;· 별도 제작된 <b>스테인리스 프레임(1,600×500·H230) 위에 얹는</b> 구조. 다리·수평조절은 프레임이 담당<br>
-  &nbsp;&nbsp;· 몸통 = <b>독립 박스 3개 맞댐</b> (좌 482 / 중 600 / 우 482 · 맞댐부 측판 2장) · 앞면 분할 <b>500 / 600 / 500</b><br>
-  &nbsp;&nbsp;· 전면(위→아래): <b>리세스 마감판 25 + 서랍 200 + 틈 20 + 문 370</b> · 중앙 문 전고 590<br>
-  &nbsp;&nbsp;· <b>손잡이 없음</b> — 앞판 상단 뒤 포켓(수평 흰색판 + 세로 마감판)에 손가락을 걸어 개폐<br>
-  &nbsp;&nbsp;· <b>좌·우 칸</b> = 서랍 1단 + 여닫이 1짝 / <b>중앙 칸</b> = 여닫이 2짝 · 뒷판 배관 타공(현장)<br>
-  &nbsp;&nbsp;· 몸통(화이트)은 벽에서 좌우 18 이격 — <b>전면 필러 18</b>(마감재·벽 밀착)로 마감<br>  &nbsp;&nbsp;· 하부 마감판 없음 — <b>문·좌우 필러가 195까지 내려와</b> 프레임 가로재를 가림<br>
-  &nbsp;&nbsp;· 서랍 슬라이드는 <b>3/4 개방</b> (프레임 전도 계산상 풀오픈은 여유 부족)<br>
-  &nbsp;&nbsp;· 상부에 <b>심리스 세라믹 상판</b>이 별도 시공으로 얹힘 (<span class="tbd">두께 미정</span> · 완성 높이 = 810 + 상판 두께)
-</div>
-
-<p class="note">좌표 기준 — 폭: 왼쪽 벽면 = 0, 오른쪽 벽면 = 1,600 &nbsp;/&nbsp; 깊이: 뒷벽 밀착 · 몸통 <b>500</b> · 전면재 포함 전체 <b>518</b> &nbsp;/&nbsp; 높이: 바닥 = 0, 문 하단 = 195, 하부장 밑면 = 230, 몸통 상단 = 810, 완성면 = 810 + 세라믹 상판 두께.</p>
+<p class="note">높이 기준 — 바닥 0 · 앞판 하단 195 · 하부장 밑면 230 · 몸통 상단 640 · 세면대 상면 820 · 수전 1,000.</p>
 
 </div>
 </body>
