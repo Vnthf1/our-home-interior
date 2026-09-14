@@ -28,3 +28,15 @@ create policy "memos anon all" on public.memos
 
 -- 실시간(Realtime) 브로드캐스트 대상에 테이블 등록
 alter publication supabase_realtime add table public.memos;
+
+-- ============================================================
+--  [추가] 수동 정렬(드래그 앤 드롭) 지원
+--  이미 테이블을 만든 뒤라면 이 블록만 다시 실행하면 된다.
+--  sort 가 작을수록 화면 위쪽. 새 메모는 (최솟값 - 1) 로 들어가 맨 위에 붙는다.
+-- ============================================================
+alter table public.memos add column if not exists sort double precision;
+
+-- 기존 행에 순서 부여 — 최신이 위로 오도록 created_at 의 음수 epoch 사용
+update public.memos
+   set sort = -extract(epoch from created_at)
+ where sort is null;

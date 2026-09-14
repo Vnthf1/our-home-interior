@@ -98,7 +98,9 @@
   const upsertLocal = (row) => {
     const i = memos.findIndex((m) => m.id === row.id);
     if (i < 0) memos.push(row); else memos[i] = row;
-    memos.sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)));
+    // sort 가 작을수록 위. 값이 없으면 created_at 역순(최신이 위)으로 대체
+    const key = (m) => (m.sort != null ? Number(m.sort) : -(new Date(m.created_at || 0).getTime() / 1000));
+    memos.sort((a, b) => key(a) - key(b) || String(a.created_at).localeCompare(String(b.created_at)));
   };
   const removeLocal = (id) => { memos = memos.filter((m) => m.id !== id); };
 
@@ -125,7 +127,9 @@
   function cardHTML(m) {
     const bg = m.color || pastel[0];
     const editing = m.id === editingId;
-    const foot = `<div class="memo-foot"><span class="memo-author-tag">${esc(m.author || "익명")}</span>` +
+    const foot = `<div class="memo-foot">` +
+      `<span class="memo-drag" draggable="true" title="드래그해서 순서 변경">⠿</span>` +
+      `<span class="memo-author-tag">${esc(m.author || "익명")}</span>` +
       `<span class="memo-time">${esc(fmt(m.updated_at || m.created_at))}</span></div>`;
     if (editing) {
       return `<div class="memo-card is-editing" data-id="${esc(m.id)}" style="background:${esc(bg)}">` +
@@ -151,10 +155,10 @@
       return;
     }
     // 최신 메모가 위로
-    boardEl.innerHTML = memos.slice().reverse().map(cardHTML).join("");
+    boardEl.innerHTML = memos.map(cardHTML).join("");
     if (editingId != null) {
       const ta = boardEl.querySelector(`.memo-card[data-id="${cssEsc(editingId)}"] .memo-edit`);
-      if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+      if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); fitHeight(ta); }
     }
     if (focusQuickAddId != null) {
       const qa = boardEl.querySelector(`.memo-card[data-id="${cssEsc(focusQuickAddId)}"] .memo-qa-in`);
@@ -162,6 +166,95 @@
       focusQuickAddId = null;
     }
   }
+  // ── 드래그 앤 드롭 정렬 ─────────────────────────────────────
+  //  sort(double) 가 작을수록 위. 새 위치의 앞·뒤 이웃 sort 의 중간값을 넣어
+  //  다른 행을 건드리지 않고 한 행만 update 한다.
+  let dragId = null;
+
+  const topSort = () => (memos.length ? Math.min.apply(null, memos.map(sortOf)) : 0);
+  const sortOf = (m) => (m.sort != null ? Number(m.sort) : -(new Date(m.created_at || 0).getTime() / 1000));
+
+  function clearDropMarks() {
+    boardEl.querySelectorAll(".memo-card").forEach((c) => c.classList.remove("drop-before", "drop-after", "is-dragging"));
+  }
+
+  boardEl.addEventListener("dragstart", (e) => {
+    const h = e.target.closest(".memo-drag");
+    if (!h) { e.preventDefault(); return; }
+    if (editingId != null) { e.preventDefault(); return; }   // 편집 중엔 이동 금지
+    const card = h.closest(".memo-card");
+    if (!card) { e.preventDefault(); return; }
+    dragId = card.dataset.id;
+    card.classList.add("is-dragging");
+    try {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", dragId);
+      e.dataTransfer.setDragImage(card, 24, 24);
+    } catch (err) {}
+  });
+
+  boardEl.addEventListener("dragover", (e) => {
+    if (dragId == null) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    const over = e.target.closest(".memo-card");
+    boardEl.querySelectorAll(".memo-card").forEach((c) => c.classList.remove("drop-before", "drop-after"));
+    if (!over || over.dataset.id === dragId) return;
+    const r = over.getBoundingClientRect();
+    const before = (e.clientY - r.top) < r.height / 2;
+    over.classList.add(before ? "drop-before" : "drop-after");
+  });
+
+  boardEl.addEventListener("dragleave", (e) => {
+    if (!e.relatedTarget || !boardEl.contains(e.relatedTarget)) {
+      boardEl.querySelectorAll(".memo-card").forEach((c) => c.classList.remove("drop-before", "drop-after"));
+    }
+  });
+
+  boardEl.addEventListener("dragend", () => { dragId = null; clearDropMarks(); });
+
+  boardEl.addEventListener("drop", async (e) => {
+    if (dragId == null) return;
+    e.preventDefault();
+    const over = e.target.closest(".memo-card");
+    const id = dragId;
+    dragId = null;
+    clearDropMarks();
+    if (!over || over.dataset.id === id) return;
+
+    const r = over.getBoundingClientRect();
+    const before = (e.clientY - r.top) < r.height / 2;
+
+    // 드래그 대상을 뺀 순서에서 삽입 위치의 앞·뒤 이웃을 찾는다
+    const rest = memos.filter((m) => m.id !== id);
+    let idx = rest.findIndex((m) => m.id === over.dataset.id);
+    if (idx < 0) return;
+    if (!before) idx += 1;
+    const prev = rest[idx - 1], next = rest[idx];
+    let ns;
+    if (!prev) ns = sortOf(next) - 1;
+    else if (!next) ns = sortOf(prev) + 1;
+    else ns = (sortOf(prev) + sortOf(next)) / 2;
+
+    // 낙관적 반영 후 저장
+    const cur = memos.find((m) => m.id === id);
+    if (cur) upsertLocal(Object.assign({}, cur, { sort: ns }));
+    render();
+    const { error } = await db.from("memos").update({ sort: ns }).eq("id", id);
+    if (error) { alert("순서 저장 실패: " + error.message); load(); }
+  });
+
+  // 편집창 높이를 내용에 맞춤 — 편집을 여는 순간 한 번만. 입력 중 실시간 조절은 안 함.
+  // (CSS 의 resize:vertical 은 그대로라 손으로 더 늘릴 수 있음)
+  const EDIT_MIN_H = 132;   // rows="5" 와 비슷한 최소 높이
+  const EDIT_MAX_H = 560;   // 그 이상은 내부 스크롤
+  function fitHeight(ta) {
+    if (!ta) return;
+    ta.style.height = "auto";
+    const h = Math.min(Math.max(ta.scrollHeight + 2, EDIT_MIN_H), EDIT_MAX_H);
+    ta.style.height = h + "px";
+  }
+
   // querySelector 용 간단 이스케이프 (uuid 라 사실상 안전하지만 방어)
   function cssEsc(s) { return String(s).replace(/["\\]/g, "\\$&"); }
 
@@ -170,7 +263,7 @@
     const author = authorEl.value.trim(); setAuthor(author);
     const color = pastel[memos.length % pastel.length];
     const { data, error } = await db.from("memos")
-      .insert({ body: "", author: author || "익명", color })
+      .insert({ body: "", author: author || "익명", color, sort: topSort() - 1 })
       .select().single();
     if (error) { alert("추가 실패: " + error.message); return; }
     upsertLocal(data);
@@ -286,7 +379,7 @@
 
   // ── 초기 로드 + 실시간 구독 ────────────────────────────────
   async function load() {
-    const { data, error } = await db.from("memos").select("*").order("created_at", { ascending: true });
+    const { data, error } = await db.from("memos").select("*").order("sort", { ascending: true, nullsFirst: false });
     if (error) { boardEl.innerHTML = `<div class="stub">불러오기 실패: ${esc(error.message)}</div>`; return; }
     memos = data || [];
     render();
