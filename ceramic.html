@@ -151,11 +151,11 @@
       <thead><tr><th>슬랩</th><th>주요 부재</th><th class="num">활용률</th></tr></thead>
       <tbody>
         <tr><td>앙카라 1</td><td>주방 벽면 A·B <b style="color:#2f7a1f">— 시공 완료</b></td><td class="num">70%</td></tr>
-        <tr><td>앙카라 2</td><td>아일랜드 앞면 + <b style="color:#b8860b">졸리컷 위·아래 2개</b> · ㄱ자 팔 · 책상 2장</td><td class="num">63%</td></tr>
+        <tr><td>앙카라 2</td><td>아일랜드 앞면 + <b style="color:#b8860b">졸리컷 위·아래 2개</b> · ㄱ자 팔 · 책상 2장 · 침대옆 예비 2</td><td class="num">68%</td></tr>
         <tr><td>앙카라 3</td><td><b style="color:#b8860b">상판 A 2420 + B 650 · 졸리컷 70 은 상판 밑</b> · 신발장</td><td class="num">78%</td></tr>
         <tr><td>카모 화이트 1</td><td>거실 장식장(좌하단) · <span style="color:#c2557f">사운드바 박스 5면</span> · <span style="color:#7a6ba8">식탁(가안)</span></td><td class="num">87%</td></tr>
         <tr><td>불가리 1</td><td>아트월 1400×2380 · 화장대 · 침대 옆 상판 2</td><td class="num">78%</td></tr>
-        <tr class="total"><td>합계</td><td>5장 · 평균 75%</td><td class="num">5장</td></tr>
+        <tr class="total"><td>합계</td><td>5장 · 평균 76%</td><td class="num">5장</td></tr>
       </tbody>
     </table>
   </div>
@@ -244,7 +244,7 @@
         { id: "1", x: 670, y: 0, w: 1900, h: 1400 },
       ]},
     /* ▼ 아래 두 장은 위아래로 맞붙여 렌더 — 배열 순서 = 위에서 아래 순서 */
-    { title: "앙카라 2", note: "아일랜드 앞면 + 졸리컷 위·아래 2개 · ㄱ자 팔 나머지 · 책상 2장", util: 63,
+    { title: "앙카라 2", note: "아일랜드 앞면 + 졸리컷 위·아래 2개 · ㄱ자 팔 나머지 · 책상 2장 · 침대옆 상판 예비 2(점선)", util: 68,
       texture: "images/앙카라.png", textureMirror: true,   // 앙카라 1과 동일 (좌우 반전)
       gaps: [{ x: 2550, y: 1530, w: 650,  h: 70 }],
       dims: [
@@ -270,6 +270,9 @@
            1/2 우측띠 밝기 212.3 편차 8.7 / 2/2 좌측띠 밝기 218.6 편차 8.9 */
         { id: "7",   x: 1080, y: 750,  w: 1350, h: 590, sub: "1/2" },
         { id: "7",   x: 1160, y: 140,  w: 1350, h: 590, sub: "2/2" },
+        /* 침대 옆 상판 예비 — 불가리 본품 파손 대비 (점선) */
+        { id: "9",   x: 2590, y: 60,   w: 250, h: 515, sub: "예비 1/2", provisional: true },
+        { id: "9",   x: 2890, y: 60,   w: 250, h: 515, sub: "예비 2/2", provisional: true },
       ]},
     { title: "앙카라 3", note: "상판 3070 = A 2420 + B 650 · 졸리컷 70 은 상판 바로 밑에 붙여 재단(무늬 연속) · 신발장", util: 78,
       texture: "images/앙카라.png", textureRotate: 180,
@@ -345,7 +348,7 @@
     const isTiny  = p.w < 500 && p.h < 300;
     const isThin  = !isTiny && short < 200;
     const isSmall = !isTiny && !isThin && short < 500;
-    const prov = !!meta.provisional;                          // 가안 = 점선
+    const prov = !!(p.provisional || meta.provisional);                          // 가안 = 점선
     // 텍스처가 깔린 슬랩은 채움을 아주 연하게 + 테두리를 부재색으로 굵게 → 무늬가 비쳐 보임
     const TX = prov ? "#3a2a55" : (hasTex ? "#2c1810" : "#fff");
     // 텍스처 위 글자 가독성: 흰색 외곽선(헤일로)
@@ -360,7 +363,7 @@
     // 세로로 길고 좁은 부재: 글자를 90° 눕혀 길이 방향으로 → 박스 밖으로 안 넘침
     if (p.h > p.w && short < 520) {
       const fs = Math.max(34, Math.min(64, p.w * 0.34));
-      const label = `${esc(p.id)} · ${esc(meta.name)} · ${meta.w}×${meta.h}`
+      const label = `${esc(p.id)} · ${esc(meta.name)} · ${p.w}×${p.h}`
         + (p.sub ? ` (${esc(p.sub)})` : "") + (meta.movable ? "  (이동가능)" : "");
       s += `<text x="${cx}" y="${cy}" transform="rotate(-90 ${cx} ${cy})" text-anchor="middle" dominant-baseline="central" font-size="${fs}" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${label}</text>`;
       return s;
@@ -380,17 +383,17 @@
     }
     if (isThin) {
       // 얇은 스트립: 한 줄
-      s += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="60" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(p.id)} · ${esc(meta.name)} · ${meta.w}×${meta.h}${p.sub ? " ("+p.sub+")" : ""}</text>`;
+      s += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="60" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(p.id)} · ${esc(meta.name)} · ${p.w}×${p.h}${p.sub ? " ("+p.sub+")" : ""}</text>`;
     } else if (isSmall) {
       // 중간 부재: 이름 + 치수
       s += `<text x="${cx}" y="${cy - 20}" text-anchor="middle" dominant-baseline="central" font-size="80" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
-      s += `<text x="${cx}" y="${cy + 60}" text-anchor="middle" dominant-baseline="central" font-size="56" fill="${TX}"${HALO} opacity="0.9" font-family="system-ui,-apple-system,sans-serif">${meta.w}×${meta.h}</text>`;
+      s += `<text x="${cx}" y="${cy + 60}" text-anchor="middle" dominant-baseline="central" font-size="56" fill="${TX}"${HALO} opacity="0.9" font-family="system-ui,-apple-system,sans-serif">${p.w}×${p.h}</text>`;
       if (meta.movable) s += `<text x="${cx}" y="${cy + 118}" text-anchor="middle" dominant-baseline="central" font-size="42" font-weight="700" fill="${TX}"${HALO} opacity="0.75">(이동가능)</text>`;
       if (p.sub) s += `<text x="${p.x + p.w - 28}" y="${p.y + p.h - 28}" text-anchor="end" font-size="46" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${esc(p.sub)}</text>`;
     } else {
       // 큰 부재: 이름 + 치수 + 회전 + 태그
       s += `<text x="${cx}" y="${cy - 40}" text-anchor="middle" dominant-baseline="central" font-size="130" font-weight="800" fill="${TX}"${HALO} font-family="system-ui,-apple-system,sans-serif">${esc(meta.name)}</text>`;
-      const dims = `${meta.w} × ${meta.h}`;
+      const dims = `${p.w} × ${p.h}`;
       s += `<text x="${cx}" y="${cy + 100}" text-anchor="middle" dominant-baseline="central" font-size="90" fill="${TX}"${HALO} opacity="0.94" font-family="system-ui,-apple-system,sans-serif">${dims}</text>`;
       if (meta.movable) s += `<text x="${cx}" y="${cy + 190}" text-anchor="middle" dominant-baseline="central" font-size="58" font-weight="700" fill="${TX}"${HALO} opacity="0.75">(이동가능)</text>`;
       if (p.sub) s += `<text x="${p.x + p.w - 30}" y="${p.y + p.h - 40}" text-anchor="end" font-size="62" font-weight="700" fill="${TX}"${HALO} opacity="0.85">${esc(p.sub)}</text>`;
