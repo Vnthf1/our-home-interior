@@ -81,6 +81,22 @@
 
   .cer-notice{margin:14px 0;padding:12px 14px;background:#fff7ed;border:1px solid #f0dcc0;border-radius:10px;color:#7a5c3a;font-size:13.5px;line-height:1.6}
   .cer-notice b{color:#c25d1a}
+
+  @media print{
+    body{background:#fff}
+    /* 원장 카드는 타이틀·그림째로 페이지 중간에서 안 잘리게 */
+    .cer-slab,.cer-stack,.cer-scen-h,.cer-compare,.cer-rec,.cer-notice,.fig{break-inside:avoid;page-break-inside:avoid}
+    .cer-scen-h{break-after:avoid;page-break-after:avoid}
+    /* 인쇄에선 2열 그리드 해제 — 원장 1장을 페이지 폭 가득 */
+    .cer-slabs{grid-template-columns:1fr !important;gap:10px}
+    .cer-stack{max-width:100% !important}
+    .cer-slab{box-shadow:none;border-color:#bbb}
+    .cer-scen{margin:16px 0 10px}
+    /* 배경 텍스처·색 유지 */
+    .cer-svg,*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    /* 참고 사진·범례는 인쇄 생략해 원장에 지면 집중 */
+    .cer-legend{display:none}
+  }
 </style>
 </head>
 <body data-page="ceramic">
